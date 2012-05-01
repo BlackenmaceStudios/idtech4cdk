@@ -85,7 +85,7 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 		for(int h = 0; h < imgWidth / VIRTUALTEXTURE_TILESIZE; h++) {
 			for(int w = 0; w < imgWidth / VIRTUALTEXTURE_TILESIZE; w++, header.numTiles++, currentTile++) {
 
-				common->Printf( "...Tile %d/%d", currentTile, maxTiles);
+				//common->Printf( "...Tile %d/%d", currentTile, maxTiles);
 				WriteTile( buffer, w * VIRTUALTEXTURE_TILESIZE, h * VIRTUALTEXTURE_TILESIZE, imgWidth );
 			}
 		}

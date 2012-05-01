@@ -5,7 +5,7 @@
 #pragma hdrstop
 
 #include "tr_local.h"
-#include "./renderprogs/tr_rprogshared.h"
+#include "../../base/renderprogs/tr_rprogshared.h"
 
 extern bmRenderSceneLights_t scene;
 extern viewLight_t *deferredViewLights;

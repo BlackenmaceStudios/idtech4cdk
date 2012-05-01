@@ -81,6 +81,7 @@
     <Compile Include="IToolsManaged.cs" />
     <Compile Include="Private\idLib\idDictCollectionPropertyDescriptor.cs" />
     <Compile Include="Private\idLib\idLibNativeAPI.cs" />
+    <Compile Include="Private\idLib\idString.cs" />
     <Compile Include="Private\idLib\idVec3.cs" />
     <Compile Include="Private\NativeAPI.cs" />
     <Compile Include="Private\NativeClass.cs" />
