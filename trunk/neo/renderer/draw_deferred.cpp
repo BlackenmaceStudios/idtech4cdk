@@ -4,7 +4,7 @@
 #include "precompiled.h"
 
 #include "tr_local.h"
-#include "./renderprogs/tr_rprogshared.h"
+#include "../../base/renderprogs/tr_rprogshared.h"
 #include "../vt/VirtualTexture.h"
 #include "../vt/VirtualTexture_Backend.h"
 

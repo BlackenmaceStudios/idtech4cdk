@@ -43,6 +43,9 @@ namespace ToolsManaged
 
             _debugConsoleFrm.Show();
             _debugConsoleFrm.BringToFront();
+
+            
+            
         }
 
         //

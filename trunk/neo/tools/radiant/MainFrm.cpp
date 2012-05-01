@@ -6997,7 +6997,7 @@ bool CMainFrame::VerifyMapBuildable(const char *opname, bool checkProc) {
 		idStr relativepathproc = relativepath;
 
 		// Check to see if the proc is there(todo: check timestamp/crc), if its not there just compile the map.
-		relativepathproc.SetFileExtension( ".proc" );
+		relativepathproc.SetFileExtension( PROC_FILE_EXT );
 		idFile *f = fileSystem->OpenFileRead( relativepathproc.c_str() );
 		if(f == NULL) {
 			common->Warning( "%s not found, forcing recompile...", relativepathproc.c_str() );
