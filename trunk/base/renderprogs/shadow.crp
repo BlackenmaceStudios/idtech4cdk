@@ -1,0 +1,59 @@
+// Shadows.crp (c) 2012 BM Studios
+//
+
+// Used for shadow lookup
+
+
+VertexProgram 
+	uniform mat4				u_matview;
+	uniform vec3 				r_lightOrigin; 
+
+	void main( void ) {
+
+		
+
+		vec4 world_position = u_matview * gl_Vertex   ;
+		gl_TexCoord[0] =  -(vec4(r_lightOrigin, 0) -  world_position  );
+		
+		
+
+		gl_Position = ftransform();
+	}
+EndVertexProgram
+
+FragmentProgram
+	uniform samplerCube ShadowMap;
+	
+	uniform int lightNum;
+
+
+	void main( void ) {   
+		vec4 shadowXyz = gl_TexCoord[0];
+
+
+
+		float fDistSquared    = dot( shadowXyz.xyz, shadowXyz.xyz );
+		float fDepth = fDistSquared * 0.99;
+
+		vec4 Moments = textureCube ( ShadowMap, shadowXyz.xyz  );
+
+
+		
+		float p = (( fDepth - Moments.y < 0.0f ) ? 1.0f : 0.1f) ;
+
+		// Compute variance.  
+	   float Variance =  Moments.y - (Moments.x*Moments.x);  
+	  Variance = max(Variance, 0.002);  
+	 // Compute probabilistic upper bound.  
+	   float d =  fDepth - Moments.x;  
+	  float p_max = Variance / (Variance + (d * d ));  
+
+	
+		
+		gl_FragColor.r = max( p, p_max) ;
+
+		gl_FragColor.g =Moments.x;
+		gl_FragColor.b = float(lightNum) / 256.0;
+		gl_FragColor.a = 1;
+	}
+EndFragmentProgram

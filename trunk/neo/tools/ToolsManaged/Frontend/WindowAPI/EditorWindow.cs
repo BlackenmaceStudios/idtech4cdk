@@ -1,0 +1,161 @@
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+
+using ToolsManaged.Private;
+namespace ToolsManaged.Frontend.WindowAPI
+{
+    //
+    // EditorWindow
+    //
+
+    [Guid("FAA0EAB1-9A61-41f3-B6A4-292F953D3D05")]
+    public unsafe class EditorWindow : IEditorWindow
+    {
+        private NativeAPI.idManagedEditorWindowNative _nativeWindow;
+        private Form _window;
+        private Keys _lastKeyDown;
+
+        //
+        // EditorWindow Constructor.
+        //
+        public EditorWindow(Form form, IntPtr pAddress)
+        {
+            _nativeWindow = new NativeAPI.idManagedEditorWindowNative();
+            _nativeWindow.AttachToMemory(typeof(NativeAPI.idManagedEditorWindowNative), pAddress);
+            _window = form;
+            _lastKeyDown = Keys.None;
+            
+        }
+
+        public NativeAPI.Win32.RECT GetScreenRect()
+        {
+            NativeAPI.Win32.RECT rect;
+
+            if (_window.GetType().Name == "Viewport")
+            {
+                Viewport viewport = (Viewport)_window;
+                NativeAPI.Win32.GetWindowRect(viewport.GetPanelHandle(), out rect);
+            }
+            else
+            {
+                NativeAPI.Win32.GetWindowRect(_window.Handle, out rect);
+            }
+            
+
+            return rect;
+        }
+
+        public void OnSize()
+        {
+            _nativeWindow.OnSize(_nativeWindow.GetNativeAddress(), 0, 0, 0);
+        }
+
+        public void Redraw()
+        {
+            _nativeWindow.OnPaint(_nativeWindow.GetNativeAddress(), IntPtr.Zero);
+        }
+
+        public void OnKeyDown(Keys key)
+        {
+            _lastKeyDown = key;
+            _nativeWindow.OnKeyDown(_nativeWindow.GetNativeAddress(), (uint)key, 0, 0);
+        }
+
+        public void OnKeyUp(Keys key)
+        {
+            _lastKeyDown = Keys.None;
+            _nativeWindow.OnKeyUp(_nativeWindow.GetNativeAddress(), (uint)key, 0, 0);
+        }
+
+        public void OnAddEntityEvent(string entityType, NativeAPI.idManagedEditorWindowNative.Point pt)
+        {
+            _nativeWindow.OnAddEntityEvent(_nativeWindow.GetNativeAddress(), entityType, pt);
+        }
+
+        public void OpenEntityContextMenu(IntPtr dict)
+        {
+            Viewport viewport = (Viewport)_window;
+
+
+
+            viewport.OpenEntityContextMenu(dict);
+        }
+
+        public void OnMouseMove(MouseButtons button, NativeAPI.idManagedEditorWindowNative.Point point)
+        {
+            uint val = 0;
+
+            if (button == MouseButtons.Left)
+            {
+                val = 0x0001;
+            }
+            _nativeWindow.OnMouseMove(_nativeWindow.GetNativeAddress(),val, point);
+        }
+
+        public void OnMouseScroll(short delta, NativeAPI.idManagedEditorWindowNative.Point point)
+        {
+            _nativeWindow.OnMouseWheelPtr(_nativeWindow.GetNativeAddress(), 0, delta, point);
+        }
+
+        public void OnMouseDownLeft(Keys key, NativeAPI.idManagedEditorWindowNative.Point point)
+        {
+            uint keyval = 0x0001;
+            if (_lastKeyDown == Keys.ShiftKey)
+            {
+                keyval |= 0x0004;
+            }
+            _nativeWindow.OnLButtonDown(_nativeWindow.GetNativeAddress(), keyval, point);
+        }
+
+        public void OnMouseUpLeft(Keys key, NativeAPI.idManagedEditorWindowNative.Point point)
+        {
+            uint keyval = 0x0001;
+            if (_lastKeyDown == Keys.ShiftKey)
+            {
+                keyval |= 0x0004;
+                _lastKeyDown = Keys.None;
+            }
+            _nativeWindow.OnLButtonUp(_nativeWindow.GetNativeAddress(), keyval, point);
+
+
+        }
+
+        public void OnMouseDownRight(Keys key, NativeAPI.idManagedEditorWindowNative.Point point)
+        {
+            _nativeWindow.OnRButtonDown(_nativeWindow.GetNativeAddress(), 0x0002, point);
+        }
+
+        public void OnMouseUpRight(Keys key, NativeAPI.idManagedEditorWindowNative.Point point)
+        {
+            _nativeWindow.OnRButtonUp(_nativeWindow.GetNativeAddress(), 0x0002, point);
+        }
+
+        public void Init()
+        {
+            NativeAPI.Win32.RECT r = GetScreenRect();
+
+            _nativeWindow.OnCreate(_nativeWindow.GetNativeAddress(), IntPtr.Zero);
+            _nativeWindow.OnSize(_nativeWindow.GetNativeAddress(),0, 0, 0);
+        }
+
+        public IntPtr GetSafeHandle()
+        {
+            return _window.Controls["panel1"].Handle;
+        }
+
+        public void SetWindowText(string name)
+        {
+            if (_window.GetType().Name == "Viewport")
+            {
+                Viewport viewport = (Viewport)_window;
+
+                viewport.SetWindowTitle(name);
+            }
+        }
+    }
+}

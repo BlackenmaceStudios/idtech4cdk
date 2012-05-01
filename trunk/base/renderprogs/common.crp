@@ -1,0 +1,31 @@
+// common.crp (c) 2012 BM Studios
+//
+
+//
+// R_GlobalPointToLocal
+//
+vec4 R_GlobalPointToLocal( vec4 pt ) {
+	vec4	temp, v;
+
+	temp = pt - gl_ModelViewMatrix[2];
+
+	v.x = dot( temp,gl_ModelViewMatrix[0] );
+	v.y = dot( temp,gl_ModelViewMatrix[1] );
+	v.z = dot( temp,gl_ModelViewMatrix[2] );
+
+	return v;
+}
+
+//
+// GlobalPlaneToLocal
+//
+vec4 R_GlobalPlaneToLocal(  vec4 pt, mat4 matrix ) {
+	vec4 trans = matrix[3];
+	vec4 v;
+
+	v[0] = dot( pt, matrix[0] );
+	v[1] = dot( pt, matrix[1] );
+	v[2] = dot( pt, matrix[2] );
+	v[3] = pt[3] + trans[1] * pt[0] + trans[2] * pt[1] + trans[3] * pt[2];
+	return v;
+}

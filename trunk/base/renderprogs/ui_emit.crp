@@ -1,0 +1,34 @@
+// ui_emit.crp
+//
+
+GeometryShader
+
+layout(points) in;
+layout(triangle_strip, max_vertices = 4) out;
+
+void main() 
+{
+	float dim = 1;
+
+	
+    gl_Position = vec4( dim, dim, 0.5, 1.0 );
+    var_TexDiffuse = vec2( dim, dim );
+	EmitVertex();
+
+    gl_Position = vec4(-dim, dim, 0.5, 1.0 );
+    var_TexDiffuse = vec2( 0.0, dim ); 
+    EmitVertex();
+    
+
+    gl_Position = vec4( dim,-dim, 0.5, 1.0 );
+    var_TexDiffuse = vec2( dim, 0.0 ); 
+    EmitVertex();
+
+    gl_Position = vec4(-dim,-dim, 0.5, 1.0 );
+    var_TexDiffuse = vec2( 0.0, 0.0 ); 
+    EmitVertex();
+
+    EndPrimitive(); 
+}
+
+EndGeometryShader

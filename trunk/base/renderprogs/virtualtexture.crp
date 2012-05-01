@@ -1,0 +1,303 @@
+// virtualtexture.crp
+//
+
+#include "renderprogs/common.crp"
+
+/*
+======================================================
+
+Virtual Texturing
+
+ID_RENDERPROGRAM_PASS1
+	Object Space
+
+
+ID_RENDERPROGRAM_PASS2
+	Screen Space
+
+
+======================================================
+*/
+
+
+varying vec4          	var_Vertex; 
+
+varying vec2            	var_TexDiffuse; 
+
+#ifdef ID_RENDERPROGRAM_PASS2
+varying vec2            	var_TexNormal; 
+varying vec2            	var_TexSpecular; 
+varying mat3     			var_TangentToWorldMatrix; 
+varying mat4            var_mv;
+#endif
+
+varying vec4			tangent;
+varying vec4			tangent1;
+varying vec4			normal;
+
+
+
+#ifdef ID_RENDERPROGRAM_PASS1
+VertexProgram 
+	attribute vec4          	attr_TexCoord;     
+	attribute vec4          	attr_Tangent;     
+	attribute vec4          	attr_Binormal;     
+	attribute vec4          	attr_Normal;  
+
+	uniform vec4				u_diffuseMatrixS;
+	uniform vec4				u_diffuseMatrixT;
+	uniform mat4				u_matview;
+	//
+	// Main - Entry Point
+	//
+	void main() {
+		// transform position into world space 
+		var_Vertex = (u_matview * gl_Vertex );
+
+		// transform position into world space 
+		mat4 textureMatrix = mat4( u_diffuseMatrixS, u_diffuseMatrixT, vec4( 0, 0, 1, 0 ), vec4( 0, 0, 0, 1 ) );
+
+		// diffuse map texgen     
+
+		var_TexDiffuse.xy = ( attr_TexCoord ).st;
+		gl_Position = ftransform( );
+
+
+		tangent = attr_Tangent;
+		tangent1 = attr_Binormal;
+		normal = attr_Normal;
+	}
+EndVertexProgram
+#else
+#include "renderprogs/ui_emit.crp"
+
+VertexProgram 
+void main()
+{
+}
+EndVertexProgram
+
+
+#endif
+
+FragmentProgram
+	uniform sampler2D   	u_normalTexture;          
+	uniform sampler2D   	u_specularTexture;   
+	
+	uniform int	vtOffset;
+
+	
+	uniform sampler2D   		u_readBackTexture;
+
+	vec2 InvST( vec2 st ) {
+		vec2 invSt = st;
+		invSt.x  =invSt.x;
+		invSt.y = 1 - invSt.y;
+
+		return invSt;
+	}
+
+#ifdef ID_RENDERPROGRAM_PASS1
+	uniform isampler2D   	u_diffuseTexture; 
+	uniform sampler2DRect   u_indexTexture;
+	void main( void ) {
+		// Load the vt atlas texture.
+		ivec4 textureVTPosition = texture2D( u_diffuseTexture, InvST(var_TexDiffuse) );
+
+		
+
+		// Convert VT atlas coords to page atlas coords
+		vec3 textureAtlasST =  texture2DRect( u_indexTexture, textureVTPosition.zw + 0.5 ).xyz;
+
+		if(textureAtlasST.b * 255 != float(vtOffset)) {
+			gl_FragData[0] = vec4(0,0,0,0);
+			gl_FragData[1] = vec4(0,0,0,0);
+			gl_FragData[2] = vec4(0,0,0,0);
+			gl_FragData[3] = vec4(0,0,0,0);
+			return;
+		}
+
+		gl_FragData[0] = vec4(textureAtlasST.x,textureAtlasST.y, var_TexDiffuse.x, var_TexDiffuse.y);
+		gl_FragData[1] = vec4(tangent.xyz, var_Vertex.x);
+		gl_FragData[2] = vec4(tangent1.xyz,  var_Vertex.y);
+		gl_FragData[3] = vec4(normal.xyz, var_Vertex.z);
+	}
+#endif
+	
+#ifdef ID_RENDERPROGRAM_PASS2
+	uniform sampler2D   	u_diffuseTexture; 
+	uniform sampler2D	   	u_indexTexture;
+
+	uniform sampler2D	   u_vertTexture;
+	uniform sampler2D	   u_vertTexture2;
+	uniform sampler2D	   u_vertTexture3;
+	
+
+	vec2 mod( vec2 a, vec2 b ) {
+		return floor(fract(a/b) * b);
+	}
+	float mipmapLevel(vec2 uv, float textureSize)
+	{
+		vec2 dx = dFdx(uv * textureSize);
+		vec2 dy = dFdy(uv * textureSize);
+		float d = max(dot(dx, dx), dot(dy, dy));
+
+		return 0.5 * log2(d) + 0 - 2;
+	}
+
+
+	//
+	// GenerateVirtualTextureST
+	//
+	vec2 GenerateVirtualTextureST(  vec2 startPos, 	vec2 triSt ) {
+	float isizeh = 16;
+		float isizev =16;
+
+		float osizeh = 16;
+		float osizev =16;
+
+
+		vec2 tileScale = vec2(isizeh, isizev); 
+		vec2 tileScaledTex =  startPos * vec2(osizeh / isizeh, osizev / isizev); 
+
+		vec2 mappingScale = vec2 (osizeh, osizev);  
+		vec2 mappingAddress =  startPos * mappingScale; 
+
+		vec4 atlasTexcoord;
+		
+		atlasTexcoord = texture2D( u_indexTexture, triSt ) ; 
+		
+		
+	
+		return (((atlasTexcoord.st * 255 ) + fract(mappingAddress)) / tileScale) ;
+
+
+	}
+
+	//
+	// YCocgToRGB
+	// http://www.gamedev.net/topic/517500-ycocg-to-rgb-in-a-pixel-shader-almost-there-one-last-problem/
+	//
+	vec4 YCocgToRGB( vec4 color )
+	{
+		vec4 outColor;	
+		vec4 inColor = color;
+
+		inColor.r -= 120.0 / 255.0;
+		inColor.g -= 95.0 / 255.0;
+
+		outColor.r = (inColor.r * 1.0) + (inColor.g * -1.0) + (inColor.b * (0.0 * 256.0 / 255.0)) + (inColor.a * 1.0);	
+		outColor.g = (inColor.r * 0.0) + (inColor.g * 1.0) + (inColor.b * (-0.5 * 256.0 / 255.0)) + (inColor.a * 1.0);	
+		outColor.b = (inColor.r * -1.0) + (inColor.g * -1.0) + (inColor.b * (1.0 * 256.0 / 255.0)) + (inColor.a * 1.0);	
+
+		return outColor;
+	}
+
+
+
+	vec3 height2normal_sobel(mat3 c)
+	{       
+	    mat3 x = mat3(   1.0, 0.0, -1.0,
+	                                    2.0, 0.0, -2.0,
+	                                    1.0, 0.0, -1.0  );
+	 
+	    mat3 y = mat3(   1.0,  2.0,  1.0,
+	                                    0.0,  0.0,  0.0,
+	                                   -1.0, -2.0, -1.0 );
+	    
+	    x = x * c;
+	    y = y * c;
+	
+	   float cx =  x[0][0] +x[0][2]
+	                   +x[1][0] +x[1][2]
+	                   +x[2][0] +x[2][2];
+	    
+	    float cy =  y[0][0] +y[0][1] +y[0][2]
+	                  +y[2][0] +y[2][1] +y[2][2];
+	                
+	   float cz =  sqrt(1-(cx*cx+cy*cy));
+	   
+	    return vec3(cx, cy, cz);
+	}
+
+	mat3 img3x3(sampler2D color_map, vec2 tc, float ts, int ch)
+	{
+	    float   d = 1.0/ts; // ts, texture sampling size
+	    mat3 c;     
+	    c[0][0] = YCocgToRGB(texture2D(color_map,tc + vec2(-d,-d)))[ch];
+	    c[0][1] = YCocgToRGB(texture2D(color_map,tc + vec2( 0,-d)))[ch];
+	    c[0][2] = YCocgToRGB(texture2D(color_map,tc + vec2( d,-d)))[ch];  
+	        
+	    c[1][0] = YCocgToRGB(texture2D(color_map,tc + vec2(-d, 0)))[ch];
+	    c[1][1] = YCocgToRGB(texture2D(color_map,tc                ))[ch];
+	    c[1][2] = YCocgToRGB(texture2D(color_map,tc + vec2( d, 0)))[ch];
+	        
+	    c[2][0] = YCocgToRGB(texture2D(color_map,tc + vec2(-d, d)))[ch];
+	    c[2][1] = YCocgToRGB(texture2D(color_map,tc + vec2( 0, d)))[ch];
+	    c[2][2] = YCocgToRGB(texture2D(color_map,tc + vec2( d, d)))[ch];
+	    
+	   return c;
+   }
+
+   vec3 GenerateNormalMap( vec2 texcoord, float texture_size, float bump_level ) {
+		mat3 c = img3x3(u_diffuseTexture, texcoord, texture_size, 0 );// red only
+		vec3 normal = height2normal_sobel(c);
+		return normalize(vec3(normal.xy, normal.z *bump_level));
+   }
+
+
+  
+   mat3 TangentBinormalNormalMatrix(vec2 st) {
+		vec4 attr_Tangent = texture2D( u_vertTexture, st );
+		vec4 attr_Binormal = texture2D( u_vertTexture2, st );
+		vec4 attr_Normal = texture2D( u_vertTexture3, st );
+
+
+
+		return mat3(attr_Tangent.x, attr_Binormal.x, attr_Normal.x,
+					attr_Tangent.y, attr_Binormal.y, attr_Normal.y,
+					attr_Tangent.z, attr_Binormal.z, attr_Normal.z);  
+   }
+
+  vec4 PixelVertex(vec2 st) {
+		vec4 inVertex;
+		vec4 attr_Tangent = texture2D( u_vertTexture, st );
+		vec4 attr_Binormal = texture2D( u_vertTexture2, st );
+		vec4 attr_Normal = texture2D( u_vertTexture3, st );
+
+		inVertex.x = attr_Tangent.w;
+		inVertex.y = attr_Binormal.w;
+		inVertex.z = attr_Normal.w;
+		inVertex.w = 1;
+		return inVertex;
+   }
+
+	void main( void ) {    
+		vec4 color = vec4( 0, 0, 0 , 0 );
+
+		vec4 textureST = texture2D( u_indexTexture, var_TexDiffuse.st );
+	
+
+		vec2 st = GenerateVirtualTextureST(  vec2(textureST.z,  1 - textureST.w), var_TexDiffuse.st);
+
+		vec4 diffuse = YCocgToRGB(texture2D( u_diffuseTexture, st   ));
+
+		if(textureST.rbga == vec4(0, 0, 0, 0)) {
+		//	discard;
+		   gl_FragData[0] = vec4(0,0,0,0);
+		   gl_FragData[1] = vec4(0,0,0,1);
+			return;
+		}
+	//	diffuse.r = vtOffset / 255.0;
+		diffuse.a = 1.0;
+
+
+		gl_FragData[0] = diffuse  ;
+		gl_FragData[0].a = 1;
+		gl_FragData[1].xyz = GenerateNormalMap( st, 4096, 0.9 )  *  TangentBinormalNormalMatrix(var_TexDiffuse.st);// * var_TangentToWorldMatrix;//normalize((vec3(0.45, 0.45, 1) * 2.0 - vec3(1.0,1.0,1.0)) * var_TangentToWorldMatrix);
+		gl_FragData[1].a = 1;
+		gl_FragData[2] = PixelVertex(var_TexDiffuse.st);
+
+	}
+#endif
+EndFragmentProgram

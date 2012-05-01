@@ -1,0 +1,1280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug x64 with inlines|Win32">
+      <Configuration>Debug x64 with inlines</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug x64 with inlines|x64">
+      <Configuration>Debug x64 with inlines</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D4BE311F-2647-4F0B-AD47-9504A2381641}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Tools</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="_Common.props" />
+    <Import Project="_Debug.props" />
+    <Import Project="_WithInlines.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="_Common.props" />
+    <Import Project="_Debug.props" />
+    <Import Project="_WithInlines.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="_Common.props" />
+    <Import Project="_Debug.props" />
+    <Import Project="_WithInlines.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="_Common.props" />
+    <Import Project="_Debug.props" />
+    <Import Project="_WithInlines.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\lib\vs2010\x86;$(LibraryPath)</LibraryPath>
+    <OutDir>..\build\$(PlatformName)\Debug with inlines\</OutDir>
+    <IntDir>..\build\$(PlatformName)\Debug with inlinesintermediate\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\lib\vs2010\x86;$(LibraryPath)</LibraryPath>
+    <OutDir>..\build\$(PlatformName)\Debug with inlines\</OutDir>
+    <IntDir>..\build\$(PlatformName)\Debug with inlinesintermediate\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\lib\vs2010\x86;$(LibraryPath)</LibraryPath>
+    <OutDir>..\build\$(PlatformName)\Debug with inlines\</OutDir>
+    <IntDir>..\build\$(PlatformName)\Debug with inlinesintermediate\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\dev\darklight\neo\nvidia-texture-tools\project\vc8;C:\dev\darklight\neo\nvidia-texture-tools\src;C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\Autodesk\FBX\FbxSdk\2012.2\lib\vs2010\x64;$(LibraryPath)</LibraryPath>
+    <OutDir>..\build\$(PlatformName)\Debug with inlines\</OutDir>
+    <IntDir>..\build\$(PlatformName)\Debug with inlinesintermediate\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DECL_DLLMAIN ;_USRDLL;_WINDLL;TOOLS_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <UndefinePreprocessorDefinitions>
+      </UndefinePreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>tools_export.def</ModuleDefinitionFile>
+      <AdditionalDependencies>glu32.lib;fbxsdk-2012.2-mtd.lib;Wininet.lib;opengl32.lib;</AdditionalDependencies>
+      <OutputFile>../base/tools/$(TargetName)x86$(TargetExt)</OutputFile>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>/force %(AdditionalOptions)</AdditionalOptions>
+      <NoEntryPoint>false</NoEntryPoint>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DECL_DLLMAIN ;_USRDLL;_WINDLL;TOOLS_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <UndefinePreprocessorDefinitions>
+      </UndefinePreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>tools_export.def</ModuleDefinitionFile>
+      <AdditionalDependencies>glu32.lib;fbxsdk-2012.2-mtd.lib;Wininet.lib;opengl32.lib;</AdditionalDependencies>
+      <OutputFile>../base/tools/$(TargetName)x86$(TargetExt)</OutputFile>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>/force %(AdditionalOptions)</AdditionalOptions>
+      <NoEntryPoint>false</NoEntryPoint>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DECL_DLLMAIN ;_USRDLL;_WINDLL;TOOLS_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <UndefinePreprocessorDefinitions>
+      </UndefinePreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>tools_export.def</ModuleDefinitionFile>
+      <AdditionalDependencies>glu32.lib;fbxsdk-2012.2-mtd.lib;Wininet.lib;opengl32.lib;</AdditionalDependencies>
+      <OutputFile>../base/tools/$(TargetName)x86$(TargetExt)</OutputFile>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>/force %(AdditionalOptions)</AdditionalOptions>
+      <NoEntryPoint>false</NoEntryPoint>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DECL_DLLMAIN ;_USRDLL;_WINDLL;TOOLS_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <UndefinePreprocessorDefinitions>_USE_32BIT_TIME_T</UndefinePreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./tools/MeshTools/MeshTools/Lib</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>tools_export.def</ModuleDefinitionFile>
+      <AdditionalDependencies>glu32.lib;fbxsdk-2012.2-mtd.lib;Wininet.lib;opengl32.lib;</AdditionalDependencies>
+      <OutputFile>../base/tools/$(TargetName)x64$(TargetExt)</OutputFile>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>/force /DEF:tools_export.def %(AdditionalOptions)</AdditionalOptions>
+      <NoEntryPoint>false</NoEntryPoint>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+      <HeapReserveSize>
+      </HeapReserveSize>
+      <HeapCommitSize>
+      </HeapCommitSize>
+      <LargeAddressAware>true</LargeAddressAware>
+      <StackReserveSize>3000000</StackReserveSize>
+      <StackCommitSize>3000000</StackCommitSize>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>__DOOM__;TOOLS_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ModuleDefinitionFile>tools_export.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>__DOOM__;TOOLS_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ModuleDefinitionFile>tools_export.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="idlib\precompiled.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">precompiled.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">precompiled.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">precompiled.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">precompiled.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jcapimin.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jccoefct.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jccolor.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jcdctmgr.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jchuff.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jcinit.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jcmainct.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jcmarker.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jcmaster.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jcomapi.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jcparam.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jcphuff.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jcprepct.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jcsample.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdapimin.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdapistd.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdatadst.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdatasrc.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdcoefct.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdcolor.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jddctmgr.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdhuff.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdinput.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdmainct.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdmarker.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdmaster.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdmerge.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdphuff.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdpostct.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdsample.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jdtrans.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jerror.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jfdctflt.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jfdctfst.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jfdctint.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jidctflt.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jidctfst.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jidctint.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jidctred.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jmemmgr.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jmemnobs.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jquant1.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jquant2.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="renderer\jpeg-6\jutils.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sys\win32\rc\CreateResourceIDs.cpp" />
+    <ClCompile Include="tools\af\DialogAF.cpp" />
+    <ClCompile Include="tools\af\DialogAFBody.cpp" />
+    <ClCompile Include="tools\af\DialogAFConstraint.cpp" />
+    <ClCompile Include="tools\af\DialogAFConstraintBallAndSocket.cpp" />
+    <ClCompile Include="tools\af\DialogAFConstraintFixed.cpp" />
+    <ClCompile Include="tools\af\DialogAFConstraintHinge.cpp" />
+    <ClCompile Include="tools\af\DialogAFConstraintSlider.cpp" />
+    <ClCompile Include="tools\af\DialogAFConstraintSpring.cpp" />
+    <ClCompile Include="tools\af\DialogAFConstraintUniversal.cpp" />
+    <ClCompile Include="tools\af\DialogAFName.cpp" />
+    <ClCompile Include="tools\af\DialogAFProperties.cpp" />
+    <ClCompile Include="tools\af\DialogAFView.cpp" />
+    <ClCompile Include="tools\comafx\CDIB.cpp" />
+    <ClCompile Include="tools\comafx\CPathTreeCtrl.cpp" />
+    <ClCompile Include="tools\comafx\CSyntaxRichEditCtrl.cpp" />
+    <ClCompile Include="tools\comafx\DialogColorPicker.cpp" />
+    <ClCompile Include="tools\comafx\DialogGoToLine.cpp" />
+    <ClCompile Include="tools\comafx\DialogName.cpp" />
+    <ClCompile Include="tools\comafx\StdAfx.cpp" />
+    <ClCompile Include="tools\comafx\VectorCtl.cpp" />
+    <ClCompile Include="tools\common\AlphaPopup.cpp" />
+    <ClCompile Include="tools\common\ColorButton.cpp" />
+    <ClCompile Include="tools\common\MaskEdit.cpp" />
+    <ClCompile Include="tools\common\OpenFileDialog.cpp" />
+    <ClCompile Include="tools\common\PropertyGrid.cpp" />
+    <ClCompile Include="tools\common\PropTree\PropTree.cpp" />
+    <ClCompile Include="tools\common\PropTree\PropTreeInfo.cpp" />
+    <ClCompile Include="tools\common\PropTree\PropTreeItem.cpp" />
+    <ClCompile Include="tools\common\PropTree\PropTreeItemButton.cpp" />
+    <ClCompile Include="tools\common\PropTree\PropTreeItemCheck.cpp" />
+    <ClCompile Include="tools\common\PropTree\PropTreeItemColor.cpp" />
+    <ClCompile Include="tools\common\PropTree\PropTreeItemCombo.cpp" />
+    <ClCompile Include="tools\common\PropTree\PropTreeItemEdit.cpp" />
+    <ClCompile Include="tools\common\PropTree\PropTreeItemEditButton.cpp" />
+    <ClCompile Include="tools\common\PropTree\PropTreeItemFileEdit.cpp" />
+    <ClCompile Include="tools\common\PropTree\PropTreeItemStatic.cpp" />
+    <ClCompile Include="tools\common\PropTree\PropTreeList.cpp" />
+    <ClCompile Include="tools\common\PropTree\PropTreeView.cpp" />
+    <ClCompile Include="tools\common\RegistryOptions.cpp" />
+    <ClCompile Include="tools\common\RollupPanel.cpp" />
+    <ClCompile Include="tools\common\SpinButton.cpp" />
+    <ClCompile Include="tools\decl\DialogDeclBrowser.cpp" />
+    <ClCompile Include="tools\decl\DialogDeclEditor.cpp" />
+    <ClCompile Include="tools\decl\DialogDeclNew.cpp" />
+    <ClCompile Include="tools\fbxexport\FbxInterface.cpp" />
+    <ClCompile Include="tools\fbxexport\FbxStaticImport.cpp" />
+    <ClCompile Include="tools\fbxexport\utility\AnimationUtility.cpp" />
+    <ClCompile Include="tools\fbxexport\utility\FbxCommon.cpp" />
+    <ClCompile Include="tools\fbxexport\utility\GeometryUtility.cpp" />
+    <ClCompile Include="tools\guied\GEApp.cpp" />
+    <ClCompile Include="tools\guied\GECheckInDlg.cpp" />
+    <ClCompile Include="tools\guied\GEDeleteModifier.cpp" />
+    <ClCompile Include="tools\guied\GEHideModifier.cpp" />
+    <ClCompile Include="tools\guied\GEInsertModifier.cpp" />
+    <ClCompile Include="tools\guied\GEItemPropsDlg.cpp" />
+    <ClCompile Include="tools\guied\GEItemScriptsDlg.cpp" />
+    <ClCompile Include="tools\guied\GEKeyValueModifier.cpp" />
+    <ClCompile Include="tools\guied\GEModifier.cpp" />
+    <ClCompile Include="tools\guied\GEModifierGroup.cpp" />
+    <ClCompile Include="tools\guied\GEModifierStack.cpp" />
+    <ClCompile Include="tools\guied\GEMoveModifier.cpp" />
+    <ClCompile Include="tools\guied\GENavigator.cpp" />
+    <ClCompile Include="tools\guied\GEOptions.cpp" />
+    <ClCompile Include="tools\guied\GEOptionsDlg.cpp" />
+    <ClCompile Include="tools\guied\GEProperties.cpp" />
+    <ClCompile Include="tools\guied\GEPropertyPage.cpp" />
+    <ClCompile Include="tools\guied\GESelectionMgr.cpp" />
+    <ClCompile Include="tools\guied\GESizeModifier.cpp" />
+    <ClCompile Include="tools\guied\GEStateModifier.cpp" />
+    <ClCompile Include="tools\guied\GEStatusBar.cpp" />
+    <ClCompile Include="tools\guied\GETransformer.cpp" />
+    <ClCompile Include="tools\guied\GEViewer.cpp" />
+    <ClCompile Include="tools\guied\GEWindowWrapper.cpp" />
+    <ClCompile Include="tools\guied\GEWorkspace.cpp" />
+    <ClCompile Include="tools\guied\GEWorkspaceFile.cpp" />
+    <ClCompile Include="tools\guied\GEZOrderModifier.cpp" />
+    <ClCompile Include="tools\guied\guied.cpp" />
+    <ClCompile Include="tools\imagecompress\ImageCompress.cpp" />
+    <ClCompile Include="tools\materialeditor\ConsoleView.cpp" />
+    <ClCompile Include="tools\materialeditor\FindDialog.cpp" />
+    <ClCompile Include="tools\materialeditor\MaterialDef.cpp" />
+    <ClCompile Include="tools\materialeditor\MaterialDoc.cpp" />
+    <ClCompile Include="tools\materialeditor\MaterialDocManager.cpp" />
+    <ClCompile Include="tools\materialeditor\MaterialEditor.cpp" />
+    <ClCompile Include="tools\materialeditor\MaterialEditView.cpp" />
+    <ClCompile Include="tools\materialeditor\MaterialModifier.cpp" />
+    <ClCompile Include="tools\materialeditor\MaterialPreviewPropView.cpp" />
+    <ClCompile Include="tools\materialeditor\MaterialPreviewView.cpp" />
+    <ClCompile Include="tools\materialeditor\MaterialPropTreeView.cpp" />
+    <ClCompile Include="tools\materialeditor\MaterialTreeView.cpp" />
+    <ClCompile Include="tools\materialeditor\MaterialView.cpp" />
+    <ClCompile Include="tools\materialeditor\MEMainFrame.cpp" />
+    <ClCompile Include="tools\materialeditor\MEOptions.cpp" />
+    <ClCompile Include="tools\materialeditor\StageView.cpp" />
+    <ClCompile Include="tools\materialeditor\ToggleListView.cpp" />
+    <ClCompile Include="tools\MeshTools\Lib\FaceMeshTools.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\Lib\MeshMatrix.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\Lib\RKMesh.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\Lib\UndoMeshTools.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\Lib\Unwrapper.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\Lib\MeshToolsVector.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\Lib\MeshToolsVertex.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\LSCM\arithb.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">./tools/MeshTools/MeshTools/;./tools/MeshTools/MeshTools/Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Level1</WarningLevel>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\LSCM\BDR_unwrapper.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">./tools/MeshTools/MeshTools/;./tools/MeshTools/MeshTools/Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Level1</WarningLevel>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\LSCM\BLI_heap.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">./tools/MeshTools/MeshTools/;./tools/MeshTools/MeshTools/Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Level1</WarningLevel>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\LSCM\BLI_linklist.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">./tools/MeshTools/MeshTools/;./tools/MeshTools/MeshTools/Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Level1</WarningLevel>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\LSCM\BLI_memarena.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">./tools/MeshTools/MeshTools/;./tools/MeshTools/MeshTools/Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Level1</WarningLevel>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\LSCM\edgehash.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">./tools/MeshTools/MeshTools/;./tools/MeshTools/MeshTools/Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Level1</WarningLevel>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\LSCM\EdgeSelect.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">./tools/MeshTools/MeshTools/;./tools/MeshTools/MeshTools/Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Level1</WarningLevel>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\LSCM\mallocn.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">./tools/MeshTools/MeshTools/;./tools/MeshTools/MeshTools/Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Level1</WarningLevel>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\LSCM\opennl.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">./tools/MeshTools/MeshTools/;./tools/MeshTools/MeshTools/Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Level1</WarningLevel>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\LSCM\parametrizer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">./tools/MeshTools/MeshTools/;./tools/MeshTools/MeshTools/Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Level1</WarningLevel>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\LSCM\rand.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">./tools/MeshTools/MeshTools/;./tools/MeshTools/MeshTools/Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Level1</WarningLevel>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\LSCM\Meshstdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">./tools/MeshTools/MeshTools/;./tools/MeshTools/MeshTools/Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Level1</WarningLevel>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\LSCM\time.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">./tools/MeshTools/MeshTools/;./tools/MeshTools/MeshTools/Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Level1</WarningLevel>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\MeshTools_UVAtlas.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\colamd.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\get_perm_c.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\heap_relax_snode.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\lsame.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\meshmemory.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\mmd.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\relax_snode.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\scolumn_bmod.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\scolumn_dfs.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\scopy_to_ucol.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\sgssv.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\sgstrf.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\sgstrs.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\smemory.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\smyblas2.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\spanel_bmod.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\spanel_dfs.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\spivotL.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\spruneL.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\sp_coletree.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\sp_ienv.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\sp_preorder.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\ssnode_bmod.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\ssnode_dfs.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\ssp_blas2.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\ssp_blas3.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\strsv.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\superlu_timer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\sutil.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\util.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\MeshTools\superlu\xerbla.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tools\modelstudio\ModelStudioEditor.cpp" />
+    <ClCompile Include="tools\particle\DialogParticleEditor.cpp" />
+    <ClCompile Include="tools\radiant\autocaulk.cpp" />
+    <ClCompile Include="tools\radiant\CameraTargetDlg.cpp" />
+    <ClCompile Include="tools\radiant\CamWnd.cpp" />
+    <ClCompile Include="tools\radiant\CapDialog.cpp" />
+    <ClCompile Include="tools\radiant\cmdlib.cpp" />
+    <ClCompile Include="tools\radiant\CommandsDlg.cpp" />
+    <ClCompile Include="tools\radiant\CommentsDlg.cpp" />
+    <ClCompile Include="tools\radiant\ConsoleDlg.cpp" />
+    <ClCompile Include="tools\radiant\CSG.CPP" />
+    <ClCompile Include="tools\radiant\CurveDlg.cpp" />
+    <ClCompile Include="tools\radiant\DialogInfo.cpp" />
+    <ClCompile Include="tools\radiant\DialogTextures.cpp" />
+    <ClCompile Include="tools\radiant\DialogThick.cpp" />
+    <ClCompile Include="tools\radiant\DlgCamera.cpp" />
+    <ClCompile Include="tools\radiant\DlgEvent.cpp" />
+    <ClCompile Include="tools\radiant\DRAG.CPP" />
+    <ClCompile Include="tools\radiant\ECLASS.CPP" />
+    <ClCompile Include="tools\radiant\EditorBrush.cpp" />
+    <ClCompile Include="tools\radiant\EditorBrushPrimit.cpp" />
+    <ClCompile Include="tools\radiant\EditorEntity.cpp" />
+    <ClCompile Include="tools\radiant\EditorMap.cpp" />
+    <ClCompile Include="tools\radiant\EditorWindow.cpp" />
+    <ClCompile Include="tools\radiant\EditViewDlg.cpp" />
+    <ClCompile Include="tools\radiant\EntityDlg.cpp" />
+    <ClCompile Include="tools\radiant\EntityListDlg.cpp" />
+    <ClCompile Include="tools\radiant\EntKeyFindReplace.cpp" />
+    <ClCompile Include="tools\radiant\FindTextureDlg.cpp" />
+    <ClCompile Include="tools\radiant\GetString.cpp" />
+    <ClCompile Include="tools\radiant\GLWidget.cpp" />
+    <ClCompile Include="tools\radiant\InspectorDialog.cpp" />
+    <ClCompile Include="tools\radiant\LightDlg.cpp" />
+    <ClCompile Include="tools\radiant\MainFrm.cpp" />
+    <ClCompile Include="tools\radiant\MapInfo.cpp" />
+    <ClCompile Include="tools\radiant\MediaPreviewDlg.cpp" />
+    <ClCompile Include="tools\radiant\MRU.CPP" />
+    <ClCompile Include="tools\radiant\NewProjDlg.cpp" />
+    <ClCompile Include="tools\radiant\NewTexWnd.cpp" />
+    <ClCompile Include="tools\radiant\PARSE.CPP" />
+    <ClCompile Include="tools\radiant\PatchDensityDlg.cpp" />
+    <ClCompile Include="tools\radiant\PatchDialog.cpp" />
+    <ClCompile Include="tools\radiant\PMESH.CPP" />
+    <ClCompile Include="tools\radiant\PointFile.cpp" />
+    <ClCompile Include="tools\radiant\PrefsDlg.cpp" />
+    <ClCompile Include="tools\radiant\PreviewDlg.cpp" />
+    <ClCompile Include="tools\radiant\PropertyList.cpp" />
+    <ClCompile Include="tools\radiant\QE3.CPP" />
+    <ClCompile Include="tools\radiant\Radiant.cpp" />
+    <ClCompile Include="tools\radiant\RotateDlg.cpp" />
+    <ClCompile Include="tools\radiant\ScaleDialog.cpp" />
+    <ClCompile Include="tools\radiant\SELECT.CPP" />
+    <ClCompile Include="tools\radiant\splines.cpp" />
+    <ClCompile Include="tools\radiant\SurfaceDlg.cpp" />
+    <ClCompile Include="tools\radiant\TabsDlg.cpp" />
+    <ClCompile Include="tools\radiant\TearoffContainerWindow.cpp" />
+    <ClCompile Include="tools\radiant\TextureBar.cpp" />
+    <ClCompile Include="tools\radiant\Undo.cpp" />
+    <ClCompile Include="tools\radiant\VERTSEL.CPP" />
+    <ClCompile Include="tools\radiant\WaitDlg.cpp" />
+    <ClCompile Include="tools\radiant\WaveOpen.cpp" />
+    <ClCompile Include="tools\radiant\WIN_DLG.CPP" />
+    <ClCompile Include="tools\radiant\WIN_QE3.CPP" />
+    <ClCompile Include="tools\radiant\XYWnd.cpp" />
+    <ClCompile Include="tools\radiant\Z.CPP" />
+    <ClCompile Include="tools\radiant\ZClip.cpp" />
+    <ClCompile Include="tools\radiant\ZWnd.cpp" />
+    <ClCompile Include="tools\script\DialogScriptEditor.cpp" />
+    <ClCompile Include="tools\sound\DialogSound.cpp" />
+    <ClCompile Include="tools\sound\DialogSoundGroup.cpp" />
+    <ClCompile Include="tools\Tools.cpp" />
+    <ClCompile Include="tools\ToolsManagedManager.cpp" />
+    <ClCompile Include="ui\Winvar.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework\EngineClassExport.h" />
+    <ClInclude Include="idlib\precompiled.h" />
+    <ClInclude Include="renderer\jpeg-6\jchuff.h" />
+    <ClInclude Include="renderer\jpeg-6\jconfig.h" />
+    <ClInclude Include="renderer\jpeg-6\jdct.h" />
+    <ClInclude Include="renderer\jpeg-6\jdhuff.h" />
+    <ClInclude Include="renderer\jpeg-6\jerror.h" />
+    <ClInclude Include="renderer\jpeg-6\jinclude.h" />
+    <ClInclude Include="renderer\jpeg-6\jmemsys.h" />
+    <ClInclude Include="renderer\jpeg-6\jmorecfg.h" />
+    <ClInclude Include="renderer\jpeg-6\jpegint.h" />
+    <ClInclude Include="renderer\jpeg-6\jpeglib.h" />
+    <ClInclude Include="renderer\jpeg-6\jversion.h" />
+    <ClInclude Include="sys\win32\rc\AFEditor_resource.h" />
+    <ClInclude Include="sys\win32\rc\Common_resource.h" />
+    <ClInclude Include="sys\win32\rc\CreateResourceIDs.h" />
+    <ClInclude Include="sys\win32\rc\Debugger_resource.h" />
+    <ClInclude Include="sys\win32\rc\DeclEditor_resource.h" />
+    <ClInclude Include="sys\win32\rc\doom_resource.h" />
+    <ClInclude Include="sys\win32\rc\GuiEd_resource.h" />
+    <ClInclude Include="sys\win32\rc\MaterialEditor_Resource.h" />
+    <ClInclude Include="sys\win32\rc\ModelManager_Resource.h" />
+    <ClInclude Include="sys\win32\rc\ParticleEditor_resource.h" />
+    <ClInclude Include="sys\win32\rc\PDAEditor_resource.h" />
+    <ClInclude Include="sys\win32\rc\PropTree_resource.h" />
+    <ClInclude Include="sys\win32\rc\Radiant_resource.h" />
+    <ClInclude Include="sys\win32\rc\ScriptEditor_resource.h" />
+    <ClInclude Include="sys\win32\rc\SoundEditor_resource.h" />
+    <ClInclude Include="tools\af\DialogAF.h" />
+    <ClInclude Include="tools\af\DialogAFBody.h" />
+    <ClInclude Include="tools\af\DialogAFConstraint.h" />
+    <ClInclude Include="tools\af\DialogAFConstraintBallAndSocket.h" />
+    <ClInclude Include="tools\af\DialogAFConstraintFixed.h" />
+    <ClInclude Include="tools\af\DialogAFConstraintHinge.h" />
+    <ClInclude Include="tools\af\DialogAFConstraintSlider.h" />
+    <ClInclude Include="tools\af\DialogAFConstraintSpring.h" />
+    <ClInclude Include="tools\af\DialogAFConstraintUniversal.h" />
+    <ClInclude Include="tools\af\DialogAFName.h" />
+    <ClInclude Include="tools\af\DialogAFProperties.h" />
+    <ClInclude Include="tools\af\DialogAFView.h" />
+    <ClInclude Include="tools\comafx\CDIB.h" />
+    <ClInclude Include="tools\comafx\CPathTreeCtrl.h" />
+    <ClInclude Include="tools\comafx\CSyntaxRichEditCtrl.h" />
+    <ClInclude Include="tools\comafx\DialogColorPicker.h" />
+    <ClInclude Include="tools\comafx\DialogGoToLine.h" />
+    <ClInclude Include="tools\comafx\DialogName.h" />
+    <ClInclude Include="tools\comafx\StdAfx.h" />
+    <ClInclude Include="tools\comafx\VectorCtl.h" />
+    <ClInclude Include="tools\common\ColorButton.h" />
+    <ClInclude Include="tools\common\DialogHelpers.h" />
+    <ClInclude Include="tools\common\MaskEdit.h" />
+    <ClInclude Include="tools\common\OpenFileDialog.h" />
+    <ClInclude Include="tools\common\PropertyGrid.h" />
+    <ClInclude Include="tools\common\PropTree\PropTree.h" />
+    <ClInclude Include="tools\common\PropTree\PropTreeInfo.h" />
+    <ClInclude Include="tools\common\PropTree\PropTreeItem.h" />
+    <ClInclude Include="tools\common\PropTree\PropTreeItemButton.h" />
+    <ClInclude Include="tools\common\PropTree\PropTreeItemCheck.h" />
+    <ClInclude Include="tools\common\PropTree\PropTreeItemColor.h" />
+    <ClInclude Include="tools\common\PropTree\PropTreeItemCombo.h" />
+    <ClInclude Include="tools\common\PropTree\PropTreeItemEdit.h" />
+    <ClInclude Include="tools\common\PropTree\PropTreeItemEditButton.h" />
+    <ClInclude Include="tools\common\PropTree\PropTreeItemFileEdit.h" />
+    <ClInclude Include="tools\common\PropTree\PropTreeItemStatic.h" />
+    <ClInclude Include="tools\common\PropTree\PropTreeList.h" />
+    <ClInclude Include="tools\common\PropTree\PropTreeView.h" />
+    <ClInclude Include="tools\common\RegistryOptions.h" />
+    <ClInclude Include="tools\common\RollupPanel.h" />
+    <ClInclude Include="tools\common\SpinButton.h" />
+    <ClInclude Include="tools\decl\DialogDeclBrowser.h" />
+    <ClInclude Include="tools\decl\DialogDeclEditor.h" />
+    <ClInclude Include="tools\decl\DialogDeclNew.h" />
+    <ClInclude Include="tools\fbxexport\FbxExport_Local.h" />
+    <ClInclude Include="tools\fbxexport\utility\AnimationUtility.h" />
+    <ClInclude Include="tools\fbxexport\utility\Common.h" />
+    <ClInclude Include="tools\fbxexport\utility\GeometryUtility.h" />
+    <ClInclude Include="tools\guied\GEApp.h" />
+    <ClInclude Include="tools\guied\GEDeleteModifier.h" />
+    <ClInclude Include="tools\guied\GEHideModifier.h" />
+    <ClInclude Include="tools\guied\GEInsertModifier.h" />
+    <ClInclude Include="tools\guied\GEItemPropsDlg.h" />
+    <ClInclude Include="tools\guied\GEItemScriptsDlg.h" />
+    <ClInclude Include="tools\guied\GEKeyValueModifier.h" />
+    <ClInclude Include="tools\guied\GEModifier.h" />
+    <ClInclude Include="tools\guied\GEModifierGroup.h" />
+    <ClInclude Include="tools\guied\GEModifierStack.h" />
+    <ClInclude Include="tools\guied\GEMoveModifier.h" />
+    <ClInclude Include="tools\guied\GENavigator.h" />
+    <ClInclude Include="tools\guied\GEOptions.h" />
+    <ClInclude Include="tools\guied\GEOptionsDlg.h" />
+    <ClInclude Include="tools\guied\GEProperties.h" />
+    <ClInclude Include="tools\guied\GEPropertyPage.h" />
+    <ClInclude Include="tools\guied\GESelectionMgr.h" />
+    <ClInclude Include="tools\guied\GESizeModifier.h" />
+    <ClInclude Include="tools\guied\GEStateModifier.h" />
+    <ClInclude Include="tools\guied\GEStatusBar.h" />
+    <ClInclude Include="tools\guied\GETransformer.h" />
+    <ClInclude Include="tools\guied\GEViewer.h" />
+    <ClInclude Include="tools\guied\GEWindowWrapper.h" />
+    <ClInclude Include="tools\guied\GEWorkspace.h" />
+    <ClInclude Include="tools\guied\GEZOrderModifier.h" />
+    <ClInclude Include="tools\materialeditor\ConsoleView.h" />
+    <ClInclude Include="tools\materialeditor\FindDialog.h" />
+    <ClInclude Include="tools\materialeditor\MaterialDef.h" />
+    <ClInclude Include="tools\materialeditor\MaterialDoc.h" />
+    <ClInclude Include="tools\materialeditor\MaterialDocManager.h" />
+    <ClInclude Include="tools\materialeditor\MaterialEditor.h" />
+    <ClInclude Include="tools\materialeditor\MaterialEditView.h" />
+    <ClInclude Include="tools\materialeditor\MaterialModifier.h" />
+    <ClInclude Include="tools\materialeditor\MaterialPreviewPropView.h" />
+    <ClInclude Include="tools\materialeditor\MaterialPreviewView.h" />
+    <ClInclude Include="tools\materialeditor\MaterialPropTreeView.h" />
+    <ClInclude Include="tools\materialeditor\MaterialTreeView.h" />
+    <ClInclude Include="tools\materialeditor\MaterialView.h" />
+    <ClInclude Include="tools\materialeditor\MEMainFrame.h" />
+    <ClInclude Include="tools\materialeditor\MEOptions.h" />
+    <ClInclude Include="tools\materialeditor\StageView.h" />
+    <ClInclude Include="tools\materialeditor\ToggleListView.h" />
+    <ClInclude Include="tools\meshtools\lscm\MeshBuilderStdafx.h" />
+    <ClInclude Include="tools\MeshTools\MeshTools_UVAtlas.h" />
+    <ClInclude Include="tools\modelstudio\ModelStudioEditor.h" />
+    <ClInclude Include="tools\particle\DialogParticleEditor.h" />
+    <ClInclude Include="tools\radiant\autocaulk.h" />
+    <ClInclude Include="tools\radiant\CameraTargetDlg.h" />
+    <ClInclude Include="tools\radiant\CamWnd.h" />
+    <ClInclude Include="tools\radiant\CapDialog.h" />
+    <ClInclude Include="tools\radiant\cmdlib.h" />
+    <ClInclude Include="tools\radiant\CommandsDlg.h" />
+    <ClInclude Include="tools\radiant\CommentsDlg.h" />
+    <ClInclude Include="tools\radiant\ConsoleDlg.h" />
+    <ClInclude Include="tools\radiant\CurveDlg.h" />
+    <ClInclude Include="tools\radiant\DialogInfo.h" />
+    <ClInclude Include="tools\radiant\DialogTextures.h" />
+    <ClInclude Include="tools\radiant\DialogThick.h" />
+    <ClInclude Include="tools\radiant\DlgCamera.h" />
+    <ClInclude Include="tools\radiant\DlgEvent.h" />
+    <ClInclude Include="tools\radiant\EditorBrush.h" />
+    <ClInclude Include="tools\radiant\EditorEntity.h" />
+    <ClInclude Include="tools\radiant\EditorMap.h" />
+    <ClInclude Include="tools\radiant\EditorWindow.h" />
+    <ClInclude Include="tools\radiant\EditViewDlg.h" />
+    <ClInclude Include="tools\radiant\EntityDlg.h" />
+    <ClInclude Include="tools\radiant\EntityListDlg.h" />
+    <ClInclude Include="tools\radiant\EntKeyFindReplace.h" />
+    <ClInclude Include="tools\radiant\FindTextureDlg.h" />
+    <ClInclude Include="tools\radiant\GetString.h" />
+    <ClInclude Include="tools\radiant\GLWidget.h" />
+    <ClInclude Include="tools\radiant\InspectorDialog.h" />
+    <ClInclude Include="tools\radiant\LightDlg.h" />
+    <ClInclude Include="tools\radiant\MainFrm.h" />
+    <ClInclude Include="tools\radiant\MapInfo.h" />
+    <ClInclude Include="tools\radiant\MediaPreviewDlg.h" />
+    <ClInclude Include="tools\radiant\MRU.H" />
+    <ClInclude Include="tools\radiant\NewProjDlg.h" />
+    <ClInclude Include="tools\radiant\NewTexWnd.h" />
+    <ClInclude Include="tools\radiant\PARSE.H" />
+    <ClInclude Include="tools\radiant\PatchDensityDlg.h" />
+    <ClInclude Include="tools\radiant\PatchDialog.h" />
+    <ClInclude Include="tools\radiant\PMESH.H" />
+    <ClInclude Include="tools\radiant\PrefsDlg.h" />
+    <ClInclude Include="tools\radiant\PreviewDlg.h" />
+    <ClInclude Include="tools\radiant\PropertyList.h" />
+    <ClInclude Include="tools\radiant\QE3.H" />
+    <ClInclude Include="tools\radiant\QEDEFS.H" />
+    <ClInclude Include="tools\radiant\QERTYPES.H" />
+    <ClInclude Include="tools\radiant\Radiant.h" />
+    <ClInclude Include="tools\radiant\RotateDlg.h" />
+    <ClInclude Include="tools\radiant\ScaleDialog.h" />
+    <ClInclude Include="tools\radiant\SELECT.H" />
+    <ClInclude Include="tools\radiant\splines.h" />
+    <ClInclude Include="tools\radiant\SurfaceDlg.h" />
+    <ClInclude Include="tools\radiant\TabsDlg.h" />
+    <ClInclude Include="tools\radiant\TearoffContainerWindow.h" />
+    <ClInclude Include="tools\radiant\TextureBar.h" />
+    <ClInclude Include="tools\radiant\Textures.h" />
+    <ClInclude Include="tools\radiant\Undo.h" />
+    <ClInclude Include="tools\radiant\WaitDlg.h" />
+    <ClInclude Include="tools\radiant\WaveOpen.h" />
+    <ClInclude Include="tools\radiant\XYWnd.h" />
+    <ClInclude Include="tools\radiant\Z.H" />
+    <ClInclude Include="tools\radiant\ZClip.h" />
+    <ClInclude Include="tools\radiant\ZWnd.h" />
+    <ClInclude Include="tools\script\DialogScriptEditor.h" />
+    <ClInclude Include="tools\sound\DialogSound.h" />
+    <ClInclude Include="tools\sound\DialogSoundGroup.h" />
+    <ClInclude Include="tools\tools_local.h" />
+    <ClInclude Include="tools\tools_platform.h" />
+    <ClInclude Include="tools\tools_public.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sys\win32\rc\res\BEVEL.BMP" />
+    <None Include="sys\win32\rc\res\BITMAP2.BMP" />
+    <None Include="sys\win32\rc\res\BMP00001.BMP" />
+    <None Include="sys\win32\rc\res\bmp00002.bmp" />
+    <None Include="sys\win32\rc\res\bmp00003.bmp" />
+    <None Include="sys\win32\rc\res\bmp00004.bmp" />
+    <None Include="sys\win32\rc\res\bmp00005.bmp" />
+    <None Include="sys\win32\rc\res\BMP0002.BMP" />
+    <None Include="sys\win32\rc\res\cchsb.bmp" />
+    <None Include="sys\win32\rc\res\ccrgb.bmp" />
+    <None Include="sys\win32\rc\res\dbg_back.bmp" />
+    <None Include="sys\win32\rc\res\dbg_breakpoint.ico" />
+    <None Include="sys\win32\rc\res\dbg_current.ico" />
+    <None Include="sys\win32\rc\res\dbg_currentline.ico" />
+    <None Include="sys\win32\rc\res\dbg_empty.ico" />
+    <None Include="sys\win32\rc\res\dbg_open.bmp" />
+    <None Include="sys\win32\rc\res\dbg_toolbar.bmp" />
+    <None Include="sys\win32\rc\res\DEFTEX.WAL">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="sys\win32\rc\res\doom.ico" />
+    <None Include="sys\win32\rc\res\ENDCAP.BMP" />
+    <None Include="sys\win32\rc\res\fpoint.cur" />
+    <None Include="sys\win32\rc\res\fxeditor.ico" />
+    <None Include="sys\win32\rc\res\fxed_link.ico" />
+    <None Include="sys\win32\rc\res\fxed_toolbar.bmp" />
+    <None Include="sys\win32\rc\res\GetString.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="sys\win32\rc\res\guied.ico" />
+    <None Include="sys\win32\rc\res\guied_collapse.ico" />
+    <None Include="sys\win32\rc\res\guied_expand.ico" />
+    <None Include="sys\win32\rc\res\guied_hand.cur" />
+    <None Include="sys\win32\rc\res\guied_nav_visible.ico" />
+    <None Include="sys\win32\rc\res\guied_nav_visibledisabled.ico" />
+    <None Include="sys\win32\rc\res\guied_scripts.ico" />
+    <None Include="sys\win32\rc\res\guied_scripts_white.ico" />
+    <None Include="sys\win32\rc\res\guied_viewer_toolbar.bmp" />
+    <None Include="sys\win32\rc\res\IBEVEL.BMP" />
+    <None Include="sys\win32\rc\res\icon2.ico" />
+    <None Include="sys\win32\rc\res\IENDCAP.BMP" />
+    <None Include="sys\win32\rc\res\logo_sm3dfx.bmp" />
+    <None Include="sys\win32\rc\res\matedtree.bmp" />
+    <None Include="sys\win32\rc\res\MaterialEditor.ico" />
+    <None Include="sys\win32\rc\res\MEFileToolbar.bmp" />
+    <None Include="sys\win32\rc\res\MEtoolbar.bmp" />
+    <None Include="sys\win32\rc\res\me_disabled_icon.ico" />
+    <None Include="sys\win32\rc\res\me_enabled.ico" />
+    <None Include="sys\win32\rc\res\me_off_icon.ico" />
+    <None Include="sys\win32\rc\res\me_on_icon.ico" />
+    <None Include="sys\win32\rc\res\PropTree.rc2">
+      <FileType>RC</FileType>
+    </None>
+    <None Include="sys\win32\rc\res\Q.BMP" />
+    <None Include="sys\win32\rc\res\qe3.ico" />
+    <None Include="sys\win32\rc\res\Radiant.ico" />
+    <None Include="sys\win32\rc\res\RADIANT3.GIF">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="sys\win32\rc\res\RadiantDoc.ico" />
+    <None Include="sys\win32\rc\res\shaderbar.bmp" />
+    <None Include="sys\win32\rc\res\shaderdoc.ico" />
+    <None Include="sys\win32\rc\res\shaderframe.ico" />
+    <None Include="sys\win32\rc\res\spliter.cur" />
+    <None Include="sys\win32\rc\res\Toolbar.bmp" />
+    <None Include="sys\win32\rc\res\TOOLBAR1.BMP" />
+    <None Include="sys\win32\rc\res\TOOLBAR2.BMP" />
+    <None Include="sys\win32\rc\res\VIEWDEFA.BMP" />
+    <None Include="sys\win32\rc\res\VIEWOPPO.BMP" />
+    <None Include="tools\comafx\riched20.tlh">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="tools_export.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="idlib.vcxproj">
+      <Project>{49bec5c6-b964-417a-851e-808886b57400}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="tools\ToolsManaged\ToolsManaged.csproj">
+      <Project>{ba4ce94b-e083-4903-91d7-4d4e9fc1a73e}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="sys\win32\rc\AFEditor.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="sys\win32\rc\Common.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="sys\win32\rc\Debugger.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="sys\win32\rc\DeclEditor.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="sys\win32\rc\doom.rc" />
+    <ResourceCompile Include="sys\win32\rc\GuiEd.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="sys\win32\rc\MaterialEditor.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="sys\win32\rc\ModelManager.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="sys\win32\rc\ParticleEditor.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="sys\win32\rc\PDAEditor.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="sys\win32\rc\PropTree.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="sys\win32\rc\Radiant.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="sys\win32\rc\ScriptEditor.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="sys\win32\rc\SoundEditor.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

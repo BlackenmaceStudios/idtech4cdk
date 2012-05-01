@@ -1,0 +1,29 @@
+// transparancy-unlit.crp
+//
+
+varying vec4          	var_Vertex; 
+varying vec2            var_TexDiffuse; 
+
+VertexProgram 
+	attribute vec4          	attr_TexCoord;     
+
+	//
+	// Main - Entry Point
+	//
+	void main() {
+		gl_Position = ftransform( );
+
+		// diffuse map texgen     
+		var_TexDiffuse.xy = ( attr_TexCoord ).st; 
+	}
+EndVertexProgram
+
+FragmentProgram  
+	uniform sampler2D   	u_diffuseTexture;    
+ 
+
+	void main( void ) {    
+		gl_FragColor = texture2D( u_diffuseTexture, var_TexDiffuse.st ) * 0.25;
+	}
+EndFragmentProgram
+
