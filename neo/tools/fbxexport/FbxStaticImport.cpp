@@ -15,7 +15,7 @@ bool WriteMD5StaticMesh( const char *meshpath ) {
 
 	// Open the mesh for writing
 	common->Printf("Writing %s\n", meshpath );
-	file = fileSystem->OpenFileWrite( meshpath );
+	file = fileSystem->OpenFileWrite( meshpath, "fs_devpath" );
 	if(!file) {
 		common->Warning("Failed to open %s for writing.\n", meshpath );
 		return  false;
@@ -108,11 +108,22 @@ void FbxExportToStaticMesh( const char *meshpath, idStr &outFilePath ) {
 		return;
 	}
 
-	common->Printf("Mesh imported successfully\n");
+	
 
 	// Reload the mesh.
-	renderModelManager->ReloadModels();
-	
+	idRenderModel *model = renderModelManager->FindModel( outFilePath.c_str() );
+	if(model == NULL)
+	{
+		common->Warning("There was a error with the mesh import, check the log\n");
+	}
+	else
+	{
+		common->Printf("Updating Model Cache...\n");
+		model->LoadModel();
+		renderModelManager->ReloadModels();
+		common->Printf("Mesh imported successfully\n");
+	}
+
 	// Disable refresh on print
 	common->SetRefreshOnPrint( false );
 }

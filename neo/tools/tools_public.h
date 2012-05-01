@@ -55,6 +55,8 @@ public:
 	virtual bool	FrameSysMsg( void *msg ) = 0;
 	virtual byte    *CompressImage( byte *uncompressedBuffer, int width, int height ) = 0;
 	virtual void	ComputeUVAtlasForModel( class bmVTModel *model, int startTris, int numTris ) = 0;
+
+	virtual void	ShowDebugConsole( void ) = 0;
 };
 
 typedef idToolInterface * (*ToolsAPI_Init_t)( bmEngineClassExport *engineExport, void *winVars );

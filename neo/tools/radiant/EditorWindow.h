@@ -34,6 +34,7 @@ public:
 	virtual BOOL RedrawWindow(LPCRECT lpRectUpdate = NULL, CRgn* prgnUpdate = NULL, UINT flags = RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE);
 	virtual void Destroy( void );
 	virtual void OnAddEntityEvent( const char *entityType, CPoint pt );
+	virtual void OnNamedEvent( const char *eventName );
 public:
 	void	OpenEntityContextMenu( idDict *entDict );
 	void	SetCapture( void );

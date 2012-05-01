@@ -32,6 +32,11 @@ namespace ToolsManaged.Frontend.WindowAPI
             
         }
 
+        public void OnNamedEvent(string eventName)
+        {
+            _nativeWindow.OnNamedEvent(_nativeWindow.GetNativeAddress(),eventName);
+        }
+
         public NativeAPI.Win32.RECT GetScreenRect()
         {
             NativeAPI.Win32.RECT rect;
@@ -39,6 +44,11 @@ namespace ToolsManaged.Frontend.WindowAPI
             if (_window.GetType().Name == "Viewport")
             {
                 Viewport viewport = (Viewport)_window;
+                NativeAPI.Win32.GetWindowRect(viewport.GetPanelHandle(), out rect);
+            }
+            else if (_window.GetType().Name == "ModelStudio")
+            {
+                ModelStudio viewport = (ModelStudio)_window;
                 NativeAPI.Win32.GetWindowRect(viewport.GetPanelHandle(), out rect);
             }
             else
@@ -141,6 +151,11 @@ namespace ToolsManaged.Frontend.WindowAPI
 
             _nativeWindow.OnCreate(_nativeWindow.GetNativeAddress(), IntPtr.Zero);
             _nativeWindow.OnSize(_nativeWindow.GetNativeAddress(),0, 0, 0);
+        }
+
+        public void ShowWindow()
+        {
+            _window.Show();
         }
 
         public IntPtr GetSafeHandle()

@@ -63,6 +63,12 @@
     <Compile Include="Frontend\EntityProperties.Designer.cs">
       <DependentUpon>EntityProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="Frontend\ModelStudio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend\ModelStudio.Designer.cs">
+      <DependentUpon>ModelStudio.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frontend\WindowAPI\EditorWindow.cs" />
     <Compile Include="Frontend\WindowAPI\FormManager.cs" />
     <Compile Include="Frontend\ToolBoxDock.cs">
@@ -99,6 +105,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Frontend\EntityProperties.resx">
       <DependentUpon>EntityProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend\ModelStudio.resx">
+      <DependentUpon>ModelStudio.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frontend\ToolBoxDock.resx">
       <DependentUpon>ToolBoxDock.cs</DependentUpon>

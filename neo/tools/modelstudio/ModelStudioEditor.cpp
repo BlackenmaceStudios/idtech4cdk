@@ -5,7 +5,6 @@
 
 #include "../../sys/win32/win_local.h"
 #include "../../sys/win32/rc/common_resource.h"
-#include "../../sys/win32/rc/ModelManager_resource.h"
 #include "../comafx/DialogName.h"
 #include "../radiant/QE3.H"
 #include "ModelStudioEditor.h"
@@ -15,7 +14,6 @@ bmModelStudioEditor *modelStudioEditor = NULL;
 // bmModelStudioEditor dialog
 
 bmModelStudioEditor::bmModelStudioEditor(CWnd* pParent /*=NULL*/)
-	: CDialog(bmModelStudioEditor::IDD, pParent)
 {
 
 }
@@ -26,21 +24,13 @@ bmModelStudioEditor::~bmModelStudioEditor()
 
 void bmModelStudioEditor::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-	DDX_Control( pDX, IDC_MODELMANAGER_PREVIEW, previewWindow );
 }
 
-BEGIN_MESSAGE_MAP(bmModelStudioEditor, CDialog)
-	ON_WM_PAINT()
-	ON_WM_SIZE()
-	ON_BN_CLICKED( ID_IMPORT_SKELETALMESH, OnFileFbxImportStatic )
-END_MESSAGE_MAP()
 
-BOOL bmModelStudioEditor::OnInitDialog() {
-	CDialog::OnInitDialog();
+int bmModelStudioEditor::OnCreate(LPCREATESTRUCT lpCreateStruct) {
+	//CDialog::OnInitDialog();
 
-	CDC *pDC = previewWindow.GetDC();
-	HDC hDC = pDC->GetSafeHdc();
+	HDC hDC = GetDC();
 
 	QEW_SetupPixelFormat(hDC, true);
 
@@ -88,13 +78,12 @@ BOOL bmModelStudioEditor::OnInitDialog() {
 		}
 	}
 
-	CRect	rect;
-	GetDlgItem(IDC_MODELMANAGER_PREVIEW)->GetClientRect(rect);
-	m_Camera.width = rect.right;
-	m_Camera.height = rect.bottom;
+	
+	m_Camera.width = SCREEN_WIDTH;
+	m_Camera.height = SCREEN_HEIGHT;
 
 	SelectObject(hDC, hOldFont);
-	ReleaseDC(pDC);
+	::ReleaseDC(GetSafeHwnd(), GetDC());
 
 	// indicate start of glyph display lists
 	qglListBase(g_qeglobals.d_font_list);
@@ -111,38 +100,46 @@ OnUpdateModelPreview
 void bmModelStudioEditor::OnUpdateModelPreview( void ) {
 	int frontEnd, backEnd = 0;
 	renderView_t	refdef;
-/*
-	//qglClearColor( 0.1f, 0.1f, 0.1f, 0.0f );
-	//qglScissor( 0, 0, m_Camera.width, m_Camera.height );
-	//qglClear( GL_COLOR_BUFFER_BIT );
 
-	viewDef_t *viewDef = renderSystem->GetNewFrameViewdef();
-	viewDef->renderView.x = 0;
-	viewDef->renderView.y = 0;
-	viewDef->renderView.width = m_Camera.width * 1.8;
-	viewDef->renderView.height = m_Camera.height  * 1.55;
-	viewDef->scissor.x1 = 0;
-	viewDef->scissor.y1 = 0;
-	viewDef->scissor.x2 = m_Camera.width  * 1.8;
-	viewDef->scissor.y2 = m_Camera.height  * 1.55;
-	viewDef->isEditor = true;
-	//tr.viewDef->skipPostProcess = true;
+	qglViewport(0, 0, m_Camera.width, m_Camera.height);
+	qglScissor(0, 0, m_Camera.width, m_Camera.height);
+	qglClearColor(g_qeglobals.d_savedinfo.colors[COLOR_CAMERABACK][0], g_qeglobals.d_savedinfo.colors[COLOR_CAMERABACK][1], g_qeglobals.d_savedinfo.colors[COLOR_CAMERABACK][2], 0);
+
+
+	qglClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	
+	float scalew = SCREEN_WIDTH / m_Camera.width;
+	float scaleh = SCREEN_HEIGHT / m_Camera.height;
+	if(scalew <= 0 || scaleh <= 0)
+	{
+		scalew = 1;
+		scaleh = 1;
+	}
+	else
+	{
+		scalew -= 0.005;
+		scaleh -= 0.005;
+	}
+
+
 	// render it
-	renderSystem->BeginFrame( m_Camera.width * 1.2, m_Camera.height );
+	renderSystem->BeginFrame( SCREEN_WIDTH * scalew , SCREEN_HEIGHT * scaleh  );
 
 	memset( &refdef, 0, sizeof( refdef ) );
 	refdef.vieworg = idVec3( 0, 0, 0 );
+	refdef.megaProject = &g_qeglobals.megaproject;
 
 	m_Camera.angles = idAngles( 0, 0, 0 );
 
 	// the editor uses opposite pitch convention
 	refdef.viewaxis = idAngles( -m_Camera.angles.pitch, m_Camera.angles.yaw, m_Camera.angles.roll ).ToMat3();
 	
-	refdef.width = SCREEN_WIDTH;
-	refdef.height = SCREEN_HEIGHT;
+	refdef.width = SCREEN_WIDTH * scalew;
+	refdef.height = SCREEN_HEIGHT * scaleh;
 	refdef.fov_x = 90;
-	refdef.fov_y = 2 * atan((float)m_Camera.height / m_Camera.width) * idMath::M_RAD2DEG;
-	refdef.forceUpdate = true;
+	refdef.fov_y = 2 * atan((float)SCREEN_HEIGHT / SCREEN_WIDTH) * idMath::M_RAD2DEG;
+	//refdef.forceUpdate = true;
 
 	// only set in animation mode to give a consistent look 
 	//refdef.time = eventLoop->Milliseconds();
@@ -151,7 +148,7 @@ void bmModelStudioEditor::OnUpdateModelPreview( void ) {
 
 	game->DrawDefferedPass( SCREEN_WIDTH, SCREEN_HEIGHT );
 	renderSystem->EndFrame( &frontEnd, &backEnd );
-	viewDef->isEditor = false;
+
 	//tr.viewDef->skipPostProcess = false;
 
 	//
@@ -162,7 +159,8 @@ void bmModelStudioEditor::OnUpdateModelPreview( void ) {
 
 	qglFinish();
 	QE_CheckOpenGLForErrors();
-*/
+
+
 }
 
 /*
@@ -171,13 +169,7 @@ bmModelStudioEditor::OnSize
 =================
 */
 void bmModelStudioEditor::OnSize(UINT nType, int cx, int cy) {
-	CWnd::OnSize(nType, cx, cy);
-
-	//CRect	rect;
-	//GetClientRect(rect);
-	//m_Camera.width = rect.right;
-	//m_Camera.height = rect.bottom;
-	//GetDlgItem(IDC_MODELMANAGER_PREVIEW)->InvalidateRect(NULL, false);
+	
 }
 
 /*
@@ -186,10 +178,11 @@ OnFileFbxImportStatic
 =================
 */
 void bmModelStudioEditor::OnPaint( void ) {
-	CPaintDC	dc(GetDlgItem(IDC_MODELMANAGER_PREVIEW));	// device context for painting
+	HDC			hdc;
 	bool		bPaint = true;
 
-	if (!renderDevice->BindDeviceToWindow( dc.m_hDC )) {
+	hdc = ::GetDC( GetSafeHwnd() );
+	if (!renderDevice->BindDeviceToWindow( hdc )) {
 		common->Printf("ERROR: wglMakeCurrent failed..\n ");
 		common->Printf("Please restart " EDITOR_WINDOWTEXT " if the model studio previewer is not working\n");
 	}
@@ -199,12 +192,25 @@ void bmModelStudioEditor::OnPaint( void ) {
 		OnUpdateModelPreview();
 
 		QE_CheckOpenGLForErrors();
-		renderDevice->SwapBuffers(dc.m_hDC);
+		renderDevice->SwapBuffers(hdc);
 	}
 
 	// jmarshall
 	renderDevice->BindDeviceToWindow( NULL );
 	// jmarshall end
+}
+/*
+=================
+OnFileFbxImportStatic
+=================
+*/
+void bmModelStudioEditor::OnNamedEvent( const char *eventName ) {
+	if(!strcmp( eventName, "ImportStatic" )) {
+		OnFileFbxImportStatic();
+	}
+	else {
+		common->FatalError("ModelStudio: Unknown event %s\n", eventName );
+	}
 }
 
 /*
@@ -240,13 +246,13 @@ void ModelStudioEditorInit( const idDict *spawnArgs ) {
 	}
 
 	if ( modelStudioEditor == NULL ) {
-		InitAfx();
+		CRect rect;
 		modelStudioEditor = new bmModelStudioEditor();
+		modelStudioEditor->Create("ModelStudio", "", QE3_CHILDSTYLE, rect, g_pParentWnd, 1234);
+
 	}
 
-	if ( modelStudioEditor->GetSafeHwnd() == NULL ) {
-		modelStudioEditor->Create(IDD_MODELMODELDLG);
-	}
+	
 
 	modelStudioEditor->ShowWindow( SW_SHOW );
 	modelStudioEditor->SetFocus();

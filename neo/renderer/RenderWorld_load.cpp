@@ -165,6 +165,7 @@ idRenderModel *idRenderWorldLocal::ParseModel( idLexer *src ) {
 			tri->vt_AreaID = src->ParseInt();
 		}
 		else {
+			src->ParseInt();
 			tri->vt_AreaID = -1;
 		}
 // jmarshall end
