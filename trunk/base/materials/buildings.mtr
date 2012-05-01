@@ -1,0 +1,68 @@
+textures/buildings/building_wind
+{
+	qer_editorimage	textures/buildings/building_wind.tga
+	bumpmap		textures/buildings/building_wind_local.tga
+	diffusemap		textures/buildings/building_wind_d.tga
+	specularmap		textures/buildings/building_wind_s.tga
+}
+
+textures/city/asphault
+{
+	qer_editorimage	textures/city/asphault.tga
+	bumpmap		textures/city/asphault_local.tga
+	diffusemap		textures/city/asphault_d.tga
+	specularmap		textures/city/asphault_s.tga
+}
+
+
+textures/buildings/condemed
+{
+	qer_editorimage	textures/buildings/condemed.tga
+	bumpmap		textures/buildings/condemed_local.tga
+	diffusemap		textures/buildings/condemed_d.tga
+	specularmap		textures/buildings/condemed_s.tga
+}
+
+models/world/building_facade
+{
+	clamp
+	qer_editorimage	models/world/building_facade.tga
+	bumpmap		models/world/building_facade_local.tga
+	diffusemap		models/world/building_facade_d.tga
+	specularmap		models/world/building_facade_s.tga
+}
+
+models/world/building_facade1
+{
+	clamp
+	qer_editorimage	models/world/building_facade1.tga
+	bumpmap		models/world/building_facade1_local.tga
+	diffusemap		models/world/building_facade1_d.tga
+	specularmap		models/world/building_facade1_s.tga
+}
+
+models/world/building03
+{
+	clamp
+	qer_editorimage	models/world/building03.tga
+	bumpmap		models/world/building03_local.tga
+	diffusemap		models/world/building03_d.tga
+	specularmap		models/world/building03_s.tga
+}
+
+models/world/appart1
+{
+	clamp
+	qer_editorimage	models/world/appart1.tga
+	bumpmap		models/world/appart1_local.tga
+	diffusemap		models/world/appart1_d.tga
+	specularmap		models/world/appart1_s.tga
+}
+
+models/world/window
+{
+	qer_editorimage	models/world/window.tga
+	bumpmap		models/world/window_local.tga
+	diffusemap		models/world/window_d.tga
+	specularmap		models/world/window_s.tga
+}

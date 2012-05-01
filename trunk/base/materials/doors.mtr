@@ -1,0 +1,7 @@
+textures/doors/door_slide1
+{
+	qer_editorimage	textures/doors/door_slide1.tga
+	bumpmap		textures/doors/door_slide1_local.tga
+	diffusemap		textures/doors/door_slide1_d.tga
+	specularmap		textures/doors/door_slide1_s.tga
+}

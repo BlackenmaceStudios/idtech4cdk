@@ -1,0 +1,7 @@
+textures/outdoor/dirtroad
+{
+	qer_editorimage	textures/outdoor/dirtroad.tga
+	bumpmap		textures/outdoor/dirtroad_local.tga
+	diffusemap		textures/outdoor/dirtroad_d.tga
+	specularmap		textures/outdoor/dirtroad_s.tga
+}

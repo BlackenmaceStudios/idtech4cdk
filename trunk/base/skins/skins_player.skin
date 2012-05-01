@@ -1,0 +1,267 @@
+skin skins/player/blueteam {
+	models/characters/player/body models/characters/player/bodyblue
+}
+
+skin skins/player/cingrenade {
+	models/weapons/mflash/f_machinegun textures/common/nodraw
+	//models/characters/sarge2/teeth/teeth textures/common/nodraw
+	models/monsters/zombie/zombie01/eyes/brown textures/common/nodraw
+	textures/common/shadow2.tga textures/common/nodraw
+	models/characters/player/body models/characters/player/bodycin
+	models/characters/player/body2 models/characters/player/body2cin
+	models/characters/player/arm1 models/characters/player/arm1cin
+	models/characters/player/arm2 models/characters/player/arm2cin
+	models/characters/player/playerhead models/characters/player/playerheadcin
+	models/weapons/machinegun/m_gui textures/common/nodraw
+	models/weapons/machinegun/machinegun textures/common/nodraw
+}
+
+skin skins/player/cinmachinegun {
+	models/weapons/mflash/f_machinegun textures/common/nodraw
+	//models/characters/sarge2/teeth/teeth textures/common/nodraw
+	models/monsters/zombie/zombie01/eyes/brown textures/common/nodraw
+	textures/common/shadow2.tga textures/common/nodraw
+	models/characters/player/body models/characters/player/bodycin
+	models/characters/player/body2 models/characters/player/body2cin
+	models/characters/player/arm1 models/characters/player/arm1cin
+	models/characters/player/arm2 models/characters/player/arm2cin
+	models/characters/player/playerhead models/characters/player/playerheadcin
+	models/weapons/grenades/grenades3fx textures/common/nodraw
+	models/weapons/grenades/grenades3 textures/common/nodraw
+}
+
+skin skins/player/legs {
+	models/weapons/machinegun/machinegun textures/common/nodraw
+	models/weapons/machinegun/m_gui.tga textures/common/nodraw
+	models/weapons/shotgun/shotgun textures/common/nodraw
+	models/weapons/shotgun/shotgui textures/common/nodraw
+	models/weapons/shotgun/gui textures/common/nodraw
+	models/weapons/mflash/f_shotgun1 textures/common/nodraw
+	models/weapons/mflash/f_machinegun textures/common/nodraw
+	models/weapons/mflash/f_pistol1 textures/common/nodraw
+	models/weapons/shell1/sshell textures/common/nodraw
+	models/weapons/plasmagun/plasmagun textures/common/nodraw
+	models/weapons/pistol/pistol textures/common/nodraw
+	models/characters/player/playerhead textures/common/nodraw
+	models/characters/common/rightbrown textures/common/nodraw
+	models/characters/common/leftbrown textures/common/nodraw
+	models/characters/sarge2/teeth/teeth textures/common/nodraw
+	models/characters/player/arm1 textures/common/nodraw
+}
+
+skin skins/player/legs_and_shadow {
+	//models/weapons/mflash/f_machinegun textures/common/nodraw
+	//models/weapons/pistol/pistol textures/common/nodraw
+	//models/weapons/machinegun/machinegun textures/common/nodraw
+	//models/weapons/machinegun/m_gui.tga textures/common/nodraw
+
+	models/characters/player/body2.tga textures/common/nodraw
+	models/characters/player/playerhead textures/common/nodraw
+	models/characters/common/rightbrown textures/common/nodraw
+	models/characters/common/leftbrown textures/common/nodraw
+	models/characters/sarge2/teeth/teeth textures/common/nodraw
+	models/characters/player/arm1 textures/common/nodraw
+
+
+	models/weapons/machinegun/machinegun textures/common/nodraw
+	models/weapons/machinegun/m_gui.tga textures/common/nodraw
+	models/weapons/shotgun/shotgun textures/common/nodraw
+	models/weapons/shotgun/shotgui textures/common/nodraw
+	models/weapons/shotgun/gui textures/common/nodraw
+	models/weapons/mflash/f_shotgun1 textures/common/nodraw
+	models/weapons/mflash/f_machinegun textures/common/nodraw
+	models/weapons/mflash/f_pistol1 textures/common/nodraw
+	models/weapons/shell1/sshell textures/common/nodraw
+	models/weapons/plasmagun/plasmagun textures/common/nodraw
+	//models/characters/player/playerhead textures/common/nodraw
+	//models/characters/sarge2/teeth/teeth textures/common/nodraw
+	//models/characters/player/eyes textures/common/nodraw
+	models/weapons/pistol/pistol textures/common/nodraw
+	models/weapons/grenades/grenades3.tga textures/common/nodraw
+	models/weapons/grenades/grenades3fx.tga textures/common/nodraw
+}
+
+skin skins/player/nogrenade {
+	models/weapons/grenades/grenades3.tga textures/common/nodraw
+	models/weapons/grenades/grenades3fx.tga textures/common/nodraw
+}
+
+skin skins/player/nomachinegun {
+	models/weapons/machinegun/machinegun textures/common/nodraw
+	models/weapons/machinegun/m_gui.tga textures/common/nodraw
+}
+
+skin skins/player/nopistol {
+	models/weapons/pistol/pistol textures/common/nodraw
+	models/weapons/pistol/pistol_clip textures/common/nodraw
+}
+
+skin skins/player/noplasma {
+	models/weapons/plasmagun/plasmagun textures/common/nodraw
+}
+
+skin skins/player/noshotgun {
+	models/weapons/shotgun/shotgun textures/common/nodraw
+	models/weapons/shotgun/shotgui textures/common/nodraw
+	models/weapons/shotgun/gui textures/common/nodraw
+	models/weapons/shell1/sshell textures/common/nodraw
+}
+
+skin skins/player/noweapon {
+	models/weapons/machinegun/machinegun textures/common/nodraw
+	models/weapons/machinegun/m_gui.tga textures/common/nodraw
+	models/weapons/shotgun/shotgun textures/common/nodraw
+	models/weapons/shotgun/shotgui textures/common/nodraw
+	models/weapons/shotgun/gui textures/common/nodraw
+	models/weapons/mflash/f_shotgun1 textures/common/nodraw
+	models/weapons/mflash/f_machinegun textures/common/nodraw
+	models/weapons/mflash/f_pistol1 textures/common/nodraw
+	models/weapons/shell1/sshell textures/common/nodraw
+	models/weapons/plasmagun/plasmagun textures/common/nodraw
+	//models/characters/player/playerhead textures/common/nodraw
+	//models/characters/sarge2/teeth/teeth textures/common/nodraw
+	//models/characters/player/eyes textures/common/nodraw
+	models/weapons/pistol/pistol textures/common/nodraw
+	models/weapons/grenades/grenades3 textures/common/nodraw
+	models/weapons/grenades/grenades3fx textures/common/nodraw
+	textures/common/shadow2 textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflash textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflash2 textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflashb textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_mflashb textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_mflash textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_fx2 textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_fx textures/common/nodraw
+}
+
+skin skins/player/hellface {
+	models/characters/player/playerhead models/characters/player/player_phantasm
+}
+
+skin skins/player/pistol {
+	models/weapons/machinegun/machinegun textures/common/nodraw
+	models/weapons/machinegun/m_gui.tga textures/common/nodraw
+	models/weapons/shotgun/shotgun textures/common/nodraw
+	models/weapons/shotgun/shotgui textures/common/nodraw
+	models/weapons/shotgun/gui textures/common/nodraw
+	models/weapons/mflash/f_shotgun1 textures/common/nodraw
+	models/weapons/mflash/f_machinegun textures/common/nodraw
+	models/weapons/mflash/f_pistol1 textures/common/nodraw
+	models/weapons/shell1/sshell textures/common/nodraw
+	models/weapons/plasmagun/plasmagun textures/common/nodraw
+	//models/characters/player/playerhead textures/common/nodraw
+	//models/characters/sarge2/teeth/teeth textures/common/nodraw
+	//models/characters/player/eyes textures/common/nodraw
+}
+
+skin skins/player/pistol_shadow {
+	textures/common/shadow2 textures/common/nodraw
+}
+
+skin skins/player/plasmagun {
+	models/weapons/machinegun/machinegun textures/common/nodraw
+	models/weapons/machinegun/m_gui.tga textures/common/nodraw
+	models/weapons/shotgun/shotgun textures/common/nodraw
+	models/weapons/shotgun/shotgui textures/common/nodraw
+	models/weapons/shotgun/gui textures/common/nodraw
+	models/weapons/mflash/f_shotgun1 textures/common/nodraw
+	models/weapons/mflash/f_machinegun textures/common/nodraw
+	models/weapons/mflash/f_pistol1 textures/common/nodraw
+	models/weapons/shell1/sshell textures/common/nodraw
+	models/weapons/mflash/f_machinegun textures/common/nodraw
+	models/weapons/pistol/pistol textures/common/nodraw
+}
+
+skin skins/player/redteam {
+	models/characters/player/body models/characters/player/bodyred
+}
+
+skin skins/player/shotgun {
+	models/weapons/machinegun/machinegun textures/common/nodraw
+	models/weapons/machinegun/m_gui.tga textures/common/nodraw
+	models/weapons/mflash/f_machinegun textures/common/nodraw
+	models/weapons/mflash/f_pistol1 textures/common/nodraw
+	models/weapons/shell1/sshell textures/common/nodraw
+	models/weapons/plasmagun/plasmagun textures/common/nodraw
+	models/weapons/mflash/f_pistol1 textures/common/nodraw
+	models/weapons/pistol/pistol textures/common/nodraw
+	models/weapons/mflash/f_shotgun1 textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_mflash textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_fx textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_fx2 textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_mflashb textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflash textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflash2 textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflashb textures/common/nodraw
+	//models/weapons/shotgun/w_shotgun2 textures/common/nodraw
+}
+
+skin skins/player/machinegun {
+	//models/weapons/machinegun/machinegun textures/common/nodraw
+	//models/weapons/machinegun/m_gui.tga textures/common/nodraw
+	models/weapons/shotgun/shotgun textures/common/nodraw
+	models/weapons/shotgun/shotgui textures/common/nodraw
+	models/weapons/mflash/f_shotgun1 textures/common/nodraw
+	models/weapons/mflash/f_machinegun textures/common/nodraw
+	models/weapons/mflash/f_pistol1 textures/common/nodraw
+	models/weapons/shell1/sshell textures/common/nodraw
+	models/weapons/plasmagun/plasmagun textures/common/nodraw
+	models/weapons/mflash/f_pistol1 textures/common/nodraw
+	models/weapons/pistol/pistol textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_mflash textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_mflashb textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_fx textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_fx2 textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflash textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflash2 textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflashb textures/common/nodraw
+	models/weapons/shotgun/w_shotgun2 textures/common/nodraw
+}
+
+skin skins/player/noguns {
+	models/weapons/machinegun/machinegun textures/common/nodraw
+	models/weapons/machinegun/m_gui.tga textures/common/nodraw
+	models/weapons/shotgun/shotgun textures/common/nodraw
+	models/weapons/shotgun/shotgui textures/common/nodraw
+	models/weapons/mflash/f_shotgun1 textures/common/nodraw
+	models/weapons/mflash/f_machinegun textures/common/nodraw
+	models/weapons/mflash/f_pistol1 textures/common/nodraw
+	models/weapons/shell1/sshell textures/common/nodraw
+	models/weapons/plasmagun/plasmagun textures/common/nodraw
+	models/weapons/mflash/f_pistol1 textures/common/nodraw
+	models/weapons/pistol/pistol textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_mflash textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_mflashb textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_fx textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_fx2 textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflash textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflash2 textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflashb textures/common/nodraw
+	models/weapons/shotgun/w_shotgun2 textures/common/nodraw
+}
+
+skin skins/player/weapons {
+	//models/weapons/machinegun/machinegun textures/common/nodraw
+	//models/weapons/machinegun/m_gui.tga textures/common/nodraw
+	//models/weapons/shotgun/shotgun textures/common/nodraw
+	//models/weapons/shotgun/shotgui textures/common/nodraw
+	//models/weapons/shotgun/gui textures/common/nodraw
+	//models/weapons/mflash/f_shotgun1 textures/common/nodraw
+	//models/weapons/mflash/f_machinegun textures/common/nodraw
+	//models/weapons/mflash/f_pistol1 textures/common/nodraw
+	//models/weapons/shell1/sshell textures/common/nodraw
+	//models/weapons/plasmagun/plasmagun textures/common/nodraw
+	//models/characters/player/playerhead textures/common/nodraw
+	//models/characters/sarge2/teeth/teeth textures/common/nodraw
+	//models/characters/player/eyes textures/common/nodraw
+	//models/weapons/pistol/pistol textures/common/nodraw
+	//models/weapons/grenades/grenades3.tga textures/common/nodraw
+	//models/weapons/grenades/grenades3fx.tga textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflash textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflash2 textures/common/nodraw
+	models/weapons/shotgun/shotgun_mflashb textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_mflashb textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_mflash textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_fx2 textures/common/nodraw
+	models/weapons/rocketlauncher/rocketlauncher_fx textures/common/nodraw
+}

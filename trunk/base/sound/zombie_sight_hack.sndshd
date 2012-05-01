@@ -1,0 +1,20 @@
+zombie_sight_hack {
+
+	volume	0
+	minDistance	3
+	maxDistance	15
+
+	sound/ed/zombie/zombie_sight1.wav
+	sound/ed/zombie/zombie_sight2.wav
+	sound/ed/zombie/zombie_sight3.wav
+	sound/ed/zombie/zombie_sight4.wav
+	sound/ed/zombie/zombie_sight5.wav
+	sound/ed/zombie/zombie_sight6.wav
+	sound/ed/zombie/zombie_sight7.wav
+	sound/ed/zombie/zombie_sight8.wav
+	sound/ed/zombie/zombie_sight9.wav
+	sound/ed/zombie/zombie_sight10.wav
+	sound/ed/zombie/zombie_sight11.wav
+	sound/ed/zombie/zombie_sight12.wav
+
+}

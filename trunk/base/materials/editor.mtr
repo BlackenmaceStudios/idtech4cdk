@@ -1,0 +1,6 @@
+editor/blockOut
+{
+	diffusemap textures/editor/blockout.tga
+	bumpmap textures/editor/blockout_local.tga
+	specularmap textures/editor/blockout_local.tga
+}

@@ -1,0 +1,17 @@
+windowDef Desktop
+{
+	rect	0,0,1280,720
+	backcolor	0 ,0 ,0 ,0 
+	visible	1
+	nocursor	1
+
+	windowDef focusedWnd
+	{
+		rect	0,360,1280,28
+		visible	1
+		forecolor	0.50196081,0.50196081,0.50196081,1
+		text	"gui::focusTxt"
+		textscale	0.40000001
+		textalign	1
+	}
+}

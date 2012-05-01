@@ -1,0 +1,39 @@
+renderer/debug_vt0
+{
+
+	{
+
+		map _vtpage_1
+	
+	}
+}
+
+renderer/debug_vt1
+{
+
+	{
+
+		map _vtpage_0
+	
+	}
+}
+
+renderer/debug_scenefbo_public
+{
+
+	{
+
+		map _vtpage_0
+	
+	}
+}
+
+renderer/debug_scenefbo
+{
+
+	{
+
+		map _vt_feedback
+	
+	}
+}

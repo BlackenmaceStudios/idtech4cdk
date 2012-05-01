@@ -1,0 +1,14 @@
+textures/skies/podsky
+{
+      qer_editorimage   textures/skies/podsky.tga
+   noFragment
+   noshadows
+   nooverlays
+   forceOpaque            // so transparent windows can draw on top of it
+   {
+      blend      add      // so transparent windows can draw on top of it
+      cameraCubeMap   env/podsky/podsky
+      texgen      skybox
+      texgen         wobblesky .0 .0 .0
+   }
+}

@@ -1,0 +1,11 @@
+windowDef EndLevel {
+	text	"#str_02014"
+	rect	0 ,0 ,640 ,480 
+	border	"0"
+	backcolor	0 ,0 ,0 ,0.25 
+	forecolor	1 ,1 ,0 ,1 
+	visible	1
+	textscale	1
+	caption	0
+	bordersize	1
+}

@@ -1,0 +1,15 @@
+monster_skullrebel_fuckup {
+	minDistance	10
+	maxDistance	45
+    volume		1
+
+    sound/monsters/generic_fuckup.ogg
+}
+
+monster_skullrebel_death {
+	minDistance	10
+	maxDistance	45
+    volume		1
+
+    sound/monsters/death.ogg
+}
