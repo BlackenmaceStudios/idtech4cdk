@@ -32,7 +32,7 @@ If you have questions concerning this license or the applicable additional terms
 #include "tr_local.h"
 
 #include "cg_explicit.h"
-#include "./renderprogs/tr_rprogshared.h"
+#include "../../base/renderprogs/tr_rprogshared.h"
 
 CGcontext cg_context;
 
