@@ -1,0 +1,60 @@
+// layers.crp
+//
+
+#include "renderprogs/common.crp"
+
+
+
+
+VertexProgram 
+	in vec4          	attr_TexCoord;   
+	in vec4          	attr_Tangent;     
+	in vec4          	attr_Binormal;     
+	in vec4          	attr_Normal;    
+	in mat4				u_matview;
+	out vec4			var_Vertex;
+	 out vec2            	var_TexDiffuse; 
+	out vec4          	var_Tangent;     
+	 out vec4          	var_Binormal;     
+	 out vec4          	var_Normal; 
+
+
+
+	//
+	// Main - Entry Point
+	//
+	void main() {
+		gl_Position = ftransform( );
+
+
+		// diffuse map texgen     
+		var_TexDiffuse.xy = ( attr_TexCoord ).st; 
+
+		var_Tangent = attr_Tangent;
+		var_Binormal = attr_Binormal;
+		var_Normal = attr_Normal;
+
+		var_Vertex = u_matview * gl_Vertex;
+		
+	}
+EndVertexProgram
+
+FragmentProgram
+	uniform sampler2D   	u_diffuseTexture;    
+
+	in vec2            	var_TexDiffuse; 
+	in vec4          	var_Tangent;     
+	in vec4          	var_Binormal;     
+	in vec4          	var_Normal; 
+	in vec4						var_Vertex;
+
+	void main( void ) {    
+
+
+		gl_FragData[0] = texture2D( u_diffuseTexture, var_TexDiffuse * 0.05 );
+		gl_FragData[0].a = 1;
+		gl_FragData[1].xyz = normalize(vec3(0.45, 0.45, 1) * 2 - vec3(1,1,1)) * mat3(var_Tangent.x, var_Binormal.x, var_Normal.x, var_Tangent.y, var_Binormal.y, var_Normal.y, var_Tangent.z, var_Binormal.z, var_Normal.z);  
+		gl_FragData[1].a = 1;
+		gl_FragData[2] = var_Vertex;
+	}
+EndFragmentProgram

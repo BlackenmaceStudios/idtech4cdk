@@ -1,0 +1,106 @@
+// postprocess.crp
+//
+
+
+varying vec2            	var_TexDiffuse; 
+
+
+VertexProgram 
+	attribute vec4          	attr_TexCoord;  
+
+	//
+	// Main - Entry Point
+	//
+	void main() {
+		gl_Position = ftransform( );
+
+		var_TexDiffuse = attr_TexCoord.xy;
+	}
+EndVertexProgram
+
+FragmentProgram
+	uniform sampler2D   	u_diffuseTexture; 
+
+	const float blurSize = 1.0/512.0; // I've chosen this size because this will result in that every step will be one pixel wide if the RTScene texture is of size 512x512
+	const float blurSizeh = 1.0/512.0; // I've chosen this size because this will result in that every step will be one pixel wide if the RTScene texture is of size 512x512
+	vec4 BlurPixelH( vec2 vTexCoord ) { 
+	   vec4 sum = vec4(0.0);
+ 
+	   // blur in y (vertical)
+	   // take nine samples, with the distance blurSize between them
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x - 4.0*blurSize, vTexCoord.y)) * 0.05;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x - 3.0*blurSize, vTexCoord.y)) * 0.09;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x - 2.0*blurSize, vTexCoord.y)) * 0.12;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x - blurSize, vTexCoord.y)) * 0.15;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x, vTexCoord.y)) * 0.16;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x + blurSize, vTexCoord.y)) * 0.15;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x + 2.0*blurSize, vTexCoord.y)) * 0.12;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x + 3.0*blurSize, vTexCoord.y)) * 0.09;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x + 4.0*blurSize, vTexCoord.y)) * 0.05;
+
+	   return sum;
+	}	
+
+	vec4 BlurPixelV( vec2 vTexCoord ) { 
+	   vec4 sum = vec4(0.0);
+ 
+	   // blur in y (vertical)
+	   // take nine samples, with the distance blurSize between them
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x, vTexCoord.y - 4.0*blurSizeh)) * 0.05;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x, vTexCoord.y - 3.0*blurSizeh)) * 0.09;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x, vTexCoord.y - 2.0*blurSizeh)) * 0.12;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x, vTexCoord.y - blurSizeh)) * 0.15;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x, vTexCoord.y)) * 0.16;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x, vTexCoord.y + blurSizeh)) * 0.15;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x, vTexCoord.y + 2.0*blurSizeh)) * 0.12;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x, vTexCoord.y + 3.0*blurSizeh)) * 0.09;
+	   sum += texture2D( u_diffuseTexture, vec2(vTexCoord.x, vTexCoord.y + 4.0*blurSizeh)) * 0.05;
+ 
+	     return sum;
+	}
+
+
+	void main( void ) {   
+		//gl_FragColor = texture2D( u_diffuseTexture, var_TexDiffuse );
+		vec4 sum = vec4( 0, 0, 0, 0 );
+		vec4 sum2 = vec4( 0, 0, 0, 0 );
+		vec2 texcoord = var_TexDiffuse;
+		int j;
+		int i;
+
+		for( i= -2 ;i < 2; i++)
+		{
+			for (j = -2; j <2; j++)
+			{
+				sum += BlurPixelV( texcoord + vec2(i, j)*0.003) * 0.25;  
+			   sum += BlurPixelH( texcoord + vec2(i, j)*0.003) * 0.25;  
+			}
+		}
+
+
+	
+
+		vec4 vWeightsBW = vec4 ( 0.1,1.06,1.11,0 );
+		vec4 vWeightsSepia = vec4 ( 0.7,0.3,0.7,1 ); 
+		vec4 cColor = texture2D( u_diffuseTexture, texcoord );
+
+
+
+		vec4 bloom = sum*sum*0.00002 * cColor;
+		bloom += cColor ;
+
+
+		float  brightness=dot( cColor,vWeightsBW );
+		vec4 temp = brightness * vWeightsSepia;
+
+		//vec4 depthrgb = tex2D( depthSample, texcoord );
+		//float depthinfluence = pow( depthrgb, 128.0 );
+
+		sum = BlurPixelH( var_TexDiffuse ) + BlurPixelV( var_TexDiffuse );
+		vec4 res = sum + (bloom ) * temp ;
+
+		vec4 diffuse = texture2D( u_diffuseTexture, var_TexDiffuse );
+		gl_FragColor =  (res * bloom + temp );
+		
+	}
+EndFragmentProgram

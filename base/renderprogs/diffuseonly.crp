@@ -1,0 +1,45 @@
+// diffuseonly.crp
+//
+
+#include "renderprogs/common.crp"
+
+
+
+
+VertexProgram 
+	in vec4          	attr_TexCoord;   
+	  
+	smooth out vec2            	var_TexDiffuse; 
+
+	//
+	// Main - Entry Point
+	//
+	void main() {
+		gl_Position = ftransform( );
+
+
+		// diffuse map texgen     
+		var_TexDiffuse.xy = ( attr_TexCoord ).st; 
+
+
+	}
+EndVertexProgram
+
+FragmentProgram
+	uniform sampler2D   	u_diffuseTexture;    
+	uniform int vtOffset;
+	smooth in vec2            	var_TexDiffuse; 
+
+
+
+	void main( void ) {    
+
+		vec2 st = vec2(var_TexDiffuse.s, 1 - var_TexDiffuse.t)  ;
+
+		vec4 lookup = texture2D( u_diffuseTexture, st );
+		
+		gl_FragColor = lookup;
+		gl_FragColor.b = float(vtOffset) / (255.0);
+		gl_FragColor.a = 1;
+	}
+EndFragmentProgram

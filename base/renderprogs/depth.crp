@@ -1,0 +1,74 @@
+// depth.crp
+//
+
+varying vec4 world_position;
+
+
+VertexProgram 
+	uniform mat4				u_matview; 
+	uniform vec3 r_lightOrigin; 
+
+	//
+	// Main - Entry Point
+	//
+	void main() {
+		mat4 lightProjectionMatrix;
+
+		mat4 s_flipMatrix = mat4(
+			// convert from our coordinate system (looking down X)
+			// to OpenGL's coordinate system (looking down -Z)
+			0, 0, -1, 0,
+			-1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 0, 1
+		);
+
+		lightProjectionMatrix[0][0] = 2 * 3 / 512;
+		lightProjectionMatrix[1][0] = 0;
+		lightProjectionMatrix[2][0] = 0;
+		lightProjectionMatrix[3][0] = 0;
+
+		lightProjectionMatrix[0][1] = 0;
+		lightProjectionMatrix[1][1] = 2 * 3 / 512;
+		lightProjectionMatrix[2][1] = 0;
+		lightProjectionMatrix[3][1] = 0;
+
+		// this is the far-plane-at-infinity formulation, and
+		// crunches the Z range slightly so w=0 vertexes do not
+		// rasterize right at the wraparound point
+		lightProjectionMatrix[0][2] = 0;
+		lightProjectionMatrix[1][2] = 0;
+		lightProjectionMatrix[2][2] = -0.999f;
+		lightProjectionMatrix[3][2] = -2.0f * 3;
+
+		lightProjectionMatrix[0][3] = 0;
+		lightProjectionMatrix[1][3] = 0;
+		lightProjectionMatrix[2][3] = -1;
+		lightProjectionMatrix[3][3] = 0;
+
+
+		gl_Position = ftransform( );
+		
+		vec4 position = u_matview * gl_Position;
+
+		gl_TexCoord[0]=  position  - vec4(r_lightOrigin.xyz, 0) ;
+		gl_TexCoord[1]= (position  - vec4(r_lightOrigin.xyz, 0)) ;
+	}
+EndVertexProgram
+
+FragmentProgram
+	
+
+	void main( void ) {    
+			float depth = gl_TexCoord[0].z / gl_TexCoord[0].w;
+			depth = depth * 0.5 + 0.5;
+
+			float dx = dFdx(depth) ;  
+			float dy = dFdy(depth * depth );  
+
+			gl_FragColor.g = dot(gl_TexCoord[0].xyz, gl_TexCoord[0].xyz ) ; 
+			
+			gl_FragColor.r = dot(gl_TexCoord[0].xyz, gl_TexCoord[0].xyz ) + 0.25*(dx*dx + dy*dy);  
+			gl_FragColor.a = gl_TexCoord[0].a;
+	}
+EndFragmentProgram
