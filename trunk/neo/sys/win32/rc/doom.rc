@@ -24,7 +24,6 @@ LANGUAGE 9, 1
 #include "SoundEditor.rc"
 #include "ParticleEditor.rc"
 #include "DeclEditor.rc"
-#include "ModelManager.rc"
 #include "ScriptEditor.rc"
 
 #include "GuiEd.rc"

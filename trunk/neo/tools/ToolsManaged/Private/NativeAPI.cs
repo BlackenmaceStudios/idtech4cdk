@@ -147,6 +147,7 @@ namespace ToolsManaged.Private
             public delegate bool RedrawWindow_t(IntPtr obj, ref RECT lpRectUpdate, IntPtr prgnUpdate, UInt32 flags);
             public delegate void Destroy_t(IntPtr obj);
             public delegate void OnAddEntityEvent_t(IntPtr obj, string entityType, Point pt);
+            public delegate void OnNamedEvent_t(IntPtr obj, string eventName);
 
             public OnCreate_t OnCreate; // (IntPtr lpCreateStruct);
             public OnLButtonDown_t OnLButtonDown; // (UInt32 nFlags, Point point);
@@ -176,7 +177,7 @@ namespace ToolsManaged.Private
              public RedrawWindow_t RedrawWindow; // (ref RECT lpRectUpdate, IntPtr prgnUpdate, UInt32 flags);
              public Destroy_t Destroy; // ();
              public OnAddEntityEvent_t OnAddEntityEvent;
-
+             public OnNamedEvent_t OnNamedEvent;
         }
     }
 }

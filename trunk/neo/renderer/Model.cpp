@@ -753,7 +753,7 @@ bool idRenderModelStatic::LoadMD5Static( const char *fileName ) {
 			//}
 		}
 
-		modelSurf->shader = declManager->FindMaterial( mesh->material );
+		modelSurf->shader = declManager->FindMaterial( "worlddefault" );
 		modelSurf->id = this->NumSurfaces();
 		modelSurf->geometry = tri;
 

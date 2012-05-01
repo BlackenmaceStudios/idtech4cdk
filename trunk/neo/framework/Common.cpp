@@ -342,6 +342,14 @@ idCommonLocal::SetRefreshOnPrint
 */
 void idCommonLocal::SetRefreshOnPrint( bool set ) {
 	com_refreshOnPrint = set;
+// jmarshall
+#ifndef ID_DEMO_BUILD
+	if(toolInterface != NULL)
+	{
+		toolInterface->ShowDebugConsole();
+	}
+#endif
+// jmarshall end
 }
 
 /*
@@ -452,6 +460,12 @@ void idCommonLocal::VPrintf( const char *fmt, va_list args ) {
 	if ( com_errorEntered != ERP_FATAL ) {
 		// update the console if we are in a long-running command, like dmap
 		if ( com_refreshOnPrint ) {
+// jmarshall
+			if(toolInterface != NULL)
+			{
+				toolInterface->ShowDebugConsole();
+			}
+// jmarshall end
 			session->UpdateScreen();
 		}
 

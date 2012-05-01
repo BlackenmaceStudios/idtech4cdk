@@ -33,8 +33,9 @@ public:
 	virtual bool	FrameSysMsg( void *msg );
 	virtual byte    *CompressImage( byte *uncompressedBuffer, int width, int height );
 	void			InitToolsManaged( void );
-	void			ShowDebugConsole( void );
+	
 	virtual void	ComputeUVAtlasForModel( class bmVTModel *model, int startTris, int numTris );
+	virtual void	ShowDebugConsole( void );
 private:
 	void			BuildUVAtlasInternalModel( class bmVTModel *model, int startTris, int numTri );
 	void			SetUVsFromInternalUVAtlas( class bmVTModel *model ) ;

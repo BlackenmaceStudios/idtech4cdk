@@ -41,9 +41,10 @@ namespace ToolsManaged
             if(_debugConsoleFrm == null)
                 _debugConsoleFrm = _formManager.CreateWindow<DebugConsole>(true);
 
+            
             _debugConsoleFrm.Show();
             _debugConsoleFrm.BringToFront();
-
+            _debugConsoleFrm.Refresh();
             
             
         }

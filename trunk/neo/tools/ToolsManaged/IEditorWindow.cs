@@ -17,5 +17,6 @@ namespace ToolsManaged
         NativeAPI.Win32.RECT GetScreenRect();
         void SetWindowText(string name);
         void OpenEntityContextMenu(IntPtr entdict);
+        void ShowWindow();
     }
 }

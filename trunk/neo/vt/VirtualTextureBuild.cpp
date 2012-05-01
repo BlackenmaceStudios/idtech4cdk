@@ -246,21 +246,46 @@ generatePage:
 
 		if(model->tris[d].vt_AreaID != -1)
 		{
+			bool hasCorrectUVs = true;
+			// Check to see if all the UV's are between 0 and 1.
+			for ( int i = 0 ; i < model->tris[d].numVerts ; i++ ) {
+				if(v[i].st.x > 1 || v[i].st.x < 0)
+				{
+					hasCorrectUVs = false;
+					break;
+				}
+
+				if(v[i].st.y > 1 || v[i].st.y < 0)
+				{
+					hasCorrectUVs = false;
+					break;
+				}
+			}
+
 			model->tris[d].vt_AreaID = VT_CurrentNumAreas;
 
 		
-		
-			for ( int i = 0 ; i < model->tris[d].numVerts ; i++ ) {
+			if(!hasCorrectUVs)
+			{
+				for ( int i = 0 ; i < model->tris[d].numVerts ; i++ ) {
 			
-				delta = v[i].xyz - bounds[0];
-				v[i].st.x = (DotProduct(delta, vecs[0]) + x + 0.5) / VT_Size;
-				v[i].st.y = (DotProduct(delta, vecs[1]) + y + 0.5) / VT_Size;
+					delta = v[i].xyz - bounds[0];
+					v[i].st.x = (DotProduct(delta, vecs[0]) + x + 0.5) / VT_Size;
+					v[i].st.y = (DotProduct(delta, vecs[1]) + y + 0.5) / VT_Size;
 
-				if(v[i].st.x > 1 || v[i].st.y > 1) {
-					goto generatePage;
+					if(v[i].st.x > 1 || v[i].st.y > 1) {
+						goto generatePage;
+					}
+
+			
 				}
-
-			
+			}
+			else
+			{
+				for ( int i = 0 ; i < model->tris[d].numVerts ; i++ ) {
+					v[i].st.x = (v[i].st.x + x + 0.5) * ((float)w / (float)VT_Size);
+					v[i].st.y = (v[i].st.y + y + 0.5) * ((float)h / (float)VT_Size);
+				}
 			}
 		}
 		else {

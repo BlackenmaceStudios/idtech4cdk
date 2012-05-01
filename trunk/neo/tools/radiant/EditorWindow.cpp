@@ -29,7 +29,9 @@ BOOL idManagedEditorWindow::OnEraseBkgnd(CDC* pDC){ return false; }
 void idManagedEditorWindow::OnDropNewmodel(){ }
 BOOL idManagedEditorWindow::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt){ return false; }
 BOOL idManagedEditorWindow::OnCmdMsg( UINT nID, int nCode, void *pExtra, AFX_CMDHANDLERINFO *pHandlerInfo ){ return false; }
+void idManagedEditorWindow::OnNamedEvent( const char *eventName ) {
 
+}
 void idManagedEditorWindow::OnAddEntityEvent( const char *entityType, CPoint pt ) {
 
 }
@@ -52,7 +54,9 @@ void idManagedEditorWindow::GetClientRect( CRect &rect ) {
 }
 
 void idManagedEditorWindow::ShowWindow( int vis ) {
-
+	if(vis == SW_SHOW) {
+		window->ShowWindow();
+	}
 }
 
 bool idManagedEditorWindow::IsWindowVisible( void ) {
