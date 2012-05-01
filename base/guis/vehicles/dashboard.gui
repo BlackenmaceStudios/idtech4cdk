@@ -1,0 +1,41 @@
+windowDef Desktop
+{
+	backcolor	0,0,0,1
+	noTime	1
+	nocursor	1
+	rect	0,0,512,288
+	windowDef unnamed
+	{
+		rect	0,0,512,288
+		visible	1
+		background	"vehicles/dashboardUIBack"
+		matcolor	1,1,1,1
+	}
+	windowDef unnamed1
+	{
+		rect	137,116,234,31
+		visible	1
+		forecolor	0,0,0.50196081,1
+		text	"gui::headlightstxt"
+		textscale	0.5
+		textalign	1
+	}
+	windowDef unnamed11
+	{
+		rect	138,150,234,31
+		visible	1
+		forecolor	1,0,0,1
+		text	"gui::emergencylighttxt"
+		textscale	0.40000001
+		textalign	1
+	}
+	windowDef SpeedTxt
+	{
+		rect	420,181,39,22
+		visible	1
+		forecolor	1,1,1,1
+		text	"gui::speed"
+		textscale	0.30000001
+		textalign	1
+	}
+}

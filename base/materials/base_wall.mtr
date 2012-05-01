@@ -1,0 +1,7 @@
+textures/base_wall/panel09_baked
+{
+	qer_editorimage	textures/base_wall/panel09_baked.tga
+	bumpmap		textures/base_wall/panel09_baked_local.tga
+	diffusemap		textures/base_wall/panel09_baked_d.tga
+	specularmap		textures/base_wall/panel09_baked_s.tga
+}

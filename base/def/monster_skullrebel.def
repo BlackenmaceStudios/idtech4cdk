@@ -1,0 +1,230 @@
+/***********************************************************************
+
+monster_skullrebel
+
+***********************************************************************/
+
+export fred {
+
+	options -prefix spplayer_ -keep Loneck Head Lknee Rknee Lhand Lhand1 Rhand Body2 Body SPINNER PISTOL_ATTACHER SHOTGUN_ATTACHER MGATTACHER pgATTACHER NADE_ATTACHER CHAINSAW_ATTACHER RL_ATTACHER FL_ATTACHER BFG_ATTACHER CHAINGUN_ATTACHER PDA_ATTACHER SOUL_ATTACHER loneckadjust headcontrol neckcontrol loneckcontrol eyecontrol jawcontrol jawadjust Jaw 
+	//mesh
+
+	mesh	models/md5/monsters/skullrebel/skullrebel.ma -dest models/md5/monsters/skullrebel/skullrebel
+
+
+}
+
+
+model model_skullrebel {
+	mesh 								models/md5/monsters/skullrebel/skullrebel.md5mesh
+
+	channel torso						( *Waist )
+	channel legs						( *origin -*Waist SPINNER eyecontrol)
+
+	anim af_pose						models/md5/characters/npcs/playermoves/initial.md5anim
+	anim ik_pose						models/md5/characters/npcs/playermoves/initial.md5anim
+
+	anim teleport						models/md5/characters/npcs/playermoves/teleportin.md5anim
+	anim exit							models/md5/characters/npcs/playermoves/exit_teleporter.md5anim
+
+	anim idle1							models/md5/characters/npcs/playermoves/fists_idle.md5anim
+	anim idle2							models/md5/characters/npcs/playermoves/fists_idle.md5anim
+	anim idle3							models/md5/characters/npcs/playermoves/fists_idle.md5anim
+	anim stand							models/md5/characters/npcs/playermoves/fists_idle.md5anim
+	anim crouch_down					models/md5/characters/npcs/playermoves/crouch_down.md5anim 
+	anim crouch							models/md5/characters/npcs/playermoves/crouch.md5anim 
+	anim crouch_up						models/md5/characters/npcs/playermoves/crouch_up.md5anim
+	anim crouch_walk					models/md5/characters/npcs/playermoves/crouch_walk.md5anim
+	anim crouch_walk_backwards			models/md5/characters/npcs/playermoves/crouch_walk_back.md5anim
+
+	anim sight1							models/md5/characters/npcs/playermoves/fists_idle.md5anim {
+		frame 1							sound_voice monster_skullrebel_fuckup
+	}
+	anim sight2							models/md5/characters/npcs/playermoves/fists_idle.md5anim{
+		frame 1							sound_voice monster_skullrebel_fuckup
+	}
+	anim sight3							models/md5/characters/npcs/playermoves/fists_idle.md5anim{
+		frame 1							sound_voice monster_skullrebel_fuckup
+	}
+
+	anim walk							models/md5/characters/npcs/playermoves/jog.md5anim {
+		frame 2							leftfoot
+		frame 11						rightfoot
+	}
+	anim walk_backwards					models/md5/characters/npcs/playermoves/jog_back.md5anim {
+		frame 6							rightfoot
+		frame 15						leftfoot
+	}
+
+	anim walk_strafe_left				models/md5/characters/npcs/playermoves/walk_strafe_left.md5anim {
+		frame 4							rightfoot
+		frame 11						leftfoot
+		frame 17						rightfoot
+		frame 25						leftfoot
+	}
+
+	anim walk_strafe_right				models/md5/characters/npcs/playermoves/walk_strafe_right.md5anim {
+		frame 3							rightfoot
+		frame 10						leftfoot
+		frame 17						rightfoot
+		frame 25						leftfoot
+	}
+
+
+	//anim run_forward					models/md5/characters/npcs/playermoves/newrun.md5anim
+	//{
+	//	frame 10						rightfoot
+	//	frame 19						leftfoot
+	//}
+
+	anim run					models/md5/characters/npcs/playermoves/run.md5anim {
+		frame 8							leftfoot
+		frame 17						rightfoot
+	}
+
+	anim run_backwards					models/md5/characters/npcs/playermoves/run_backwards_270.md5anim {
+		
+		frame 7							rightfoot
+		frame 14						leftfoot
+		frame 21						rightfoot
+		frame 27						leftfoot
+	}
+	anim run_strafe_left				models/md5/characters/npcs/playermoves/run_strafe_left.md5anim {
+		prevent_idle_override
+		frame 4							rightfoot
+		frame 7							leftfoot
+		frame 18						rightfoot
+		frame 21						leftfoot
+	}
+	anim run_strafe_right				models/md5/characters/npcs/playermoves/run_strafe_right.md5anim {
+		prevent_idle_override
+		frame 5							leftfoot
+		frame 8							rightfoot
+		frame 18						leftfoot
+		frame 20						rightfoot
+	}
+	anim jump							models/md5/characters/npcs/playermoves/walkjump1.md5anim {
+		prevent_idle_override
+		frame 1							sound_body player_sounds_jump_small
+	}
+	anim run_jump						models/md5/characters/npcs/playermoves/walkjump1.md5anim {
+		prevent_idle_override
+		frame 1							sound_body player_sounds_jump
+	}
+	anim soft_land						models/md5/characters/npcs/playermoves/soft_land.md5anim {
+		prevent_idle_override
+		frame 1							sound_voice2 snd_land_soft
+		frame 1							leftfoot
+		frame 3							rightfoot
+	}
+	anim hard_land						models/md5/characters/npcs/playermoves/hard_land.md5anim {
+		prevent_idle_override
+		frame 1							sound_voice2 snd_land_hard
+		frame 1							leftfoot
+		frame 3							rightfoot
+	}
+	anim fall							models/md5/characters/npcs/playermoves/fall.md5anim {
+		prevent_idle_override
+	}
+	anim turn_left						models/md5/characters/npcs/playermoves/turn_left.md5anim {
+		prevent_idle_override
+	}
+	anim turn_right						models/md5/characters/npcs/playermoves/turn_right.md5anim  {
+		prevent_idle_override
+	}
+	anim pain							models/md5/characters/npcs/playermoves/painchest.md5anim {
+		prevent_idle_override
+	}
+	anim pain_head						models/md5/characters/npcs/playermoves/painhead.md5anim {
+		prevent_idle_override
+	}
+
+	anim pain_right_arm					models/md5/characters/npcs/playermoves/painrightarm.md5anim {
+		prevent_idle_override
+	}
+
+	anim pain_left_arm					models/md5/characters/npcs/playermoves/painleftarm.md5anim {
+		prevent_idle_override
+	}
+
+	anim pain_chest						models/md5/characters/npcs/playermoves/painchest.md5anim {
+		prevent_idle_override
+	}
+
+	anim fists_raise					models/md5/characters/npcs/playermoves/raisewep.md5anim
+	anim fists_idle						models/md5/characters/npcs/playermoves/fists_idle_down.md5anim, models/md5/characters/npcs/playermoves/fists_idle.md5anim, models/md5/characters/npcs/playermoves/fists_idle_up.md5anim
+	anim fists_aim						models/md5/characters/npcs/playermoves/fists_aim_down.md5anim, models/md5/characters/npcs/playermoves/fists_aim.md5anim, models/md5/characters/npcs/playermoves/fists_aim_up.md5anim
+	anim melee_attack1				models/md5/characters/npcs/playermoves/fists_punch_down1.md5anim, models/md5/characters/npcs/playermoves/fists_punch1.md5anim, models/md5/characters/npcs/playermoves/fists_punch_up1.md5anim
+	anim fists_punch_left				models/md5/characters/npcs/playermoves/fists_punch_down2.md5anim, models/md5/characters/npcs/playermoves/fists_punch2.md5anim, models/md5/characters/npcs/playermoves/fists_punch_up2.md5anim
+	anim fists_lower					models/md5/characters/npcs/playermoves/lowerwep.md5anim
+
+	anim pistol_raise					models/md5/characters/npcs/playermoves/raisewep.md5anim	
+	anim pistol_idle					models/md5/characters/npcs/playermoves/pistol_idle_down.md5anim, models/md5/characters/npcs/playermoves/pistol_idle.md5anim, models/md5/characters/npcs/playermoves/pistol_idle_up.md5anim
+	anim pistol_aim						models/md5/characters/npcs/playermoves/pistol_aim_down.md5anim, models/md5/characters/npcs/playermoves/pistol_aim.md5anim, models/md5/characters/npcs/playermoves/pistol_aim_up.md5anim
+	anim pistol_fire1					models/md5/characters/npcs/playermoves/pistol_fire_down.md5anim, models/md5/characters/npcs/playermoves/pistol_fire1.md5anim, models/md5/characters/npcs/playermoves/pistol_fire_up.md5anim
+	anim pistol_reload					models/md5/characters/npcs/playermoves/pistol_reload.md5anim
+	anim pistol_lower					models/md5/characters/npcs/playermoves/lowerwep.md5anim
+}
+
+entityDef monster_skullrebel {
+	"inherit"			"monster_default"
+	"health"			"4"
+	"team"				"1"
+"walk_on_sight"					"1"
+"blockedRadius"					"1000"
+	"blockedMoveTime"				"1200"
+	"blockedAttackTime"				"1200"
+	"ragdoll"			"monster_skullrebel"
+	"maxs"							"22 22 68"
+	"mins"							"-22 -22 0"
+	"model"				"model_skullrebel"
+	"mass"							"150"
+	"offsetModel"					"-8 0 0"
+	"melee_damage" 					"35"
+	"melee_range"					"40"
+	"rank"							"0"
+	"use_aas"						"aas48"
+
+	"anim"				"idle"
+	"scriptobject"					"monster_skullrebel"
+	"snd_sight"			"monster_skullrebel_fuckup"
+
+	"damage_zone head"					"*loneckcontrol"
+	"damage_zone chest"					"*Waist -*loneckcontrol"
+	"damage_zone left_arm"				"*Luparm"
+	"damage_zone right_arm"				"*Ruparm"
+	"damage_zone legs"					"origin Body2"
+	"damage_scale head"					"1"
+
+	"ik_numLegs"						"2"
+	"ik_footSize"						"4"
+	"ik_minWaistAnkleDist"				"16"
+	"ik_waist"							"Body2"
+	"ik_hip1"							"Lupleg"
+	"ik_hip2"							"Rupleg"
+	"ik_knee1"							"Lloleg"
+	"ik_knee2"							"Rloleg"
+	"ik_ankle1"							"Lankle_r"
+	"ik_ankle2"							"Rankle_r"
+	"ik_dir1"							"Lknee"
+	"ik_dir2"							"Rknee"
+	"ik_foot1"							"Lball_r"
+	"ik_foot2"							"Rball_r"
+
+	"ik_numArms"						"2"
+	"ik_shoulder1"						"Ruparm"
+	"ik_shoulder2"						"Luparm"
+	"ik_elbow1"							"Rloarm"
+	"ik_elbow2"							"Lloarm"
+	"ik_hand1"							"Rfings2"
+	"ik_hand2"							"Lfings2"
+
+		"bone_focus"						"headcontrol"
+	"bone_leftEye"						"Leyeaim"
+	"bone_rightEye"						"Reyeaim"
+	"bone_hips"							"Hips"
+	"bone_chest"						"Shoulders"		// AI aim location
+	"bone_head"							"headcontrol"	// AI aim location
+	
+
+}

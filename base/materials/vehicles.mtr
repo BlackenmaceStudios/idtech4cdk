@@ -1,0 +1,158 @@
+models/items/flashlight/beam1
+{
+  translucent
+  twoSided
+  fogLight
+  
+   deform tube
+   {
+      if ( parm7 == 1 )
+      blend add
+     
+      map models/items/flashlight/beam1.tga
+      //   scroll   time * 3 , time * 0   
+      forcehighquality
+   
+   }
+}
+
+models/items/flashlight/beam2
+{
+  translucent
+  twoSided
+  fogLight
+  
+   deform tube
+   {
+      if ( parm7 == 1 )
+      blend add
+     
+      map models/items/flashlight/beam1.tga
+      //   scroll   time * 3 , time * 0   
+      forcehighquality
+   
+   }
+   
+}
+
+models/items/flashlight/flare {
+   translucent
+   deform sprite
+   {
+      if ( parm7 == 1 )
+      blend         add
+      map            models/items/flashlight/flare2.tga
+   }
+}
+
+
+models/items/flashlight/flare3 {
+    translucent
+   deform sprite
+   {
+      if ( parm7 == 1 )
+      blend         add
+      map            models/items/flashlight/flare2.tga
+   }
+}
+
+models/md5/vehicles/buggy/steeringwheel
+{
+	diffusemap models/md5/vehicles/buggy/steeringwheel.tga
+	bumpmap models/md5/vehicles/buggy/steeringwheel_local.tga
+	specularmap models/md5/vehicles/buggy/steeringwheel_s.tga
+}
+
+models/items/flashlight/flare3_red {
+    translucent
+   deform sprite
+   {
+      if ( parm6 == 1 )
+      blend         add
+	map		lights/biground1.tga
+		red 		( blinktable2 [Parm4 + (time * (4 * Parm3)) ]) * Parm0
+		green 		( blinktable2 [Parm4 + (time * (4 * Parm3)) ]) * Parm1
+		blue 		( blinktable2 [Parm4 + (time * (4 * Parm3)) ]) * Parm2
+      map            models/items/flashlight/flare3_red.tga
+   }
+}
+
+models/md5/vehicles/buggy/flare3_blue {
+    translucent
+   deform sprite
+   {
+      if ( parm5 == 1 )
+      blend         add
+      map            models/md5/vehicles/buggy/flare3_blue.tga
+	red 		( blinktable2 [Parm4 + (time * (6 * Parm3)) ]) * Parm0
+		green 		( blinktable2 [Parm4 + (time * (6 * Parm3)) ]) * Parm1
+		blue 		( blinktable2 [Parm4 + (time * (6 * Parm3)) ]) * Parm2
+   }
+}
+
+
+models/md5/vehicles/buggy/flare3_red {
+    translucent
+   deform sprite
+   {
+      
+      if ( parm6 == 1 )
+      blend         add
+	map		lights/biground1.tga
+		red 		( blinktable2 [Parm4 + (time * (4 * Parm3)) ]) * Parm0
+		green 		( blinktable2 [Parm4 + (time * (4 * Parm3)) ]) * Parm1
+		blue 		( blinktable2 [Parm4 + (time * (4 * Parm3)) ]) * Parm2
+      map            models/md5/vehicles/buggy/flare3_red.tga
+   }
+}
+
+vehicles/dashboardUIBack
+{
+	{
+		map	models/md5/vehicles/buggy/dashboard.tga
+	}
+}
+
+models/md5/vehicles/buggy/dashboard
+{
+	
+	guisurf entity
+}
+
+models/mapobjects/buggy/buggy
+{
+	renderbump -size 512 512 -aa 2 models/md5/vehicles/buggy/buggy_local.tga models/md5/vehicles/buggy/buggy_hi.lwo
+	diffusemap	models/mapobjects/base/chairs/chair1_bmp.tga
+	specularmap	models/mapobjects/base/chairs/chair1_bmp.tga
+	bumpmap		models/md5/vehicles/buggy/buggy_local.tga
+}
+
+models/mapobjects/capri/capri_wheel
+{
+	// renderbump -size 256 128 -aa 2 models/mapobjects/capri/capri_wheel_local.tga models/mapobjects/capri/wheel_hi.lwo
+	diffusemap	models/md5/vehicles/capri/capri_wheel_d.tga
+	specularmap	models/md5/vehicles/capri/capri_wheel_s.tga
+	bumpmap		models/md5/vehicles/capri/capri_wheel_local.tga
+}
+
+models/md5/vehicles/buggy/buggy
+{
+	// renderbump -size 512 512 -aa 2 models/mapobjects/buggy/buggy_local.tga models/mapobjects/buggy/buggy_hi.lwo
+	{
+		blend	bumpmap          
+		map		models/md5/vehicles/buggy/buggy_local.tga
+		
+	}
+	diffusemap         	models/md5/vehicles/buggy/buggy_d.tga
+	specularmap      	models/md5/vehicles/buggy/buggy_turret_d.tga
+}
+
+
+models/md5/vehicles/buggy/wheel
+{
+	// renderbump -size 256 128 -aa 2 models/md5/vehicles/buggy/wheel_local.tga models/md5/vehicles/buggy/wheel_hi.lwo
+
+	diffusemap	models/md5/vehicles/buggy/wheel_d.tga
+	specularmap	models/md5/vehicles/buggy/wheel_s.tga
+	bumpmap		models/md5/vehicles/buggy/wheel_local.tga
+}

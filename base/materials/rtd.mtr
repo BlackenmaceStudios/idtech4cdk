@@ -1,0 +1,20 @@
+textures/rtdadmobile/rtd_ad_diffuse
+{
+	translucent
+	sort sprite
+	twoSided
+	{       
+      	 blend	diffusemap
+	 map	models/mapobjects/rtdadmobile/rtd_ad_diffuse.tga
+	 
+	}
+
+	{
+	  blend diffusemap
+	  map textures/misc/scanline.tga
+
+      	  
+
+	}
+}
+

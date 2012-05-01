@@ -1,0 +1,28 @@
+worlddefault {
+	diffusemap textures/black.tga
+	specularmap textures/black.tga
+	bumpmap textures/black.tga
+}
+
+guis/assets/logo
+{
+	translucent
+	{
+		blend add
+		map guis/assets/logo.tga
+	}
+	{
+		blend filter
+		map guis/assets/logo.tga
+	}
+
+}
+
+guis/assets/buttonback
+{
+	translucent
+	{
+		blend filter
+		map guis/assets/buttonback.tga
+	}
+}

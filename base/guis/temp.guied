@@ -1,0 +1,35 @@
+windowDef Desktop
+{
+	rect	0,0,1280,720
+	backcolor	0, 0, 0, 0
+	windowDef unnamed
+	{
+		rect	23,17,254,181
+		visible	1
+		background	"renderer/debug_vt0"
+		matcolor	1,1,1,1
+	}
+	windowDef unnamed1
+	{
+		rect	29,190,186,33
+		visible	1
+		forecolor	1,1,1,1
+		text	"VirtualTexture 0"
+		textscale	0.40000001
+	}
+	windowDef unnamed2
+	{
+		rect	33,244,244,205
+		visible	1
+		background	"renderer/debug_scenefbo_public"
+		matcolor	1,1,1,1
+	}
+	windowDef unnamed3
+	{
+		rect	35,450,186,33
+		visible	1
+		forecolor	1,1,1,1
+		text	"Scene FBO public"
+		textscale	0.40000001
+	}
+}

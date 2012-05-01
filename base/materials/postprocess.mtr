@@ -1,0 +1,37 @@
+renderer/predeferred_interaction
+{
+	DeferredInteraction
+	{
+		blend add
+		map _currentRenderTargets
+	}
+}
+
+renderer/post
+{
+	translucent
+	{
+
+		program postprocess.crp
+		map _currentRender
+		
+	}
+}
+
+renderer/postdiffuse
+{
+
+	{
+
+		map _currentRenderTargets
+	
+	}
+}
+
+renderer/testshadow
+{
+	{
+
+		map _light0_sm_cubemap
+	}
+}

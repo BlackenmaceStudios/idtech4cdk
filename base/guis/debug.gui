@@ -1,0 +1,36 @@
+windowDef Desktop
+{
+	rect	0,0,1280,720
+	backcolor	0, 0, 0, 0
+	windowDef unnamed
+	{
+		rect	23,17,254,181
+		visible	1
+		background	"renderer/debug_vt0"
+		matcolor	1,1,1,1
+	}
+	windowDef unnamed1
+	{
+		rect	29,190,186,33
+		visible	1
+		forecolor	1,1,1,1
+		text	"Virtual Page 0"
+		textscale	0.40000001
+	}
+
+	windowDef unnamed3
+	{
+		rect	23,217,254,181
+		visible	1
+		background	"renderer/debug_vt1"
+		matcolor	1,1,1,1
+	}
+	windowDef unnamed4
+	{
+		rect	29,390,186,33
+		visible	1
+		forecolor	1,1,1,1
+		text	"Virtual Page 1"
+		textscale	0.40000001
+	}
+}

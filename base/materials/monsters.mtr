@@ -1,0 +1,11 @@
+models/md5/monsters/skullrebel/skullrebel
+{
+	{
+		blend diffusemap
+		map models/md5/monsters/skullrebel/skullrebel_glow.tga
+	}
+	qer_editorimage	models/md5/monsters/skullrebel/skullrebel.tga
+	bumpmap		models/md5/monsters/skullrebel/skullrebel_local.tga
+	diffusemap		models/md5/monsters/skullrebel/skullrebel.tga
+	specularmap		models/md5/monsters/skullrebel/skullrebel_s.tga
+}

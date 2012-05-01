@@ -1,0 +1,8 @@
+entityDef editor_testmodel {
+	"editor_color"			"1 1 0"
+	"editor_mins"			"-16 -16 -16"
+	"editor_maxs"			"16 16 16"
+
+	"editor_usage"			"Touch a vis-portal with this to break air/vacuum flood filling at windows.  Trigger it to allow vacuum to flood through."
+	"spawnclass"			"bmEditorEntity"
+}

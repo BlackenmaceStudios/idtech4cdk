@@ -1,0 +1,36 @@
+
+
+Vehicle_TurnIgnitionSnd {
+    minDistance	5
+    maxDistance	25
+    volume		5
+
+    sound/vehicles/generic_ignition.ogg
+}
+
+Vehicle_EngineLoop {
+    minDistance	3
+    maxDistance	12
+    volume		1
+    looping
+
+    sound/vehicles/generic_engineidle.ogg
+}
+
+
+Vehicle_siren01 {
+    minDistance	7
+    maxDistance	22
+    volume		0.8
+
+
+    sound/vehicles/siren01.ogg
+}
+
+vehicle_accelerate
+{
+      minDistance	3
+    maxDistance	12
+    volume		1
+     sound/vehicles/generic_accelerate.ogg
+}
