@@ -35,6 +35,9 @@ If you have questions concerning this license or the applicable additional terms
 #define	 TEXTURE_OFFSET_EQUAL_EPSILON	0.005
 #define	 TEXTURE_VECTOR_EQUAL_EPSILON	0.001
 
+idCVar bsp_inlinemesh_maxfacespertri( "bsp_inlinemesh_maxfacespertri", "99", CVAR_RENDERER | CVAR_INTEGER , "Max number of faces per model before its split for UV generation." );
+
+
 /*
 ===============
 AddTriListToArea
@@ -699,34 +702,44 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 			for ( i = 0 ; i < model->NumSurfaces() ; i++ ) {
 				const modelSurface_t *surface = model->Surface( i );
 				const srfTriangles_t *tri = surface->geometry;
+ 
+				int numTrisPerChartArea = ((float)tri->numIndexes / (float)bsp_inlinemesh_maxfacespertri.GetInteger());
+				int numIndexes = bsp_inlinemesh_maxfacespertri.GetInteger();
+// jmarshall - make the model faces for spread out.
 
-				mapTri_t	mapTri;
-				memset( &mapTri, 0, sizeof( mapTri ) );
-// jmarshall - changed this so it pulls another fake material to avoid grouping...need to this right.
-				mapTri.material = declManager->FindMaterial( VT_GetNextMaterial() );
-// jmarshall end
-				// don't let discretes (autosprites, etc) merge together
-				if ( mapTri.material->IsDiscrete() ) {
-					mapTri.mergeGroup = (void *)surface;
-				}
-// jmarshall -- The previous implementation assumes the model is a quad mesh?
-#if 1
-				for ( int j = 0 ; j < tri->numIndexes ; j += 3 ) {
-					for ( int k = 0 ; k < 3 ; k++ ) {
-						idVec3 v = tri->verts[tri->indexes[j+k]].xyz;
+				for(int f = 0; f < numTrisPerChartArea; f++)
+				{
+					mapTri_t	mapTri;
+					memset( &mapTri, 0, sizeof( mapTri ) );
 
-						mapTri.v[k].xyz = v * axis + origin;
+					
+					int startIndex = (f *numIndexes);
 
-						mapTri.v[k].normal = tri->verts[tri->indexes[j+k]].normal * axis;
-						mapTri.v[k].st = tri->verts[tri->indexes[j+k]].st;
+	// jmarshall - changed this so it pulls another fake material to avoid grouping...need to this right.
+					mapTri.material = declManager->FindMaterial( VT_GetNextMaterial() );
+	// jmarshall end
+					// don't let discretes (autosprites, etc) merge together
+					if ( mapTri.material->IsDiscrete() ) {
+						mapTri.mergeGroup = (void *)surface;
 					}
-					AddMapTriToAreas( &mapTri, e );
-				}
-#else
-				entity->meshTri = CreateModelSurfaceForMapEntity( tri );
-#endif
+	// jmarshall -- The previous implementation assumes the model is a quad mesh?
+	#if 1
+					for ( int j = startIndex ; j < startIndex + numIndexes ; j += 3 ) {
+						for ( int k = 0 ; k < 3 ; k++ ) {
+							idVec3 v = tri->verts[tri->indexes[j+k]].xyz;
 
-// jmarshall end
+							mapTri.v[k].xyz = v * axis + origin;
+
+							mapTri.v[k].normal = tri->verts[tri->indexes[j+k]].normal * axis;
+							mapTri.v[k].st = tri->verts[tri->indexes[j+k]].st;
+						}
+						AddMapTriToAreas( &mapTri, e );
+					}
+	#else
+					entity->meshTri = CreateModelSurfaceForMapEntity( tri );
+	#endif
+				}
+	// jmarshall end
 			}
 		}
 	}

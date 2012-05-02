@@ -88,7 +88,8 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 	float surfaceSize = 4;
 	float lastSpacing = 1;
 
-	int numVTAreas = (vt_compile_size.GetInteger() / vt_compile_areasize.GetInteger()) * (vt_compile_size.GetInteger() / vt_compile_areasize.GetInteger());
+	int numVTAreas = (int)((float)vt_compile_size.GetInteger() / (float)vt_compile_areasize.GetInteger());
+	numVTAreas = numVTAreas * numVTAreas;
 
 	spacing = 1;
 
@@ -96,6 +97,8 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 	common->Printf( "...VT Compile Size %i\n", vt_compile_size.GetInteger() );
 	common->Printf( "...VT Area Size %i\n", vt_compile_areasize.GetInteger() );
 	common->Printf( "...Number of VT areas %d\n", numVTAreas );
+	common->Printf( "...Number of Faces in map %d\n", model->tris.Num() );
+
 	int numTrisPerArea = model->tris.Num() / numVTAreas;
 	
 
