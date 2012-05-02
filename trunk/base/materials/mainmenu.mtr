@@ -1,8 +1,4 @@
-worlddefault {
-	diffusemap textures/black.tga
-	specularmap textures/black.tga
-	bumpmap textures/black.tga
-}
+
 
 guis/assets/logo
 {

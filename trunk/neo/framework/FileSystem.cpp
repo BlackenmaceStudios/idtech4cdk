@@ -967,7 +967,9 @@ Returns a fully qualified path that can be used with stdio libraries
 const char *idFileSystemLocal::RelativePathToOSPath( const char *relativePath, const char *basePath ) {
 	const char *path = cvarSystem->GetCVarString( basePath );
 	if ( !path[0] ) {
-		path = fs_savepath.GetString();
+// jmarshall
+		path = fs_basepath.GetString();
+// jmarshall end
 	}
 	return BuildOSPath( path, gameFolder, relativePath );
 }
