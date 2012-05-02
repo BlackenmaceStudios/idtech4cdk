@@ -8,6 +8,8 @@
 
 #include "../tools/compilers/dmap/vtmodel.h"
 
+#define USE_CORRECT_UV_GENERATION				// Works now...frickin sweat...
+
 VirtualTextureBuilder vtBuilder;
 static int vertNum = 0;
 

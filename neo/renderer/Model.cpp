@@ -623,7 +623,7 @@ void idRenderModelStatic::FinishSurfaces() {
 	for ( i = 0 ; i < numOriginalSurfaces ; i++ ) {
 		const modelSurface_t	*surf = &surfaces[i];
 
-	//	if ( surf->shader->ShouldCreateBackSides() ) {
+		if ( surf->shader->ShouldCreateBackSides() ) {
 			srfTriangles_t *newTri;
 
 			newTri = R_CopyStaticTriSurf( surf->geometry );
@@ -635,7 +635,7 @@ void idRenderModelStatic::FinishSurfaces() {
 			newSurf.geometry = newTri;
 
 			AddSurface( newSurf );
-	//	}
+		}
 	}
 
 	// clean the surfaces
@@ -668,6 +668,7 @@ void idRenderModelStatic::FinishSurfaces() {
 		bounds.Clear();
 		for ( i = 0 ; i < surfaces.Num() ; i++ ) {
 			modelSurface_t	*surf = &surfaces[i];
+
 
 			// if the surface has a deformation, increase the bounds
 			// the amount here is somewhat arbitrary, designed to handle
@@ -712,6 +713,8 @@ bool idRenderModelStatic::LoadMD5Static( const char *fileName ) {
 		return false;
 	}
 
+	fastLoad = true;		// don't do all the sil processing
+
 	// Init all the surfaces
 	for( int i = 0; i < model.NumMeshes(); i++) {
 		bmMD5StaticMesh *mesh = &model.meshes[i];
@@ -729,13 +732,11 @@ bool idRenderModelStatic::LoadMD5Static( const char *fileName ) {
 		R_AllocStaticTriSurfIndexes( tri, mesh->numIndexes );
 
 		// TODO: Right now were forcing generation of the tbn stuff, we might want to pull this from the FBX file later.
-		tri->generateNormals = false;
+		tri->generateNormals = true;
 		tri->numVerts = mesh->numVertexes;
 
 		for ( int j = 0; j < mesh->numIndexes; j++ ) {
-			tri->indexes[tri->numIndexes] = model.indexes[mesh->startIndex + j];
-
-			tri->numIndexes++;
+			tri->indexes[tri->numIndexes++] = model.indexes[mesh->startIndex + j];
 		}
 
 		// now allocate and generate the combined vertexes
@@ -747,16 +748,20 @@ bool idRenderModelStatic::LoadMD5Static( const char *fileName ) {
 			//*(unsigned *)tri->verts[j].color = *(unsigned *)mv->color;
 			//if ( mesh->numTVFaces == mesh->numFaces && mesh->numTVertexes != 0 ) {
 			const idVec2 &tv = model.verts[ mesh->startVertex + j ].st;;
-				float u = tv.x * uTiling + uOffset;
-				float v = tv.y * vTiling + vOffset;
-				tri->verts[ j ].st[0] = u * textureCos + v * textureSin;
-				tri->verts[ j ].st[1] = u * -textureSin + v * textureCos;
+
+			tri->verts[ j ].st[0] = tv.x;
+			tri->verts[ j ].st[1] = tv.y;
 		
 			//}
 		}
 
+		
+	// jmarshall
+		tri->shadowCapPlaneBits = 666;
+	// jmarshall end
+
 		modelSurf->shader = declManager->FindMaterial( "worlddefault" );
-		modelSurf->id = this->NumSurfaces();
+		modelSurf->id = 0;
 		modelSurf->geometry = tri;
 
 		this->AddSurface( surf );
