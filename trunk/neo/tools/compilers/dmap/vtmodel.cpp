@@ -32,7 +32,7 @@ void bmVTModel::WriteToFile( const char *file ) {
 		idDrawVert *Vertexes = tri->verts;
 		glIndex_t *indicies = tri->indexes;
 
-		common->Printf("Writing Mesh To OBJ for vt area %d\n", tri->vt_AreaID );
+	//	common->Printf("Writing Mesh To OBJ for vt area %d\n", tri->vt_AreaID );
 
 		// Open a new file for writing if we are in a different area. 
 		if(lastVTArea == -1 /*!= tris[d].vt_AreaID*/) {
