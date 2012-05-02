@@ -488,3 +488,7 @@ srfTriangles_t *CreateLightShadow( optimizeGroup_t *shadowerGroups, const mapLig
 void		FreeBeamTree( struct beamTree_s *beamTree );
 
 void		CarveTriByBeamTree( const struct beamTree_s *beamTree, const mapTri_t *tri, mapTri_t **lit, mapTri_t **unLit );
+
+// jmarshall
+extern idCVar bsp_inlinemesh_maxfacespertri;
+// jmarshall end

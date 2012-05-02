@@ -59,7 +59,7 @@ namespace ToolsManaged.Frontend
             // Enter excutes a command.
             if (e.KeyCode == Keys.Enter)
             {
-
+                Printf(inputTxt.Text + "\n");
                 NativeAPI.CmdSystem.BufferCommandText(inputTxt.Text);
                 inputTxt.Text = "";
 

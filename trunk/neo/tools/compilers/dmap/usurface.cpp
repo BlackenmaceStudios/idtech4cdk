@@ -703,8 +703,19 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 				const modelSurface_t *surface = model->Surface( i );
 				const srfTriangles_t *tri = surface->geometry;
  
-				int numTrisPerChartArea = ((float)tri->numIndexes / (float)bsp_inlinemesh_maxfacespertri.GetInteger());
-				int numIndexes = bsp_inlinemesh_maxfacespertri.GetInteger();
+				int numTrisPerChartArea;
+				int numIndexes;
+				
+				if(bsp_inlinemesh_maxfacespertri.GetInteger() <= 0)
+				{
+					numTrisPerChartArea = 1;
+					numIndexes = tri->numIndexes;
+				}
+				else
+				{
+					numTrisPerChartArea = ((float)tri->numIndexes / (float)bsp_inlinemesh_maxfacespertri.GetInteger());
+					numIndexes = bsp_inlinemesh_maxfacespertri.GetInteger();
+				}
 // jmarshall - make the model faces for spread out.
 
 				for(int f = 0; f < numTrisPerChartArea; f++)
