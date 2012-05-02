@@ -33,6 +33,6 @@ void bmMegaProjectFile::InitDefault( void ) {
 	_areas.Clear();
 
 	defaultArea = AllocArea();
-	defaultArea->AllocLayer( "textures/layers/default", "_white" );
+	defaultArea->AllocLayer( "textures/editor/checker_model", "_white" );
 
 }

@@ -2843,6 +2843,7 @@ bool idParser::ParseBool( void ) {
 idParser::ParseFloat
 ================
 */
+#define TruncateFloat(myFloat, numDigits) (myfloat * powf(10, numDigits)) / powf(10, numDigits)
 float idParser::ParseFloat( void ) {
 	idToken token;
 
@@ -2857,7 +2858,9 @@ float idParser::ParseFloat( void ) {
 	else if ( token.type != TT_NUMBER ) {
 		idParser::Error( "expected float value, found '%s'", token.c_str() );
 	}
-	return token.GetFloatValue();
+// jmarshall
+	return token.GetDoubleValue();
+// jmarshall end
 }
 
 /*

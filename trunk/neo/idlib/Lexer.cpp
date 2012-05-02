@@ -1289,7 +1289,11 @@ float idLexer::ParseFloat( bool *errorFlag ) {
 			idLexer::Error( "expected float value, found '%s'", token.c_str() );
 		}
 	}
-	return token.GetFloatValue();
+// jmarshall
+	double val = atof( token.c_str() );
+	return (float)val;
+	//return token.GetFloatValue();
+// jmarshall end
 }
 
 /*

@@ -579,6 +579,7 @@ void idRenderModelStatic::FinishSurfaces() {
 		return;
 	}
 
+
 	// renderBump doesn't care about most of this
 	if ( fastLoad ) {
 		bounds.Zero();
@@ -622,7 +623,7 @@ void idRenderModelStatic::FinishSurfaces() {
 	for ( i = 0 ; i < numOriginalSurfaces ; i++ ) {
 		const modelSurface_t	*surf = &surfaces[i];
 
-		if ( surf->shader->ShouldCreateBackSides() ) {
+	//	if ( surf->shader->ShouldCreateBackSides() ) {
 			srfTriangles_t *newTri;
 
 			newTri = R_CopyStaticTriSurf( surf->geometry );
@@ -634,7 +635,7 @@ void idRenderModelStatic::FinishSurfaces() {
 			newSurf.geometry = newTri;
 
 			AddSurface( newSurf );
-		}
+	//	}
 	}
 
 	// clean the surfaces
@@ -728,11 +729,12 @@ bool idRenderModelStatic::LoadMD5Static( const char *fileName ) {
 		R_AllocStaticTriSurfIndexes( tri, mesh->numIndexes );
 
 		// TODO: Right now were forcing generation of the tbn stuff, we might want to pull this from the FBX file later.
-		tri->generateNormals = true;
+		tri->generateNormals = false;
 		tri->numVerts = mesh->numVertexes;
 
 		for ( int j = 0; j < mesh->numIndexes; j++ ) {
 			tri->indexes[tri->numIndexes] = model.indexes[mesh->startIndex + j];
+
 			tri->numIndexes++;
 		}
 

@@ -10,7 +10,7 @@ Version 2
 {
 "classname" "editor_testmodel"
 "name" "editor_testmodel_1"
-"origin" "296 16 24"
+"origin" "200 16 -72"
 }
 // entity 3
 {

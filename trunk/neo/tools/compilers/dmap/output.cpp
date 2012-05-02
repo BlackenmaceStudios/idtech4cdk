@@ -421,6 +421,14 @@ typedef struct interactionTris_s {
 	area = &dmapGlobals.uEntities[entityNum].areas[areaNum];
 	entity = dmapGlobals.uEntities[entityNum].mapEntity;
 
+// jmarshall
+	if(dmapGlobals.uEntities[entityNum].meshTri != NULL)
+	{
+		outModel.AddTris( dmapGlobals.uEntities[entityNum].meshTri );
+		return;
+	}
+// jmarshall end
+
 	numSurfaces = CountUniqueShaders( area->groups );
 
 
@@ -641,8 +649,15 @@ static void CreateOutputGeometry( int entityNum ) {
 		}
 	}
 
-	for ( i = 0 ; i < e->numAreas ; i++ ) {
-		CreateOutputSurfaces( entityNum, i );
+	if(e->numAreas > 0)
+	{
+		for ( i = 0 ; i < e->numAreas ; i++ ) {
+			CreateOutputSurfaces( entityNum, i );
+		}
+	}
+	else
+	{
+		CreateOutputSurfaces( entityNum, 0 );
 	}
 
 	
@@ -744,7 +759,7 @@ void WriteOutputFile( void ) {
 	for ( i=dmapGlobals.num_entities - 1 ; i >= 0 ; i-- ) {
 		entity = &dmapGlobals.uEntities[i];
 	
-		if ( !entity->primitives ) {
+		if ( !entity->primitives && !entity->meshTri ) {
 			continue;
 		}
 
