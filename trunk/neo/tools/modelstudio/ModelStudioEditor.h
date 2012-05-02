@@ -2,7 +2,8 @@
 //
 #pragma once
 
-void FbxExportToStaticMesh( const char *meshpath, idStr &outPath );
+bool ObjExportToStaticMesh( const char *meshpath, idStr &outPath );
+bool FbxExportToStaticMesh( const char *meshpath, idStr &outPath );
 
 /////////////////////////////////////////////////////////////////////////////
 // CCDialogPDAEditor dialog

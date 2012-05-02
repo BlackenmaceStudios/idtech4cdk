@@ -220,10 +220,25 @@ OnFileFbxImportStatic
 */
 void bmModelStudioEditor::OnFileFbxImportStatic( void ) {
 
-	const char *fileName = Sys_OpenFileDialog( "Import Static FBX Model", "Autodesk FBX Model(*.fbx)||", "fbx");
+	idStr fileName = Sys_OpenFileDialog( "Import Static Model", "Autodesk FBX Model(*.fbx)|*.fbx*|Wavefront OBJ Model(*.obj)|*.obj*||", "obj");
 	idStr modelPath;
 
-	FbxExportToStaticMesh( fileName, modelPath );
+	// Use the right importer for the model.
+	if(fileName.CheckExtension( "fbx" ))
+	{
+		if(!FbxExportToStaticMesh( fileName.c_str(), modelPath ))
+			return;
+	}
+	else if(fileName.CheckExtension( "obj" ))
+	{
+		if(!ObjExportToStaticMesh( fileName.c_str(), modelPath ))
+			return;
+	}
+	else
+	{
+		common->Warning("This model type isn't supported for static mesh import.\n");
+	}
+
 	g_qeglobals.testModel.hModel = renderModelManager->FindModel( modelPath );
 
 	g_qeglobals.testRenderWorld->UpdateEntityDef( g_qeglobals.testModelWorldHandle, &g_qeglobals.testModel );

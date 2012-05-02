@@ -40,6 +40,10 @@ namespace ToolsManaged.Frontend
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            // This feels wrong
+            if (timer1.Enabled == false)
+                return;
+
             window.Redraw();
             base.OnPaint(e);
 
@@ -56,7 +60,9 @@ namespace ToolsManaged.Frontend
 
         private void sToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            timer1.Enabled = false;
             ((EditorWindow)window).OnNamedEvent("ImportStatic");
+            timer1.Enabled = true;
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
