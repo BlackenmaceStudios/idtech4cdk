@@ -623,6 +623,8 @@ PutPrimitivesInAreas
 
 =====================
 */
+
+const char *VT_GetNextMaterial();
 void PutPrimitivesInAreas( uEntity_t *e ) {
 	uBrush_t		*b;
 	int				i;
@@ -700,13 +702,15 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 
 				mapTri_t	mapTri;
 				memset( &mapTri, 0, sizeof( mapTri ) );
-				mapTri.material = surface->shader;
+// jmarshall - changed this so it pulls another fake material to avoid grouping...need to this right.
+				mapTri.material = declManager->FindMaterial( VT_GetNextMaterial() );
+// jmarshall end
 				// don't let discretes (autosprites, etc) merge together
 				if ( mapTri.material->IsDiscrete() ) {
 					mapTri.mergeGroup = (void *)surface;
 				}
 // jmarshall -- The previous implementation assumes the model is a quad mesh?
-#if 0
+#if 1
 				for ( int j = 0 ; j < tri->numIndexes ; j += 3 ) {
 					for ( int k = 0 ; k < 3 ; k++ ) {
 						idVec3 v = tri->verts[tri->indexes[j+k]].xyz;

@@ -1503,16 +1503,19 @@ idImage	*idImageManager::ImageFromFile( const char *_name, textureFilter_t filte
 	idStr name;
 	idImage	*image;
 	int hash;
-
-	if ( !_name || !_name[0] || idStr::Icmp( _name, "default" ) == 0 || idStr::Icmp( _name, "_default" ) == 0 ) {
+// jmarshall - use the default texture with the editors default assigned texture
+	if ( !_name || !_name[0] || idStr::Icmp( _name, "default" ) == 0 || idStr::Icmp( _name, "_default" ) == 0 || idStr::Icmp( _name, "unnamed")  == 0 || strstr(_name, "default_material") ) {
 		declManager->MediaPrint( "DEFAULTED\n" );
 		return globalImages->defaultImage;
 	}
 
+// jmarshall end
 	// strip any .tga file extensions from anywhere in the _name, including image program parameters
 	name = _name;
 	name.Replace( ".tga", "" );
 	name.BackSlashesToSlashes();
+
+	
 
 	//
 	// see if the image is already loaded, unless we

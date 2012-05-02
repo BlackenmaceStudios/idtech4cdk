@@ -77,25 +77,19 @@ Version 2
 }
 // entity 1
 {
-"classname" "light"
-"name" "light_1"
-"origin" "192 128 80"
-}
-// entity 2
-{
 "classname" "editor_testmodel"
 "name" "editor_testmodel_1"
 "origin" "200 16 -72"
 }
-// entity 3
+// entity 2
 {
 "classname" "info_player_start"
 "name" "info_player_start_1"
 "origin" "32 16 24"
 }
-// entity 4
+// entity 3
 {
 "classname" "light"
 "name" "light_2"
-"origin" "208 -144 80"
+"origin" "64 16 80"
 }
