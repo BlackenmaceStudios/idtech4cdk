@@ -247,7 +247,9 @@ void  FbxInterface::LoadUVInformation(KFbxMesh* pMesh,  bmFbxMesh *Mesh)
         // only support mapping mode eBY_POLYGON_VERTEX and eBY_CONTROL_POINT
         if( lUVElement->GetMappingMode() != KFbxGeometryElement::eBY_POLYGON_VERTEX &&
             lUVElement->GetMappingMode() != KFbxGeometryElement::eBY_CONTROL_POINT )
-            return;
+		{
+            common->Error("Illegal UVElement mapping mode\n");
+		}
 
         //direct array, where holds the actual uv data
         const int lDataCount = lUVElement->GetDirectArray().GetCount();
@@ -258,9 +260,61 @@ void  FbxInterface::LoadUVInformation(KFbxMesh* pMesh,  bmFbxMesh *Mesh)
 
         //iterating through the data by polygon
         const int lPolyCount = pMesh->GetPolygonCount();
+		int vertexId = 0;
+		for( int lPolyIndex = 0; lPolyIndex < lPolyCount; ++lPolyIndex, vertexId++ )
+		{
+			// build the max index array that we need to pass into MakePoly
+            if(pMesh->GetPolygonSize(lPolyIndex) != 3) {
+				common->Error("Mesh no triangulated");
+			}
 
-		
+			for( int lVertIndex = 0; lVertIndex < 3; ++lVertIndex )
+            {
+				
+				//get the index of the current vertex in control points array
+				int lPolyVertIndex = pMesh->GetPolygonVertex(lPolyIndex,lVertIndex);
+				switch(lUVElement->GetMappingMode())
+				{
+					case KFbxGeometryElement::eBY_POLYGON_VERTEX:
+						{
+							// Set the UV's for the polygon.
+							int uvIndex = pMesh->GetTextureUVIndex(lPolyIndex, lVertIndex);
+							KFbxVector2& uv = uvs->GetDirectArray()[uvIndex];
+							verts[lPolyVertIndex].st = idVec2( (float)uv[0], (float)uv[1] );
 
+							// Set the normal for the polygon.
+							KFbxVector4 fbxNormal;	
+							pMesh->GetPolygonVertexNormal(lPolyIndex,lVertIndex, fbxNormal);	
+							verts[lPolyVertIndex].normal = idVec3( (float)fbxNormal[0], (float)fbxNormal[1], (float)fbxNormal[2] );
+
+							
+						}
+						break;
+
+					case KFbxGeometryElement::eBY_CONTROL_POINT:  // this just adds too many vertexs for it to ever to be useful :/.
+						{
+							// Set the UV's for the polygon
+							int lUVIndex = lUseIndex ? lUVElement->GetIndexArray().GetAt(lPolyVertIndex) : lPolyVertIndex;
+							KFbxVector2& uv = uvs->GetDirectArray()[lUVIndex];
+							verts[lPolyVertIndex].st = idVec2( (float)uv[0], (float)uv[1] );
+
+							// Set the normal for the polygon.
+							KFbxVector4 fbxNormal;	
+							pMesh->GetPolygonVertexNormal(lPolyIndex,lVertIndex, fbxNormal);	
+							verts[lPolyVertIndex].normal = idVec3( (float)fbxNormal[0], (float)fbxNormal[1], (float)fbxNormal[2] );
+						}
+						break;
+
+					default:
+						common->FatalError("FBX mesh has unknown geometry element type!\n");
+						break;
+				}
+
+				indexes.Append( lPolyVertIndex );
+			}
+		}
+	}
+/*
         if( lUVElement->GetMappingMode() == KFbxGeometryElement::eBY_CONTROL_POINT )
         {
             for( int lPolyIndex = 0; lPolyIndex < lPolyCount; ++lPolyIndex )
@@ -288,16 +342,13 @@ void  FbxInterface::LoadUVInformation(KFbxMesh* pMesh,  bmFbxMesh *Mesh)
         else if (lUVElement->GetMappingMode() == KFbxGeometryElement::eBY_POLYGON_VERTEX)
         {
          
-            for( int lPolyIndex = 0; lPolyIndex < lPolyCount; ++lPolyIndex )
-            {
-                // build the max index array that we need to pass into MakePoly
-                if(pMesh->GetPolygonSize(lPolyIndex) != 3) {
-					common->Error("Mesh no triangulated");
-				}
+            
+                
                 for( int lVertIndex = 0; lVertIndex < 3; lVertIndex++ )
                 {
-					
-						 KFbxVector2 lUVValue;
+					KFbxVector2 lUVValue;
+
+
 
 						 // Get the normal value.
 						 KFbxVector4 fbxNormal;	
@@ -321,6 +372,7 @@ void  FbxInterface::LoadUVInformation(KFbxMesh* pMesh,  bmFbxMesh *Mesh)
             }
         }
     }
+*/
 }
 
 /*

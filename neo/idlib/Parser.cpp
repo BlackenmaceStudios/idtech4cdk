@@ -2369,10 +2369,19 @@ int idParser::ReadToken( idToken *token ) {
 		}
 		// check for precompiler directives
 		if ( token->type == TT_PUNCTUATION && (*token)[0] == '#' && (*token)[1] == '\0' ) {
-			// read the precompiler directive
-			if ( !idParser::ReadDirective() ) {
-				return false;
+// jmarshall
+			if(idParser::scriptstack->GetFlags() & LEXFL_IGNOREDIRECTIVES)
+			{
+				idParser::SkipRestOfLine();
 			}
+			else
+			{
+				// read the precompiler directive
+				if ( !idParser::ReadDirective() ) {
+					return false;
+				}
+			}
+// jmarshall end
 			continue;
 		}
 		// if skipping source because of conditional compilation
