@@ -53,7 +53,7 @@ bmOpenGLRenderDevice::RenderSurfaceFromCache
 void bmOpenGLRenderDevice::RenderSurfaceFromCache( const srfTriangles_t *tris ) {
 	idDrawVert	*ac = (idDrawVert *)vertexCache.Position( tris->ambientCache );
 	qglColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( idDrawVert ), ac->color );
-	qglVertexAttribPointerARB( 8, 2, GL_FLOAT, false, sizeof( idDrawVert ), ac->st.ToFloatPtr() );
+	qglTexCoordPointer(  2, GL_FLOAT, sizeof( idDrawVert ), ac->st.ToFloatPtr() );
 	qglVertexPointer( 3, GL_FLOAT, sizeof( idDrawVert ), ac->xyz.ToFloatPtr() );
 
 	RB_DrawElementsWithCounters( tris );

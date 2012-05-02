@@ -4,3 +4,15 @@ editor/blockOut
 	bumpmap textures/editor/blockout_local.tga
 	specularmap textures/editor/blockout_local.tga
 }
+
+worlddefault {
+	diffusemap textures/editor/checker.tga
+	specularmap textures/black.tga
+	bumpmap textures/editor/checker_local.tga
+}
+
+modeldefault {
+	diffusemap textures/editor/checker.tga
+	specularmap textures/editor/checker.tga
+	bumpmap textures/editor/checker_local.tga
+}

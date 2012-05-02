@@ -71,15 +71,16 @@ namespace ToolsManaged.Frontend
 
         private void assignModelBtn_Click(object sender, EventArgs e)
         {
+            string rootModelPath = "generated/models";
             OpenFileDialog dialog = new OpenFileDialog();
 
-            dialog.InitialDirectory = NativeAPI.FileSystem.RelativePathToOSPath("models");
+            dialog.InitialDirectory = NativeAPI.FileSystem.RelativePathToOSPath(rootModelPath);
             dialog.Filter = "Static Model (*.md5staticmesh)|*.md5staticmesh";
             dialog.FilterIndex = 1;
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                string relpath = dialog.FileName.Substring(dialog.InitialDirectory.Length - 6);
+                string relpath = dialog.FileName.Substring(dialog.InitialDirectory.Length - (rootModelPath.Length + 1));
 
                 
                 _dict.Set("model", relpath);

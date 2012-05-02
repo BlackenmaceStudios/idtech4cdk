@@ -38,7 +38,7 @@ void bmVTModel::WriteToFile( const char *file ) {
 				fileSystem->CloseFile( objf );
 			}
 			
-			objf = fileSystem->OpenFileWrite(va( "%s_area.obj", file, tris[d].vt_AreaID) );
+			objf = fileSystem->OpenFileWrite(va( "%s_area.obj", file, tris[d].vt_AreaID), "fs_basepath" );
 			if(!objf) {
 				common->FatalError( "Failed to write obj");
 			}
