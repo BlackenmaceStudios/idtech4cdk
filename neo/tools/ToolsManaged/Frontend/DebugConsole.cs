@@ -51,7 +51,21 @@ namespace ToolsManaged.Frontend
 
             textBox1.TextChanged += new EventHandler(textBox1_TextChanged);
 
-            
+            inputTxt.KeyDown += new KeyEventHandler(inputTxt_KeyDown);
+        }
+
+        void inputTxt_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Enter excutes a command.
+            if (e.KeyCode == Keys.Enter)
+            {
+
+                NativeAPI.CmdSystem.BufferCommandText(inputTxt.Text);
+                inputTxt.Text = "";
+
+                e.Handled = true;
+            }
+
         }
 
         void textBox1_TextChanged(object sender, EventArgs e)
@@ -77,17 +91,14 @@ namespace ToolsManaged.Frontend
             idString.RTFPrintColorString(textBox1, s2 + "\n");
         }
 
-        private void executeButton_Click(object sender, EventArgs e)
+        private void inputTxt_TextChanged(object sender, EventArgs e)
         {
-            NativeAPI.CmdSystem.BufferCommandText(inputTxt.Text);
+
+        }
+/*
+ * NativeAPI.CmdSystem.BufferCommandText(inputTxt.Text);
 
             inputTxt.Text = "";
-           
-        }
-
-        private void textBox1_TextChanged_1(object sender, EventArgs e)
-        {
-           
-        }
+*/
     }
 }

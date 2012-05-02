@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.inputTxt = new System.Windows.Forms.TextBox();
-            this.executeButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
@@ -38,29 +37,21 @@
             // 
             this.inputTxt.Location = new System.Drawing.Point(7, 349);
             this.inputTxt.Name = "inputTxt";
-            this.inputTxt.Size = new System.Drawing.Size(479, 20);
+            this.inputTxt.Size = new System.Drawing.Size(624, 20);
             this.inputTxt.TabIndex = 1;
-            // 
-            // executeButton
-            // 
-            this.executeButton.Location = new System.Drawing.Point(509, 337);
-            this.executeButton.Name = "executeButton";
-            this.executeButton.Size = new System.Drawing.Size(125, 39);
-            this.executeButton.TabIndex = 2;
-            this.executeButton.Text = "Execute";
-            this.executeButton.UseVisualStyleBackColor = true;
-            this.executeButton.Click += new System.EventHandler(this.executeButton_Click);
+            this.inputTxt.TextChanged += new System.EventHandler(this.inputTxt_TextChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.label1.Location = new System.Drawing.Point(7, 331);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(144, 13);
+            this.label1.Size = new System.Drawing.Size(334, 13);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Type a command here...";
+            this.label1.Text = "Type a command here and than press ENTER to execute.";
             // 
             // textBox1
             // 
@@ -75,7 +66,6 @@
             this.textBox1.Size = new System.Drawing.Size(624, 320);
             this.textBox1.TabIndex = 4;
             this.textBox1.Text = "";
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged_1);
             // 
             // DebugConsole
             // 
@@ -85,7 +75,6 @@
             this.ClientSize = new System.Drawing.Size(638, 385);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.executeButton);
             this.Controls.Add(this.inputTxt);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -100,7 +89,6 @@
         #endregion
 
         private System.Windows.Forms.TextBox inputTxt;
-        private System.Windows.Forms.Button executeButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox textBox1;
     }
