@@ -213,7 +213,8 @@ void Dmap( const idCmdArgs &args ) {
 		return;
 	}
 
-	common->Printf("---- dmap ----\n");
+	common->Printf("---- World Builder ----\n");
+	common->Printf("Processing compile options\n");
 
 	dmapGlobals.fullCarve = true;
 	dmapGlobals.shadowOptLevel = SO_MERGE_SURFACES;		// create shadows by merging all surfaces, but no super optimization
@@ -297,6 +298,16 @@ void Dmap( const idCmdArgs &args ) {
 	if ( i >= args.Argc() ) {
 		common->Error( "usage: dmap [options] mapfile" );
 	}
+// jmarshall - ensure bsp_inlinemesh_maxfacespertri cvar has good to go values.
+	if(bsp_inlinemesh_maxfacespertri.GetInteger() > 0 && (bsp_inlinemesh_maxfacespertri.GetInteger() % 3) != 0) {
+		common->Warning( "CVar bsp_inlinemesh_maxfacespertri has a invalid value, must be multiples of 3!\n");
+		return;
+	}
+
+	if(bsp_inlinemesh_maxfacespertri.GetInteger() <= 0) {
+		common->Warning( "InlineMesh face seperation is disabled! This will affect the quality of the UV map generation\n");
+	}
+// jmarshall end
 
 	dmapGlobals.noOptimize = true;
 	dmapGlobals.noLightCarve = true;

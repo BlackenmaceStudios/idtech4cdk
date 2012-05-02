@@ -88,8 +88,7 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 	float surfaceSize = 4;
 	float lastSpacing = 1;
 
-	int numVTAreas = (int)((float)vt_compile_size.GetInteger() / (float)vt_compile_areasize.GetInteger());
-	numVTAreas = numVTAreas * numVTAreas;
+	int numVTAreas = NumVTAreas();
 
 	spacing = 1;
 
@@ -99,23 +98,29 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 	common->Printf( "...Number of VT areas %d\n", numVTAreas );
 	common->Printf( "...Number of Faces in map %d\n", model->tris.Num() );
 
-	int numTrisPerArea = model->tris.Num() / numVTAreas;
+	int numTrisPerArea = (int)((float)floor((float)model->tris.Num() / (float)numVTAreas));
 	
-
 	if(numTrisPerArea == 0) {
 		numVTAreas = numTrisPerArea;
 		numTrisPerArea = 1;
 	}
 	VT_CurrentNumAreas = 0;
 #ifdef USE_CORRECT_UV_GENERATION
-	for(int i = 0; i < model->tris.Num(); i+=numTrisPerArea)
+
+	 for(int i = 0, chartID = 0; i < model->tris.Num(); i+=numTrisPerArea, chartID++)
 	{
 		int triCount = numTrisPerArea;
 
-		common->Printf( "Generating UV's for chart %d - %d\n", VT_CurrentNumAreas, triCount);
-		if(i + triCount > model->tris.Num()) {
+		if(i + triCount > model->tris.Num() || (chartID == (numVTAreas - 1))) {
 			triCount = model->tris.Num() - i;
+			if(triCount <= 0)
+			{
+				common->FatalError("GenerateVTVerts: invalid tricount\n");
+			}
+			
 		}
+
+		common->Printf( "Generating UV's for chart %d - %d\n", VT_CurrentNumAreas, triCount);
 
 		toolInterface->ComputeUVAtlasForModel( model, i, triCount );
 
@@ -314,5 +319,7 @@ VirtualTextureBuilder::NumVTAreas
 ======================
 */
 int	 VirtualTextureBuilder::NumVTAreas( void ) {
-	return VT_CurrentNumAreas + 1;
+	int numVTAreas = (int)((float)vt_compile_size.GetInteger() / (float)vt_compile_areasize.GetInteger());
+	numVTAreas = numVTAreas * numVTAreas;
+	return numVTAreas;
 }
