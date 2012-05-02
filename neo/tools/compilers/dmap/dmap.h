@@ -52,6 +52,10 @@ typedef struct {
 
 	int					numAreas;
 	uArea_t *			areas;
+
+// jmarshall
+	srfTriangles_t		*meshTri;		
+// jmarshall end
 } uEntity_t;
 
 

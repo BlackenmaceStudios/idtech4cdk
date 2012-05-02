@@ -32,6 +32,8 @@ void bmVTModel::WriteToFile( const char *file ) {
 		idDrawVert *Vertexes = tri->verts;
 		glIndex_t *indicies = tri->indexes;
 
+		common->Printf("Writing Mesh To OBJ for vt area %d\n", tri->vt_AreaID );
+
 		// Open a new file for writing if we are in a different area. 
 		if(lastVTArea == -1 /*!= tris[d].vt_AreaID*/) {
 			if(objf != NULL) {
@@ -62,7 +64,7 @@ void bmVTModel::WriteToFile( const char *file ) {
 
 			dv = &Vertexes[i];
 
-			objf->WriteFloatString( "vt %f %f\n", dv->st.x + tri->vt_AreaID, dv->st.y);
+			objf->WriteFloatString( "vt %f %f\n", dv->st.x + tri->vt_AreaID, 1.0f - dv->st.y);
 		}
 
 		for ( int i = 0 ; i <  tri->numVerts ; i++ ) {

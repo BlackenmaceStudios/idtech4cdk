@@ -283,8 +283,8 @@ generatePage:
 			else
 			{
 				for ( int i = 0 ; i < model->tris[d].numVerts ; i++ ) {
-					v[i].st.x = (v[i].st.x + x + 0.5) * ((float)w / (float)VT_Size);
-					v[i].st.y = (v[i].st.y + y + 0.5) * ((float)h / (float)VT_Size);
+				//	v[i].st.x = (v[i].st.x + x + 0.5) * ((float)w / (float)VT_Size);
+				//	v[i].st.y = (v[i].st.y + y + 0.5) * ((float)h / (float)VT_Size);
 				}
 			}
 		}

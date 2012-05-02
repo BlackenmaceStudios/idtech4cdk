@@ -224,6 +224,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <UndefinePreprocessorDefinitions>_USE_32BIT_TIME_T</UndefinePreprocessorDefinitions>
       <AdditionalIncludeDirectories>./tools/MeshTools/MeshTools/Lib</AdditionalIncludeDirectories>
+      <FloatingPointModel>Strict</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>

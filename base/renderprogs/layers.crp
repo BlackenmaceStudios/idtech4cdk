@@ -51,7 +51,7 @@ FragmentProgram
 	void main( void ) {    
 
 
-		gl_FragData[0] = texture2D( u_diffuseTexture, var_TexDiffuse * 0.05 );
+		gl_FragData[0] = texture2D( u_diffuseTexture, var_TexDiffuse  ) * 0.4;
 		gl_FragData[0].a = 1;
 		gl_FragData[1].xyz = normalize(vec3(0.45, 0.45, 1) * 2 - vec3(1,1,1)) * mat3(var_Tangent.x, var_Binormal.x, var_Normal.x, var_Tangent.y, var_Binormal.y, var_Normal.y, var_Tangent.z, var_Binormal.z, var_Normal.z);  
 		gl_FragData[1].a = 1;

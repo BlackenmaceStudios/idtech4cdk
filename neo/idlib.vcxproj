@@ -359,6 +359,7 @@
       <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
       <UndefinePreprocessorDefinitions>
       </UndefinePreprocessorDefinitions>
+      <FloatingPointModel>Strict</FloatingPointModel>
     </ClCompile>
     <Lib>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>

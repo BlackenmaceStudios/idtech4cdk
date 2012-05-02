@@ -583,6 +583,41 @@ void AddMapTriToAreas( mapTri_t *tri, uEntity_t *e ) {
 }
 
 /*
+====================
+CreateModelSurfaceForMapEntity
+
+Clones a srfTriangle_t 
+====================
+*/
+// jmarshall
+srfTriangles_t	*CreateModelSurfaceForMapEntity( const srfTriangles_t *tris ) {
+	srfTriangles_t	*uTri;
+
+	uTri = R_AllocStaticTriSurf();
+	R_AllocStaticTriSurfVerts( uTri, tris->numVerts );
+	R_AllocStaticTriSurfIndexes( uTri, tris->numIndexes );
+
+	for(int i = 0; i < tris->numVerts; i++)
+	{
+		uTri->verts[i] = tris->verts[i];
+	}
+	
+	for(int i = 0; i < tris->numIndexes; i+=3)
+	{
+		uTri->indexes[i+0] = tris->indexes[i + 0];
+		uTri->indexes[i+1] = tris->indexes[i + 1];
+		uTri->indexes[i+2] = tris->indexes[i + 2];
+		
+	}
+
+	uTri->numVerts = tris->numVerts;
+	uTri->numIndexes = tris->numIndexes;
+
+	return uTri;
+}
+// jmarshall end
+
+/*
 =====================
 PutPrimitivesInAreas
 
@@ -670,6 +705,8 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 				if ( mapTri.material->IsDiscrete() ) {
 					mapTri.mergeGroup = (void *)surface;
 				}
+// jmarshall -- The previous implementation assumes the model is a quad mesh?
+#if 0
 				for ( int j = 0 ; j < tri->numIndexes ; j += 3 ) {
 					for ( int k = 0 ; k < 3 ; k++ ) {
 						idVec3 v = tri->verts[tri->indexes[j+k]].xyz;
@@ -681,6 +718,11 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 					}
 					AddMapTriToAreas( &mapTri, e );
 				}
+#else
+				entity->meshTri = CreateModelSurfaceForMapEntity( tri );
+#endif
+
+// jmarshall end
 			}
 		}
 	}
