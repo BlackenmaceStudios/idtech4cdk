@@ -70,12 +70,7 @@ namespace ToolsManaged.Frontend
 
         void textBox1_TextChanged(object sender, EventArgs e)
         {
-            textBox1.SuspendLayout();
-
-            SendMessage(textBox1.Handle, WM_VSCROLL, new IntPtr(SB_BOTTOM), new IntPtr(0));
-
-            textBox1.ResumeLayout();  
-
+            
         }
 
 
@@ -89,6 +84,13 @@ namespace ToolsManaged.Frontend
             s2 = s2.Replace("\n", " ");
             s2 = s2.Replace("\r", " ");
             idString.RTFPrintColorString(textBox1, s2 + "\n");
+
+            textBox1.SuspendLayout();
+
+            SendMessage(textBox1.Handle, WM_VSCROLL, new IntPtr(SB_BOTTOM), new IntPtr(0));
+
+            textBox1.ResumeLayout();  
+
         }
 
         private void inputTxt_TextChanged(object sender, EventArgs e)

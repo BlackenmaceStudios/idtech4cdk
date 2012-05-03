@@ -23,8 +23,7 @@ namespace ToolsManaged.Frontend
 
         private void UpdateEntityPropertiesControl()
         {
-            _templateDict = NativeAPI.Entity_GetTemplate(_dict.GetString("classname"));
-            _templateDict.childDict = _dict;
+            _dict.childDict = NativeAPI.Entity_GetTemplate(_dict.GetString("classname"));
 
 
             entitiesPropertyCntrl.SelectedObject = _dict;
@@ -33,13 +32,6 @@ namespace ToolsManaged.Frontend
 
         private void UpdateProperties()
         {
-            Vector3 origin;
-
-            origin = _dict.GetVector("origin");
-
-            // Update the origin text boxes.
-            UpdateOrigin(origin);
-
             // Update the properties dialog.
             UpdateEntityPropertiesControl();
 

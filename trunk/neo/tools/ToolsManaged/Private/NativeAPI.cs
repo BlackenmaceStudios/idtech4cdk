@@ -27,8 +27,40 @@ namespace ToolsManaged.Private
 
             return dict;
         }
-        
-        
+
+        public static class DeclManager
+        {
+            public enum idDeclType_t
+            {
+                DECL_TABLE = 0,
+                DECL_MATERIAL,
+                DECL_SKIN,
+                DECL_SOUND,
+                DECL_ENTITYDEF,
+                DECL_MODELDEF,
+                DECL_FX,
+                DECL_PARTICLE,
+                DECL_AF,
+                DECL_MODELEXPORT,
+                DECL_MAPDEF,
+                DECL_OBJECTIVE
+            }
+
+            private static class Internal
+            {
+                [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_declManager_FindType")]
+                public static extern IntPtr FindType(int type, string name, bool makeDefault);
+            }
+
+            public static idLibNativeAPI.idDictNative FindType(idDeclType_t type, string name, bool makeDefault)
+            {
+                IntPtr ptr;
+
+                ptr = Internal.FindType((int)type, name, makeDefault);
+
+                return new idLibNativeAPI.idDictNative(ptr);
+            }
+        }
         
         public static class FileSystem
         {
