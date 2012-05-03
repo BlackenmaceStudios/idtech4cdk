@@ -85,12 +85,14 @@
     </Compile>
     <Compile Include="IEditorWindow.cs" />
     <Compile Include="IToolsManaged.cs" />
+    <Compile Include="Private\Editor\EditorShowProperties.cs" />
     <Compile Include="Private\idLib\idDictCollectionPropertyDescriptor.cs" />
     <Compile Include="Private\idLib\idLibNativeAPI.cs" />
     <Compile Include="Private\idLib\idString.cs" />
     <Compile Include="Private\idLib\idVec3.cs" />
     <Compile Include="Private\NativeAPI.cs" />
     <Compile Include="Private\NativeClass.cs" />
+    <Compile Include="Private\ReflectionHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -128,6 +130,7 @@
     <Content Include="images\scale.png" />
     <Content Include="images\translate.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

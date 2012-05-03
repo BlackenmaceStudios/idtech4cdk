@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace ToolsManaged.Private.idLib
@@ -130,21 +131,114 @@ namespace ToolsManaged.Private.idLib
                 return GetProperties();
             }
 
+            private Type GetKeyType(string keyname)
+            {
+                // If there isn't a framework decl defined just force all val types to be a string.
+                if (childDict == null)
+                {
+                    return typeof(string);
+                }
+
+                // Hardcoded hacks.
+                if(keyname == "origin")
+                {
+                    return typeof(idLib.Vector3);
+                }
+
+                for (int c = 0; c < childDict.GetNumKeyVals(); c++)
+                {
+                    Type type;
+                    idKeyValueInstancePtrManaged instance = childDict.GetKeyValInstance(c);
+                    string compstr;
+
+                    if (instance.key.Contains("editor_bool"))
+                    {
+                        type = typeof(bool);
+                        compstr = instance.key.Substring(("editor_bool ").Length);
+                    }
+                    else if (instance.key.Contains("editor_val"))
+                    {
+                        type = typeof(int);
+                        compstr = instance.key.Substring(("editor_val ").Length);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    if (compstr == keyname)
+                    {
+                        return type;
+                    }
+                }
+
+                Type keyType = ReflectionHelper.FindTypeInAssembly(keyname);
+                if (keyType != null)
+                    return keyType;
+
+                // Couldn't find any type defined just use default string.
+                return typeof(string);
+            }
+
+            
+
             public PropertyDescriptorCollection GetProperties()
             {
+                int i;
+
                 // Create a new collection object PropertyDescriptorCollection
                 PropertyDescriptorCollection pds = new PropertyDescriptorCollection(null);
 
                 // Iterate the list of employees
-                for (int i = 0; i < GetNumKeyVals(); i++)
+                for (i = 0; i < GetNumKeyVals(); i++)
                 {
                     // For each employee create a property descriptor 
                     // and add it to the 
                     // PropertyDescriptorCollection instance
                     idDictCollectionPropertyDescriptor pd = new
-                                  idDictCollectionPropertyDescriptor(this, i);
+                                  idDictCollectionPropertyDescriptor(this, i, GetKeyType( GetKeyValInstance( i ).key ));
+
+                    
                     pds.Add(pd);
                 }
+
+                if (childDict != null)
+                {
+                    for (int c = 0; c < childDict.GetNumKeyVals(); c++)
+                    {
+                        idKeyValueInstancePtrManaged instance = childDict.GetKeyValInstance( c );
+
+                        // Ignore any of the editor helper keys.
+                        if (instance.key.Contains("editor_"))
+                            continue;
+
+                        // Check to see if this value is already there.
+                        for (int g = 0; g < GetNumKeyVals(); g++)
+                        {
+                            idKeyValueInstancePtrManaged testval = GetKeyValInstance(g);
+
+                            if (testval.key == instance.key)
+                            {
+                                instance = null;
+                                break;
+                            }
+                        }
+
+                        if (instance == null)
+                            continue;
+
+                        
+
+                        // For each employee create a property descriptor 
+                        // and add it to the 
+                        // PropertyDescriptorCollection instance
+                        idDictCollectionPropertyDescriptor pd = new
+                                      idDictCollectionPropertyDescriptor(this, c + i, instance.key, instance.value, GetKeyType(instance.key));
+                        
+                        pds.Add(pd);
+                    }
+                }
+
                 return pds;
             }
 
