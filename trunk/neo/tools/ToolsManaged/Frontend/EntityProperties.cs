@@ -10,10 +10,14 @@ using System.Windows.Forms;
 using ToolsManaged.Private;
 using ToolsManaged.Private.idLib;
 using ToolsManaged.Frontend.WindowAPI;
+
+using ToolsManaged.Private.Editor;
 namespace ToolsManaged.Frontend
 {
     public partial class EntityProperties : Form
     {
+        
+
         private idLibNativeAPI.idDictNative _dict;
         private idLibNativeAPI.idDictNative _templateDict;
         public EntityProperties()
@@ -74,9 +78,9 @@ namespace ToolsManaged.Frontend
             {
                 string relpath = dialog.FileName.Substring(dialog.InitialDirectory.Length - (rootModelPath.Length + 1));
 
-                
+        
                 _dict.Set("model", relpath);
-                _dict.Set("scale", "1 1 1");
+                _dict.Set("vthandletype", "" + EditorUVGenerateType.Editor_GenerateUVs);
                 entitiesPropertyCntrl.Refresh();
 
                 NativeAPI.UpdateBrush();

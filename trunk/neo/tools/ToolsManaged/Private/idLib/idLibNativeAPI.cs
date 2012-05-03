@@ -163,7 +163,21 @@ namespace ToolsManaged.Private.idLib
                     }
                     else
                     {
-                        continue;
+                        // editor_netval 
+                        if (instance.key.Contains("editor_netval"))
+                        {
+                            string[] table = instance.key.Split(' ');
+
+                            type = ReflectionHelper.FindTypeInAssembly(table[1]);
+                            if (type == null)
+                                continue;
+
+                            compstr = table[2];
+                        }
+                        else
+                        {
+                            continue;
+                        }
                     }
 
                     if (compstr == keyname)

@@ -14,7 +14,7 @@ namespace ToolsManaged.Private
 
             for (int i = 0; i < assemblyTypes.Length; i++)
             {
-                if (assemblyTypes[i].Name.Contains("." + type))
+                if (assemblyTypes[i].Name.Contains(type))
                 {
                     return assemblyTypes[i];
                 }

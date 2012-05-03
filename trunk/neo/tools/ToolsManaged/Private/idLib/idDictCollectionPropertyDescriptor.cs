@@ -173,6 +173,10 @@ namespace ToolsManaged.Private.idLib
             {
                 return val;
             }
+            else if (_type.BaseType == typeof(Enum))
+            {
+                return Enum.Parse(_type, (string)val, false);
+            }
             else
             {
                 return ReflectionHelper.InitObjectFromType(_type, val);
@@ -243,6 +247,10 @@ namespace ToolsManaged.Private.idLib
             else if (_type == typeof(string))
             {
                 val = (string)value;
+            }
+            else if (_type == typeof(Enum))
+            {
+                val = "" + Enum.GetName( _type, value);
             }
             else // .net managed object.
             {

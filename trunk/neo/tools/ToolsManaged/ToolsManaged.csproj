@@ -86,6 +86,7 @@
     <Compile Include="IEditorWindow.cs" />
     <Compile Include="IToolsManaged.cs" />
     <Compile Include="Private\Editor\EditorShowProperties.cs" />
+    <Compile Include="Private\Editor\EditorUVGenerateType.cs" />
     <Compile Include="Private\idLib\idDictCollectionPropertyDescriptor.cs" />
     <Compile Include="Private\idLib\idLibNativeAPI.cs" />
     <Compile Include="Private\idLib\idString.cs" />
