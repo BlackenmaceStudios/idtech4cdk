@@ -260,6 +260,7 @@ entityDef func_static {
 	"editor_bool gui_noninteractive" "any gui attached will not be interactive"
 	"editor_bool noclipmodel"	"0 by default. Sets whether or not to generate a collision model for an ASE/LWO func_static at level load. (Set to 1 for stuff the player can't interact with. This will save memory.)"
 	"editor_bool inline"		"If true, turn the model into map geometry at dmap time"
+	"editor_netval EditorUVGenerateType vthandletype" "Type of uvs to generate/import"
 
 	"clientSpawnClass"			"bmClientEntity"
 	"spawnclass"				"idStaticEntity"
@@ -267,7 +268,6 @@ entityDef func_static {
 	"solid"						"1"
 	"noclipmodel"				"0"
 
-	
 	
 }
 
