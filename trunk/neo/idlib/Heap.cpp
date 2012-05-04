@@ -29,6 +29,8 @@ If you have questions concerning this license or the applicable additional terms
 #include "precompiled.h"
 #pragma hdrstop
 
+#include <crtdbg.h>
+
 #ifndef USE_LIBC_MALLOC
 	#define USE_LIBC_MALLOC		1
 #endif
@@ -1178,12 +1180,27 @@ Mem_DumpCompressed_f
 void Mem_DumpCompressed_f( const idCmdArgs &args ) {
 }
 
+
+/* ALLOCATION HOOK FUNCTION
+   -------------------------
+   An allocation hook function can have many, many different
+   uses. This one simply logs each allocation operation in a file.
+*/
+int __cdecl MyAllocHook( int nAllocType, void * pvData, size_t   nSize,int nBlockUse, long lRequest,const unsigned char * szFileName,int nLine) {
+	return TRUE;
+}
+
+
 /*
 ==================
 Mem_Init
 ==================
 */
 void Mem_Init( void ) {
+// jmarshall
+	_CrtSetAllocHook( MyAllocHook );
+
+// jmarshall end
 	mem_heap = new idHeap;
 	Mem_ClearFrameStats();
 }

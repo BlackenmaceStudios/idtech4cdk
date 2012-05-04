@@ -124,8 +124,8 @@ namespace ToolsManaged.Frontend.WindowAPI
                 viewportHeight = 720;
                 viewportWidth = 1280;
             }
-            
 
+            
             Point[] viewportLocation = new Point[4];
             
             viewportLocation[0] = new Point(rect.Left + 10 + (int)leftSideBorder, rect.Top + 78);
@@ -157,7 +157,10 @@ namespace ToolsManaged.Frontend.WindowAPI
                     }
 
                     window.DesktopLocation = viewportLocation[viewportNum++];
-                    window.Size = new Size(viewportWidth, viewportHeight);
+                    Size s = window.Size;
+                    s.Width = viewportWidth;
+                    s.Height = viewportHeight;
+                    window.Size = s;
                     ((Viewport)window).window.OnSize();
 
                 }

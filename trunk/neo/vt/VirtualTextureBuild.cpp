@@ -600,6 +600,7 @@ generatePage:
 		
 		switch(model->tris[d]->vt_uvGenerateType)
 		{
+			
 			case Editor_GenerateUVs_Q3Style:
 				{
 					for ( int i = 0 ; i < model->tris[d]->numVerts ; i++ ) {

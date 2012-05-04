@@ -690,6 +690,12 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 			}
 			idRenderModel	*model = renderModelManager->FindModel( modelName );
 
+			idStr modelOptStr = entity->mapEntity->epairs.GetString("model_optimize");
+			EditorModelOptimization optimize = EditorModelOptimize;
+			if(modelOptStr.Length() > 0 ) {
+				optimize = (EditorModelOptimization)toolInterface->GetValueFromManagedEnum( "EditorModelOptimization", modelOptStr );
+			}
+
 			common->Printf( "inlining %s.\n", entity->mapEntity->epairs.GetString( "name" ) );
 
 			idMat3	axis;
@@ -742,7 +748,7 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 
 	// jmarshall -- Checks to see if bsp optimization is screwing up my uvs.
 					
-					if(!bsp_inlinemesh_nooptmize.GetBool())
+					if(optimize == EditorModelOptimize)
 					{
 						for ( int j = startIndex ; j < startIndex + numIndexes ; j += 3 ) {
 							for ( int k = 0 ; k < 3 ; k++ ) {

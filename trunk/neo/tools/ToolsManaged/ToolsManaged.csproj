@@ -85,6 +85,7 @@
     </Compile>
     <Compile Include="IEditorWindow.cs" />
     <Compile Include="IToolsManaged.cs" />
+    <Compile Include="Private\Editor\EditorModelOptimization.cs" />
     <Compile Include="Private\Editor\EditorShowProperties.cs" />
     <Compile Include="Private\Editor\EditorUVGenerateType.cs" />
     <Compile Include="Private\Editor\Input\KeyHandler.cs" />

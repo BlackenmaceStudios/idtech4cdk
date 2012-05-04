@@ -65,6 +65,9 @@ namespace ToolsManaged.Frontend
 
         private void Viewport_Load(object sender, EventArgs e)
         {
+
+            point.x = 0;
+            point.y = 0;
             panel1.MouseMove += new MouseEventHandler(panel1_MouseMove);
             panel1.MouseClick += new MouseEventHandler(panel1_MouseClick);
             panel1.MouseUp += new MouseEventHandler(panel1_MouseUp);
@@ -83,9 +86,10 @@ namespace ToolsManaged.Frontend
             Invalidate();
         }
 
+        static ToolsManaged.Private.NativeAPI.idManagedEditorWindowNative.Point point;
+
         void panel1_MouseWheel(object sender, MouseEventArgs e)
         {
-            ToolsManaged.Private.NativeAPI.idManagedEditorWindowNative.Point point = new Private.NativeAPI.idManagedEditorWindowNative.Point();
             Point screenCoords = Cursor.Position;
             Point controlRelatedCoords = this.panel1.PointToClient(screenCoords);
 

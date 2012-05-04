@@ -239,11 +239,15 @@
       <NoEntryPoint>false</NoEntryPoint>
       <EntryPointSymbol>
       </EntryPointSymbol>
-      <HeapReserveSize>4000000</HeapReserveSize>
-      <HeapCommitSize>4000000</HeapCommitSize>
+      <HeapReserveSize>
+      </HeapReserveSize>
+      <HeapCommitSize>
+      </HeapCommitSize>
       <LargeAddressAware>false</LargeAddressAware>
-      <StackReserveSize>4000000</StackReserveSize>
-      <StackCommitSize>4000000</StackCommitSize>
+      <StackReserveSize>
+      </StackReserveSize>
+      <StackCommitSize>
+      </StackCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

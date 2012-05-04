@@ -510,4 +510,10 @@ enum EditorUVGenerateType
 	Editor_ImportUVs_60Percent,
 	Editor_ImportUVs_70Percent
 };
+
+enum EditorModelOptimization
+{
+        EditorModelOptimize = 0,
+        EditorModelDontOptimize
+};
 // jmarshall end
