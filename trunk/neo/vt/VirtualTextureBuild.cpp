@@ -257,21 +257,31 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 			bool isValid = false;
 			
 
-			remapIndex[1] = RemapVertexFromParentToChildTri( parentTris, verts, index+1, false);
-			if(remapIndex[1] == -1)
-			{
-				remapIndex[2] = RemapVertexFromParentToChildTri( parentTris, verts, index+2, false);
-				if(remapIndex[2] == -1)
-				{
-					continue; // triangle is completely excluded.
-				}
-			}
-
 			for(int c = 0; c < 3; c++)
 			{
 				index = parentTris->indexes[i + c];
-				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, true);
-				indexes.Append( remapIndex[c] );
+
+				for(int s = 0; s < validIndexes.Num(); s++)
+				{
+					if(validIndexes[s] == index)
+					{
+						isValid = true;
+						break;
+					}
+				}
+
+				if(isValid)
+					break;
+			}
+
+			if(isValid)
+			{
+				for(int c = 0; c < 3; c++)
+				{
+					index = parentTris->indexes[i + c];
+					remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, true);
+					indexes.Append( remapIndex[c] );
+				}
 			}
 		}
 	}
