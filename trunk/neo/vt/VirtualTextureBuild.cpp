@@ -202,16 +202,19 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 		}
 
 		float scale = 0.0f;
-
+		float scale2 = 0.0f;
 		// Scale the UV's to the 
 		if( pageBounds[1].x < 0.97f && pageBounds[1].y < 0.97f )
 		{
 			float fakeScale;
+			float fakeScale2;
 			if(pageBounds[1].x > pageBounds[1].y) {
 				fakeScale = pageBounds[1].x;
+				fakeScale2 = pageBounds[1].y;
 			}
 			else
 			{
+				fakeScale2 = pageBounds[1].x;
 				fakeScale = pageBounds[1].y;
 			}
 
@@ -222,6 +225,15 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 				scale += fakeScale;
 			}
 			scale -= fakeScale;
+
+			scale2 = fakeScale2;
+
+			// I can't think of the right way to do this, yup I pulled another nate.
+			while( scale2 * fakeScale2 < 1.0f ) {
+				scale2 += fakeScale2;
+			}
+			scale2 -= fakeScale2;
+
 
 
 			for(int v = 0; v < model->tris.Num(); v++)
@@ -236,7 +248,7 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 					for(int k = 0; k < tris->numVerts; k++)
 					{
 						tris->verts[k].st.x *= scale;
-						tris->verts[k].st.y *= scale;
+						tris->verts[k].st.y *= scale2;
 					}
 				}
 			}

@@ -52,6 +52,8 @@ the number of surface triangles, which will be used to handle dangling
 edge silhouettes.
 ================
 */
+static int ShadowFacingFacesPtrSize = 0;
+static byte *ShadowFacingFacesPtr;
 void R_CalcInteractionFacing( const idRenderEntityLocal *ent, const srfTriangles_t *tri, const idRenderLightLocal *light, srfCullInfo_t &cullInfo, float *modelSpaceMatrix ) {
 	idVec3 localLightOrigin;
 
@@ -86,7 +88,16 @@ void R_CalcInteractionFacing( const idRenderEntityLocal *ent, const srfTriangles
 		R_DeriveFacePlanes( const_cast<srfTriangles_t *>(tri) );
 	}
 
-	cullInfo.facing = (byte *) R_StaticAlloc( ( numFaces + 1 ) * sizeof( cullInfo.facing[0] ) );
+	if(ShadowFacingFacesPtrSize < numFaces) {
+		if(ShadowFacingFacesPtr != NULL)
+		{
+			R_StaticFree( ShadowFacingFacesPtr );
+		}
+		ShadowFacingFacesPtr = (byte *) R_StaticAlloc( ( numFaces + 1 ) * sizeof( cullInfo.facing[0] ) );
+		ShadowFacingFacesPtrSize = numFaces;
+	}
+
+	cullInfo.facing = ShadowFacingFacesPtr;
 
 	// calculate back face culling
 	float *planeSide = (float *) _alloca16( numFaces * sizeof( float ) );
@@ -156,7 +167,9 @@ R_FreeInteractionCullInfo
 */
 void R_FreeInteractionCullInfo( srfCullInfo_t &cullInfo ) {
 	if ( cullInfo.facing != NULL ) {
-		R_StaticFree( cullInfo.facing );
+// jmarshall - this was stupid alloc/freeing each frame.
+		//R_StaticFree( cullInfo.facing );
+// jmarshall 
 		cullInfo.facing = NULL;
 	}
 	if ( cullInfo.cullBits != NULL ) {

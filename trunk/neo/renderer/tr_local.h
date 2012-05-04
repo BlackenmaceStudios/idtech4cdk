@@ -122,6 +122,7 @@ typedef struct drawSurf_s {
 	idScreenRect			scissorRect;	// for scissor clipping, local inside renderView viewport
 	int						dsFlags;			// DSF_VIEW_INSIDE_SHADOW, etc
 	struct vertCache_s		*dynamicTexCoords;	// float * in vertex cache memory
+
 	// specular directions for non vertex program cards, skybox texcoords, etc
 } drawSurf_t;
 
