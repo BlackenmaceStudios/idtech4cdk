@@ -45,6 +45,7 @@ public:
 
 	bool						GenerateVTVerts_r( class bmVTModel *model, float surfaceSize, int numVTAreas );
 	int							NumVTAreas( void );
+	void						ScaleUVsToFitArea( srfTriangles_t *tris, int x, int y, int w, int h );
 private:
 	bool						VerifyUVForPage( bmVTModel *model, float surfaceSizes, int numVTAreas );
 

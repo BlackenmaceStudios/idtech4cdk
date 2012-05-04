@@ -80,7 +80,7 @@ namespace ToolsManaged.Frontend
 
         
                 _dict.Set("model", relpath);
-                _dict.Set("vthandletype", "" + EditorUVGenerateType.Editor_GenerateUVs);
+                _dict.Set("vthandletype", "" + EditorUVGenerateType.Editor_GenerateUVs_Orient);
                 entitiesPropertyCntrl.Refresh();
 
                 NativeAPI.UpdateBrush();

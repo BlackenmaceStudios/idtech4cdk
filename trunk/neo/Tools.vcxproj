@@ -224,7 +224,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <UndefinePreprocessorDefinitions>_USE_32BIT_TIME_T</UndefinePreprocessorDefinitions>
       <AdditionalIncludeDirectories>./tools/MeshTools/MeshTools/Lib</AdditionalIncludeDirectories>
-      <FloatingPointModel>Strict</FloatingPointModel>
+      <FloatingPointModel>Precise</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -239,13 +239,11 @@
       <NoEntryPoint>false</NoEntryPoint>
       <EntryPointSymbol>
       </EntryPointSymbol>
-      <HeapReserveSize>
-      </HeapReserveSize>
-      <HeapCommitSize>
-      </HeapCommitSize>
-      <LargeAddressAware>true</LargeAddressAware>
-      <StackReserveSize>3000000</StackReserveSize>
-      <StackCommitSize>3000000</StackCommitSize>
+      <HeapReserveSize>4000000</HeapReserveSize>
+      <HeapCommitSize>4000000</HeapCommitSize>
+      <LargeAddressAware>false</LargeAddressAware>
+      <StackReserveSize>4000000</StackReserveSize>
+      <StackCommitSize>4000000</StackCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

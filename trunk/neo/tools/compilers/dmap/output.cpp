@@ -217,6 +217,7 @@ srfTriangles_t	*ShareMapTriVerts( const mapTri_t *tris ) {
 	numIndexes = 0;
 
 	for ( step = tris ; step ; step = step->next ) {
+		bool trisIsValid = false;
 		for ( i = 0 ; i < 3 ; i++ ) {
 			const idDrawVert	*dv;
 
@@ -234,10 +235,14 @@ srfTriangles_t	*ShareMapTriVerts( const mapTri_t *tris ) {
 				uTri->verts[j].normal = dv->normal;
 				uTri->verts[j].st[0] = dv->st[0];
 				uTri->verts[j].st[1] = dv->st[1];
+				trisIsValid = true;
 			}
 
 			uTri->indexes[numIndexes++] = j;
 		}
+
+		
+		
 	}
 
 	uTri->numVerts = numVerts;
@@ -408,6 +413,7 @@ static void CreateOutputSurfaces( int entityNum, int areaNum ) {
 	int			i; // , j;
 //	int			col;
 	srfTriangles_t	*uTri;
+	int			uvGenHandleType = 0;
 //	mapTri_t	*tri;
 typedef struct interactionTris_s {
 	struct interactionTris_s	*next;
@@ -422,14 +428,24 @@ typedef struct interactionTris_s {
 	entity = dmapGlobals.uEntities[entityNum].mapEntity;
 
 // jmarshall
+
+	idStr uvHandleTypeStr = entity->epairs.GetString("vthandletype");
+	if(uvHandleTypeStr.Length() > 0 ) {
+		uvGenHandleType = toolInterface->GetValueFromManagedEnum( "EditorUVGenerateType", uvHandleTypeStr );
+	}
+
 	if(dmapGlobals.uEntities[entityNum].meshTri != NULL)
 	{
-		outModel.AddTris( dmapGlobals.uEntities[entityNum].meshTri );
+		uTri = dmapGlobals.uEntities[entityNum].meshTri;
+		uTri->vt_uvGenerateType = (EditorUVGenerateType)uvGenHandleType;
+		outModel.AddTris( uTri );
 		return;
 	}
 // jmarshall end
 
+
 	numSurfaces = CountUniqueShaders( area->groups );
+	
 
 
 	if ( entityNum == 0 ) {
@@ -520,6 +536,7 @@ typedef struct interactionTris_s {
 		FreeTriList( ambient );
 
 		CleanupUTriangles( uTri );
+		uTri->vt_uvGenerateType = (EditorUVGenerateType)uvGenHandleType;
 
 		outModel.AddTris( uTri );
 		R_FreeStaticTriSurf( uTri );
@@ -676,7 +693,7 @@ static void WriteOutputSurfaces( void ) {
 		procFile->WriteFloatString( "\"%s\" ", va("vt_%d", surfaceNum) );
 
 		
-		WriteUTriangles( &outModel.tris[surfaceNum] );
+		WriteUTriangles( outModel.tris[surfaceNum] );
 		procFile->WriteFloatString( "}\n\n" );
 	}
 

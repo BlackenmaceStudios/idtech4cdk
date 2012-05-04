@@ -808,6 +808,8 @@ consider it invalid if any one of the possibilities is invalid.
 static bool IsTriangleValid( const optVertex_t *v1, const optVertex_t *v2, const optVertex_t *v3 ) {
 	idVec3	d1, d2, normal;
 
+	
+
 	d1 = v2->pv - v1->pv;
 	d2 = v3->pv - v1->pv;
 	normal = d1.Cross( d2 );
@@ -1899,7 +1901,7 @@ static	void OptimizeOptList( optimizeGroup_t *opt ) {
 	AddOriginalEdges( opt );
 	SplitOriginalEdgesAtCrossings( opt );
 
-#if 0
+#if 1
 	// seperate any discontinuous areas for individual optimization
 	// to reduce the scope of the problem
 	SeparateIslands( opt );

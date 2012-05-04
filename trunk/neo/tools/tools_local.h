@@ -36,6 +36,7 @@ public:
 	
 	virtual void	ComputeUVAtlasForModel( class bmVTModel *model, int startTris, int numTris );
 	virtual void	ShowDebugConsole( void );
+	virtual int		GetValueFromManagedEnum(const char * enumTypeStr, const char * enumValStr);
 private:
 	void			BuildUVAtlasInternalModel( class bmVTModel *model, int startTris, int numTri );
 	void			SetUVsFromInternalUVAtlas( class bmVTModel *model ) ;

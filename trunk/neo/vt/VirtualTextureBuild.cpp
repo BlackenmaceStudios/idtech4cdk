@@ -7,8 +7,8 @@
 
 
 #include "../tools/compilers/dmap/vtmodel.h"
-
-#define USE_CORRECT_UV_GENERATION				// Works now...frickin sweat...
+#include "../tools/compilers/dmap/dmap.h"
+//#define USE_CORRECT_UV_GENERATION				// Works now...frickin sweat...
 
 VirtualTextureBuilder vtBuilder;
 static int vertNum = 0;
@@ -18,9 +18,9 @@ int		firstTrisOnPage = 0;
 int VT_CurrentNumAreas = 0;
 float spacing = 1.0;
 
-idCVar vt_compile_areasize( "vt_compile_areasize", "4096", CVAR_RENDERER | CVAR_INTEGER , "Size of the texture for each area of the map." );
-idCVar vt_compile_size( "vt_compile_size", "16384", CVAR_RENDERER | CVAR_INTEGER , "Size of the virtual texture to build." );
-idCVar vt_compile_bsize( "vt_compile_bsize", "128", CVAR_RENDERER | CVAR_INTEGER , "Size of the virtual texture to build." );
+idCVar vt_compile_areasize( "vt_compile_areasize", "4096", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT , "Size of the texture for each area of the map." );
+idCVar vt_compile_size( "vt_compile_size", "16384", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT , "Size of the virtual texture to build." );
+idCVar vt_compile_bsize( "vt_compile_bsize", "128", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT , "Size of the virtual texture to build." );
 
 #define VT_Size vt_compile_bsize.GetInteger()
 
@@ -98,21 +98,23 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 	common->Printf( "...Number of VT areas %d\n", numVTAreas );
 	common->Printf( "...Number of Faces in map %d\n", model->tris.Num() );
 
-	int numTrisPerArea = (int)((float)floor((float)model->tris.Num() / (float)numVTAreas));
+	int numTrisPerArea = (int)ceil((float)model->tris.Num() / (float)numVTAreas);
 	
-	if(numTrisPerArea == 0) {
-		numVTAreas = numTrisPerArea;
-		numTrisPerArea = 1;
+	if(numTrisPerArea <= 0 || numVTAreas <= 0) {
+		numVTAreas = 1;
+		numTrisPerArea =model->tris.Num();
 	}
 	VT_CurrentNumAreas = 0;
 #ifdef USE_CORRECT_UV_GENERATION
+
+	float startTris = 0;
 
 	 for(int i = 0, chartID = 0; i < model->tris.Num(); i+=numTrisPerArea, chartID++)
 	{
 		int triCount = numTrisPerArea;
 
-		if(i + triCount > model->tris.Num() || (chartID == (numVTAreas - 1))) {
-			triCount = model->tris.Num() - i;
+		if(startTris + triCount > model->tris.Num() || (chartID == (numVTAreas))) {
+			triCount = model->tris.Num() - startTris;
 			if(triCount <= 0)
 			{
 				common->FatalError("GenerateVTVerts: invalid tricount\n");
@@ -122,12 +124,13 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 
 		common->Printf( "Generating UV's for chart %d - %d\n", VT_CurrentNumAreas, triCount);
 
-		toolInterface->ComputeUVAtlasForModel( model, i, triCount );
+		toolInterface->ComputeUVAtlasForModel( model, startTris, triCount );
 
 		for(int f = i; f < i + triCount; f++) {
-			model->tris[f].vt_AreaID = VT_CurrentNumAreas;
+			model->tris[f]->vt_AreaID = VT_CurrentNumAreas;
 		}
 
+		startTris = i+numTrisPerArea;
 		VT_CurrentNumAreas++;
 	}
 #else // old stuff.
@@ -146,6 +149,19 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 		common->Printf( "Virtual Texture UV coordinates generated succesfully. Final blocksize %f\n", surfaceSize);
 	}
 }
+/*
+====================
+VirtualTextureBuilder::ScaleUVsToFitArea
+====================
+*/
+void VirtualTextureBuilder::ScaleUVsToFitArea( srfTriangles_t *tris, int x, int y, int w, int h ) {
+	idDrawVert *v = tris->verts;
+	for ( int i = 0 ; i < tris->numVerts ; i++ ) {
+			v[i].st.x = (v[i].st.x + x + 0.5) * ((float)w / (float)VT_Size);
+			v[i].st.y = (v[i].st.y + y + 0.5) * ((float)h / (float)VT_Size);
+	}
+}
+
 
 /*
 ====================
@@ -176,7 +192,7 @@ bool VirtualTextureBuilder::GenerateVTVerts_r( bmVTModel *model,  float surfaceS
 		idVec3 size;
 		idPlane plane;
 		idVec3 planeNormal;
-		idDrawVert *v = model->tris[d].verts;
+		idDrawVert *v = model->tris[d]->verts;
 		
 		vecs[0] = idVec3(0,0,0);
 		vecs[1] = idVec3(0,0,0);
@@ -187,7 +203,7 @@ bool VirtualTextureBuilder::GenerateVTVerts_r( bmVTModel *model,  float surfaceS
 		bounds.Clear();
 
 		// Get the bounds for the tris
-		for(int i = 0; i < model->tris[d].numVerts; i++)
+		for(int i = 0; i < model->tris[d]->numVerts; i++)
 		{
 			bounds.AddPoint( v[i].xyz );
 		}
@@ -254,62 +270,59 @@ generatePage:
 			firstTrisOnPage = d;
 		}
 
-		if(model->tris[d].vt_AreaID != -1)
+		switch(model->tris[d]->vt_uvGenerateType)
 		{
-			bool hasCorrectUVs = true;
-			// Check to see if all the UV's are between 0 and 1.
-			for ( int i = 0 ; i < model->tris[d].numVerts ; i++ ) {
-				if(v[i].st.x > 1 || v[i].st.x < 0)
+			case Editor_GenerateUVs_Q3Style:
 				{
-					hasCorrectUVs = false;
-					break;
-				}
-
-				if(v[i].st.y > 1 || v[i].st.y < 0)
-				{
-					hasCorrectUVs = false;
-					break;
-				}
-			}
-
-			model->tris[d].vt_AreaID = VT_CurrentNumAreas;
-
-		
-			if(!hasCorrectUVs)
-			{
-				for ( int i = 0 ; i < model->tris[d].numVerts ; i++ ) {
+					for ( int i = 0 ; i < model->tris[d]->numVerts ; i++ ) {
 			
-					delta = v[i].xyz - bounds[0];
-					v[i].st.x = (DotProduct(delta, vecs[0]) + x + 0.5) / VT_Size;
-					v[i].st.y = (DotProduct(delta, vecs[1]) + y + 0.5) / VT_Size;
+						delta = v[i].xyz - bounds[0];
+						v[i].st.x = (DotProduct(delta, vecs[0]) + x + 0.5) / VT_Size;
+						v[i].st.y = (DotProduct(delta, vecs[1]) + y + 0.5) / VT_Size;
 
-					if(v[i].st.x > 1 || v[i].st.y > 1) {
-						goto generatePage;
+						if(v[i].st.x > 1 || v[i].st.y > 1) {
+							goto generatePage;
+						}
 					}
 
-			
+					model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
 				}
-			}
-			else
-			{
-				for ( int i = 0 ; i < model->tris[d].numVerts ; i++ ) {
-				//	v[i].st.x = (v[i].st.x + x + 0.5) * ((float)w / (float)VT_Size);
-				//	v[i].st.y = (v[i].st.y + y + 0.5) * ((float)h / (float)VT_Size);
+			case Editor_GenerateUVs_Orient:
+				{
+					toolInterface->ComputeUVAtlasForModel( model, d, 1 );
+					ScaleUVsToFitArea(model->tris[d], x, y, w, h);
+					model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
 				}
-			}
+				break;
+			case Editor_ImportUVs_AutoSpacing:
+				{
+					ScaleUVsToFitArea(model->tris[d], x, y, w, h);
+					model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
+				}
+				break;
+			case Editor_ImportUVs_SinglePage:
+				{
+					if(firstTrisOnPage != d)
+					{
+						VT_CurrentNumAreas++;
+						// Prepare a new VT page.
+						PrepareNewVTArea();
+						firstTrisOnPage = d;
+					}
+					model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
+					
+					VT_CurrentNumAreas++;
+					// Prepare a new VT page.
+					PrepareNewVTArea();
+					firstTrisOnPage = d;
+				}
+				break;
+			default:
+				{
+					common->FatalError("GenerateVTVerts: Not implemented UVGen option\n");
+				}
 		}
-		else {
-			model->tris[d].vt_AreaID = numVTAreas;
-		}
-		// Don't add the area id until we know all the verts are good.
-		
-		//for ( int i = 0 ; i < model->tris[d].numVerts ; i++ ) {
-		//	v[i].st.x += model->tris[d].vt_AreaID;
-		//}
-		
-	}
-
-	
+	}	
 
 	return true;
 }
@@ -321,5 +334,5 @@ VirtualTextureBuilder::NumVTAreas
 int	 VirtualTextureBuilder::NumVTAreas( void ) {
 	int numVTAreas = (int)((float)vt_compile_size.GetInteger() / (float)vt_compile_areasize.GetInteger());
 	numVTAreas = numVTAreas * numVTAreas;
-	return numVTAreas;
+	return numVTAreas-1;
 }

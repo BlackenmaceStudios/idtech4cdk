@@ -249,6 +249,7 @@ bool idToolInterfaceLocal::FrameSysMsg( void *msg ) {
 	return false;
 }
 
+
 /*
 =================
 idToolInterfaceLocal::InitTool

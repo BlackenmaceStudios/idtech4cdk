@@ -68,6 +68,8 @@ typedef struct mapTri_s {
 											// from different fixed groups, like guiSurfs and mirrors
 	int					planeNum;			// not set universally, just in some areas
 
+
+
 	idDrawVert			v[3];
 	const struct hashVert_s *hashVert[3];
 	struct optVertex_s *optVert[3];
@@ -491,4 +493,21 @@ void		CarveTriByBeamTree( const struct beamTree_s *beamTree, const mapTri_t *tri
 
 // jmarshall
 extern idCVar bsp_inlinemesh_maxfacespertri;
+// jmarshall end
+
+// jmarshall - this needs to get removed when dmap goes to tools.dll
+enum EditorUVGenerateType
+{
+	Editor_GenerateUVs_Orient = 0,
+	Editor_GenerateUVs_Q3Style,
+	Editor_ImportUVs_AutoSpacing,
+	Editor_ImportUVs_SinglePage,
+	Editor_ImportUVs_10Percent,
+	Editor_ImportUVs_20Percent,
+	Editor_ImportUVs_30Percent,
+	Editor_ImportUVs_40Percent,
+	Editor_ImportUVs_50Percent,
+	Editor_ImportUVs_60Percent,
+	Editor_ImportUVs_70Percent
+};
 // jmarshall end

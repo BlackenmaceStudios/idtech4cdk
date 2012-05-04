@@ -25,6 +25,7 @@ namespace ToolsManaged
         void AddEntity(string type, string name);
         void AddNewEntityType(string folder, string entityType);
 
+        int GetValueFromManagedEnum(string enumTypeStr, string enumValStr);
         IEditorWindow CreateEditorWindow(string WindowClassName, IntPtr address);
     }
 }
