@@ -59,7 +59,24 @@ public:
 
 	void			SetColor( dword color );
 	dword			GetColor( void ) const;
+// jmarshall
+	bool			operator==(	const idDrawVert &a ) const;
+// jmarshall end
 };
+
+// jmarshall
+ID_INLINE bool idDrawVert::operator==(	const idDrawVert &a ) const {
+	if(xyz != a.xyz)
+		return false;
+
+	if(st != a.st) {
+		return false;
+	}
+
+	// Should we compare tbn?
+	return true;
+}
+// jmarshall end
 
 ID_INLINE float idDrawVert::operator[]( const int index ) const {
 	assert( index >= 0 && index < 5 );

@@ -17,6 +17,37 @@ void bmVTModel::Init( void ) {
 	tris.Resize( 0 );
 }
 
+void bmVTModel::AllocTriangleAtPosition( int triId ) {
+	srfTriangles_t	*uTri = R_AllocStaticTriSurf();
+
+	tris.Insert( uTri, triId );
+}
+
+void bmVTModel::FreeTri( int triId ) { 
+	R_FreeStaticTriSurf( tris[triId] ); 
+	tris.Remove( tris[triId] ); 
+}
+
+void bmVTModel::SetVertexesForTris( int triId, idDrawVert *verts, int numVerts, int *indexes, int numIndexes ) {
+	srfTriangles_t	*uTri = tris[triId];
+
+	R_AllocStaticTriSurfIndexes( uTri, numIndexes );
+	R_AllocStaticTriSurfVerts( uTri, numVerts );
+
+	for(int i = 0; i < numIndexes; i++)
+	{
+		uTri->indexes[i] = indexes[i];
+	}
+
+	for(int i = 0; i < numVerts; i++)
+	{
+		uTri->verts[i] = verts[i];
+	}
+
+	uTri->numVerts = numVerts;
+	uTri->numIndexes = numIndexes;
+}
+
 void bmVTModel::AddTris( const srfTriangles_t *uTris ) {
 	
 
