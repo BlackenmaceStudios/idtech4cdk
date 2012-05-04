@@ -127,14 +127,25 @@ namespace ToolsManaged.Frontend
            
         }
 
+        static int ignoreDown = 0;
         void panel1_MouseDown(object sender, MouseEventArgs e)
         {
+            int downTime = System.Environment.TickCount;
+            if (downTime - ignoreDown < 2)
+            {
+               
+                return;
+            }
+
+            ignoreDown = downTime;
+            
             ToolsManaged.Private.NativeAPI.idManagedEditorWindowNative.Point point = new Private.NativeAPI.idManagedEditorWindowNative.Point();
 
             point.x = e.Location.X;
             point.y = e.Location.Y;
 
             _lastPoint = point;
+            
 
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
@@ -209,6 +220,8 @@ namespace ToolsManaged.Frontend
            
             base.OnResize(e);
         }
+
+    
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {

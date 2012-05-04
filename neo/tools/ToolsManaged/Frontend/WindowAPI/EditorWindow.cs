@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 
 using ToolsManaged.Private;
+using ToolsManaged.Private.Editor.Input;
 namespace ToolsManaged.Frontend.WindowAPI
 {
     //
@@ -18,7 +19,9 @@ namespace ToolsManaged.Frontend.WindowAPI
     {
         private NativeAPI.idManagedEditorWindowNative _nativeWindow;
         private Form _window;
-        private Keys _lastKeyDown;
+
+
+   
 
         //
         // EditorWindow Constructor.
@@ -28,7 +31,7 @@ namespace ToolsManaged.Frontend.WindowAPI
             _nativeWindow = new NativeAPI.idManagedEditorWindowNative();
             _nativeWindow.AttachToMemory(typeof(NativeAPI.idManagedEditorWindowNative), pAddress);
             _window = form;
-            _lastKeyDown = Keys.None;
+           
             
         }
 
@@ -72,13 +75,13 @@ namespace ToolsManaged.Frontend.WindowAPI
 
         public void OnKeyDown(Keys key)
         {
-            _lastKeyDown = key;
+            
             _nativeWindow.OnKeyDown(_nativeWindow.GetNativeAddress(), (uint)key, 0, 0);
         }
 
         public void OnKeyUp(Keys key)
         {
-            _lastKeyDown = Keys.None;
+           
             _nativeWindow.OnKeyUp(_nativeWindow.GetNativeAddress(), (uint)key, 0, 0);
         }
 
@@ -111,24 +114,30 @@ namespace ToolsManaged.Frontend.WindowAPI
         {
             _nativeWindow.OnMouseWheelPtr(_nativeWindow.GetNativeAddress(), 0, delta, point);
         }
-
+        private KeyHandler.VirtualKeyStates _lastKey;
         public void OnMouseDownLeft(Keys key, NativeAPI.idManagedEditorWindowNative.Point point)
         {
             uint keyval = 0x0001;
-            if (_lastKeyDown == Keys.ShiftKey)
+            if (KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_SHIFT))
             {
                 keyval |= 0x0004;
+                _lastKey = KeyHandler.VirtualKeyStates.VK_SHIFT;
             }
+            if (KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_LMENU))
+            {
+                keyval |= 0xA4;
+            }
+            
             _nativeWindow.OnLButtonDown(_nativeWindow.GetNativeAddress(), keyval, point);
         }
 
         public void OnMouseUpLeft(Keys key, NativeAPI.idManagedEditorWindowNative.Point point)
         {
             uint keyval = 0x0001;
-            if (_lastKeyDown == Keys.ShiftKey)
+            if (!KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_SHIFT) && _lastKey == KeyHandler.VirtualKeyStates.VK_SHIFT)
             {
                 keyval |= 0x0004;
-                _lastKeyDown = Keys.None;
+                _lastKey = KeyHandler.VirtualKeyStates.VK_NONAME;
             }
             _nativeWindow.OnLButtonUp(_nativeWindow.GetNativeAddress(), keyval, point);
 

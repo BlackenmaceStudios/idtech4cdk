@@ -41,6 +41,9 @@ If you have questions concerning this license or the applicable additional terms
 class idPolynomial {
 public:
 					idPolynomial( void );
+					// jmarshall
+					~idPolynomial(void) { if(coefficient) { Mem_Free16( coefficient ); coefficient= NULL; } };
+					// jmarshall end
 					explicit idPolynomial( int d );
 					explicit idPolynomial( float a, float b );
 					explicit idPolynomial( float a, float b, float c );
@@ -106,6 +109,7 @@ ID_INLINE idPolynomial::idPolynomial( void ) {
 	allocated = 0;
 	coefficient = NULL;
 }
+
 
 ID_INLINE idPolynomial::idPolynomial( int d ) {
 	degree = -1;
@@ -625,5 +629,7 @@ ID_INLINE void idPolynomial::Resize( int d, bool keep ) {
 	}
 	degree = d;
 }
+
+
 
 #endif /* !__MATH_POLYNOMIAL_H__ */

@@ -32,68 +32,6 @@ extern bmMemoryHandler		*allocator;
 // jmarshall
 #include <malloc.h>
 
-__inline void *operator new( size_t s ) {
-	if(allocator == NULL)
-		return malloc( s );
-
-	return allocator->Allocate( s );
-}
-__inline void operator delete( void *p ) {
-	if(allocator == NULL) {
-		free( p );
-		return;
-	}
-
-	allocator->Free( p );
-}
-__inline void *operator new[]( size_t s ) {
-	if(allocator == NULL)
-		return malloc( s );
-
-	return allocator->Allocate( s );
-}
-__inline void operator delete[]( void *p ) {
-	if(allocator == NULL) {
-		free( p );
-		return;
-	}
-
-	allocator->Free( p );
-}
-
-__inline  void* operator new(size_t s, const char * lpszFileName, int nLine) {
-	if(allocator == NULL)
-		return malloc( s );
-
-	return allocator->Allocate( s );
-}
-
-
-__inline void operator delete(void* p, const char * lpszFileName, int nLine) {
-	if(allocator == NULL) {
-		free( p );
-		return;
-	}
-
-	allocator->Free( p );
-}
-
-
-__inline void* operator new[](size_t s, const char * lpszFileName, int nLine) {
-	if(allocator == NULL)
-		return malloc( s );
-
-	return allocator->Allocate( s );
-}
-
-__inline void operator delete[](void* p, const char * lpszFileName, int nLine) {
-	if(allocator == NULL) {
-		free( p );
-		return;
-	}
-
-	allocator->Free( p );
-}
 
 // jamrshall end
 #ifndef TOOLS_DLL

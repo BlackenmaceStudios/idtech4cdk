@@ -48,53 +48,7 @@ void* AFX_CDECL operator new(size_t s, LPCSTR lpszFileName, int nLine) {
 	return allocator->Allocate( s );
 }
 
-
 void AFX_CDECL operator delete(void* p, LPCSTR lpszFileName, int nLine) {
-	if(allocator == NULL) {
-		free( p );
-		return;
-	}
-
-	allocator->Free( p );
-}
-
-void* __cdecl operator new( size_t s ) {
-	if(allocator == NULL)
-		return malloc( s );
-
-	return allocator->Allocate( s );
-}
-void __cdecl operator delete( void *p ) {
-	if(allocator == NULL) {
-		free( p );
-		return;
-	}
-
-	allocator->Free( p );
-}
-void* __cdecl operator new[]( size_t s ) {
-	if(allocator == NULL)
-		return malloc( s );
-
-	return allocator->Allocate( s );
-}
-void __cdecl operator delete[]( void *p ) {
-	if(allocator == NULL) {
-		free( p );
-		return;
-	}
-
-	allocator->Free( p );
-}
-
-void* __cdecl operator new[](size_t s, LPCSTR lpszFileName, int nLine) {
-	if(allocator == NULL)
-		return malloc( s );
-
-	return allocator->Allocate( s );
-}
-
-void __cdecl operator delete[](void* p, LPCSTR lpszFileName, int nLine) {
 	if(allocator == NULL) {
 		free( p );
 		return;

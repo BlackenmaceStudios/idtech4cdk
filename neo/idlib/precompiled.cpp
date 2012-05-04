@@ -26,3 +26,72 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 #include "precompiled.h"
+
+
+void *operator new( size_t s ) {
+	if(allocator == NULL)
+		return malloc( s );
+
+	return allocator->Allocate( s );
+}
+void operator delete( void *p ) {
+	if(allocator == NULL) {
+		free( p );
+		return;
+	}
+
+	allocator->Free( p );
+}
+void *operator new[]( size_t s ) {
+	if(allocator == NULL)
+		return malloc( s );
+
+	return allocator->Allocate( s );
+}
+void operator delete[]( void *p ) {
+	if(allocator == NULL) {
+		free( p );
+		return;
+	}
+
+	allocator->Free( p );
+}
+
+ void* operator new(size_t s, const char * lpszFileName, int nLine) {
+	if(allocator == NULL)
+		return malloc( s );
+
+	return allocator->Allocate( s );
+}
+
+
+void operator delete(void* p, const char * lpszFileName, int nLine) {
+	if(allocator == NULL) {
+		free( p );
+		return;
+	}
+
+	allocator->Free( p );
+}
+
+
+void* operator new[](size_t s, const char * lpszFileName, int nLine) {
+	if(allocator == NULL)
+		return malloc( s );
+
+	return allocator->Allocate( s );
+}
+
+void operator delete[](void* p, const char * lpszFileName, int nLine) {
+	if(allocator == NULL) {
+		free( p );
+		return;
+	}
+
+	allocator->Free( p );
+}
+
+
+
+
+

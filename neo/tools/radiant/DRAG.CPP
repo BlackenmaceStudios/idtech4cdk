@@ -235,6 +235,7 @@ static void Drag_Setup( int x, int y, int buttons,
 		return;
 	}
 
+
 	if (g_qeglobals.d_select_mode == sel_vertex || g_qeglobals.d_select_mode == sel_edge) {
 		return;
 	}
@@ -692,6 +693,12 @@ void Drag_MouseMoved(int x, int y, int buttons) {
 		drag_ok = false;
 		return;
 	}
+	// jmarshall
+	if(abs(y - pressy) > 30.0f && drag_first) {
+		pressy = y;
+		drag_first = false;
+	}
+	// jmarshall end
 
 	// clear along one axis
 	if (buttons & MK_SHIFT) {
