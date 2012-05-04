@@ -241,6 +241,10 @@ public:
 					// returns true if Error() was called with LEXFL_NOFATALERRORS or LEXFL_NOERRORS set
 	bool			HadError( void ) const;
 
+// jmarshall
+
+// jmarshall end
+
 					// set the base folder to load files from
 	static void		SetBaseFolder( const char *path );
 

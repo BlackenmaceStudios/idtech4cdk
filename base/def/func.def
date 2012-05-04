@@ -268,7 +268,7 @@ entityDef func_static {
 	"solid"						"1"
 	"noclipmodel"				"0"
 
-	
+	"vthandletype"				"Editor_GenerateUVs_Orient"
 }
 
 entityDef func_shaking {

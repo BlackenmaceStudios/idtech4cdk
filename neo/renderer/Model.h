@@ -98,7 +98,7 @@ typedef struct srfTriangles_s {
 
 // jmarshall
 	int							vt_AreaID;				// The area id for the virtual texture page.
-
+	enum EditorUVGenerateType   vt_uvGenerateType;
 	bool						shadowMapVisibleSides[6];
 // jmarshall end
 
@@ -138,6 +138,8 @@ typedef struct srfTriangles_s {
 														// the interaction, which we will get the ambientCache from
 
 	struct srfTriangles_s *		nextDeferredFree;		// chain of tris to free next frame
+
+	struct srfTriangles_s *		nextSurface;		// chain of tris to free next frame
 
 	// data in vertex object space, not directly readable by the CPU
 	struct vertCache_s *		indexCache;				// int

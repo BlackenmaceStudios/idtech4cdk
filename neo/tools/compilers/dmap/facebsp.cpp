@@ -352,7 +352,8 @@ void	BuildFaceTree_r( node_t *node, bspface_t *list ) {
 
 	// split the bounds if we have a nice axial plane
 	for ( i = 0 ; i < 3 ; i++ ) {
-		if ( idMath::Fabs( plane[i] - 1.0 ) < 0.001 ) {
+		float f = idMath::Fabs( plane[i] - 1.0 );
+		if ( f  < 0.7  ) {
 			node->children[0]->bounds[0][i] = plane.Dist();
 			node->children[1]->bounds[1][i] = plane.Dist();
 			break;

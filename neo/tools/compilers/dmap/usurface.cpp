@@ -35,7 +35,8 @@ If you have questions concerning this license or the applicable additional terms
 #define	 TEXTURE_OFFSET_EQUAL_EPSILON	0.005
 #define	 TEXTURE_VECTOR_EQUAL_EPSILON	0.001
 
-idCVar bsp_inlinemesh_maxfacespertri( "bsp_inlinemesh_maxfacespertri", "99", CVAR_RENDERER | CVAR_INTEGER , "Max number of faces per model before its split for UV generation." );
+idCVar bsp_inlinemesh_maxfacespertri( "bsp_inlinemesh_maxfacespertri", "0", CVAR_RENDERER | CVAR_INTEGER , "Max number of faces per model before its split for UV generation." );
+idCVar bsp_inlinemesh_nooptmize( "bsp_inlinemesh_nooptmize", "1", CVAR_RENDERER | CVAR_BOOL , "Don't do any modification to inline meshes." );
 
 
 /*
@@ -593,28 +594,33 @@ Clones a srfTriangle_t
 ====================
 */
 // jmarshall
-srfTriangles_t	*CreateModelSurfaceForMapEntity( const srfTriangles_t *tris ) {
+srfTriangles_t	*CreateModelSurfaceForMapEntity( int startIndex, int numIndexes, idMat3 axis, idVec3 origin, const srfTriangles_t *tris ) {
 	srfTriangles_t	*uTri;
-
+	int	numVerts= numIndexes;
 	uTri = R_AllocStaticTriSurf();
-	R_AllocStaticTriSurfVerts( uTri, tris->numVerts );
-	R_AllocStaticTriSurfIndexes( uTri, tris->numIndexes );
-
-	for(int i = 0; i < tris->numVerts; i++)
-	{
-		uTri->verts[i] = tris->verts[i];
-	}
 	
-	for(int i = 0; i < tris->numIndexes; i+=3)
+	R_AllocStaticTriSurfIndexes( uTri, numIndexes );
+	
+	for ( int i = startIndex, d= 0; i < startIndex + numIndexes ; i++, d++ )
 	{
-		uTri->indexes[i+0] = tris->indexes[i + 0];
-		uTri->indexes[i+1] = tris->indexes[i + 1];
-		uTri->indexes[i+2] = tris->indexes[i + 2];
-		
+		uTri->indexes[d] = d;
+
 	}
 
-	uTri->numVerts = tris->numVerts;
-	uTri->numIndexes = tris->numIndexes;
+	R_AllocStaticTriSurfVerts( uTri, numVerts );
+	for ( int i = startIndex, d= 0; i < startIndex + numIndexes ; i++, d++ )
+	{
+		idVec3 v = tris->verts[tris->indexes[i]].xyz;
+
+		int vertId = uTri->indexes[d];
+		uTri->verts[vertId].xyz = v * axis + origin;
+
+		uTri->verts[vertId].normal = tris->verts[tris->indexes[i]].normal * axis;
+		uTri->verts[vertId].st = tris->verts[tris->indexes[i]].st;
+	}
+
+	uTri->numVerts = numIndexes;
+	uTri->numIndexes = numVerts;
 
 	return uTri;
 }
@@ -698,7 +704,7 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 			}		
 
 			idVec3	origin = entity->mapEntity->epairs.GetVector( "origin" );
-
+			srfTriangles_t *nextSurface = NULL;
 			for ( i = 0 ; i < model->NumSurfaces() ; i++ ) {
 				const modelSurface_t *surface = model->Surface( i );
 				const srfTriangles_t *tri = surface->geometry;
@@ -722,33 +728,46 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 				{
 					mapTri_t	mapTri;
 					memset( &mapTri, 0, sizeof( mapTri ) );
-
 					
 					int startIndex = (f *numIndexes);
+
+
+					if(startIndex + numIndexes > tri->numIndexes) {
+						numIndexes = tri->numIndexes - (startIndex);
+					}
 
 	// jmarshall - changed this so it pulls another fake material to avoid grouping...need to this right.
 					mapTri.material = declManager->FindMaterial( VT_GetNextMaterial() );
 	// jmarshall end
-					// don't let discretes (autosprites, etc) merge together
-					if ( mapTri.material->IsDiscrete() ) {
-						mapTri.mergeGroup = (void *)surface;
-					}
-	// jmarshall -- The previous implementation assumes the model is a quad mesh?
-	#if 1
-					for ( int j = startIndex ; j < startIndex + numIndexes ; j += 3 ) {
-						for ( int k = 0 ; k < 3 ; k++ ) {
-							idVec3 v = tri->verts[tri->indexes[j+k]].xyz;
 
-							mapTri.v[k].xyz = v * axis + origin;
+	// jmarshall -- Checks to see if bsp optimization is screwing up my uvs.
+					
+					if(!bsp_inlinemesh_nooptmize.GetBool())
+					{
+						for ( int j = startIndex ; j < startIndex + numIndexes ; j += 3 ) {
+							for ( int k = 0 ; k < 3 ; k++ ) {
+								idVec3 v = tri->verts[tri->indexes[j+k]].xyz;
 
-							mapTri.v[k].normal = tri->verts[tri->indexes[j+k]].normal * axis;
-							mapTri.v[k].st = tri->verts[tri->indexes[j+k]].st;
+								mapTri.v[k].xyz = v * axis + origin;
+
+								mapTri.v[k].normal = tri->verts[tri->indexes[j+k]].normal * axis;
+								mapTri.v[k].st = tri->verts[tri->indexes[j+k]].st;
+							}
+							AddMapTriToAreas( &mapTri, e );
 						}
-						AddMapTriToAreas( &mapTri, e );
 					}
-	#else
-					entity->meshTri = CreateModelSurfaceForMapEntity( tri );
-	#endif
+					else
+					{
+						if(nextSurface == NULL)
+						{
+							entity->meshTri = CreateModelSurfaceForMapEntity( startIndex, numIndexes, axis, origin, tri );
+							nextSurface = entity->meshTri;
+						}
+						else {
+							nextSurface->nextSurface = CreateModelSurfaceForMapEntity( startIndex, numIndexes, axis, origin, tri );
+							nextSurface = nextSurface->nextSurface;
+						}
+					}
 				}
 	// jmarshall end
 			}
@@ -996,9 +1015,9 @@ static void CarveGroupsByLight( uEntity_t *e, mapLight_t *light ) {
 				|| ( !light->def.lightShader->IsFogLight() && !group->material->ReceivesLighting() ) 
 				|| !group->bounds.IntersectsBounds( light->def.frustumTris->bounds ) ) {
 
-				group->nextGroup = carvedGroups;
-				carvedGroups = group;
-				continue;
+				//group->nextGroup = carvedGroups;
+				//carvedGroups = group;
+				//continue;
 			}
 
 			if ( group->numGroupLights == MAX_GROUP_LIGHTS ) {

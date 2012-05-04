@@ -11,6 +11,6 @@ public:
 	void					AddTris( const srfTriangles_t *uTris );
 	void WriteToFile( const char *file ) ;
 
-	idList<srfTriangles_t> tris;
+	idList<srfTriangles_t*> tris;
 };
 

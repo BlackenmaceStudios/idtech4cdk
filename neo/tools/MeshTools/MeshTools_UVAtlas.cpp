@@ -18,10 +18,10 @@ void idToolInterfaceLocal::BuildUVAtlasInternalModel( class bmVTModel *model, in
 	int numTris2 = 0;
 	for(int i = startTris; i < startTris + numTri; i++)
 	{
-		srfTriangles_t *tri = &model->tris[i];
+		srfTriangles_t *tri = model->tris[i];
 
-		numVertexes += model->tris[i].numVerts;
-		numIndexes += model->tris[i].numIndexes;
+		numVertexes += model->tris[i]->numVerts;
+		numIndexes += model->tris[i]->numIndexes;
 
 		for(int ind = 0; ind < tri->numIndexes; ind+=3, numTris++) {
 
@@ -34,7 +34,7 @@ void idToolInterfaceLocal::BuildUVAtlasInternalModel( class bmVTModel *model, in
 	startVertex = 0;
 	for(int i = startTris; i <startTris + numTri; i++)
 	{
-		srfTriangles_t *tri = &model->tris[i];
+		srfTriangles_t *tri = model->tris[i];
 
 		for(int v = 0; v < tri->numVerts; v++)
 		{
@@ -96,7 +96,7 @@ void idToolInterfaceLocal::SetUVsFromInternalUVAtlas( class bmVTModel *model ) {
 		Face *face = &RKMesh::Get()->pFaces[i];
 
 		int triNum = face->relativeUV[0];
-		srfTriangles_t *tri = &model->tris[triNum];
+		srfTriangles_t *tri = model->tris[triNum];
 
 		int *indexes = &tri->indexes[face->relativeUV[1]];
 		idVec2 stupidHack;

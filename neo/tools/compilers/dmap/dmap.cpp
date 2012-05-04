@@ -126,15 +126,17 @@ bool ProcessModels( void ) {
 		common->Printf( "############### entity %i ###############\n", dmapGlobals.entityNum );
 
 		// if we leaked, stop without any more processing
-		if ( !ProcessModel( entity, (bool)(dmapGlobals.entityNum == 0 ) ) ) {
+		if ( !ProcessModel( entity, true )) {
 			return false;
 		}
 
 		// we usually don't want to see output for submodels unless
 		// something strange is going on
 		if ( !dmapGlobals.verboseentities ) {
-			dmapGlobals.verbose = false;
+			
 		}
+
+		dmapGlobals.verbose = true;
 	}
 
 	dmapGlobals.verbose = oldVerbose;
@@ -216,7 +218,7 @@ void Dmap( const idCmdArgs &args ) {
 	common->Printf("---- World Builder ----\n");
 	common->Printf("Processing compile options\n");
 
-	dmapGlobals.fullCarve = true;
+	//dmapGlobals.fullCarve = true;
 	dmapGlobals.shadowOptLevel = SO_MERGE_SURFACES;		// create shadows by merging all surfaces, but no super optimization
 //	dmapGlobals.shadowOptLevel = SO_CLIP_OCCLUDERS;		// remove occluders that are completely covered
 //	dmapGlobals.shadowOptLevel = SO_SIL_OPTIMIZE;
@@ -307,10 +309,8 @@ void Dmap( const idCmdArgs &args ) {
 	if(bsp_inlinemesh_maxfacespertri.GetInteger() <= 0) {
 		common->Warning( "InlineMesh face seperation is disabled! This will affect the quality of the UV map generation\n");
 	}
-// jmarshall end
-
 	dmapGlobals.noOptimize = true;
-	dmapGlobals.noLightCarve = true;
+	//dmapGlobals.noLightCarve = true;
 
 	passedName = args.Argv(i);		// may have an extension
 	passedName.BackSlashesToSlashes();

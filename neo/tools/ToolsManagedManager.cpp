@@ -31,6 +31,20 @@ extern "C" __declspec(dllexport) idDict *TOOLAPI_Entity_GetTemplate( const char 
 	return &def->dict;
 }
 
+/*
+=================
+idToolInterfaceLocal::GetValueFromManagedEnum
+=================
+*/
+int idToolInterfaceLocal::GetValueFromManagedEnum(const char * enumTypeStrv, const char * enumValStrv)
+{
+	long value = 0;
+	_bstr_t enumTypeStr(enumTypeStrv);
+	_bstr_t enumValStr(enumValStrv);
+
+	toolsManaged->GetValueFromManagedEnum( enumTypeStr, enumValStr, &value );
+	return value;
+}
 
 void Brush_Update();
 extern "C" __declspec(dllexport) void TOOLAPI_Brush_Update( void )

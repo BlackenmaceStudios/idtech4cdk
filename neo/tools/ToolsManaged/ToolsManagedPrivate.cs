@@ -157,5 +157,16 @@ namespace ToolsManaged
 
             return window;
         }
+
+        public int GetValueFromManagedEnum(string enumTypeStr, string enumValStr)
+        {
+            Type type = Private.ReflectionHelper.FindTypeInAssembly(enumTypeStr);
+            if (type == null)
+            {
+                return -1;
+            }
+
+            return (int)Enum.Parse(type, enumValStr, true);
+        }
     }
 }
