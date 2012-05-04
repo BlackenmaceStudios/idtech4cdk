@@ -24,6 +24,28 @@ idCVar vt_compile_bsize( "vt_compile_bsize", "128", CVAR_RENDERER | CVAR_INTEGER
 
 #define VT_Size vt_compile_bsize.GetInteger()
 
+struct vtBuildChartScale_t {
+	srfTriangles_t *tris;
+	int x;
+	int y;
+	int w;
+	int h;
+};
+
+idList<vtBuildChartScale_t> chartScalePool;
+
+void AddScaleUVsToFitAreaDeferred( srfTriangles_t *tris, int x, int y, int w, int h )
+{
+	vtBuildChartScale_t vt;
+
+	vt.tris = tris;
+	vt.x = x;
+	vt.y = y;
+	vt.w = w;
+	vt.h = h;
+	chartScalePool.Append( vt );
+}
+
 
 void PrepareNewVTArea( void ) {
 	if(allocated != NULL) {
@@ -100,6 +122,8 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 	common->Printf( "...Number of Faces in map %d\n", model->tris.Num() );
 
 	int numTrisPerArea = (int)ceil((float)model->tris.Num() / (float)numVTAreas);
+
+	chartScalePool.Clear();
 	
 	if(numTrisPerArea <= 0 || numVTAreas <= 0) {
 		numVTAreas = 1;
@@ -135,12 +159,92 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 		VT_CurrentNumAreas++;
 	}
 #else // old stuff.
-	
+	float scaleAmt = 0.001;
 	while(!GenerateVTVerts_r( model, surfaceSize, numVTAreas )) {
 
-		surfaceSize += 0.001;
+		surfaceSize += scaleAmt;
+		scaleAmt *= 1.03;
 		lastSpacing = spacing;
 	}
+
+	common->Printf("---- VT_ScaleUVsToFitCell -----\n");
+
+	// After we know everything fits properly scale everything to fit in the proper areas.
+	for(int i = 0; i < chartScalePool.Num(); i++)
+	{
+		vtBuildChartScale_t *vt = &chartScalePool[i];
+		
+		ScaleUVsToFitArea( vt->tris, vt->x, vt->y, vt->w, vt->h );
+	}
+
+	// UV's might not have everything stretched to the chart borders.
+	common->Printf("---- VT_OptimizeUVCharts -----\n");
+	for(int i = 0; i < numVTAreas; i++)
+	{
+		idBounds pageBounds;
+		
+		pageBounds.Clear();
+
+		for(int v = 0; v < model->tris.Num(); v++)
+		{
+			srfTriangles_t *tris;
+
+			tris = model->tris[v];
+
+			// If this mesh is in the current area add it to the bounds.
+			if(tris->vt_AreaID == i) 
+			{
+				for(int k = 0; k < tris->numVerts; k++)
+				{
+					pageBounds.AddPoint( idVec3( tris->verts[k].st.x, tris->verts[k].st.y, 0.0f ));
+				}
+			}
+		}
+
+		float scale = 0.0f;
+
+		// Scale the UV's to the 
+		if( pageBounds[1].x < 0.97f && pageBounds[1].y < 0.97f )
+		{
+			float fakeScale;
+			if(pageBounds[1].x > pageBounds[1].y) {
+				fakeScale = pageBounds[1].x;
+			}
+			else
+			{
+				fakeScale = pageBounds[1].y;
+			}
+
+			scale = fakeScale;
+
+			// I can't think of the right way to do this, yup I pulled another nate.
+			while( scale * fakeScale < 1.0f ) {
+				scale += fakeScale;
+			}
+			scale -= fakeScale;
+
+
+			for(int v = 0; v < model->tris.Num(); v++)
+			{
+				srfTriangles_t *tris;
+
+				tris = model->tris[v];
+
+				// If this mesh is in the current area add it to the bounds.
+				if(tris->vt_AreaID == i) 
+				{
+					for(int k = 0; k < tris->numVerts; k++)
+					{
+						tris->verts[k].st.x *= scale;
+						tris->verts[k].st.y *= scale;
+					}
+				}
+			}
+		}
+	}
+
+
+	chartScalePool.Clear();
 #endif
 
 	if(VT_CurrentNumAreas != numVTAreas) {
@@ -159,6 +263,39 @@ void VirtualTextureBuilder::ScaleUVsToFitArea( srfTriangles_t *tris, int x, int 
 	idDrawVert *v = tris->verts;
 	idBounds uvBounds;
 
+	float w1,h1,x1,y1;
+
+	w1 = ((float)w / (float)VT_Size);
+	h1 = ((float)h / (float)VT_Size);
+
+	uvBounds.Clear();
+
+	if(x != 0)
+	{
+		x1 = ((float)x / (float)VT_Size);
+	}
+	else
+	{
+		x1 = 0;
+	}
+
+	if(y != 0)
+	{
+		y1 = ((float)y / (float)VT_Size);
+	}
+	else
+	{
+		y1 = 0;
+	}
+
+	// Scale uv's.
+	for(int i = 0; i < tris->numVerts; i++)
+	{
+		idVec2 *st = &v[i].st;
+		st->x *= w1; 
+		st->y *= h1;
+	}
+
 	// Find the actual width and hieght of the current uv set.
 	for ( int i = 0 ; i < tris->numVerts ; i++ ) {
 		uvBounds.AddPoint(idVec3(v[i].st.x, v[i].st.y, 0.0f));
@@ -166,8 +303,11 @@ void VirtualTextureBuilder::ScaleUVsToFitArea( srfTriangles_t *tris, int x, int 
 
 	// Move the UVs to the origin and than offset to the right place.
 	for ( int i = 0 ; i < tris->numVerts ; i++ ) {
-	//	v[i].st.x -= uvBounds[1].x;
-		//v[i].st.y -= uvBounds[1].y;
+		v[i].st.x -= uvBounds[0].x;
+		v[i].st.y -= uvBounds[0].y;
+
+		v[i].st.x += x1;
+		v[i].st.y += y1;
 	}
 
 	//		v[i].st.x = (v[i].st.x + x + 0.5) * ((float)w / (float)VT_Size);
@@ -359,7 +499,7 @@ bool VirtualTextureBuilder::GenerateVTVerts_r( bmVTModel *model,  float surfaceS
 	int wtest = 0, htest = 0;
 
 	scaleST = idVec2(1, 1);
-
+	chartScalePool.Clear();
 	int numTrisOnChart = 0;
 
 	for(int d = 0; d < model->tris.Num(); d++)
@@ -466,13 +606,13 @@ generatePage:
 			case Editor_GenerateUVs_Orient:
 				{
 					toolInterface->ComputeUVAtlasForModel( model, d, 1 );
-					ScaleUVsToFitArea(model->tris[d], x, y, w, h);
+					AddScaleUVsToFitAreaDeferred(model->tris[d], x, y, w, h);
 					model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
 				}
 				break;
 			case Editor_ImportUVs_AutoSpacing:
 				{
-					ScaleUVsToFitArea(model->tris[d], x, y, w, h);
+					AddScaleUVsToFitAreaDeferred(model->tris[d], x, y, w, h);
 					model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
 				}
 				break;
