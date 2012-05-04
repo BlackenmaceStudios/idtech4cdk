@@ -239,10 +239,10 @@ SCommandInfo	g_Commands[] = {
 	{ "CameraClip_ZoomIn",        221, RAD_CONTROL, ID_VIEW_CUBEIN },
 	{ "CameraClip_Toggle",        220, RAD_CONTROL, ID_VIEW_CUBICCLIPPING },
 
-	{ "ViewTab_EntityInfo",     'N', 0, ID_VIEW_ENTITY },
-	{ "ViewTab_Console",        'O', 0, ID_VIEW_CONSOLE },
-	{ "ViewTab_Textures",       'T', 0, ID_VIEW_TEXTURE },
-	{ "ViewTab_MediaBrowser",   'M', 0, ID_VIEW_MEDIABROWSER },
+	{ "",     'N', 0, ID_VIEW_ENTITY },
+	{ "",        'O', 0, ID_VIEW_CONSOLE },
+	{ "",       'T', 0, ID_VIEW_TEXTURE },
+	{ "",   'M', 0, ID_VIEW_MEDIABROWSER },
 
 	{ "Window_SurfaceInspector",'S', 0, ID_TEXTURES_INSPECTOR },
 	{ "Window_PatchInspector",  'S', RAD_SHIFT, ID_PATCH_INSPECTOR },
@@ -1152,22 +1152,23 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	SetIcon( LoadIcon( win32.hInstance, MAKEINTRESOURCE( EDITOR_ICON_HANDLE  ) ), false );
 
 	UINT	nID = (g_PrefsDlg.m_bWideToolbar) ? IDR_TOOLBAR_ADVANCED : IDR_TOOLBAR1;
-
+	/*
 	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP
 		| CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) || !m_wndToolBar.LoadToolBar(nID)) {
 		TRACE0("Failed to create toolbar\n");
 		return -1;	// fail to create
 	}
 
+	
+	*/
 	if (!m_wndStatusBar.Create(this) || !m_wndStatusBar.SetIndicators(indicators, sizeof(indicators) / sizeof(UINT))) {
 		TRACE0("Failed to create status bar\n");
 		return -1;	// fail to create
 	}
-
 	m_bCamPreview = true;
 
 	
-
+	/*
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SCALELOCKX, FALSE);
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SCALELOCKY, FALSE);
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SCALELOCKZ, FALSE);
@@ -1183,14 +1184,15 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SOUND_SHOWSELECTEDSOUNDVOLUMES,g_qeglobals.d_savedinfo.showSoundWhenSelected);
 
 	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
+	*/
 	EnableDocking(CBRS_ALIGN_ANY);
-	DockControlBar(&m_wndToolBar);
+	//DockControlBar(&m_wndToolBar);
 
 	g_nScaleHow = 0;
 
 	m_wndTextureBar.Create(this, IDD_TEXTUREBAR, CBRS_BOTTOM, 7433);
 	m_wndTextureBar.EnableDocking(CBRS_ALIGN_ANY);
-	DockControlBar(&m_wndTextureBar);
+	//DockControlBar(&m_wndTextureBar);
 
 	g_qeglobals.d_lpMruMenu = CreateMruMenuDefault();
 
@@ -1228,7 +1230,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	SetGridStatus();
 	SetTexValStatus();
 	SetButtonMenuStates();
-	LoadBarState("RadiantToolBars2");
+	//LoadBarState("RadiantToolBars2");
 
 	SetActiveXY(m_pXYWnd);
 	m_pXYWnd->SetFocus();
