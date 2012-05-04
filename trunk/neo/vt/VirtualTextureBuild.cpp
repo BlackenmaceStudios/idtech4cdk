@@ -33,6 +33,7 @@ void PrepareNewVTArea( void ) {
 	allocated = new int[VT_Size];
 	memset( allocated, 0, sizeof( int ) * VT_Size );
 
+	//common->Printf( "-------VTUVGenerate Processing %d---------\n", VT_CurrentNumAreas );
 }
 
 /*
@@ -156,12 +157,131 @@ VirtualTextureBuilder::ScaleUVsToFitArea
 */
 void VirtualTextureBuilder::ScaleUVsToFitArea( srfTriangles_t *tris, int x, int y, int w, int h ) {
 	idDrawVert *v = tris->verts;
+	idBounds uvBounds;
+
+	// Find the actual width and hieght of the current uv set.
 	for ( int i = 0 ; i < tris->numVerts ; i++ ) {
-			v[i].st.x = (v[i].st.x + x + 0.5) * ((float)w / (float)VT_Size);
-			v[i].st.y = (v[i].st.y + y + 0.5) * ((float)h / (float)VT_Size);
+		uvBounds.AddPoint(idVec3(v[i].st.x, v[i].st.y, 0.0f));
 	}
+
+	// Move the UVs to the origin and than offset to the right place.
+	for ( int i = 0 ; i < tris->numVerts ; i++ ) {
+	//	v[i].st.x -= uvBounds[1].x;
+		//v[i].st.y -= uvBounds[1].y;
+	}
+
+	//		v[i].st.x = (v[i].st.x + x + 0.5) * ((float)w / (float)VT_Size);
+	//		v[i].st.y = (v[i].st.y + y + 0.5) * ((float)h / (float)VT_Size);
+}
+/*
+====================
+VirtualTextureBuilder:RemapVertexFromParentToChildTri
+====================
+*/
+int VirtualTextureBuilder::RemapVertexFromParentToChildTri( srfTriangles_t *parentTris, idList<idDrawVert> &childVerts, int index, bool appendVert ) {
+	idDrawVert parentVert;
+
+	// Check to see if the vertex is in the child vert and return its position.
+	parentVert = parentTris->verts[index];
+	for(int i = 0; i < childVerts.Num(); i++)
+	{
+		if(childVerts[i] == parentVert)
+		{
+			return i;
+		}
+	}
+
+	if(appendVert) {
+		childVerts.Append(parentVert);
+		return childVerts.Num() - 1;
+	}
+
+	return -1;
 }
 
+/*
+====================
+VirtualTextureBuilder:ScaleUVRegionToFitInTri
+====================
+*/
+void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriangles_t *parentTris, srfTriangles_t *tris, int triId, int pageId, int widthId, int heightId, float uvScaleW, float uvScaleH ) {
+	idBounds uvRegion;
+	idList<idDrawVert> verts;
+	idList<int> indexes, validIndexes;
+
+	verts.SetGranularity( 3000 );
+
+	common->Printf("ScaleUVRegionToFitInTri: Processing %d...\n", pageId );
+
+	// Get the region of UV's we want to use.
+	uvRegion.Clear();
+	uvRegion[0] = idVec3(widthId * uvScaleW, heightId * uvScaleH, 0.0f);
+	uvRegion[1] = idVec3((widthId + 1) * uvScaleW, (heightId + 1) * uvScaleH, 0.0f);
+
+	// Get and store all the vertexes and indexes that fall within this range.
+	for(int i = 0; i < parentTris->numVerts; i++)
+	{
+		idDrawVert v;
+
+		v = parentTris->verts[i];
+		if(uvRegion.ContainsPoint( idVec3(v.st.x, v.st.y, 0.0f))) {
+			verts.Append( v );
+			validIndexes.Append( i );
+		}
+	}
+
+	
+	common->Printf("...Number of vertexes %d\n", verts.Num() );
+
+	for(int i = 0; i < parentTris->numIndexes; i+=3)
+	{
+		int index = parentTris->indexes[i];
+		int remapIndex[3];
+
+		remapIndex[0] = RemapVertexFromParentToChildTri( parentTris, verts, index, false);
+
+		if(remapIndex[0] != -1)
+		{
+			indexes.Append( remapIndex[0] );
+
+			for(int c = 1; c < 3; c++)
+			{
+				index = parentTris->indexes[i + c];
+				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, true);
+				indexes.Append( remapIndex[c] );
+			}
+		}
+		else
+		{
+			// Test the other two verts and see if it works out.
+			bool isValid = false;
+			
+
+			remapIndex[1] = RemapVertexFromParentToChildTri( parentTris, verts, index+1, false);
+			if(remapIndex[1] == -1)
+			{
+				remapIndex[2] = RemapVertexFromParentToChildTri( parentTris, verts, index+2, false);
+				if(remapIndex[2] == -1)
+				{
+					continue; // triangle is completely excluded.
+				}
+			}
+
+			for(int c = 0; c < 3; c++)
+			{
+				index = parentTris->indexes[i + c];
+				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, true);
+				indexes.Append( remapIndex[c] );
+			}
+		}
+	}
+
+	common->Printf("...Number of indexes %d\n", indexes.Num() );
+
+	// Now that we have all the verts and indexes for this section finish up allocation of the triangle.
+	
+	model->SetVertexesForTris( triId, &verts[0], verts.Num(), &indexes[0], indexes.Num() );
+}
 
 /*
 ====================
@@ -186,6 +306,8 @@ bool VirtualTextureBuilder::GenerateVTVerts_r( bmVTModel *model,  float surfaceS
 	int wtest = 0, htest = 0;
 
 	scaleST = idVec2(1, 1);
+
+	int numTrisOnChart = 0;
 
 	for(int d = 0; d < model->tris.Num(); d++)
 	{
@@ -252,7 +374,7 @@ bool VirtualTextureBuilder::GenerateVTVerts_r( bmVTModel *model,  float surfaceS
 
 generatePage:		
 		// Check to see if this will fit on the current page.
-		if(!AllocVTBlock( w, h , &x, &y )) {
+		if(!AllocVTBlock( w, h , &x, &y ) && model->tris[d]->vt_uvGenerateType < Editor_ImportUVs_SinglePage) {
 
 
 			scaleST.x = 1;
@@ -260,7 +382,7 @@ generatePage:
 			VT_CurrentNumAreas++;
 
 			// If we  already filled up all the texture space for all of the target pages, start over with a higher blocksize(less space).
-			if(VT_CurrentNumAreas >= numVTAreas)
+			if(VT_CurrentNumAreas >= numVTAreas || numTrisOnChart == 0)
 			{
 				return false;
 			}
@@ -268,8 +390,9 @@ generatePage:
 			// Prepare a new VT page.
 			PrepareNewVTArea();
 			firstTrisOnPage = d;
+			numTrisOnChart = 0;
 		}
-
+		
 		switch(model->tris[d]->vt_uvGenerateType)
 		{
 			case Editor_GenerateUVs_Q3Style:
@@ -302,6 +425,8 @@ generatePage:
 				break;
 			case Editor_ImportUVs_SinglePage:
 				{
+					
+
 					if(firstTrisOnPage != d)
 					{
 						VT_CurrentNumAreas++;
@@ -309,19 +434,77 @@ generatePage:
 						PrepareNewVTArea();
 						firstTrisOnPage = d;
 					}
+					
 					model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
 					
 					VT_CurrentNumAreas++;
 					// Prepare a new VT page.
 					PrepareNewVTArea();
-					firstTrisOnPage = d;
+					firstTrisOnPage = d+1;
+					continue;
 				}
 				break;
 			default:
 				{
-					common->FatalError("GenerateVTVerts: Not implemented UVGen option\n");
+					float numUVPagesForTri, numIndexesPerArea, cellsPerWidth, cellsPerHeight;
+					float UVScale;
+
+					srfTriangles_t *tris = model->tris[d];
+
+					
+
+					if(firstTrisOnPage != d)
+					{
+						VT_CurrentNumAreas++;
+						// Prepare a new VT page.
+						PrepareNewVTArea();
+						firstTrisOnPage = d;
+					}
+					
+					numUVPagesForTri = model->tris[d]->vt_uvGenerateType - Editor_ImportUVs_SinglePage;
+					
+					UVScale = (numUVPagesForTri / 10.0f);
+					numUVPagesForTri = numVTAreas * UVScale; 
+					
+
+					cellsPerWidth = (float)floor(sqrt(numUVPagesForTri));
+					cellsPerHeight = (float)ceil(sqrt(numUVPagesForTri));
+
+					float UVScaleW = (1.0f / cellsPerWidth);
+					float UVScaleH = (1.0f / cellsPerHeight);
+
+					int cellId = 0;
+					for(int w = 0; w < cellsPerWidth; w++)
+					{
+						for(int h = 0; h < cellsPerHeight; h++, cellId++)
+						{
+							model->AllocTriangleAtPosition( d + cellId );
+
+							srfTriangles_t *newTris = model->tris[d + cellId];
+							ScaleUVRegionToFitInTri( model, tris, newTris, d + cellId, VT_CurrentNumAreas, w, h, UVScaleW, UVScaleH );
+							newTris->vt_AreaID = VT_CurrentNumAreas++;
+							newTris->vt_uvGenerateType = Editor_ImportUVs_SinglePage; // Just incase we have to go through the UVs again.
+							// Prepare a new VT page.
+							PrepareNewVTArea();
+						}
+					}
+
+					// Remove the only triangles.
+					R_FreeStaticTriSurf( tris ); 
+					model->tris.Remove( tris );
+
+					d += cellId + 1;
+					
+					// Prepare a new VT page.
+					PrepareNewVTArea();
+					firstTrisOnPage = d+1;
+					continue;
 				}
 		}
+		
+		
+		numTrisOnChart++;
+
 	}	
 
 	return true;
