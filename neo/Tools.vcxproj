@@ -1105,6 +1105,7 @@
     <ClInclude Include="tools\tools_public.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="sys\win32\rc\res\95check.bmp" />
     <None Include="sys\win32\rc\res\BEVEL.BMP" />
     <None Include="sys\win32\rc\res\BITMAP2.BMP" />
     <None Include="sys\win32\rc\res\BMP00001.BMP" />
@@ -1143,10 +1144,26 @@
     <None Include="sys\win32\rc\res\guied_scripts.ico" />
     <None Include="sys\win32\rc\res\guied_scripts_white.ico" />
     <None Include="sys\win32\rc\res\guied_viewer_toolbar.bmp" />
+    <None Include="sys\win32\rc\res\help.cur" />
     <None Include="sys\win32\rc\res\IBEVEL.BMP" />
     <None Include="sys\win32\rc\res\icon2.ico" />
     <None Include="sys\win32\rc\res\IENDCAP.BMP" />
+    <None Include="sys\win32\rc\res\im_orgh.cur" />
+    <None Include="sys\win32\rc\res\im_orghv.cur" />
+    <None Include="sys\win32\rc\res\im_orgv.cur" />
+    <None Include="sys\win32\rc\res\im_pane.cur" />
+    <None Include="sys\win32\rc\res\im_panh.cur" />
+    <None Include="sys\win32\rc\res\im_panhv.cur" />
+    <None Include="sys\win32\rc\res\im_pann.cur" />
+    <None Include="sys\win32\rc\res\im_panne.cur" />
+    <None Include="sys\win32\rc\res\im_pannw.cur" />
+    <None Include="sys\win32\rc\res\im_pans.cur" />
+    <None Include="sys\win32\rc\res\im_panse.cur" />
+    <None Include="sys\win32\rc\res\im_pansw.cur" />
+    <None Include="sys\win32\rc\res\im_panv.cur" />
+    <None Include="sys\win32\rc\res\im_panw.cur" />
     <None Include="sys\win32\rc\res\logo_sm3dfx.bmp" />
+    <None Include="sys\win32\rc\res\magnify.cur" />
     <None Include="sys\win32\rc\res\matedtree.bmp" />
     <None Include="sys\win32\rc\res\MaterialEditor.ico" />
     <None Include="sys\win32\rc\res\MEFileToolbar.bmp" />
@@ -1155,6 +1172,7 @@
     <None Include="sys\win32\rc\res\me_enabled.ico" />
     <None Include="sys\win32\rc\res\me_off_icon.ico" />
     <None Include="sys\win32\rc\res\me_on_icon.ico" />
+    <None Include="sys\win32\rc\res\minifwnd.bmp" />
     <None Include="sys\win32\rc\res\PropTree.rc2">
       <FileType>RC</FileType>
     </None>

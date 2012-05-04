@@ -488,9 +488,12 @@ void FillBSPMenu(void) {
 	i = 0;
 	count = g_qeglobals.d_project_entity->epairs.GetNumKeyVals();
 	for (int j = 0; j < count; j++) {
+		const char *key = ((const char *)g_qeglobals.d_project_entity->epairs.GetKeyVal(j)->GetKey()) + strlen("bsp ");
+
+		 
 		if (g_qeglobals.d_project_entity->epairs.GetKeyVal(j)->GetKey()[0] == 'b' && g_qeglobals.d_project_entity->epairs.GetKeyVal(j)->GetKey()[1] == 's' && g_qeglobals.d_project_entity->epairs.GetKeyVal(j)->GetKey()[2] == 'p') {
-			bsp_commands[i] = g_qeglobals.d_project_entity->epairs.GetKeyVal(j)->GetKey().c_str();
-			AppendMenu(hmenu, MF_ENABLED | MF_STRING, CMD_BSPCOMMAND + i, (LPCTSTR) g_qeglobals.d_project_entity->epairs.GetKeyVal(j)->GetKey().c_str());
+			bsp_commands[i] = key;
+			AppendMenu(hmenu, MF_ENABLED | MF_STRING, CMD_BSPCOMMAND + i, (LPCTSTR) key);
 			i++;
 		}
 	}

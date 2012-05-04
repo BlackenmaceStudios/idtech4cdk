@@ -507,6 +507,7 @@ void RB_RenderDrawShadowMappedSurfList( drawSurf_t *drawSurfs, int side ) {
 		
 		srfCullInfo_t cullInfo;
 		cullInfo.facing = NULL;
+		
 		R_CalcInteractionFacing(NULL, drawSurf->geo, _currentLight, cullInfo, (float *)&drawSurf->space->modelMatrix[0]);
 
 		int numFaces = drawSurf->geo->numIndexes / 3;
@@ -515,8 +516,11 @@ void RB_RenderDrawShadowMappedSurfList( drawSurf_t *drawSurfs, int side ) {
 			allFront &= cullInfo.facing[i];
 		}
 		if ( allFront != 0 ) {
+			
 			continue;
 		}
+
+		
 
 		float	matrix[16];
 		myGlMultMatrix( drawSurf->space->modelMatrix, lightMatrix, matrix );

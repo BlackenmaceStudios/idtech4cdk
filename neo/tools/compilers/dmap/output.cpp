@@ -798,7 +798,7 @@ void WriteOutputFile( void ) {
 	for ( i=dmapGlobals.num_entities - 1 ; i >= 0 ; i-- ) {
 		entity = &dmapGlobals.uEntities[i];
 	
-		if ( !entity->primitives ) {
+		if ( !entity->primitives && !entity->meshTri ) {
 			continue;
 		}
 

@@ -2268,9 +2268,11 @@ void RunBsp (const char *command) {
 		}
 		g_pParentWnd->SetFocus();
 
-	} else { // assumes bsp is the command
-		if (strlen(command) > strlen("bsp")) {
-			idStr::snPrintf( sys, sizeof(sys), "dmap %s %s", command + strlen("bsp"), in );
+	} else { // assumes Compile World is the command
+		if (strstr(command, "-")) {
+			idStr str =  (((const char *)strstr(command, "-")) + 1);
+			
+			idStr::snPrintf( sys, sizeof(sys), "dmap %s %s", str.c_str(), in );
 		} else {
 			idStr::snPrintf( sys, sizeof(sys), "dmap %s", in );
 		}
