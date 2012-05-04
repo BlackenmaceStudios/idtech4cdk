@@ -1,0 +1,16 @@
+{
+"mapspath" "C:\dev\darklight\maps"
+"bsp Full Compile" ""
+"bsp NoFlood Compile-noflood" ""
+"bsp Update Entities-updateents" ""
+"bsp Compile World updatevt-updatevt" ""
+"autosave" "C:\dev\darklight\base\autosave.map"
+"autosave1" "C:\dev\darklight\base\autosave1.map"
+"autosave2" "C:\dev\darklight\base\autosave2.map"
+"texturepath" "C:\dev\darklight\base\textures"
+"entitypath" "C:\dev\darklight\base\scripts\*.def"
+"remotebasepath" "C:\dev\darklight\"
+"rshcmd" ""
+"basepath" "C:\dev\darklight\"
+"brush_primit" "1"
+}
