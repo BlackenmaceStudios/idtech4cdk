@@ -77,8 +77,6 @@ void idToolInterfaceLocal::BuildUVAtlasInternalModel( class bmVTModel *model, in
 		startVertex += tri->numVerts;
 	}
 
-	common->Printf( "...%d-%d tris\n", numTris, numTris2 );
-
 	RKMesh::Get()->CreateNormals();
 }
 
@@ -134,7 +132,7 @@ void idToolInterfaceLocal::SetUVsFromInternalUVAtlas( class bmVTModel *model ) {
 		}
 	}
 
-	common->Printf("...%d faces from internal, highuv %d\n", RKMesh::Get()->m_NumberOfFaces, highUVNum );
+	
 }
 
 /*

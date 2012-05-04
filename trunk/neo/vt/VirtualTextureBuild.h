@@ -49,7 +49,7 @@ public:
 private:
 	bool						VerifyUVForPage( bmVTModel *model, float surfaceSizes, int numVTAreas );
 	void						ScaleUVsToFitArea( srfTriangles_t *tris, int x, int y, int w, int h );
-	void						ScaleUVRegionToFitInTri( bmVTModel *model, srfTriangles_t *parentTris, srfTriangles_t *tris, int triId, int pageId, int widthId, int heightId, float uvScaleW, float uvScaleH );
+	void						ScaleUVRegionToFitInTri( bmVTModel *model, srfTriangles_t *parentTris, srfTriangles_t *tris, int triId, int pageId, int widthId, int heightId, float uvScaleW, float uvScaleH, float chartW, float chartH );
 	int							RemapVertexFromParentToChildTri( srfTriangles_t *parentTris, idList<idDrawVert> &childVerts,  int index, bool appendVert );
 
 	idList< idDrawVert >		verts;

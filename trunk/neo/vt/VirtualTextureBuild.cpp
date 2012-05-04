@@ -204,7 +204,7 @@ int VirtualTextureBuilder::RemapVertexFromParentToChildTri( srfTriangles_t *pare
 VirtualTextureBuilder:ScaleUVRegionToFitInTri
 ====================
 */
-void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriangles_t *parentTris, srfTriangles_t *tris, int triId, int pageId, int widthId, int heightId, float uvScaleW, float uvScaleH ) {
+void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriangles_t *parentTris, srfTriangles_t *tris, int triId, int pageId, int widthId, int heightId, float uvScaleW, float uvScaleH, float chartW, float chartH ) {
 	idBounds uvRegion;
 	idList<idDrawVert> verts;
 	idList<int> indexes, validIndexes;
@@ -216,7 +216,9 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 	// Get the region of UV's we want to use.
 	uvRegion.Clear();
 	uvRegion[0] = idVec3(widthId * uvScaleW, heightId * uvScaleH, 0.0f);
-	uvRegion[1] = idVec3((widthId + 1) * uvScaleW, (heightId + 1) * uvScaleH, 0.0f);
+
+	// Even if there isn't anything after this chart this the end part of the region.
+	uvRegion[1] = idVec3((widthId+1) * uvScaleW, (heightId+1 ) * uvScaleH, 0.0f);
 
 	// Get and store all the vertexes and indexes that fall within this range.
 	for(int i = 0; i < parentTris->numVerts; i++)
@@ -288,9 +290,50 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 
 	common->Printf("...Number of indexes %d\n", indexes.Num() );
 
-	// Now that we have all the verts and indexes for this section finish up allocation of the triangle.
-	
+	// Now that we have all the verts and indexes for this section(alloc verts and indexes as well here for the tris).
 	model->SetVertexesForTris( triId, &verts[0], verts.Num(), &indexes[0], indexes.Num() );
+
+	// The UV's might be outside of the target range if the a triangle is barely within the requested bounds.
+	// This will create duplicate triangles in places fixme!
+	uvRegion.Clear();
+	for(int i = 0; i < tris->numVerts; i++)
+	{
+		uvRegion.AddPoint(idVec3(tris->verts[i].st.x, tris->verts[i].st.y, 0.0f));
+	}
+
+	common->Printf("...Modified UV Range %f %f\n", uvRegion[0].x, uvRegion[1].y);
+
+	// Finally get the UV's offset properly
+	idVec2 scale;
+	scale.x = 1.0f;
+	scale.y = 1.0f;
+	for(int i = 0; i < tris->numVerts; i++)
+	{
+		idVec2 st = tris->verts[i].st;
+
+		st.x -= uvRegion[0].x;
+		st.y -= uvRegion[0].y;
+
+		st.x *= chartW;
+		st.y *= chartH;
+
+		if(abs(st.x) > scale.x) {
+			scale.x = abs(st.x);
+		}
+
+		if(abs(st.y) > scale.y) {
+			scale.y = abs(st.y);
+		}
+
+		tris->verts[i].st = st;
+	}
+
+	// Scale the UV's if they go beyond the 0-1 border.
+	for(int i = 0; i < tris->numVerts; i++)
+	{
+		tris->verts[i].st /= scale;
+
+	}
 }
 
 /*
@@ -491,7 +534,7 @@ generatePage:
 							model->AllocTriangleAtPosition( d + cellId );
 
 							srfTriangles_t *newTris = model->tris[d + cellId];
-							ScaleUVRegionToFitInTri( model, tris, newTris, d + cellId, VT_CurrentNumAreas, w, h, UVScaleW, UVScaleH );
+							ScaleUVRegionToFitInTri( model, tris, newTris, d + cellId, VT_CurrentNumAreas, w, h, UVScaleW, UVScaleH, cellsPerWidth, cellsPerHeight );
 							newTris->vt_AreaID = VT_CurrentNumAreas++;
 							newTris->vt_uvGenerateType = Editor_ImportUVs_SinglePage; // Just incase we have to go through the UVs again.
 							// Prepare a new VT page.
