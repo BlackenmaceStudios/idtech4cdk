@@ -49,6 +49,8 @@ extern void DrawPathLines();
 int g_axialAnchor = -1;
 int g_axialDest = -1;
 bool g_bAxialMode = false;
+bool g_enableDrag = false;
+idVec3	dir;
 
 void ValidateAxialPoints() {
 	int faceCount = g_ptrSelectedFaces.GetSize();
@@ -617,7 +619,7 @@ void CCamWnd::Cam_MouseControl(float dtime) {
 void CCamWnd::Cam_MouseDown(int x, int y, int buttons) {
 	static bool inEntityProperties = false;
 
-	idVec3	dir;
+	
 	float	f, r, u;
 	int		i;
 
@@ -694,8 +696,13 @@ void CCamWnd::Cam_MouseDown(int x, int y, int buttons) {
 		}
 		else {
 			// something global needs to track which window is responsible for stuff
-			Patch_SetView(W_CAMERA);
-			Drag_Begin(x, y, buttons, m_Camera.vright, m_Camera.vup, m_Camera.origin, dir);
+			
+			// jmarshall - don't drag in camera unless alt is defined.
+			//if(!(nMouseButton | VK_LMENU))
+			{
+				Patch_SetView(W_CAMERA);
+				Drag_Begin(x, y, buttons, m_Camera.vright, m_Camera.vup, m_Camera.origin, dir);
+			}
 		}
 
 		return;
@@ -743,6 +750,7 @@ void CCamWnd::Cam_MouseMoved(int x, int y, int buttons) {
 	}
 
 	GetCursorPos(&m_ptCursor);
+
 
 	if (buttons & (MK_LBUTTON | MK_MBUTTON)) {
 		Drag_MouseMoved(x, y, buttons);
