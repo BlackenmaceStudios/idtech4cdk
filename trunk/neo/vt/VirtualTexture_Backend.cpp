@@ -112,7 +112,9 @@ bmVirtualTextureBackend::UpdateSceneVT
 void RB_VirtualTexture_DrawUnpackBuffer( int areaNum ) ;
 
 void bmVirtualTextureBackend::UpdateSceneVT( void ) {
+	int numCharts = 0;
 
+	numCharts = virtualTextureManager->GetCurrentVirtualTextureFile()->NumCharts();
 
 	// Read in the current tiles for the scene.
 	ReadCurrentScene();
@@ -122,7 +124,7 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 
 	virtualTextureManager->FlipToDefaultPage();
 
-	for(int i = 0; i < 64; i++) {
+	for(int i = 0; i < numCharts; i++) {
 		// If a area isn't visibile in the current scene, no need to render it.
 		if(sceneTiles[i].Num() <= 0) {
 			continue;

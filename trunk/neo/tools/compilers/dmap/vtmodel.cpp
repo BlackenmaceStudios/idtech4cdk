@@ -54,6 +54,17 @@ void bmVTModel::AddTris( const srfTriangles_t *uTris ) {
 	tris.Append( (srfTriangles_t *)uTris );
 }
 
+int bmVTModel::NumTrisForArea( int areaNum ) {
+	int numTrisInArea = 0;
+	for(int d = 0; d < tris.Num(); d++)
+	{
+		if(tris[d]->vt_AreaID == areaNum)
+			numTrisInArea++;
+	}
+
+	return numTrisInArea;
+}
+
 void bmVTModel::WriteToFile( const char *file ) {
 	idFile *objf = NULL;
 	
