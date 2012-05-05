@@ -122,7 +122,7 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 
 	virtualTextureManager->FlipToDefaultPage();
 
-	for(int i = 0; i < 17; i++) {
+	for(int i = 0; i < 64; i++) {
 		// If a area isn't visibile in the current scene, no need to render it.
 		if(sceneTiles[i].Num() <= 0) {
 			continue;

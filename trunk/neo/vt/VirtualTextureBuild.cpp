@@ -111,7 +111,9 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 	float surfaceSize = 4;
 	float lastSpacing = 1;
 
-	int numVTAreas = NumVTAreas();
+	int numVTAreas = (int)((float)vt_compile_size.GetInteger() / (float)vt_compile_areasize.GetInteger());
+	numVTAreas = numVTAreas * numVTAreas;
+	numCalcedAreas = numVTAreas;
 
 	spacing = 1;
 
@@ -160,12 +162,14 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 	}
 #else // old stuff.
 	float scaleAmt = 0.001;
-	while(!GenerateVTVerts_r( model, surfaceSize, numVTAreas )) {
+	while(!GenerateVTVerts_r( model, surfaceSize, numVTAreas, true )) {
 
 		surfaceSize += scaleAmt;
 		scaleAmt *= 1.03;
 		lastSpacing = spacing;
 	}
+
+	GenerateVTVerts_r( model, surfaceSize, numVTAreas, false );
 
 	common->Printf("---- VT_ScaleUVsToFitCell -----\n");
 
@@ -330,6 +334,7 @@ void VirtualTextureBuilder::ScaleUVsToFitArea( srfTriangles_t *tris, int x, int 
 VirtualTextureBuilder:RemapVertexFromParentToChildTri
 ====================
 */
+idList<int> validIndexes;
 int VirtualTextureBuilder::RemapVertexFromParentToChildTri( srfTriangles_t *parentTris, idList<idDrawVert> &childVerts, int index, bool appendVert ) {
 	idDrawVert parentVert;
 
@@ -345,6 +350,7 @@ int VirtualTextureBuilder::RemapVertexFromParentToChildTri( srfTriangles_t *pare
 
 	if(appendVert) {
 		childVerts.Append(parentVert);
+	//	validIndexes.Append(childVerts.Num() - 1);
 		return childVerts.Num() - 1;
 	}
 
@@ -359,10 +365,12 @@ VirtualTextureBuilder:ScaleUVRegionToFitInTri
 void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriangles_t *parentTris, srfTriangles_t *tris, int triId, int pageId, int widthId, int heightId, float uvScaleW, float uvScaleH, float chartW, float chartH ) {
 	idBounds uvRegion;
 	idList<idDrawVert> verts;
-	idList<int> indexes, validIndexes;
+	idList<int> indexes, burnIndexes;
 
 	verts.SetGranularity( 3000 );
 
+	validIndexes.Clear();
+	burnIndexes.Clear();
 	common->Printf("ScaleUVRegionToFitInTri: Processing %d...\n", pageId );
 
 	// Get the region of UV's we want to use.
@@ -392,50 +400,98 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 		int index = parentTris->indexes[i];
 		int remapIndex[3];
 
+		if(index == -1)
+		{
+			continue;
+		}
+
 		remapIndex[0] = RemapVertexFromParentToChildTri( parentTris, verts, index, false);
 
 		if(remapIndex[0] != -1)
 		{
-			indexes.Append( remapIndex[0] );
+			bool burnAllIndexes;
 
+			// Check to see if this UV exclusively belongs to this tris.
 			for(int c = 1; c < 3; c++)
 			{
 				index = parentTris->indexes[i + c];
-				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, true);
+				if(index == -1)
+				{
+					remapIndex[0] = remapIndex[1] = -1;
+					break;
+				}
+				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, false);
+			}
+
+			burnAllIndexes = (remapIndex[0] != -1 && remapIndex[1] != -1 && remapIndex[2] != -1);
+
+			for(int c = 0; c < 3; c++)
+			{
+				index = parentTris->indexes[i + c];
+				if(burnAllIndexes)
+				{
+					burnIndexes.Append(parentTris->indexes[i + c]);
+				}
+				else
+				{
+					remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, true);
+				}
 				indexes.Append( remapIndex[c] );
+				
 			}
 		}
 		else
 		{
 			// Test the other two verts and see if it works out.
-			bool isValid = false;
-			
+			for(int c = 0; c < 3; c++)
+			{
+				index = parentTris->indexes[i + c];
+				if(index == -1)
+				{
+					remapIndex[0] = remapIndex[1] = -1;
+					break;
+				}
+				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, false);
+			}
+
+			if(remapIndex[0] == remapIndex[1] || remapIndex[1] == remapIndex[2] || remapIndex[0] == remapIndex[2])
+				continue;
 
 			for(int c = 0; c < 3; c++)
 			{
 				index = parentTris->indexes[i + c];
+				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, true);
+			}
 
-				for(int s = 0; s < validIndexes.Num(); s++)
+			bool allValid = false;
+			for(int v = 0; v < validIndexes.Num(); v++)
+			{
+				for(int c = 0; c < 3; c++)
 				{
-					if(validIndexes[s] == index)
+					if(validIndexes[v] == remapIndex[c])
 					{
-						isValid = true;
+						indexes.Append( remapIndex[0] );
+						indexes.Append( remapIndex[1] );
+						indexes.Append( remapIndex[2] );
+						allValid  = true;
 						break;
 					}
 				}
 
-				if(isValid)
+				if(allValid) {
 					break;
-			}
-
-			if(isValid)
-			{
-				for(int c = 0; c < 3; c++)
-				{
-					index = parentTris->indexes[i + c];
-					remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, true);
-					indexes.Append( remapIndex[c] );
 				}
+			}
+		}
+	}
+
+	for(int i = 0; i < burnIndexes.Num(); i++)
+	{
+		for(int f = 0; f < parentTris->numIndexes; f++)
+		{
+			if(parentTris->indexes[f] == burnIndexes[i])
+			{
+				parentTris->indexes[f] = -1;
 			}
 		}
 	}
@@ -493,7 +549,7 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 VirtualTextureBuilder::GenerateVTVerts
 ====================
 */
-bool VirtualTextureBuilder::GenerateVTVerts_r( bmVTModel *model,  float surfaceSize, int numVTAreas ) {
+bool VirtualTextureBuilder::GenerateVTVerts_r( bmVTModel *model,  float surfaceSize, int numVTAreas, bool fakePass ) {
 	idBounds bounds;
 	idVec3 exactSize, delta;
 	float w, h, s, t;
@@ -603,30 +659,39 @@ generatePage:
 			
 			case Editor_GenerateUVs_Q3Style:
 				{
-					for ( int i = 0 ; i < model->tris[d]->numVerts ; i++ ) {
+					if(!fakePass)
+					{
+						for ( int i = 0 ; i < model->tris[d]->numVerts ; i++ ) {
 			
-						delta = v[i].xyz - bounds[0];
-						v[i].st.x = (DotProduct(delta, vecs[0]) + x + 0.5) / VT_Size;
-						v[i].st.y = (DotProduct(delta, vecs[1]) + y + 0.5) / VT_Size;
+							delta = v[i].xyz - bounds[0];
+							v[i].st.x = (DotProduct(delta, vecs[0]) + x + 0.5) / VT_Size;
+							v[i].st.y = (DotProduct(delta, vecs[1]) + y + 0.5) / VT_Size;
 
-						if(v[i].st.x > 1 || v[i].st.y > 1) {
-							goto generatePage;
+							if(v[i].st.x > 1 || v[i].st.y > 1) {
+								goto generatePage;
+							}
 						}
-					}
 
-					model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
+						model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
+					}
 				}
 			case Editor_GenerateUVs_Orient:
 				{
-					toolInterface->ComputeUVAtlasForModel( model, d, 1 );
-					AddScaleUVsToFitAreaDeferred(model->tris[d], x, y, w, h);
-					model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
+					if(!fakePass)
+					{
+						toolInterface->ComputeUVAtlasForModel( model, d, 1 );
+						AddScaleUVsToFitAreaDeferred(model->tris[d], x, y, w, h);
+						model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
+					}
 				}
 				break;
 			case Editor_ImportUVs_AutoSpacing:
 				{
-					AddScaleUVsToFitAreaDeferred(model->tris[d], x, y, w, h);
-					model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
+					if(!fakePass)
+					{
+						AddScaleUVsToFitAreaDeferred(model->tris[d], x, y, w, h);
+						model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
+					}
 				}
 				break;
 			case Editor_ImportUVs_SinglePage:
@@ -714,14 +779,4 @@ generatePage:
 	}	
 
 	return true;
-}
-/*
-======================
-VirtualTextureBuilder::NumVTAreas
-======================
-*/
-int	 VirtualTextureBuilder::NumVTAreas( void ) {
-	int numVTAreas = (int)((float)vt_compile_size.GetInteger() / (float)vt_compile_areasize.GetInteger());
-	numVTAreas = numVTAreas * numVTAreas;
-	return numVTAreas-1;
 }

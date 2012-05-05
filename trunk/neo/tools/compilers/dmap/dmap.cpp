@@ -296,7 +296,7 @@ void Dmap( const idCmdArgs &args ) {
 			break;
 		}
 	}
-
+	dmapGlobals.noOptimize = true;
 	if ( i >= args.Argc() ) {
 		common->Error( "usage: dmap [options] mapfile" );
 	}

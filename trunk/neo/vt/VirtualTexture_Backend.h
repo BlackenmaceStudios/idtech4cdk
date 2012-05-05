@@ -37,7 +37,7 @@ private:
 	void						ReadTilesInScene( byte *readbackBuffer, int width, int height );
 	void						UploadAreaTiles( int pageId, idList<bmVTTileReadback_t> &areaTiles );
 
-	idList<bmVTTileReadback_t>	sceneTiles[16];
+	idList<bmVTTileReadback_t>	sceneTiles[64];
 };
 
 extern bmVirtualTextureBackend vtBackEnd;
