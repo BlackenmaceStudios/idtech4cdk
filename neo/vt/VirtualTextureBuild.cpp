@@ -383,10 +383,12 @@ int VirtualTextureBuilder::RemapVertexFromParentToChildTri( srfTriangles_t *pare
 VirtualTextureBuilder:ScaleUVRegionToFitInTri
 ====================
 */
+#define VT_EPSILON			0.001f
 void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriangles_t *parentTris, srfTriangles_t *tris, int triId, int pageId, int widthId, int heightId, float uvScaleW, float uvScaleH, float chartW, float chartH ) {
 	idBounds uvRegion;
 	idList<idDrawVert> verts;
 	idList<int> indexes, burnIndexes;
+	idVec3 epsilon = idVec3(VT_EPSILON, VT_EPSILON, 0.0f);
 
 	verts.SetGranularity( 3000 );
 	indexes.Clear();
@@ -396,25 +398,46 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 
 	// Get the region of UV's we want to use.
 	uvRegion.Clear();
-	uvRegion[0] = idVec3(widthId * uvScaleW, heightId * uvScaleH, 0.0f);
+	uvRegion.AddPoint(idVec3(widthId * uvScaleW, heightId * uvScaleH, 0.0f) - epsilon);
 
 	// Even if there isn't anything after this chart this the end part of the region.
-	uvRegion[1] = idVec3((widthId+1) * uvScaleW, (heightId+1 ) * uvScaleH, 0.0f);
+	uvRegion.AddPoint(idVec3((widthId+1) * uvScaleW, (heightId+1 ) * uvScaleH, 0.0f) + epsilon);
+
+	common->Printf("...(%f %f) -> (%f %f)\n", uvRegion[0].x, uvRegion[0].y, uvRegion[1].x, uvRegion[1].y);
 
 	// Get and store all the vertexes and indexes that fall within this range.
+
+	int dupVerts = 0;
 	for(int i = 0; i < parentTris->numVerts; i++)
 	{
 		idDrawVert v;
 
 		v = parentTris->verts[i];
 		if(uvRegion.ContainsPoint( idVec3(v.st.x, v.st.y, 0.0f))) {
-			verts.Append( v );
+			bool appendVert = true;
 
-			validIndexes.Append( i );
+			for(int c = 0; c < verts.Num(); c++)
+			{
+				if(verts[c].xyz == v.xyz)
+				{
+					appendVert = false;
+					dupVerts++;
+					break;
+				}
+			}
+			if(appendVert)
+			{
+				verts.Append( v );
+				validIndexes.Append( i );
+			}
+
+			
 		}
 	}
 
-	
+	if(dupVerts > 0) {
+		common->Printf("...Removed %d duplicated vertexes\n", dupVerts );
+	}
 	
 
 	for(int i = 0; i < parentTris->numIndexes; i+=3)
@@ -506,6 +529,10 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 						indexes.Append( remapIndex[0] );
 						indexes.Append( remapIndex[1] );
 						indexes.Append( remapIndex[2] );
+
+						burnIndexes.Append(parentTris->indexes[i + 0]);
+						burnIndexes.Append(parentTris->indexes[i + 1]);
+						burnIndexes.Append(parentTris->indexes[i + 2]);
 						allValid  = true;
 						break;
 					}
@@ -524,7 +551,7 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 		{
 			if(parentTris->indexes[f] == burnIndexes[i])
 			{
-			//	parentTris->indexes[f] = -1;
+				parentTris->indexes[f] = -1;
 			}
 		}
 	}
@@ -542,7 +569,7 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 		uvRegion.AddPoint(idVec3(tris->verts[i].st.x, tris->verts[i].st.y, 0.0f));
 	}
 
-	common->Printf("...Modified UV Range %f %f\n", uvRegion[0].x, uvRegion[1].y);
+	
 
 	// Finally get the UV's offset properly
 	idVec2 scale;
