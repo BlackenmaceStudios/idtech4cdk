@@ -25,7 +25,7 @@ static void R_EmptyTexturePage( idImage *image ) {
 	image->GenerateImage( data, vt_page_size.GetInteger(), vt_page_size.GetInteger(), 
 		TF_NEAREST, false, TR_REPEAT, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
 
-	delete image->rawBuffer;
+	delete data;
 	image->rawBuffer = NULL;
 	//image->CreatePBO();
 }

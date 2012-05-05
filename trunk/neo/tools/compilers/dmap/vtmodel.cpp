@@ -28,8 +28,7 @@ void bmVTModel::FreeTri( int triId ) {
 	tris.Remove( tris[triId] ); 
 }
 
-void bmVTModel::SetVertexesForTris( int triId, idDrawVert *verts, int numVerts, int *indexes, int numIndexes ) {
-	srfTriangles_t	*uTri = tris[triId];
+void bmVTModel::SetVertexesForTris( srfTriangles_t	*uTri, idDrawVert *verts, int numVerts, int *indexes, int numIndexes ) {
 
 	R_AllocStaticTriSurfIndexes( uTri, numIndexes );
 	R_AllocStaticTriSurfVerts( uTri, numVerts );

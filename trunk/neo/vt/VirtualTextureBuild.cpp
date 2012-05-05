@@ -57,7 +57,7 @@ void PrepareNewVTArea( bool fakePass ) {
 	VT_CurrentNumAreas++;
 	if(!fakePass)
 	{
-		common->Printf( "-------VTUVGenerate Processing %d---------\n", VT_CurrentNumAreas );
+		common->Printf( "Processing VT Chart %d...\n", VT_CurrentNumAreas );
 	}
 }
 
@@ -173,7 +173,7 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 		scaleAmt *= 1.03;
 		lastSpacing = spacing;
 	}
-	common->Printf("...Surface Size %d\n", surfaceSize);
+	common->Printf("...Surface Size %f\n", surfaceSize);
 
 	GenerateVTVerts_r( model, surfaceSize, numVTAreas, false );
 
@@ -349,9 +349,16 @@ int VirtualTextureBuilder::RemapVertexFromParentToChildTri( srfTriangles_t *pare
 	parentVert = parentTris->verts[index];
 	for(int i = 0; i < childVerts.Num(); i++)
 	{
+
 		if(childVerts[i] == parentVert)
 		{
-			return i;
+			int indexNum = i;
+
+			if(indexNum < validIndexes.Num()) {
+				return indexNum;
+			}
+
+			break; // Either was added later or isn't part of the section and was append on.
 		}
 	}
 
@@ -375,7 +382,7 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 	idList<int> indexes, burnIndexes;
 
 	verts.SetGranularity( 3000 );
-
+	indexes.Clear();
 	validIndexes.Clear();
 	burnIndexes.Clear();
 	common->Printf("ScaleUVRegionToFitInTri: Processing %d...\n", pageId );
@@ -400,7 +407,7 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 	}
 
 	
-	common->Printf("...Number of vertexes %d\n", verts.Num() );
+	
 
 	for(int i = 0; i < parentTris->numIndexes; i+=3)
 	{
@@ -427,7 +434,7 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 					remapIndex[0] = remapIndex[1] = -1;
 					break;
 				}
-				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, false);
+				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, true);
 			}
 
 			burnAllIndexes = (remapIndex[0] != -1 && remapIndex[1] != -1 && remapIndex[2] != -1);
@@ -441,7 +448,7 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 				}
 				else
 				{
-					remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, true);
+					remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, false);
 				}
 				indexes.Append( remapIndex[c] );
 				
@@ -450,6 +457,7 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 		else
 		{
 			// Test the other two verts and see if it works out.
+			bool hasValidVert = false;
 			for(int c = 0; c < 3; c++)
 			{
 				index = parentTris->indexes[i + c];
@@ -459,16 +467,26 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 					break;
 				}
 				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, false);
+				if(remapIndex[c] != -1)
+				{
+					for(int d = 0; d < 3; d++)
+					{
+						index = parentTris->indexes[i + d];
+						remapIndex[d] = RemapVertexFromParentToChildTri( parentTris, verts, index, true);
+					}
+
+					break;
+				}
+				
 			}
 
 			if(remapIndex[0] == remapIndex[1] || remapIndex[1] == remapIndex[2] || remapIndex[0] == remapIndex[2])
-				continue;
-
-			for(int c = 0; c < 3; c++)
 			{
-				index = parentTris->indexes[i + c];
-				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, true);
+
+				continue;
 			}
+
+			
 
 			bool allValid = false;
 			for(int v = 0; v < validIndexes.Num(); v++)
@@ -502,11 +520,11 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 			}
 		}
 	}
-
+	common->Printf("...Number of vertexes %d\n", verts.Num() );
 	common->Printf("...Number of indexes %d\n", indexes.Num() );
 
 	// Now that we have all the verts and indexes for this section(alloc verts and indexes as well here for the tris).
-	model->SetVertexesForTris( triId, &verts[0], verts.Num(), &indexes[0], indexes.Num() );
+	model->SetVertexesForTris( tris, &verts[0], verts.Num(), &indexes[0], indexes.Num() );
 
 	// The UV's might be outside of the target range if the a triangle is barely within the requested bounds.
 	// This will create duplicate triangles in places fixme!
@@ -567,7 +585,7 @@ bool VirtualTextureBuilder::GenerateVTVerts_r( bmVTModel *model,  float surfaceS
 
 	spacing = 1.0;
 	firstTrisOnPage = 0;
-	VT_CurrentNumAreas = 0;
+	VT_CurrentNumAreas = -1;
 
 	PrepareNewVTArea(fakePass);
 
@@ -646,6 +664,8 @@ generatePage:
 			scaleST.x = 1;
 			scaleST.y = 1;
 
+			// Prepare a new VT page.
+			PrepareNewVTArea(fakePass);
 
 			// If we  already filled up all the texture space for all of the target pages, start over with a higher blocksize(less space).
 			if(VT_CurrentNumAreas >= numVTAreas || numTrisOnChart == 0)
@@ -653,8 +673,7 @@ generatePage:
 				return false;
 			}
 			
-			// Prepare a new VT page.
-			PrepareNewVTArea(fakePass);
+			
 			firstTrisOnPage = d;
 			numTrisOnChart = 0;
 		}
@@ -680,6 +699,7 @@ generatePage:
 						model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
 					}
 				}
+				break;
 			case Editor_GenerateUVs_Orient:
 				{
 					if(!fakePass)
@@ -715,6 +735,7 @@ generatePage:
 					// Prepare a new VT page.
 					PrepareNewVTArea(fakePass);
 					firstTrisOnPage = d+1;
+					numTrisOnChart = 0;
 					continue;
 				}
 				break;
@@ -764,11 +785,12 @@ generatePage:
 					R_FreeStaticTriSurf( tris ); 
 					model->tris.Remove( tris );
 
-					d += cellId + 1;
+					d += cellId;
 					
 					// Prepare a new VT page.
 					PrepareNewVTArea(fakePass);
-					firstTrisOnPage = d+1;
+					firstTrisOnPage = d;
+					numTrisOnChart = 0;
 					continue;
 				}
 		}

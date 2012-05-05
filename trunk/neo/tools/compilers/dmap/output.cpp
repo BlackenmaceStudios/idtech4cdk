@@ -685,6 +685,8 @@ WriteOutputSurfaces
 ====================
 */
 static void WriteOutputSurfaces( void ) {
+	
+
 	procFile->WriteFloatString( "model { /* name = */ \"_area%i\" /* numSurfaces = */ %i\n\n", 0, outModel.tris.Num() );
 
 	for(int surfaceNum = 0; surfaceNum < outModel.tris.Num(); surfaceNum++) {
@@ -708,6 +710,8 @@ WriteOutputEntity
 static void WriteOutputEntity( int entityNum ) {
 	int		i;
 	uEntity_t *e;
+
+	common->Printf("Writing Entity %d\n", entityNum );
 
 	e = &dmapGlobals.uEntities[entityNum];
 
@@ -790,9 +794,19 @@ void WriteOutputFile( void ) {
 
 	// Create our virtual texture.
 	vt = virtualTextureManager->CreateNewVirtualTextureFile( vtpath, vtBuilder.NumVTAreas() );
+	if(vt == NULL) {
+		common->Warning("****** VT_BuildError ********\n");
+		common->Warning("Aborting build.\n");
+
+		fileSystem->CloseFile( procFile );
+		return;
+	}
 
 	// Write out the OBJ.
 	outModel.WriteToFile( objpath.c_str() );
+
+	common->Printf("-------WorldOutputSurfaces------\n");
+	
 
 	// Now write out the geometry with the modified coordinates for VT.
 	for ( i=dmapGlobals.num_entities - 1 ; i >= 0 ; i-- ) {
