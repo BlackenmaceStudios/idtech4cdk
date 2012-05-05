@@ -1,7 +1,7 @@
 // VirtualTextureFile.h
 //
 
-#define VT_LOAD_FROMMEMORY		2
+#define VT_LOAD_FROMMEMORY		3
 
 #define VIRTUALTEXTURE_EXTEN	".virtualtexture"
 #define VIRTUALTEXTURE_IDEN		(('F'<<24)+('T'<<16)+('V'<<8)+'J')
@@ -19,7 +19,7 @@ struct bmVirtualTextureHeader_t {
 	int			iden;			// Iden 
 	int			version;		// Version
 	int			mapcrc;			// CRC of the map file
-
+	int			numCharts;
 	int			numTiles;		// How many tiles are in the virtualtexture file.
 
 	//
@@ -93,6 +93,8 @@ public:
 	void						FinishVirtualTextureWrite( void );
 
 	void						BindAtlas( void );
+
+	int							NumCharts( void ) { return header.numCharts; }
 
 	idImage						*vtAtlasImage2;
 private:

@@ -47,15 +47,18 @@ void AddScaleUVsToFitAreaDeferred( srfTriangles_t *tris, int x, int y, int w, in
 }
 
 
-void PrepareNewVTArea( void ) {
+void PrepareNewVTArea( bool fakePass ) {
 	if(allocated != NULL) {
 		delete allocated;
 	}
 
 	allocated = new int[VT_Size];
 	memset( allocated, 0, sizeof( int ) * VT_Size );
-
-	//common->Printf( "-------VTUVGenerate Processing %d---------\n", VT_CurrentNumAreas );
+	VT_CurrentNumAreas++;
+	if(!fakePass)
+	{
+		common->Printf( "-------VTUVGenerate Processing %d---------\n", VT_CurrentNumAreas );
+	}
 }
 
 /*
@@ -162,12 +165,15 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 	}
 #else // old stuff.
 	float scaleAmt = 0.001;
+
+	common->Printf("----- VT_CalcSpacing ------\n");
 	while(!GenerateVTVerts_r( model, surfaceSize, numVTAreas, true )) {
 
 		surfaceSize += scaleAmt;
 		scaleAmt *= 1.03;
 		lastSpacing = spacing;
 	}
+	common->Printf("...Surface Size %d\n", surfaceSize);
 
 	GenerateVTVerts_r( model, surfaceSize, numVTAreas, false );
 
@@ -262,7 +268,8 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 
 	chartScalePool.Clear();
 #endif
-
+	numCalcedAreas = VT_CurrentNumAreas;
+	model->numAreas = numCalcedAreas;
 	if(VT_CurrentNumAreas != numVTAreas) {
 		common->Warning("Areas not divided properly!");
 	}
@@ -562,7 +569,7 @@ bool VirtualTextureBuilder::GenerateVTVerts_r( bmVTModel *model,  float surfaceS
 	firstTrisOnPage = 0;
 	VT_CurrentNumAreas = 0;
 
-	PrepareNewVTArea();
+	PrepareNewVTArea(fakePass);
 
 	int wtest = 0, htest = 0;
 
@@ -636,11 +643,9 @@ bool VirtualTextureBuilder::GenerateVTVerts_r( bmVTModel *model,  float surfaceS
 generatePage:		
 		// Check to see if this will fit on the current page.
 		if(!AllocVTBlock( w, h , &x, &y ) && model->tris[d]->vt_uvGenerateType < Editor_ImportUVs_SinglePage) {
-
-
 			scaleST.x = 1;
 			scaleST.y = 1;
-			VT_CurrentNumAreas++;
+
 
 			// If we  already filled up all the texture space for all of the target pages, start over with a higher blocksize(less space).
 			if(VT_CurrentNumAreas >= numVTAreas || numTrisOnChart == 0)
@@ -649,7 +654,7 @@ generatePage:
 			}
 			
 			// Prepare a new VT page.
-			PrepareNewVTArea();
+			PrepareNewVTArea(fakePass);
 			firstTrisOnPage = d;
 			numTrisOnChart = 0;
 		}
@@ -700,17 +705,15 @@ generatePage:
 
 					if(firstTrisOnPage != d)
 					{
-						VT_CurrentNumAreas++;
 						// Prepare a new VT page.
-						PrepareNewVTArea();
+						PrepareNewVTArea(fakePass);
 						firstTrisOnPage = d;
 					}
 					
 					model->tris[d]->vt_AreaID = VT_CurrentNumAreas;
 					
-					VT_CurrentNumAreas++;
 					// Prepare a new VT page.
-					PrepareNewVTArea();
+					PrepareNewVTArea(fakePass);
 					firstTrisOnPage = d+1;
 					continue;
 				}
@@ -722,13 +725,10 @@ generatePage:
 
 					srfTriangles_t *tris = model->tris[d];
 
-					
-
 					if(firstTrisOnPage != d)
 					{
-						VT_CurrentNumAreas++;
 						// Prepare a new VT page.
-						PrepareNewVTArea();
+						PrepareNewVTArea(fakePass);
 						firstTrisOnPage = d;
 					}
 					
@@ -753,10 +753,10 @@ generatePage:
 
 							srfTriangles_t *newTris = model->tris[d + cellId];
 							ScaleUVRegionToFitInTri( model, tris, newTris, d + cellId, VT_CurrentNumAreas, w, h, UVScaleW, UVScaleH, cellsPerWidth, cellsPerHeight );
-							newTris->vt_AreaID = VT_CurrentNumAreas++;
+							newTris->vt_AreaID = VT_CurrentNumAreas;
 							newTris->vt_uvGenerateType = Editor_ImportUVs_SinglePage; // Just incase we have to go through the UVs again.
 							// Prepare a new VT page.
-							PrepareNewVTArea();
+							PrepareNewVTArea(fakePass);
 						}
 					}
 
@@ -767,7 +767,7 @@ generatePage:
 					d += cellId + 1;
 					
 					// Prepare a new VT page.
-					PrepareNewVTArea();
+					PrepareNewVTArea(fakePass);
 					firstTrisOnPage = d+1;
 					continue;
 				}

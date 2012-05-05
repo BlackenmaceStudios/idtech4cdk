@@ -4,6 +4,7 @@
 #include "precompiled.h"
 
 #include "../renderer/tr_local.h"
+#include "VirtualTexture.h"
 #include "VirtualTexture_Backend.h"
 
 /*
@@ -13,9 +14,12 @@ bmVirtualTextureBackend::ReadTilesInScene
 */
 void bmVirtualTextureBackend::ReadTilesInScene( byte *readbackBuffer, int width, int height ) {
 	bmVTTileReadback_t tile;
+	int numCharts;
+
+	numCharts = virtualTextureManager->GetCurrentVirtualTextureFile()->NumCharts();
 
 	// Clear all the scene tiles. 
-	for(int i = 0; i < 16; i++)
+	for(int i = 0; i < numCharts; i++)
 	{
 		sceneTiles[i].Clear();
 	}

@@ -15,13 +15,19 @@ byte *compressedBuffer = NULL;
 
 bmVirtualTextureFile::bmVirtualTextureFile() {
 	f = NULL;
-
+	fileBuffer = NULL;
 }
 
 bmVirtualTextureFile::~bmVirtualTextureFile() {
 	if(f != NULL) {
 //		fileSystem->CloseFile( f );
 		f = NULL;
+	}
+
+	if(fileBuffer != NULL)
+	{
+		delete fileBuffer;
+		fileBuffer = NULL;
 	}
 }
 
@@ -57,9 +63,11 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 	}
 
 	// Write the header out first so everything gets positioned correctly and we can write in real time.
+	header.numCharts = numAreas;
 	header.WriteToFile( f );
 
 	imglist.Clear();
+	
 
 	
 	byte *buffer;
@@ -77,8 +85,10 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 		if(imgWidth <= 0 || imgHeight <= 0) {
 			common->Warning("Area texture for VT not found...\n");
 		}
-
-		common->Printf( "Building VT Area %d/%d...", i + 1, numAreas);
+		else
+		{
+			common->Printf( "Building VT Area %d/%d...", i + 1, numAreas);
+		}
 
 		int maxTiles = (imgWidth / VIRTUALTEXTURE_TILESIZE) * (imgWidth / VIRTUALTEXTURE_TILESIZE);
 		int currentTile = 0;
@@ -294,7 +304,7 @@ void bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum, byte *tileBuffer
 }
 #else
 byte *bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum ) {
-	int bufferpos = sizeof(bmVirtualTextureHeader_t) + ((4096 * 4096) * pageNum) + (VIRTUALTEXTURE_TILEMEMSIZE * (tileNum));
+	int bufferpos = ((4096 * 4096) * pageNum) + (VIRTUALTEXTURE_TILEMEMSIZE * (tileNum));
 
 	if(bufferpos >= fileBufferLen) {
 		common->FatalError( "VT_ReadTile: %d > %d", bufferpos, fileBufferLen );

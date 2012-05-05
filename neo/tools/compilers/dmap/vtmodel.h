@@ -13,7 +13,9 @@ public:
 	void					SetVertexesForTris( int triId, idDrawVert *verts, int numVerts, int *indexes, int numIndexes );
 	void					FreeTri( int triId );
 	void WriteToFile( const char *file ) ;
+	int						NumTrisForArea( int areaNum );
 
 	idList<srfTriangles_t*> tris;
+	int						numAreas;
 };
 
