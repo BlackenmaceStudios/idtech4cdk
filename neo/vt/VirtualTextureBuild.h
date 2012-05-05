@@ -43,8 +43,8 @@ class VirtualTextureBuilder {
 public:
 	void						GenerateVTVerts( class bmVTModel *model );
 
-	bool						GenerateVTVerts_r( class bmVTModel *model, float surfaceSize, int numVTAreas );
-	int							NumVTAreas( void );
+	bool						GenerateVTVerts_r( class bmVTModel *model, float surfaceSize, int numVTAreas, bool fakePass );
+	int							NumVTAreas( void ) {return numCalcedAreas; };
 	
 private:
 	bool						VerifyUVForPage( bmVTModel *model, float surfaceSizes, int numVTAreas );
@@ -53,6 +53,7 @@ private:
 	int							RemapVertexFromParentToChildTri( srfTriangles_t *parentTris, idList<idDrawVert> &childVerts,  int index, bool appendVert );
 
 	idList< idDrawVert >		verts;
+	int	numCalcedAreas;
 };
 
 ID_INLINE void VT_FixST( idVec2 &st ) {

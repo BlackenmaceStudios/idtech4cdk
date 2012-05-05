@@ -1740,7 +1740,7 @@ bool idPhysics_Player::Evaluate( int timeStepMSec, int endTimeMSec ) {
 	clipModel->Link( gameLocal.clip, self, 0, current.origin, clipModel->GetAxis() );
 
 	if ( IsOutsideWorld() ) {
-		gameLocal.Warning( "clip model outside world bounds for entity '%s' at (%s)", self->name.c_str(), current.origin.ToString(0) );
+		//gameLocal.Warning( "clip model outside world bounds for entity '%s' at (%s)", self->name.c_str(), current.origin.ToString(0) );
 	}
 
 	return true; //( current.origin != oldOrigin );
