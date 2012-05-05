@@ -457,13 +457,13 @@ FragmentProgram
 
 		
 
-			 color += LightPass( i / numLights, var_Vertex, vCurrOffset, vec4(r_lightOrigin[i], 0.0), vec4(0.1,0.1,0.1, 0) , vec4(1,1,1, 0), lightProjectS, lightProjectT, r_lightProjectionQ[i], r_lightFalloff[i], vec4(1,1,1,1) )  * diffuse * (shadow + 0.3);
+			 color += LightPass( i / numLights, var_Vertex, vCurrOffset, vec4(r_lightOrigin[i], 0.0), vec4(4,4,4, 0) , vec4(1,1,1, 0), lightProjectS, lightProjectT, r_lightProjectionQ[i], r_lightFalloff[i], vec4(1,1,1,1) )  * diffuse * (shadow + 0.3);
 		}
 		
 		
 
 		//gl_FragColor = (color + 0.4) * var_Shadow * vec4(1,1,1,1) ;
-		gl_FragColor.xyz = color.xyz; //((color.xyz)    ) + (UnlitTransparent()) ;
+		gl_FragColor.xyz = texture2D( u_diffuseTexture, var_TexNormal.st ).xyz; //color.xyz; //((color.xyz)    ) + (UnlitTransparent()) ;
 		
 		gl_FragColor.a = 1;
 	}

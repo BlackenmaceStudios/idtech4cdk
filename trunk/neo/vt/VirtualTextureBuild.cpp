@@ -346,15 +346,22 @@ int VirtualTextureBuilder::RemapVertexFromParentToChildTri( srfTriangles_t *pare
 	idDrawVert parentVert;
 
 	// Check to see if the vertex is in the child vert and return its position.
-	parentVert = parentTris->verts[index];
+	if(index != -1)
+	{
+		parentVert = parentTris->verts[index];
+	}
 	for(int i = 0; i < childVerts.Num(); i++)
 	{
-
-		if(childVerts[i] == parentVert)
+		if(index == -1)
+		{
+			parentVert = childVerts[i];
+		}
+		if(childVerts[i].xyz == parentVert.xyz)
 		{
 			int indexNum = i;
 
-			if(indexNum < validIndexes.Num()) {
+			// If we aren't appending a vertex only use validIndexes, if appendVert use any and all if present.
+			if(indexNum < validIndexes.Num() || appendVert) {
 				return indexNum;
 			}
 
@@ -402,6 +409,7 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 		v = parentTris->verts[i];
 		if(uvRegion.ContainsPoint( idVec3(v.st.x, v.st.y, 0.0f))) {
 			verts.Append( v );
+
 			validIndexes.Append( i );
 		}
 	}
@@ -516,7 +524,7 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 		{
 			if(parentTris->indexes[f] == burnIndexes[i])
 			{
-				parentTris->indexes[f] = -1;
+			//	parentTris->indexes[f] = -1;
 			}
 		}
 	}
