@@ -126,8 +126,8 @@ void idToolInterfaceLocal::SetUVsFromInternalUVAtlas( class bmVTModel *model ) {
 			Z += RKMesh::Get()->m_CentreZ;
 			
 			//tri->verts[vertIndex-1-face->relativeUV[2]].xyz = idVec3(X,Y,Z);
-			tri->verts[vertIndex-1-face->relativeUV[2]].st.x = RKMesh::Get()->pUVs[uvIndex].m_U;
-			tri->verts[vertIndex-1-face->relativeUV[2]].st.y = RKMesh::Get()->pUVs[uvIndex].m_V;
+			tri->verts[vertIndex-face->relativeUV[2]-1].st.x = RKMesh::Get()->pUVs[uvIndex].m_U;
+			tri->verts[vertIndex-face->relativeUV[2]-1].st.y = RKMesh::Get()->pUVs[uvIndex].m_V;
 
 		}
 	}

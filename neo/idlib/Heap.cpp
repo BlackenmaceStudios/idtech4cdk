@@ -1187,6 +1187,9 @@ void Mem_DumpCompressed_f( const idCmdArgs &args ) {
    uses. This one simply logs each allocation operation in a file.
 */
 int __cdecl MyAllocHook( int nAllocType, void * pvData, size_t   nSize,int nBlockUse, long lRequest,const unsigned char * szFileName,int nLine) {
+	if(nSize >= 62914560) {
+		common->Warning("Heap huge alloc detected - %d megs!\n", nSize/1048576  );
+	}
 	return TRUE;
 }
 

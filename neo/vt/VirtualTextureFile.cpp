@@ -325,6 +325,7 @@ void bmVirtualTextureFile::FinishVirtualTextureWrite( void ) {
 	}
 	//header.numTiles = imglist.Num();
 
+	common->Printf("-------VT_FinishTextureWrite------\n");
 	common->Printf( "Wrote %d tiles - %d bytes\n", header.numTiles, f->Length());
 
 	// Re-write the header and close the file.
