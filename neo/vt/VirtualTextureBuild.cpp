@@ -472,8 +472,9 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 
 		remapIndex[0] = RemapVertexFromParentToChildTri( parentTris, verts, index, false);
 		remapIndex[1] = RemapVertexFromParentToChildTri( parentTris, verts,  parentTris->indexes[i+1], false);
+		remapIndex[2] = RemapVertexFromParentToChildTri( parentTris, verts,  parentTris->indexes[i+2], false);
 		bool allowNewNeighbor = false;
-		if(remapIndex[0] != -1 || remapIndex[1] != -1)
+		if(remapIndex[0] != -1 || remapIndex[1] != -1 || remapIndex[1] != -1)
 		{
 			bool burnAllIndexes;
 
