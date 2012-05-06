@@ -273,6 +273,9 @@ typedef struct {
 
 	int		totalShadowTriangles;
 	int		totalShadowVerts;
+// jmarshall
+	idStr   mapCompileError;
+// jmarshall end
 } dmapGlobals_t;
 
 extern dmapGlobals_t dmapGlobals;

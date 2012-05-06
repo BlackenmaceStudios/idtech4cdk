@@ -33,9 +33,11 @@ void bmVTModel::SetVertexesForTris( srfTriangles_t	*uTri, idDrawVert *verts, int
 	R_AllocStaticTriSurfIndexes( uTri, numIndexes );
 	R_AllocStaticTriSurfVerts( uTri, numVerts );
 
-	for(int i = 0; i < numIndexes; i++)
+	for(int i = 0; i < numIndexes; i+=3)
 	{
-		uTri->indexes[i] = indexes[i];
+		uTri->indexes[i+0] = indexes[i+0];
+		uTri->indexes[i+1] = indexes[i+1];
+		uTri->indexes[i+2] = indexes[i+2];
 	}
 
 	for(int i = 0; i < numVerts; i++)

@@ -107,6 +107,6 @@ private:
 	idList< idStr > imglist;
 
 	idImage						*vtAtlasImage;
-	
+	idStr						vtpath;
 	bmVirtualTextureHeader_t	header;
 };

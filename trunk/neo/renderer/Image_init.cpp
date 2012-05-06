@@ -1436,7 +1436,7 @@ idImage *idImageManager::AllocImage( const char *name ) {
 
 	image->hashNext = imageHashTable[hash];
 	imageHashTable[hash] = image;
-
+	image->texnum = idImage::TEXTURE_NOT_LOADED;
 	image->imgName = name;
 
 	return image;

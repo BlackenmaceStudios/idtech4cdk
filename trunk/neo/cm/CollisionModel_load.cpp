@@ -3177,10 +3177,15 @@ idCollisionModelManagerLocal::FindModel
 */
 cmHandle_t idCollisionModelManagerLocal::FindModel( const char *name ) {
 	int i;
+	idStr cmName;
+
+	cmName = name;
+	cmName.Replace( "\\", "/");
 
 	// check if this model is already loaded
 	for ( i = 0; i < numModels; i++ ) {
-		if ( !models[i]->name.Icmp( name ) ) {
+		idStr &model_name = models[i]->name;
+		if ( !model_name.Icmp( cmName.c_str() ) ) {
 			break;
 		}
 	}
