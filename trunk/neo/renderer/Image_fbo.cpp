@@ -45,7 +45,7 @@ void idImage::GenerateFrameBufferImage( int width, int height ) {
 		return;
 
 	// generate the texture number
-	qglGenTextures( 1, &texnum );
+	GenerateImageHandle( 1, &texnum );
 	qglBindTexture(GL_TEXTURE_2D, texnum);
 	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -105,7 +105,7 @@ void idImage::GenerateFrameBufferDepthImage( int width, int height ) {
 	qglGenFramebuffersEXT(1, &fboHandle);
 	
 	// Try to use a texture depth component
-	qglGenTextures(1, &texnum);
+	GenerateImageHandle(1, &texnum);
 	qglBindTexture(GL_TEXTURE_2D, texnum);
 	
 	// GL_LINEAR does not make sense for depth texture. However, next tutorial shows usage of GL_LINEAR and PCF
@@ -193,7 +193,7 @@ void idImage::GenerateFrameBufferColorTargetFromFBO( void ) {
     
 
 	// Create the texture.
-	qglGenTextures(1, &texnum);
+	GenerateImageHandle(1, &texnum);
     qglBindTexture(GL_TEXTURE_2D, texnum);
 	if(strstr( imgName.c_str(), "xyz")) {
 		qglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, uploadWidth, uploadHeight, 0, GL_RGBA, GL_FLOAT, NULL);
@@ -251,7 +251,7 @@ void idImage::GenerateFrameBufferCubeImage( int width, int height ) {
 	type = TT_CUBIC;
 
 	// color cube map
-	qglGenTextures(1, &texnum);
+	GenerateImageHandle(1, &texnum);
 	qglBindTexture(GL_TEXTURE_CUBE_MAP, texnum);
 	qglTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	qglTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

@@ -342,7 +342,7 @@ VirtualTextureBuilder:RemapVertexFromParentToChildTri
 ====================
 */
 idList<int> validIndexes;
-int VirtualTextureBuilder::RemapVertexFromParentToChildTri( srfTriangles_t *parentTris, idList<idDrawVert> &childVerts, int index, bool appendVert ) {
+int VirtualTextureBuilder::RemapVertexFromParentToChildTri( srfTriangles_t *parentTris, idList<idDrawVert> &childVerts, int index, bool appendVert, bool allowNewNeighbor ) {
 	idDrawVert parentVert;
 
 	// Check to see if the vertex is in the child vert and return its position.
@@ -350,27 +350,40 @@ int VirtualTextureBuilder::RemapVertexFromParentToChildTri( srfTriangles_t *pare
 	{
 		parentVert = parentTris->verts[index];
 	}
+
+	if(appendVert == false && index == -1) {
+		return -1;
+	}
 	for(int i = 0; i < childVerts.Num(); i++)
 	{
 		if(index == -1)
 		{
 			parentVert = childVerts[i];
 		}
-		if(childVerts[i].xyz == parentVert.xyz)
+		if(childVerts[i].xyz == parentVert.xyz && childVerts[i].st == parentVert.st)
 		{
 			int indexNum = i;
 
 			// If we aren't appending a vertex only use validIndexes, if appendVert use any and all if present.
-			if(indexNum < validIndexes.Num() || appendVert) {
+			if(childVerts[i].color[0] >= 1 || appendVert) {
 				return indexNum;
 			}
+
+
 
 			break; // Either was added later or isn't part of the section and was append on.
 		}
 	}
 
 	if(appendVert) {
+		if(allowNewNeighbor) {
+			validIndexes.Append(childVerts.Num());
+			parentVert.color[0]=1;
+		}
 		childVerts.Append(parentVert);
+		
+		
+		
 	//	validIndexes.Append(childVerts.Num() - 1);
 		return childVerts.Num() - 1;
 	}
@@ -384,10 +397,12 @@ VirtualTextureBuilder:ScaleUVRegionToFitInTri
 ====================
 */
 #define VT_EPSILON			0.001f
+
+
 void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriangles_t *parentTris, srfTriangles_t *tris, int triId, int pageId, int widthId, int heightId, float uvScaleW, float uvScaleH, float chartW, float chartH ) {
 	idBounds uvRegion;
 	idList<idDrawVert> verts;
-	idList<int> indexes, burnIndexes;
+	idList<int> indexes, burnIndexes, realIndexes;
 	idVec3 epsilon = idVec3(VT_EPSILON, VT_EPSILON, 0.0f);
 
 	verts.SetGranularity( 3000 );
@@ -408,17 +423,20 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 	// Get and store all the vertexes and indexes that fall within this range.
 
 	int dupVerts = 0;
+
 	for(int i = 0; i < parentTris->numVerts; i++)
 	{
 		idDrawVert v;
 
 		v = parentTris->verts[i];
+		v.color[0] = 2;
+		parentTris->verts[i].color[0] = 0;
 		if(uvRegion.ContainsPoint( idVec3(v.st.x, v.st.y, 0.0f))) {
 			bool appendVert = true;
 
 			for(int c = 0; c < verts.Num(); c++)
 			{
-				if(verts[c].xyz == v.xyz)
+				if(verts[c].xyz == v.xyz && verts[c].st == v.st)
 				{
 					appendVert = false;
 					dupVerts++;
@@ -429,6 +447,8 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 			{
 				verts.Append( v );
 				validIndexes.Append( i );
+
+
 			}
 
 			
@@ -451,13 +471,14 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 		}
 
 		remapIndex[0] = RemapVertexFromParentToChildTri( parentTris, verts, index, false);
-
-		if(remapIndex[0] != -1)
+		remapIndex[1] = RemapVertexFromParentToChildTri( parentTris, verts,  parentTris->indexes[i+1], false);
+		bool allowNewNeighbor = false;
+		if(remapIndex[0] != -1 || remapIndex[1] != -1)
 		{
 			bool burnAllIndexes;
 
 			// Check to see if this UV exclusively belongs to this tris.
-			for(int c = 1; c < 3; c++)
+			for(int c = 0; c < 3; c++)
 			{
 				index = parentTris->indexes[i + c];
 				if(index == -1)
@@ -465,7 +486,11 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 					remapIndex[0] = remapIndex[1] = -1;
 					break;
 				}
-				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, true);
+				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, false);
+				if(remapIndex[c] != -1 && verts[ remapIndex[c] ].color[0] == 2)
+				{
+					allowNewNeighbor = true;
+				}
 			}
 
 			burnAllIndexes = (remapIndex[0] != -1 && remapIndex[1] != -1 && remapIndex[2] != -1);
@@ -479,22 +504,49 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 				}
 				else
 				{
-					remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, false);
+					remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, true, allowNewNeighbor);
 				}
 				indexes.Append( remapIndex[c] );
 				
 			}
 		}
+#if 0
 		else
 		{
 			// Test the other two verts and see if it works out.
 			bool hasValidVert = false;
+			bool validTris = true;
+			
+
+			int numVertsInChartArea = 0;
+
+			for(int c = 0; c < 3; c++)
+			{
+				index = parentTris->indexes[i + c];
+				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, false);
+				if(remapIndex[c] != -1)
+				{
+					numVertsInChartArea++;
+
+					if(verts[ remapIndex[c] ].color[0] == 2)
+					{
+						allowNewNeighbor = true;
+					}
+				}
+
+				
+			}
+
+			if(numVertsInChartArea > 1)
+				continue;
+
 			for(int c = 0; c < 3; c++)
 			{
 				index = parentTris->indexes[i + c];
 				if(index == -1)
 				{
 					remapIndex[0] = remapIndex[1] = -1;
+					validTris = false;
 					break;
 				}
 				remapIndex[c] = RemapVertexFromParentToChildTri( parentTris, verts, index, false);
@@ -503,12 +555,22 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 					for(int d = 0; d < 3; d++)
 					{
 						index = parentTris->indexes[i + d];
-						remapIndex[d] = RemapVertexFromParentToChildTri( parentTris, verts, index, true);
+						if(index == -1)
+						{
+							remapIndex[0] = remapIndex[1] = -1;
+							validTris = false;
+							break;
+						}
+						remapIndex[d] = RemapVertexFromParentToChildTri( parentTris, verts, index, true, allowNewNeighbor);
 					}
 
 					break;
 				}
 				
+			}
+
+			if(!validTris) {
+				continue;
 			}
 
 			if(remapIndex[0] == remapIndex[1] || remapIndex[1] == remapIndex[2] || remapIndex[0] == remapIndex[2])
@@ -530,9 +592,10 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 						indexes.Append( remapIndex[1] );
 						indexes.Append( remapIndex[2] );
 
-						burnIndexes.Append(parentTris->indexes[i + 0]);
-						burnIndexes.Append(parentTris->indexes[i + 1]);
-						burnIndexes.Append(parentTris->indexes[i + 2]);
+
+						//burnIndexes.Append(parentTris->indexes[i + 0]);
+						//burnIndexes.Append(parentTris->indexes[i + 1]);
+						//burnIndexes.Append(parentTris->indexes[i + 2]);
 						allValid  = true;
 						break;
 					}
@@ -543,6 +606,53 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 				}
 			}
 		}
+#endif
+	}
+
+	int storedTrisNum = storedTris.Num();
+	realIndexes.Clear();
+	for(int i = 0; i < indexes.Num(); i+=3)
+	{
+		idDrawVert *v[3];
+
+		v[0] = &verts[indexes[ i + 0 ]];
+		v[1] = &verts[indexes[ i + 1 ]];
+		v[2] = &verts[indexes[ i + 2 ]];
+
+		bool isValid = true;
+
+
+		int numDupVerts[3];
+		numDupVerts[0] = 0;
+		numDupVerts[1] = 0;
+		numDupVerts[2] = 0;
+		for(int c = 0; c < storedTrisNum; c+=3)
+		{
+			for(int l = 0; l < 3; l++)
+			{
+				if(storedTris[c+l].xyz == v[l]->xyz) {
+					numDupVerts[l]++;
+				}
+			}
+			
+		}
+
+		int testCnt = 0;
+		for(int c = 0; c < 3; c++){
+			if(numDupVerts[c] > 0)
+			{
+				testCnt++;
+			}
+		}
+
+		if(testCnt > 2)
+			continue;
+
+		for(int c = i; c < i + 3; c++)
+		{
+			realIndexes.Append( indexes[ c ] );
+			storedTris.Append( verts[indexes[c]] );
+		}
 	}
 
 	for(int i = 0; i < burnIndexes.Num(); i++)
@@ -551,15 +661,15 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 		{
 			if(parentTris->indexes[f] == burnIndexes[i])
 			{
-				parentTris->indexes[f] = -1;
+			//	parentTris->indexes[f] = -1;
 			}
 		}
 	}
 	common->Printf("...Number of vertexes %d\n", verts.Num() );
-	common->Printf("...Number of indexes %d\n", indexes.Num() );
+	common->Printf("...Number of indexes %d-%d\n", realIndexes.Num(), indexes.Num() );
 
 	// Now that we have all the verts and indexes for this section(alloc verts and indexes as well here for the tris).
-	model->SetVertexesForTris( tris, &verts[0], verts.Num(), &indexes[0], indexes.Num() );
+	model->SetVertexesForTris( tris, &verts[0], verts.Num(), &realIndexes[0], realIndexes.Num() );
 
 	// The UV's might be outside of the target range if the a triangle is barely within the requested bounds.
 	// This will create duplicate triangles in places fixme!
@@ -617,6 +727,7 @@ bool VirtualTextureBuilder::GenerateVTVerts_r( bmVTModel *model,  float surfaceS
 	idVec3 vecs[2];
 	idVec2 scaleST;
 
+	
 
 	spacing = 1.0;
 	firstTrisOnPage = 0;
@@ -779,6 +890,8 @@ generatePage:
 					float numUVPagesForTri, numIndexesPerArea, cellsPerWidth, cellsPerHeight;
 					float UVScale;
 
+					storedTris.Clear();
+
 					srfTriangles_t *tris = model->tris[d];
 
 					if(firstTrisOnPage != d)
@@ -801,9 +914,10 @@ generatePage:
 					float UVScaleH = (1.0f / cellsPerHeight);
 
 					int cellId = 0;
-					for(int w = 0; w < cellsPerWidth; w++)
+					for(int h = 0; h < cellsPerHeight; h++)
+					
 					{
-						for(int h = 0; h < cellsPerHeight; h++, cellId++)
+						for(int w = 0; w < cellsPerWidth; w++, cellId++)	
 						{
 							model->AllocTriangleAtPosition( d + cellId );
 
@@ -816,6 +930,19 @@ generatePage:
 						}
 					}
 
+					// Double check the mesh.
+					int numUntouchedIndexes = 0;
+					for(int r = 0; r < tris->numIndexes; r++)
+					{
+						if(tris->indexes[r] != -1) {
+							numUntouchedIndexes++;
+						}
+					}
+
+					if(numUntouchedIndexes != 0) {
+						common->Warning("%d untouched indexes in mesh\n", numUntouchedIndexes);
+					}
+
 					// Remove the only triangles.
 					R_FreeStaticTriSurf( tris ); 
 					model->tris.Remove( tris );
@@ -826,6 +953,8 @@ generatePage:
 					PrepareNewVTArea(fakePass);
 					firstTrisOnPage = d;
 					numTrisOnChart = 0;
+
+					storedTris.Clear();
 					continue;
 				}
 		}
