@@ -22,7 +22,9 @@ void idImage::CreatePBO( void ) {
 	}
 	
 	pbo = new bmImagePBO();
-	pbo->Init( this );
+	if ( glConfig.isInitialized ) {
+		pbo->Init( this );
+	}
 }
 
 /*
@@ -39,7 +41,7 @@ void bmImagePBO::Init(idImage *img) {
 	qglBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, pboReadbackHandle);
     qglBufferDataARB(GL_PIXEL_PACK_BUFFER_ARB, img->uploadWidth * img->uploadHeight * 4, 0, GL_STREAM_READ_ARB);
 
-
+	buffer = NULL;
 	UnbindPBO();
 
 
@@ -61,7 +63,6 @@ bmImagePBO::ReadPBO
 ==============
 */
 byte* bmImagePBO::ReadPBO( bool readBack ) {
-	byte *buffer = NULL;
 	if(!readBack)
 	{
 		qglReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
@@ -90,6 +91,10 @@ bmImagePBO::UnbindPBO
 */
 void bmImagePBO::UnbindPBO( void ) {
 	
-	qglUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB); 
+	if(buffer != NULL)
+	{
+		qglUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB); 
+		buffer = NULL;
+	}
 	qglBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
 }

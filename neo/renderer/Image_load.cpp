@@ -73,6 +73,8 @@ int idImage::BitsForInternalFormat( int internalFormat ) const {
 		return 8;
 	case GL_ALPHA8:
 		return 8;
+	case GL_RGBA32F_ARB:
+	case GL_RGBA32I:
 	case GL_RGBA8:
 		return 32;
 	case GL_RGB8:
@@ -87,6 +89,7 @@ int idImage::BitsForInternalFormat( int internalFormat ) const {
 		return 8;
 	case GL_RGBA4:
 		return 16;
+	case GL_RGBA16F_ARB:
 	case GL_RGB5:
 		return 16;
 	case GL_COLOR_INDEX8_EXT:
@@ -98,7 +101,8 @@ int idImage::BitsForInternalFormat( int internalFormat ) const {
 	case GL_COMPRESSED_RGBA_ARB:
 		return 8;			// not sure
 	default:
-		common->Error( "R_BitsForInternalFormat: BAD FORMAT:%i", internalFormat );
+		common->FatalError( "R_BitsForInternalFormat: BAD FORMAT:%i", internalFormat );
+		return -1;
 	}
 	return 0;
 }
@@ -499,6 +503,10 @@ void idImage::GenerateImageHandle( int numImages, unsigned int *texnum ) {
 		common->FatalError("GenerateImageHandle: Handle is already valid!\n");
 		return;
 	}
+	if ( !glConfig.isInitialized ) {
+		common->FatalError("GenerateImageHandle: GL not initilized!\n");
+		return;
+	}
 	qglGenTextures(numImages, texnum);
 }
 /*
@@ -518,9 +526,6 @@ void idImage::Generate2DImageAtlas( int atlasSize, int tileSize, bool intStorage
 	repeat = TR_REPEAT;
 	depth = TD_HIGH_QUALITY;
 
-	uploadHeight = atlasSize;
-	uploadWidth = atlasSize;
-
 	// if we don't have a rendering context, just return after we
 	// have filled in the parms.  We must have the values set, or
 	// an image match from a shader before OpenGL starts would miss
@@ -529,17 +534,15 @@ void idImage::Generate2DImageAtlas( int atlasSize, int tileSize, bool intStorage
 		return;
 	}
 
+	uploadHeight = atlasSize;
+	uploadWidth = atlasSize;
+
 	type = TT_2D;
 
 	// generate the texture number
 	GenerateImageHandle( 1, &texnum );
 	
-	Bind();
-
-	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	
 
 
 	buffer = new byte[atlasSize * atlasSize * 4];
@@ -553,7 +556,7 @@ void idImage::Generate2DImageAtlas( int atlasSize, int tileSize, bool intStorage
 			tile.z = w;
 			tile.w = h;
 
-			R_FillImageBufferRegion<byte>( buffer, tile, w * tileSize, h * tileSize, tileSize, tileSize, atlasSize ); 
+			R_FillImageBufferRegion( buffer, tile, w * tileSize, h * tileSize, tileSize, tileSize, atlasSize ); 
 			if(tile.x < 255) {
 				tile.x ++;
 			}
@@ -573,15 +576,32 @@ void idImage::Generate2DImageAtlas( int atlasSize, int tileSize, bool intStorage
 	}
 	GL_CheckErrors();
 
+	Bind();
+
+	
+	//qglTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 0 );
 	if(intStorage)
 	{
+		internalFormat = GL_RGBA32I;
 		qglTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA32I, atlasSize, atlasSize, 0, GL_RGBA_INTEGER, GL_UNSIGNED_BYTE, buffer );
 	}
 	else {
-		qglTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, atlasSize, atlasSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer );
+		internalFormat = GL_RGBA8;
+		qglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, atlasSize, atlasSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer );
 	}
+
+	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	//qglTexImage2D( GL_TEXTURE_2D, miplevel, internalFormat, scaled_width, scaled_height, 
+	//				0, GL_RGBA, GL_UNSIGNED_BYTE, scaledBuffer )
+
 	GL_CheckErrors();
-	delete buffer;
+	delete[] buffer; 
+
+	globalImages->BindNull();
 }
 
 /*
@@ -597,13 +617,13 @@ void idImage::GenerateRectImage( const byte *pic, int width, int height ) {
 	repeat = TR_REPEAT;
 	depth = TD_HIGH_QUALITY;
 
-	uploadHeight = height;
-	uploadWidth = width;
-	type = TT_RECT;
-
 	if ( !glConfig.isInitialized ) {
 		return;
 	}
+
+	uploadHeight = height;
+	uploadWidth = width;
+	type = TT_RECT;
 
 	// generate the texture number
 	GenerateImageHandle( 1, &texnum );
@@ -1754,6 +1774,42 @@ void	idImage::ActuallyLoadImage( bool checkForPrecompressed, bool fromBackEnd ) 
 	// this is the ONLY place generatorFunction will ever be called
 	if ( generatorFunction ) {
 		generatorFunction( this );
+// jmarshall
+		if ( glConfig.isInitialized ) {
+			Bind();
+
+			GLenum texEnum;
+			float width, height;
+			switch( type ) {
+			case TT_RECT:
+				texEnum = GL_TEXTURE_RECTANGLE;
+			case TT_2D:
+				texEnum = GL_TEXTURE_2D;
+				break;
+			case TT_3D:
+				texEnum = GL_TEXTURE_3D;
+				break;
+			case TT_CUBIC:
+				texEnum = -1;
+				break;
+			}
+
+			if(texEnum != -1)
+			{
+				qglGetTexLevelParameterfv( texEnum, 0, GL_TEXTURE_WIDTH, &width );
+				qglGetTexLevelParameterfv( texEnum, 0, GL_TEXTURE_HEIGHT, &height );
+
+				if(width != uploadWidth || height != uploadHeight) {
+					common->FatalError( "Hardware texture storage error!\n");
+				}
+			}
+
+			if(pbo != NULL && !pbo->IsValid()) {
+				pbo->Init( this );
+			}
+			globalImages->BindNull();
+		}
+// jmarshall end
 		return;
 	}
 
@@ -1845,6 +1901,9 @@ PurgeImage
 ===============
 */
 void idImage::PurgeImage() {
+	if ( !glConfig.isInitialized ) {
+		return;
+	}
 	if ( texnum != TEXTURE_NOT_LOADED ) {
 		// sometimes is NULL when exiting with an error
 		if ( qglDeleteTextures ) {
@@ -1859,6 +1918,11 @@ void idImage::PurgeImage() {
 	}
 
 // jmarshall
+	if(pbo != NULL) {
+		//delete pbo;
+		//pbo = NULL;
+	}
+
 	if(fboHandle != -1) {
 		qglDeleteRenderbuffersEXT( 1, &fboHandle );
 		numAdditionalColorTargets = 0;
@@ -1866,10 +1930,13 @@ void idImage::PurgeImage() {
 // jmarshall
 	// clear all the current binding caches, so the next bind will do a real one
 	for ( int i = 0 ; i < MAX_MULTITEXTURE_UNITS ; i++ ) {
-		backEnd.glState.tmu[i].current2DMap = -1;
-		backEnd.glState.tmu[i].current3DMap = -1;
-		backEnd.glState.tmu[i].currentCubeMap = -1;
+// jmarshall
+		tmu_t			*tmu = &backEnd.glState.tmu[i];
+		GL_SelectTextureNoClient( i );
+
+		globalImages->BindNull();
 	}
+	GL_SelectTextureNoClient( 0 );
 }
 
 /*
@@ -1905,23 +1972,21 @@ void idImage::Bind() {
 			// if we have a partial image, go ahead and use that
 			this->partialImage->Bind();
 
+
 			// start a background load of the full thing if it isn't already in the queue
 			if ( !backgroundLoadInProgress ) {
 				StartBackgroundImageLoad();
 			}
 			return;
 		}
-
+		common->Warning( "idImage::Bind: tried to bind image with invalid handle, loading image\n");
 		// load the image on demand here, which isn't our normal game operating mode
-		
-		// jmarshall: emptyname causes recursion.
-		if(strcmp(imgName.c_str(), "_emptyname"))
-		{
-			ActuallyLoadImage( true, true );	// check for precompressed, load is from back end
-		}
-		else {
-			MakeDefault();
-		}
+		ActuallyLoadImage( true, true );        // check for precompressed, load is from back end
+
+	}
+
+	if(uploadWidth <= 0 || uploadHeight <= 0) {
+		common->FatalError("Bind with invalid image dimensions\n");
 	}
 
 
@@ -1940,7 +2005,9 @@ void idImage::Bind() {
 		} else if ( tmu->textureType == TT_2D ) {
 			qglDisable( GL_TEXTURE_2D );
 		} else if ( tmu->textureType == TT_RECT ) {
+			qglBindTexture( GL_TEXTURE_RECTANGLE_ARB, 0 );
 			qglDisable( GL_TEXTURE_RECTANGLE_ARB );
+			
 		}
 
 		if ( type == TT_CUBIC ) {

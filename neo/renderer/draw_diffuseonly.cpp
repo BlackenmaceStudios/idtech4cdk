@@ -24,12 +24,7 @@ void RB_DiffuseOnly_Init( void ) {
 	// Bind the pre-interaction program.
 	progs[PROG_DIFFUSEONLY].programHandle->Bind();
 
-	GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT, 
-                        GL_COLOR_ATTACHMENT1_EXT,
-                         GL_COLOR_ATTACHMENT2_EXT
-						};
-
-    qglDrawBuffers(3, buffers);
+	qglDrawBuffer( GL_COLOR_ATTACHMENT0_EXT );
 
 	RB_SetupDeferredRenderer();
 	
@@ -94,25 +89,27 @@ void RB_DiffuseOnly_DrawSurface( drawSurf_t *surf, idImage *image, bool noVt ) {
 		qglPolygonOffset( r_offsetFactor.GetFloat(), r_offsetUnits.GetFloat() * shader->GetPolygonOffset() );
 	}
 
+	// texture 1 will be the per-surface bump map
+	GL_SelectTextureNoClient( 0 );
+	image->Bind();
+	progs[PROG_DIFFUSEONLY].programHandle->BindTextureVar( PP_TEX_DIFFUSE );
 
+	int stride = sizeof( idDrawVert );
 
 		// set the vertex pointers
 	idDrawVert	*ac = (idDrawVert *)vertexCache.Position( surf->geo->ambientCache );
-	qglColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( idDrawVert ), ac->color );
-	qglVertexAttribPointerARB( 11, 3, GL_FLOAT, false, sizeof( idDrawVert ), ac->normal.ToFloatPtr() );
-	qglVertexAttribPointerARB( 10, 3, GL_FLOAT, false, sizeof( idDrawVert ), ac->tangents[1].ToFloatPtr() );
-	qglVertexAttribPointerARB( 9, 3, GL_FLOAT, false, sizeof( idDrawVert ), ac->tangents[0].ToFloatPtr() );
-	qglVertexAttribPointerARB( 8, 2, GL_FLOAT, false, sizeof( idDrawVert ), ac->st.ToFloatPtr() );
+	qglColorPointer( 4, GL_UNSIGNED_BYTE, stride, ac->color );
+	qglVertexAttribPointerARB( 11, 3, GL_FLOAT, false, stride, ac->normal.ToFloatPtr() );
+	qglVertexAttribPointerARB( 10, 3, GL_FLOAT, false, stride, ac->tangents[1].ToFloatPtr() );
+	qglVertexAttribPointerARB( 9, 3, GL_FLOAT, false, stride, ac->tangents[0].ToFloatPtr() );
+	qglVertexAttribPointerARB( 8, 2, GL_FLOAT, false, stride, ac->st.ToFloatPtr() );
 	qglVertexPointer( 3, GL_FLOAT, sizeof( idDrawVert ), ac->xyz.ToFloatPtr() );
 
 
 	progs[PROG_DIFFUSEONLY].programHandle->SetVar1fi(PP_VT_VTOFFSET, surf->geo->vt_AreaID);
 	progs[PROG_DIFFUSEONLY].programHandle->SetVarMatrix4fv( VV_TEX_MATVIEW, 1, &surf->space->modelMatrix[0] );
 
-	// texture 1 will be the per-surface bump map
-	GL_SelectTextureNoClient( 0 );
-	image->Bind();
-	progs[PROG_DIFFUSEONLY].programHandle->BindTextureVar( PP_TEX_DIFFUSE );
+	
 
 	// draw it
 	RB_DrawElementsWithCounters( surf->geo );
@@ -126,6 +123,8 @@ void RB_DiffuseOnly_DrawSurface( drawSurf_t *surf, idImage *image, bool noVt ) {
 	if ( shader->GetSort() == SS_SUBVIEW ) {
 		GL_State( GLS_DEPTHFUNC_LESS );
 	}
+
+	globalImages->BindNull();
 }
 
 

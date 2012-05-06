@@ -143,6 +143,7 @@ void RB_Deferred_PrepareSceneForDrawing( viewLight_t *lights ) {
 	viewLight_t		*vLight;
 	scene.numLights = 0;
 
+
 	for ( vLight = lights ; vLight ; vLight = vLight->next, scene.numLights++ ) {
 		renderLight_t *parms = &vLight->lightDef->parms;
 

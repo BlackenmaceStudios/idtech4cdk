@@ -253,6 +253,17 @@ void idImage::MakeDefault() {
 	int		x, y;
 	byte	data[DEFAULT_SIZE][DEFAULT_SIZE][4];
 
+// jmarshall
+	if(imgName != "_default" && globalImages->defaultImage->texnum != idImage::TEXTURE_NOT_LOADED) {
+		texnum = globalImages->defaultImage->texnum;
+		uploadWidth = DEFAULT_SIZE;
+		uploadHeight = DEFAULT_SIZE;
+		type = TT_2D;
+		defaulted = true;
+		return;
+	}
+// jmarshall end
+
 	if ( com_developer.GetBool() ) {
 		// grey center
 		for ( y = 0 ; y < DEFAULT_SIZE ; y++ ) {
@@ -1031,7 +1042,7 @@ idImage::Reload
 */
 void idImage::Reload( bool checkPrecompressed, bool force ) {
 	// always regenerate functional images
-	if ( generatorFunction ) {
+	if ( generatorFunction && (uploadWidth <= 0 || uploadHeight <= 0) ) {
 		common->DPrintf( "regenerating %s.\n", imgName.c_str() );
 		generatorFunction( this );
 		return;
@@ -1951,12 +1962,95 @@ void idImageManager::BindNull() {
 	} else if ( tmu->textureType == TT_2D ) {
 		qglDisable( GL_TEXTURE_2D );
 	}else if ( tmu->textureType == TT_RECT ) {
+		qglBindTexture( GL_TEXTURE_RECTANGLE_ARB, 0 );
 		qglDisable( GL_TEXTURE_RECTANGLE_ARB );
 	}
 	else if(tmu->textureType != TT_DISABLED){
 		common->FatalError( "BindNull: Invalid textureType\n");
 	}
 	tmu->textureType = TT_DISABLED;
+}
+
+/*
+=================
+DumpImageStats_f
+
+Dump images, the difference between this one and the above image is it looks at whats on the hardware rather than storage.
+=================
+*/
+void idImageManager::DumpImageStats_f( const idCmdArgs &args ) {
+	float memory = 0;
+	int numInvalidTextures = 0;
+	common->Printf("---- Image Hardware Stats ----\n");
+	for(int i = 0; i < globalImages->images.Num(); i++) {
+		idImage *image = globalImages->images[i];
+		idStr type;
+		GLenum gltype;
+		float width;
+		float height;
+		int internalVal;
+
+		if(image->defaulted)
+			continue;
+
+		if ( image->type == TT_2D ) {
+			type = "GL_TEXTURE_2D";
+			gltype = GL_TEXTURE_2D;
+		} else if ( image->type == TT_CUBIC ) {
+			type = "GL_TEXTURE_CUBE_MAP";
+			gltype = GL_TEXTURE_CUBE_MAP;
+		} else if ( image->type == TT_3D ) {
+			type = "GL_TEXTURE_3D";
+			gltype = GL_TEXTURE_3D;
+		}else if ( image->type == TT_RECT ) {
+			type = "GL_TEXTURE_RECTANGLE_ARB";
+			gltype = GL_TEXTURE_RECTANGLE_ARB;
+		}
+		else {
+			type = "UNKNOWN_TEXTURE_TYPE";
+		}
+
+		
+
+		image->Bind();
+		qglGetTexLevelParameterfv( gltype, 0, GL_TEXTURE_WIDTH, &width );
+		qglGetTexLevelParameterfv( gltype, 0, GL_TEXTURE_HEIGHT, &height );
+
+		qglGetTexLevelParameteriv( gltype, 0, GL_TEXTURE_INTERNAL_FORMAT, &internalVal);
+		
+
+		if(width <= 0 || height <= 0)
+		{
+			common->Warning("INVALID Image: %s\n", image->imgName.c_str() );
+			numInvalidTextures++;
+		}
+		else
+		{
+			int formatSize = image->BitsForInternalFormat( internalVal );
+			memory += (width * height) * formatSize;
+			common->Printf("Image %s - TexNum: %d - Type %s - Width: %f Height: %f\n", image->imgName.c_str(), image->texnum, type.c_str(), width, height );
+		}
+
+		
+	}
+
+	common->Printf( "------ Defaulted Images --------\n");
+	for(int i = 0; i < globalImages->images.Num(); i++) {
+		idImage *image = globalImages->images[i];
+		if(!image->defaulted)
+			continue;
+
+		common->Printf("Image %s - Default Texture Handle\n", image->imgName.c_str() );
+	}
+
+	common->Printf( "Video Ram Usage: %fmb - %f bytes\n", memory/1048576,memory);
+	common->Printf( "Images Loaded: %d\n", globalImages->images.Num() - numInvalidTextures);
+
+	if(numInvalidTextures >= 0)
+	{
+		common->Printf( "Invalid images: %d\n", numInvalidTextures);
+		common->Printf( "There were invalid images stored on the hardware, this means a texture was generated and somehow it got destroyed\n");
+	}
 }
 
 /*
@@ -1976,6 +2070,9 @@ void idImageManager::Init() {
 
 	// set default texture filter modes
 	ChangeTextureFilter();
+
+// jmarshall
+	cmdSystem->AddCommand( "printimagestats", DumpImageStats_f, CMD_FL_RENDERER, "dumps the hardware values of each image." );
 
 	// create built in images
 	defaultImage = ImageFromFunction( "_default", R_DefaultImage );
@@ -2001,7 +2098,7 @@ void idImageManager::Init() {
 	scratchImage = ImageFromFunction("_scratch", R_RGBA8Image );
 	scratchImage2 = ImageFromFunction("_scratch2", R_RGBA8Image );
 	accumImage = ImageFromFunction("_accum", R_RGBA8Image );
-	scratchCubeMapImage = ImageFromFunction("_scratchCubeMap", makeNormalizeVectorCubeMap );
+//	scratchCubeMapImage = ImageFromFunction("_scratchCubeMap", makeNormalizeVectorCubeMap );
 
 // jmarshall
 	currentRenderImage = ImageFromFunction("_currentRender", R_FrameBufferImage );

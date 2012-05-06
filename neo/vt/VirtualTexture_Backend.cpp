@@ -39,6 +39,8 @@ static void R_FeedBackTileTable( idImage *image ) {
 	//image->GenerateImage( data, 256,256,  TF_NEAREST, false, TR_CLAMP, TD_HIGH_QUALITY );
 	image->GenerateRectImage( data, 16,16 );
 	image->rawBuffer = data;
+
+	globalImages->BindNull();
 	//image->CreatePBO();
 }
 
@@ -89,7 +91,7 @@ void bmVirtualTextureBackend::UploadAreaTiles( int pageId, idList<bmVTTileReadba
 
 		pageTile = page->GetTileInfo( rbtile->tileNum );
 	
-		R_FillImageBufferRegion<byte>( sceneFboPublic->rawBuffer, idVec4(vtTile->px, vtTile->py, rbtile->pageNum, 255), pageTile->px, pageTile->py, 1, 1, 16 );
+		R_FillImageBufferRegion( sceneFboPublic->rawBuffer, idVec4(vtTile->px, vtTile->py, rbtile->pageNum, 255), pageTile->px, pageTile->py, 1, 1, 16 );
 		lastVTTile = vtTile;
 	}
 

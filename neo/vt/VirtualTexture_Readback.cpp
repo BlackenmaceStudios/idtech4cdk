@@ -90,7 +90,7 @@ void bmVirtualTextureBackend::ReadCurrentScene( void ) {
 
 		bmVirtualTexturePageTile_t *tilepos = page->GetTileInfo( tileNum );
 
-		R_FillImageBufferRegion<byte>( sceneFboPublic->rawBuffer, idVec4(tile->px, tile->py, vtSheetNum, 255), tilepos->px, tilepos->py, 1, 1, 255 );
+		R_FillImageBufferRegion( sceneFboPublic->rawBuffer, idVec4(tile->px, tile->py, vtSheetNum, 255), tilepos->px, tilepos->py, 1, 1, 255 );
 	}
 	sceneFbo->pbo->UnbindPBO();
 #endif
