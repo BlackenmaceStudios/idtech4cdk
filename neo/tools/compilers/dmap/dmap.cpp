@@ -223,7 +223,7 @@ void Dmap( const idCmdArgs &args ) {
 //	dmapGlobals.shadowOptLevel = SO_CLIP_OCCLUDERS;		// remove occluders that are completely covered
 //	dmapGlobals.shadowOptLevel = SO_SIL_OPTIMIZE;
 //	dmapGlobals.shadowOptLevel = SO_CULL_OCCLUDED;
-
+	dmapGlobals.mapCompileError = "";
 	dmapGlobals.noLightCarve = true;
 
 	for ( i = 1 ; i < args.Argc() ; i++ ) {
@@ -393,6 +393,13 @@ void Dmap( const idCmdArgs &args ) {
 
 	// clear the map plane list
 	dmapGlobals.mapPlanes.Clear();
+// jmarshall
+	if(dmapGlobals.mapCompileError.Length() > 0) {
+		common->Warning("There was a problem building the world! The build process completed but it may not be complete/accurate\n");
+		common->Warning(dmapGlobals.mapCompileError.c_str());
+		dmapGlobals.mapCompileError = "";
+	}
+// jmarshall end
 
 	// jmarshall
 /*

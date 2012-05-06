@@ -262,6 +262,10 @@ public:
 
 	virtual idFile *		MakeTemporaryFile( void ) = 0;
 
+// jmarshall
+	virtual void			RenameFile( const char *toPath, const char *fromPath ) = 0;
+// jmarshall end
+
 							// make downloaded pak files known so pure negociation works next time
 	virtual int				AddZipFile( const char *path ) = 0;
 

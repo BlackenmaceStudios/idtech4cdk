@@ -41,6 +41,7 @@ If you have questions concerning this license or the applicable additional terms
 
 bmVirtualTextureFile *vt = NULL;
 bmVTModel outModel;
+
 //=================================================================================
 
 
@@ -726,7 +727,7 @@ static void WriteOutputEntity( int entityNum ) {
 	//	WriteOutputSurfaces( entityNum, i );
 	//}
 
-	WriteOutputSurfaces();
+	//WriteOutputSurfaces();
 
 	// we will completely skip the portals and nodes if it is a single area
 	if ( entityNum == 0 && e->numAreas > 1 ) {
@@ -789,7 +790,6 @@ void WriteOutputFile( void ) {
 
 	// Init the VT model
 	vtBuilder.GenerateVTVerts(&outModel);
-	
 
 
 	// Create our virtual texture.
@@ -798,15 +798,18 @@ void WriteOutputFile( void ) {
 		common->Warning("****** VT_BuildError ********\n");
 		common->Warning("Aborting build.\n");
 
-		fileSystem->CloseFile( procFile );
-		return;
+		dmapGlobals.mapCompileError = "*****Virtual Texture Build Error*******";
 	}
-
+	else
+	{
+		vt->FinishVirtualTextureWrite();
+		vt = NULL;
+	}
 	// Write out the OBJ.
 	outModel.WriteToFile( objpath.c_str() );
 
 	common->Printf("-------WorldOutputSurfaces------\n");
-	
+	WriteOutputSurfaces();
 
 	// Now write out the geometry with the modified coordinates for VT.
 	for ( i=dmapGlobals.num_entities - 1 ; i >= 0 ; i-- ) {
@@ -819,8 +822,7 @@ void WriteOutputFile( void ) {
 		WriteOutputEntity( i );
 	}
 
-	vt->FinishVirtualTextureWrite();
-	vt = NULL;
+	
 // jmarshall end
 
 

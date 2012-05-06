@@ -431,7 +431,7 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 		v = parentTris->verts[i];
 		v.color[0] = 2;
 		parentTris->verts[i].color[0] = 0;
-		if(uvRegion.ContainsPoint( idVec3(v.st.x, v.st.y, 0.0f))) {
+		if(uvRegion.ContainsPoint( idVec3(v.st.x, 1.0f - v.st.y, 0.0f))) {
 			bool appendVert = true;
 
 			for(int c = 0; c < verts.Num(); c++)

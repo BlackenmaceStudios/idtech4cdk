@@ -55,8 +55,10 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 
 	common->Printf( "----------- VT_InitNewVirtualTextureFile ----------\n" );
 
+	vtpath = va( "%s%s", path, VIRTUALTEXTURE_EXTEN );
+
 	// Open the virtual texture for writing.
-	f = fileSystem->OpenFileWrite( va( "%s%s", path, VIRTUALTEXTURE_EXTEN ), "fs_devpath" );
+	f = fileSystem->OpenFileWrite( va( "%s%s_temp", path, VIRTUALTEXTURE_EXTEN ), "fs_devpath" );
 	if(f == NULL) {
 		common->Warning("Failed to open %s for writing\n", path );
 		return false;
@@ -84,6 +86,7 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 
 		if(imgWidth <= 0 || imgHeight <= 0) {
 			common->Warning("Area texture for VT not found...\n");
+			return false;
 		}
 		else
 		{
@@ -320,6 +323,8 @@ bmVirtualTextureFile::FinishVirtualTextureWrite
 ===========================
 */
 void bmVirtualTextureFile::FinishVirtualTextureWrite( void ) {
+	idStr temppath;
+
 	if( f == NULL ) {
 		common->FatalError( "FinishVirtualTextureWrite: f == null\n");
 	}
@@ -327,6 +332,8 @@ void bmVirtualTextureFile::FinishVirtualTextureWrite( void ) {
 
 	common->Printf("-------VT_FinishTextureWrite------\n");
 	common->Printf( "Wrote %d tiles - %d bytes\n", header.numTiles, f->Length());
+
+	temppath = f->GetFullPath();
 
 	// Re-write the header and close the file.
 	header.WriteToFile( f );
@@ -337,6 +344,9 @@ void bmVirtualTextureFile::FinishVirtualTextureWrite( void ) {
 
 	delete compressedBuffer;
 	compressedBuffer = NULL;
+
+	// Rename the temp file to the real path.
+	fileSystem->RenameFile( fileSystem->RelativePathToOSPath( vtpath.c_str() ), temppath.c_str() );
 }
 /*
 ===========================

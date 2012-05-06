@@ -1671,8 +1671,10 @@ void idGameLocal::CacheDictionaryMedia( const idDict *dict ) {
 	if ( cvarSystem->GetCVarBool( "com_makingBuild" ) ) {
 		GetShakeSounds( dict );
 	}
-
-	kv = dict->MatchPrefix( "model" );
+//  jmarshall
+	int modelNum = 1;
+	kv = dict->FindKey( "model" );
+// jmarshall end
 	while( kv ) {
 		if ( kv->GetValue().Length() ) {
 			declManager->MediaPrint( "Precaching model %s\n", kv->GetValue().c_str() );
@@ -1684,7 +1686,9 @@ void idGameLocal::CacheDictionaryMedia( const idDict *dict ) {
 				collisionModelManager->LoadModel( kv->GetValue(), true );
 			}
 		}
-		kv = dict->MatchPrefix( "model", kv );
+//  jmarshall
+	kv = dict->FindKey( va("model%d", modelNum) );
+// jmarshall end
 	}
 
 	kv = dict->FindKey( "s_shader" );

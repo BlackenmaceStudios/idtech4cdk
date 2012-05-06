@@ -941,8 +941,9 @@ idPlayer::idPlayer
 */
 idPlayer::idPlayer() {
 	memset( &usercmd, 0, sizeof( usercmd ) );
-
-	noclip					= false;
+// jmarshall
+	noclip					= true;
+// jmarshall end
 	godmode					= false;
 
 	spawnAnglesSet			= false;
@@ -1186,7 +1187,7 @@ void idPlayer::Init( void ) {
 	const char			*value;
 	const idKeyValue	*kv;
 
-	noclip					= false;
+	noclip					= true;
 	godmode					= false;
 
 	oldButtons				= 0;

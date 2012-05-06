@@ -393,7 +393,9 @@ public:
 	virtual bool			FilenameCompare( const char *s1, const char *s2 ) const;
 	virtual idFile *		AllocFileMemory( const char *name ) {  tempMemoryFile.Init( name, NULL, 0 ); return &tempMemoryFile; }
 	virtual  void			FreeFileMemory( idFile *file ) { tempMemoryFile.Free(); }
-
+// jmarshall
+	virtual void			RenameFile( const char *toPath, const char *fromPath );
+// jmarshall end
 	static void				Dir_f( const idCmdArgs &args );
 	static void				DirTree_f( const idCmdArgs &args );
 	static void				Path_f( const idCmdArgs &args );
@@ -4063,6 +4065,19 @@ idFile * idFileSystemLocal::MakeTemporaryFile( void ) {
 	file->mode = ( 1 << FS_READ ) + ( 1 << FS_WRITE );
 	file->fileSize = 0;
 	return file;
+}
+
+/*
+===============
+idFileSystemLocal::FindFile
+===============
+*/
+void idFileSystemLocal::RenameFile( const char *toPath, const char *fromPath ) {
+	remove(toPath);
+
+	if(!rename(fromPath, toPath)) {
+		common->Warning("FS_RenameFile: Failed to rename %s to %s\n", toPath, fromPath );
+	}
 }
 
 /*
