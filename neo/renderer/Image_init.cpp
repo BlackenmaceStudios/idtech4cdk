@@ -1504,7 +1504,7 @@ idImage	*idImageManager::ImageFromFile( const char *_name, textureFilter_t filte
 	idImage	*image;
 	int hash;
 // jmarshall - use the default texture with the editors default assigned texture
-	if ( !_name || !_name[0] || idStr::Icmp( _name, "default" ) == 0 || idStr::Icmp( _name, "_default" ) == 0 || idStr::Icmp( _name, "unnamed")  == 0 || strstr(_name, "default_material") ) {
+	if ( !_name || !_name[0] || idStr::Icmp( _name, "default" ) == 0 || idStr::Icmp( _name, "_default" ) == 0 || idStr::Icmp( _name, "unnamed")  == 0 || strstr(_name, "default_material") || strstr(_name, "_emptyname") ) {
 		declManager->MediaPrint( "DEFAULTED\n" );
 		return globalImages->defaultImage;
 	}

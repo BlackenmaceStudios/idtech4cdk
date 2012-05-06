@@ -491,6 +491,18 @@ void idImage::GetDownsize( int &scaled_width, int &scaled_height ) const {
 }
 /*
 ================
+GenerateImageHandle
+================
+*/
+void idImage::GenerateImageHandle( int numImages, unsigned int *texnum ) { 
+	if(*texnum != TEXTURE_NOT_LOADED) { 
+		common->FatalError("GenerateImageHandle: Handle is already valid!\n");
+		return;
+	}
+	qglGenTextures(numImages, texnum);
+}
+/*
+================
 Generate2DImageAtlas
 ================
 */
@@ -520,7 +532,7 @@ void idImage::Generate2DImageAtlas( int atlasSize, int tileSize, bool intStorage
 	type = TT_2D;
 
 	// generate the texture number
-	qglGenTextures( 1, &texnum );
+	GenerateImageHandle( 1, &texnum );
 	
 	Bind();
 
@@ -594,7 +606,7 @@ void idImage::GenerateRectImage( const byte *pic, int width, int height ) {
 	}
 
 	// generate the texture number
-	qglGenTextures( 1, &texnum );
+	GenerateImageHandle( 1, &texnum );
 	Bind();
 
 	qglTexImage2D( GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pic );
@@ -688,7 +700,10 @@ void idImage::GenerateImage( const byte *pic, int width, int height,
 	scaledBuffer = NULL;
 
 	// generate the texture number
-	qglGenTextures( 1, &texnum );
+	if(texnum == TEXTURE_NOT_LOADED)
+	{
+		GenerateImageHandle( 1, &texnum );
+	}
 	if ( texnum == TEXTURE_NOT_LOADED ) {
 		common->FatalError("GenerateImage: Texnum invalid\n");
 	}
@@ -917,7 +932,7 @@ void idImage::Generate3DImage( const byte *pic, int width, int height, int picDe
 	// FIXME: allow picmip here
 
 	// generate the texture number
-	qglGenTextures( 1, &texnum );
+	GenerateImageHandle( 1, &texnum );
 
 	// select proper internal format before we resample
 	// this function doesn't need to know it is 3D, so just make it very "tall"
@@ -1052,7 +1067,7 @@ void idImage::GenerateCubeImage( const byte *pic[6], int size,
 	width = height = size;
 
 	// generate the texture number
-	qglGenTextures( 1, &texnum );
+	GenerateImageHandle( 1, &texnum );
 
 	// select proper internal format before we resample
 	internalFormat = SelectInternalFormat( pic, 6, width, height, depth, &isMonochrome, IMAGE_COMPRESS_NONE );
@@ -1616,7 +1631,7 @@ void idImage::UploadPrecompressedImage( byte *data, int len ) {
 	header->ddspf.dwABitMask = LittleLong( header->ddspf.dwABitMask );
 
 	// generate the texture number
-	qglGenTextures( 1, &texnum );
+	GenerateImageHandle( 1, &texnum );
 
 	int externalFormat = 0;
 

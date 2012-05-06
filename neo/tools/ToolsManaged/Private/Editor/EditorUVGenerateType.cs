@@ -7,8 +7,8 @@ namespace ToolsManaged.Private.Editor
 {
     public enum EditorUVGenerateType
     {
-        Editor_GenerateUVs_Orient = 0,
-        Editor_GenerateUVs_Q3Style,
+         Editor_GenerateUVs_Q3Style = 0,
+        Editor_GenerateUVs_Orient,
         Editor_ImportUVs_AutoSpacing,
         Editor_ImportUVs_SinglePage,
         Editor_ImportUVs_10Percent,
