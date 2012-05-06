@@ -275,9 +275,9 @@ bool bmVirtualTextureFile::InitFromFile( const char *path ) {
 #endif
 
 	
-
-	vtAtlasImage = globalImages->ImageFromFunction( va( "_vt_%s_atlas", path), R_CreateImageAtlasTextureInt );
-	vtAtlasImage2 = globalImages->ImageFromFunction( va( "_vt_%s_atlas2", path), R_CreateImageAtlasTexture );
+	vtAtlasImage2 = globalImages->ImageFromFunction( va( "_vt_atlas2", path), R_CreateImageAtlasTexture );
+	vtAtlasImage = globalImages->ImageFromFunction( va( "_vt_atlas", path), R_CreateImageAtlasTextureInt );
+	
 
 	return true;
 }

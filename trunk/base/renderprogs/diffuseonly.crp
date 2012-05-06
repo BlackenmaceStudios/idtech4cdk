@@ -39,6 +39,7 @@ FragmentProgram
 		vec4 lookup = texture2D( u_diffuseTexture, st );
 		
 		gl_FragColor = lookup;
+		//gl_FragColor = vec4(st.x, st.y, 0.0, 1.0);
 		gl_FragColor.b = float(vtOffset) / (255.0);
 		gl_FragColor.a = 1;
 	}

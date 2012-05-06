@@ -37,12 +37,13 @@ void idImage::GenerateFrameBufferImage( int width, int height ) {
 	repeat = TR_REPEAT;
 	depth = TD_HIGH_QUALITY;
 
+	if ( !glConfig.isInitialized ) {
+		return;
+	}
+
 	uploadHeight = height;
 	uploadWidth = width;
 	type = TT_2D;
-
-	if(qglGenTextures == NULL)
-		return;
 
 	// generate the texture number
 	GenerateImageHandle( 1, &texnum );
@@ -91,13 +92,16 @@ idImage::GenerateFrameBufferDepthImage
 void idImage::GenerateFrameBufferDepthImage( int width, int height ) {
 	PurgeImage();
 
-	if(qglGenTextures == NULL)
-		return;
-
 	filter = TF_LINEAR;
 	allowDownSize = false;
 	repeat = TR_REPEAT;
 	depth = TD_HIGH_QUALITY;
+
+	if ( !glConfig.isInitialized ) {
+		return;
+	}
+
+	
 
 	uploadHeight = height;
 	uploadWidth = width;
@@ -153,8 +157,9 @@ idImage::GenerateFrameBufferColorTargetFromFBO
 void idImage::GenerateFrameBufferColorTargetFromFBO( void ) {
 	idStr parentImgName = imgName;
 
-	if(qglGenTextures == NULL)
+	if ( !glConfig.isInitialized ) {
 		return;
+	}
 
 
 	int magicChr = parentImgName.Find( '/' );
@@ -238,8 +243,9 @@ idImage::GenerateFrameBufferCubeImage
 void idImage::GenerateFrameBufferCubeImage( int width, int height ) {
 	PurgeImage();
 
-	if(qglGenTextures == NULL)
+	if ( !glConfig.isInitialized ) {
 		return;
+	}
 
 	filter = TF_LINEAR;
 	allowDownSize = false;
@@ -297,7 +303,7 @@ void idImage::GenerateFrameBufferCubeImage( int width, int height ) {
 	}
 
 	UnBindFBO();
-	qglBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	globalImages->BindNull();
 }
 
 static void R_Image_FrameBufferCubeImage( idImage *image ) {

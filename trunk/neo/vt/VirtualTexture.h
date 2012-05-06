@@ -13,7 +13,7 @@ A virtual texutre is a gigantic texture
 */
 
 #define VIRTUALTEXTURE_PAGESIZE	4096
-#define VT_NUMPAGES 8
+#define VT_NUMPAGES 2
 
 #include "VirtualTextureFile.h"
 #include "./dxt/dxt.h"

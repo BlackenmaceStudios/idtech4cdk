@@ -412,11 +412,6 @@ void R_InitOpenGL( void ) {
 	// Reset our gamma
 	R_SetColorMappings();
 
-// jmarshall 
-	// Init the virtual texture manager.
-	virtualTextureManager->Init();
-// jmarshall end
-
 #ifdef _WIN32
 	static bool glCheck = false;
 	if ( !glCheck && win32.osversion.dwMajorVersion == 6 ) {
@@ -1737,7 +1732,6 @@ R_InitCommands
 =================
 */
 void R_InitCommands( void ) {
-	cmdSystem->AddCommand( "MakeMegaTexture", idMegaTexture::MakeMegaTexture_f, CMD_FL_RENDERER|CMD_FL_CHEAT, "processes giant images" );
 	cmdSystem->AddCommand( "sizeUp", R_SizeUp_f, CMD_FL_RENDERER, "makes the rendered view larger" );
 	cmdSystem->AddCommand( "sizeDown", R_SizeDown_f, CMD_FL_RENDERER, "makes the rendered view smaller" );
 	cmdSystem->AddCommand( "reloadGuis", R_ReloadGuis_f, CMD_FL_RENDERER, "reloads guis" );
@@ -1842,6 +1836,11 @@ void idRenderSystemLocal::Init( void ) {
 	globalImages->Init();
 
 	idCinematic::InitCinematic( );
+
+// jmarshall 
+	// Init the virtual texture manager.
+	virtualTextureManager->Init();
+// jmarshall end
 
 	// build brightness translation tables
 	R_SetColorMappings();

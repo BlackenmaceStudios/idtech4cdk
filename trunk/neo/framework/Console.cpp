@@ -32,7 +32,7 @@ If you have questions concerning this license or the applicable additional terms
 void SCR_DrawTextLeftAlign( float &y, const char *text, ... ) id_attribute((format(printf,2,3)));
 void SCR_DrawTextRightAlign( float &y, const char *text, ... ) id_attribute((format(printf,2,3)));
 
-#define	LINE_WIDTH				78
+#define	LINE_WIDTH				178
 #define	NUM_CON_TIMES			4
 #define	CON_TEXTSIZE			0x30000
 #define	TOTAL_LINES				(CON_TEXTSIZE / LINE_WIDTH)

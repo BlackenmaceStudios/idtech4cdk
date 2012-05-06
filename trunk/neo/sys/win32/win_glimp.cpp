@@ -237,14 +237,14 @@ LONG WINAPI FakeWndProc (
 
 	const static PIXELFORMATDESCRIPTOR pfd = {
 		sizeof(PIXELFORMATDESCRIPTOR),
-		1,
+		3,
 		PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,
 		PFD_TYPE_RGBA,
-		24,
+		32,
 		0, 0, 0, 0, 0, 0,
 		8, 0,
 		0, 0, 0, 0,
-		24, 8,
+		32, 8,
 		0,
 		PFD_MAIN_PLANE,
 		0,
