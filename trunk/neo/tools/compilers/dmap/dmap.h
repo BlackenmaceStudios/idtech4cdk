@@ -253,7 +253,9 @@ typedef struct {
 	idList<mapLight_t*>	mapLights;
 
 	bool	verbose;
-
+// jmarshall
+	bool	onlyEntities;
+// jmarshall end
 	bool	glview;
 	bool	noOptimize;
 	bool	verboseentities;

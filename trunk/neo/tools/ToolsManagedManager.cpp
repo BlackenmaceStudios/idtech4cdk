@@ -3,6 +3,8 @@
 
 #include "precompiled.h"
 
+#include "radiant/QERTYPES.H"
+#include "radiant/editorEntity.h"
 
 using namespace ToolsManaged;
 extern bool g_editorAlive;
@@ -30,6 +32,17 @@ extern "C" __declspec(dllexport) idDict *TOOLAPI_Entity_GetTemplate( const char 
 
 	return &def->dict;
 }
+
+extern "C" __declspec(dllexport) idDict *TOOLAPI_Entity_GetEntityDict( const char *name )
+{
+	entity_t *ent = FindEntity( "name", name );
+	if(!ent) {
+		return NULL;
+	}
+
+	return &ent->epairs;
+}
+
 
 /*
 =================

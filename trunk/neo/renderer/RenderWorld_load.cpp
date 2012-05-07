@@ -44,11 +44,9 @@ void idRenderWorldLocal::FreeWorld() {
 
 	// this will free all the lightDefs and entityDefs
 	FreeDefs();
-
 // jmarshall
-	vt = NULL;
+	ClearVirtualTextureData();
 // jmarshall end
-
 	// free all the portals and check light/model references
 	for ( i = 0 ; i < numPortalAreas ; i++ ) {
 		portalArea_t	*area;
@@ -487,6 +485,19 @@ void idRenderWorldLocal::FreeDefs() {
 			entityDefs[i] = NULL;
 		}
 	}
+}
+/*
+=================
+idRenderWorldLocal::ClearVirtualTextureData
+=================
+*/
+void idRenderWorldLocal::ClearVirtualTextureData( void ) {
+	if(vt != NULL)
+	{
+		virtualTextureManager->FreeVirtualTextureFile();
+		vt = NULL;
+	}
+
 }
 
 /*

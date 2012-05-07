@@ -51,6 +51,7 @@ typedef struct {
 
 
 void		Mem_Init( void );
+void		Mem_InitHook( void );
 void		Mem_Shutdown( void );
 void		Mem_EnableLeakTest( const char *name );
 void		Mem_ClearFrameStats( void );

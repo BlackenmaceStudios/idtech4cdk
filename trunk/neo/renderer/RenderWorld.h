@@ -330,6 +330,8 @@ public:
 // jmarshall
 	virtual idRenderEntity	*AddClientEntity( idDict &spawnArgs ) = 0;
 	virtual void			FreeClientEntity( idRenderEntity *entity ) = 0;
+
+	virtual void			ClearVirtualTextureData( void ) = 0;
 // jmarshall end
 
 	// entityDefs and lightDefs are added to a given world to determine

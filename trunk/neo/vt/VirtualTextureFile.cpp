@@ -20,7 +20,7 @@ bmVirtualTextureFile::bmVirtualTextureFile() {
 
 bmVirtualTextureFile::~bmVirtualTextureFile() {
 	if(f != NULL) {
-//		fileSystem->CloseFile( f );
+		fileSystem->CloseFile( f );
 		f = NULL;
 	}
 
@@ -272,6 +272,7 @@ bool bmVirtualTextureFile::InitFromFile( const char *path ) {
 	f->Read( fileBuffer, fileBufferLen );
 
 	fileSystem->CloseFile( f );
+	f = NULL;
 #endif
 
 	

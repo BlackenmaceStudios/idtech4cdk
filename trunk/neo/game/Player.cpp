@@ -2126,9 +2126,9 @@ void idPlayer::SelectInitialSpawnPoint( idVec3 &origin, idAngles &angles ) {
 	if ( spot->spawnArgs.GetString( "skin", NULL, skin ) ) {
 		spawnArgs.Set( "spawn_skin", skin );
 	}
-
+// jmarshall - script
 	// activate the spawn locations targets
-	spot->PostEventMS( &EV_ActivateTargets, 0, this );
+	//spot->PostEventMS( &EV_ActivateTargets, 0, this );
 
 	origin = spot->GetPhysics()->GetOrigin();
 	origin[2] += 4.0f + CM_BOX_EPSILON;		// move up to make sure the player is at least an epsilon above the floor

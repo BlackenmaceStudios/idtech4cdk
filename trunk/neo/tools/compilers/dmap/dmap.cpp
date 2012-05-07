@@ -190,6 +190,7 @@ void ResetDmapGlobals( void ) {
 	dmapGlobals.shadowOptLevel = SO_NONE;
 	dmapGlobals.drawBounds.Clear();
 	dmapGlobals.drawflag = false;
+	dmapGlobals.onlyEntities = false;
 	dmapGlobals.totalShadowTriangles = 0;
 	dmapGlobals.totalShadowVerts = 0;
 }
@@ -288,11 +289,12 @@ void Dmap( const idCmdArgs &args ) {
 		} else if ( !idStr::Icmp( s, "noAAS" ) ) {
 			noAAS = true;
 			common->Printf( "noAAS = true\n" );
-		} else if ( !idStr::Icmp( s, "editorOutput" ) ) {
-#ifdef _WIN32
-		//	com_outputMsg = true;
-#endif
-		} else {
+// jmarshall
+		} else if ( !idStr::Icmp( s, "updateents" ) ) {
+			dmapGlobals.onlyEntities = true;
+		} 
+// jmarshall end
+		else {
 			break;
 		}
 	}
@@ -348,16 +350,21 @@ void Dmap( const idCmdArgs &args ) {
 		return;
 	}
 
-	if ( ProcessModels() ) {
-		WriteOutputFile();
-	} else {
-		leaked = true;
+
+	if(dmapGlobals.onlyEntities) {
+		dmapGlobals.dmapFile->WriteGameEntities( dmapGlobals.mapFileBase, WORLD_ENTITIES_FILE_EXT );
+		noCM = true;
 	}
-
+	else
+	{
+		if ( ProcessModels() ) {
+			WriteOutputFile();
+		} else {
+			leaked = true;
+		}
+	}
+// jmarshall end
 	FreeDMapFile();
-
-	common->Printf( "%i total shadow triangles\n", dmapGlobals.totalShadowTriangles );
-	common->Printf( "%i total shadow verts\n", dmapGlobals.totalShadowVerts );
 
 	end = sys->Milliseconds();
 	common->Printf( "-----------------------\n" );

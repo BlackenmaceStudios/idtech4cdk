@@ -21,7 +21,7 @@ void bmVirtualTextureBackend::ReadTilesInScene( byte *readbackBuffer, int width,
 	// Clear all the scene tiles. 
 	for(int i = 0; i < numCharts; i++)
 	{
-		sceneTiles[i].Clear();
+		sceneTiles[i].SetNum( 0, false );
 	}
 
 	// Go through all the tiles and parse them. 
