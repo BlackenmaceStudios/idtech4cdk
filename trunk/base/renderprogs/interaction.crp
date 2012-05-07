@@ -215,7 +215,7 @@ FragmentProgram
 		
 		vec4 color = lightingModel( diffuse * var_Color , specular * var_Color, L, var_ViewDir, N, H, shadow );
 			d = sqrt(d) * 8;
-			float atten =  23000 / ( d * d2 + d2 * d * d);
+			float atten = 223000 / ( d * d2 + d2 * d * d);
 				color *=  atten    ; 
 
 			
@@ -304,7 +304,7 @@ FragmentProgram
 
 	
 
-		vec4 vWeightsBW = vec4 ( 0.1,0.06,1.41,0 );
+		vec4 vWeightsBW = vec4 ( 0.1,0.1,0.4,0 );
 		vec4 vWeightsSepia = vec4 ( 3.7,3.6,3.7,1 ); 
 		vec4 cColor = texture2D( u_diffuseTexture, var_TexNormal.st );
 
@@ -332,7 +332,7 @@ FragmentProgram
 	//
 	void main( void ) {   
 		vec4 color = vec4(0,0,0,1);
-		vec4 diffuse = CalcBloom();
+		vec4 diffuse = texture2D( u_diffuseTexture, var_TexDiffuse.st );
 		
 		
 		vec4 var_Shadow = BlurPixelV( ShadowMap, var_TexNormal.st );
@@ -457,13 +457,13 @@ FragmentProgram
 
 		
 
-			 color += LightPass( i / numLights, var_Vertex, vCurrOffset, vec4(r_lightOrigin[i], 0.0), vec4(4,4,4, 0) , vec4(1,1,1, 0), lightProjectS, lightProjectT, r_lightProjectionQ[i], r_lightFalloff[i], vec4(1,1,1,1) )  * diffuse * (shadow + 0.3);
+			 color += LightPass( i / numLights, var_Vertex, vCurrOffset, vec4(r_lightOrigin[i], 0.0), vec4(r_diffuseColor[i], 0) , vec4(r_diffuseColor[i], 0), lightProjectS, lightProjectT, r_lightProjectionQ[i], r_lightFalloff[i], vec4(1,1,1,1) )  ;
 		}
 		
 		
 
 		//gl_FragColor = (color + 0.4) * var_Shadow * vec4(1,1,1,1) ;
-		gl_FragColor.xyz = texture2D( u_diffuseTexture, var_TexNormal.st ).xyz; //color.xyz; //((color.xyz)    ) + (UnlitTransparent()) ;
+		gl_FragColor.xyz = color.xyz * diffuse.xyz * (var_Shadow.r + 0.3); //((color.xyz)    ) + (UnlitTransparent()) ;
 		
 		gl_FragColor.a = 1;
 	}
