@@ -533,7 +533,6 @@
     <ClInclude Include="renderer\image_pbo.h" />
     <ClInclude Include="renderer\Interaction.h" />
     <ClInclude Include="renderer\Material.h" />
-    <ClInclude Include="renderer\MegaTexture.h" />
     <ClInclude Include="renderer\Model.h" />
     <ClInclude Include="renderer\Model_local.h" />
     <ClInclude Include="renderer\ModelDecal.h" />
@@ -2112,7 +2111,6 @@
     <ClCompile Include="renderer\Image_program.cpp" />
     <ClCompile Include="renderer\Interaction.cpp" />
     <ClCompile Include="renderer\Material.cpp" />
-    <ClCompile Include="renderer\MegaTexture.cpp" />
     <ClCompile Include="renderer\Model.cpp" />
     <ClCompile Include="renderer\Model_beam.cpp" />
     <ClCompile Include="renderer\Model_liquid.cpp" />

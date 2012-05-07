@@ -198,8 +198,6 @@ struct newShaderStage_t {
 	int					numFragmentProgramImages;
 	idImage *			fragmentProgramImages[MAX_FRAGMENT_IMAGES];
 
-	idMegaTexture		*megaTexture;		// handles all the binding and parameter setting 
-
 	newShaderStage_t::newShaderStage_t() {
 		renderProgram = NULL;
 	}

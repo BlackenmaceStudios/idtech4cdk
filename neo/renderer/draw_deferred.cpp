@@ -143,6 +143,8 @@ void RB_Deferred_PrepareSceneForDrawing( viewLight_t *lights ) {
 	viewLight_t		*vLight;
 	scene.numLights = 0;
 
+	if(backEnd.lightScale <= 0)
+		backEnd.lightScale = 1.0f;
 
 	for ( vLight = lights ; vLight ; vLight = vLight->next, scene.numLights++ ) {
 		renderLight_t *parms = &vLight->lightDef->parms;
@@ -313,9 +315,9 @@ void RB_Deferred_DrawDeferredInteraction( const drawSurf_t *surf ) {
 	progs[PROG_INTERACTION].programHandle->BindTextureVar( PP_TEX_DIFFUSE );
 
 	// texture 5 is the per-surface specular map
-	GL_SelectTextureNoClient( 2 );
-	globalImages->currentRenderImageTargets->fboColorTargets[0]->Bind();
-	progs[PROG_INTERACTION].programHandle->BindTextureVar( PP_TEX_NORMAL );
+	//GL_SelectTextureNoClient( 2 );
+	//globalImages->currentRenderImageTargets->fboColorTargets[2]->Bind();
+	//progs[PROG_INTERACTION].programHandle->BindTextureVar( PP_TEX_SPEC );
 
 	// texture 5 is the per-surface specular map
 	GL_SelectTextureNoClient( 3 );
