@@ -33,7 +33,7 @@ If you have questions concerning this license or the applicable additional terms
 
 // simple types.  function types are dynamically allocated
 
-// jmarshall
+// jmarshall - aisde from vector, everything else is assumed to be the size of a pointer no matter the type.
 idTypeDef	type_void( ev_void, &def_void, "void", 0, NULL );
 idTypeDef	type_scriptevent( ev_scriptevent, &def_scriptevent, "scriptevent", sizeof( INT_PTR * ), NULL );
 idTypeDef	type_namespace( ev_namespace, &def_namespace, "namespace", sizeof( INT_PTR * ), NULL );
