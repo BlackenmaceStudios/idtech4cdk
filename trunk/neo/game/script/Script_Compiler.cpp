@@ -281,7 +281,7 @@ idCompiler::VirtualFunctionConstant
 Creates a def for an index into a virtual function table
 ============
 */
-ID_INLINE idVarDef *idCompiler::VirtualFunctionConstant( idVarDef *func ) {
+idVarDef *idCompiler::VirtualFunctionConstant( idVarDef *func ) {
 	eval_t eval;
 
 	memset( &eval, 0, sizeof( eval ) );
@@ -300,7 +300,7 @@ idCompiler::SizeConstant
 Creates a def for a size constant
 ============
 */
-ID_INLINE idVarDef *idCompiler::SizeConstant( int size ) {
+idVarDef *idCompiler::SizeConstant( int size ) {
 	eval_t eval;
 
 	memset( &eval, 0, sizeof( eval ) );
@@ -315,7 +315,7 @@ idCompiler::JumpConstant
 Creates a def for a jump constant
 ============
 */
-ID_INLINE idVarDef *idCompiler::JumpConstant( int value ) {
+idVarDef *idCompiler::JumpConstant( int value ) {
 	eval_t eval;
 
 	memset( &eval, 0, sizeof( eval ) );

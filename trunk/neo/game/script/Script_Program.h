@@ -76,7 +76,9 @@ typedef union eval_s {
 	float				_float;
 	float				vector[ 3 ];
 	function_t			*function;
-	int 				_int;
+// jmarshall
+	INT_PTR  			_int;
+// jmarshall end
 	int 				entity;
 } eval_t;
 

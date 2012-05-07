@@ -1344,11 +1344,11 @@ void idActor::UpdateScript( void ) {
 		if ( scriptThread->IsWaiting() ) {
 			break;
 		}
-  // jmarshall -- script  
-	//	scriptThread->Execute();
-	//	if ( idealState == state ) {
+
+		scriptThread->Execute();
+		if ( idealState == state ) {
 			break;
-	//	}
+		}
 	}
 
 	if ( i == 20 ) {
