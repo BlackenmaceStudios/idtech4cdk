@@ -135,12 +135,11 @@ FragmentProgram
 
 	// traditional lambertian blinn-phong lighting model 
 	vec4 lightingModel( vec4 diffuse, vec4 specular, vec3 L, vec3 V, vec3 N, vec3 H, vec4 shadow ) { 
-	specular *= 0.1;
-	diffuse *= 0.2;
-		float NdotL = clamp( dot( N , L ), 0.1, 1.0 ) ;
-		float NdotH = pow( max( dot( N, H ), 0.0001 ), 32 )  ;
-
-		return ( diffuse * NdotL ) + (specular * NdotH); 
+	
+		float NdotL = clamp( dot( N , L ), 0.1,1.0 ) ;
+		float NdotH = pow( max( dot( N, H ), 0.0001 ), 16 )  ;
+		
+		return (( diffuse * NdotL ) + (specular * NdotH)); 
 	} 
 
 	vec4 LightPass( float lightNum, vec4 var_Vertex, vec2 vCurrOffset, vec4 u_lightOrigin, vec4 diffuse, vec4 u_specularColor, vec4 u_lightProjectionS, vec4 u_lightProjectionT, vec4 u_lightProjectionQ, vec4 u_lightFalloff, vec4 shadow ) {
@@ -154,7 +153,7 @@ FragmentProgram
 		vec3 var_ViewDir = normalize(u_viewOrigin.xyz - var_Vertex.xyz ).xyz;
 
 #endif
-		float d2 = length(u_lightOrigin.xyz - var_Vertex.xyz ) * u_lightProjectionS.x ;
+		float d2 = length(u_lightOrigin.xyz - var_Vertex.xyz ) *  u_lightProjectionS.x ;
 
 
 		
@@ -215,7 +214,7 @@ FragmentProgram
 		
 		vec4 color = lightingModel( diffuse * var_Color , specular * var_Color, L, var_ViewDir, N, H, shadow );
 			d = sqrt(d) * 8;
-			float atten = 223000 / ( d * d2 + d2 * d * d);
+			float atten = 73000 / ( d * d2 + d2 * d * d);
 				color *=  atten    ; 
 
 			
@@ -332,7 +331,7 @@ FragmentProgram
 	//
 	void main( void ) {   
 		vec4 color = vec4(0,0,0,1);
-		vec4 diffuse = texture2D( u_diffuseTexture, var_TexDiffuse.st );
+		vec4 diffuse = CalcBloom();
 		
 		
 		vec4 var_Shadow = BlurPixelV( ShadowMap, var_TexNormal.st );
@@ -460,10 +459,10 @@ FragmentProgram
 			 color += LightPass( i / numLights, var_Vertex, vCurrOffset, vec4(r_lightOrigin[i], 0.0), vec4(r_diffuseColor[i], 0) , vec4(r_diffuseColor[i], 0), lightProjectS, lightProjectT, r_lightProjectionQ[i], r_lightFalloff[i], vec4(1,1,1,1) )  ;
 		}
 		
-		
+
 
 		//gl_FragColor = (color + 0.4) * var_Shadow * vec4(1,1,1,1) ;
-		gl_FragColor.xyz = color.xyz * diffuse.xyz * (var_Shadow.r + 0.3); //((color.xyz)    ) + (UnlitTransparent()) ;
+		gl_FragColor.xyz = color.xyz * diffuse.xyz * (var_Shadow.r + 0.7); //((color.xyz)    ) + (UnlitTransparent()) ;
 		
 		gl_FragColor.a = 1;
 	}
