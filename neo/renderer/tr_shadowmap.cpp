@@ -126,6 +126,7 @@ R_CalculateShadowsForModelLight
 ================
 */
 void R_CalculateShadowsForModelLight( idRenderModel *model, viewEntity_t *vEntity,idRenderLightLocal *light, viewLight_t *vLight ) {
+
 	for(int s = 0; s < model->NumSurfaces(); s++) {
 		srfTriangles_t	*tri = model->Surface( s )->geometry;
 

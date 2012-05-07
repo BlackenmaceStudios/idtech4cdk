@@ -123,7 +123,7 @@ void bmOpenGLRenderDevice::ForceDeviceSync( void ) {
 		}
 		syncResult = qglClientWaitSync(sync,GL_SYNC_FLUSH_COMMANDS_BIT, -1);
 	}
-	
+	qglDeleteSync(sync);
 }
 
 /*

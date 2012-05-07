@@ -19,6 +19,18 @@ namespace ToolsManaged.Private
         [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Entity_GetTemplate")]
         private static extern IntPtr TOOLAPI_Entity_GetTemplate(string type);
 
+        [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Entity_GetEntityDict")]
+        private static extern IntPtr TOOLAPI_Entity_GetEntityDict(string name);
+
+        public static idLibNativeAPI.idDictNative Entity_GetEntityDict(string name)
+        {
+            idLibNativeAPI.idDictNative dict;
+
+            dict = new idLibNativeAPI.idDictNative(TOOLAPI_Entity_GetEntityDict(name));
+
+            return dict;
+        }
+
         public static idLibNativeAPI.idDictNative Entity_GetTemplate(string type)
         {
             idLibNativeAPI.idDictNative dict;

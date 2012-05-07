@@ -115,8 +115,10 @@ public:
 	bmVirtualTextureFile		*CreateNewVirtualTextureFile( const char *path, int numAreas );
 
 	bmVirtualTextureFile		*GetCurrentVirtualTextureFile( void ) { return currentVirtualTextureFile; }
-private:
+
 	void						FreeVirtualTextureFile( void );
+private:
+	
 
 	int							currentPage;
 	bmVirtualTexturePage		pages[VT_NUMPAGES];

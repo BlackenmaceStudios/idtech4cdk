@@ -1487,7 +1487,13 @@ void idGameLocal::MapShutdown( void ) {
 		// clear any debug lines, text, and polygons
 		gameRenderWorld->DebugClearLines( 0 );
 		gameRenderWorld->DebugClearPolygons( 0 );
+
+// jmarshall - Clear any virtual texture data.
+		gameRenderWorld->ClearVirtualTextureData();
+// jmarshall end
 	}
+
+
 
 	// clear out camera if we're in a cinematic
 	if ( inCinematic ) {

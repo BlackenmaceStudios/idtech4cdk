@@ -417,10 +417,12 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <EntryPointSymbol>
       </EntryPointSymbol>
-      <StackReserveSize>26777216</StackReserveSize>
-      <StackCommitSize>26777216</StackCommitSize>
-      <HeapReserveSize>1000000</HeapReserveSize>
-      <HeapCommitSize>1000000</HeapCommitSize>
+      <StackReserveSize>109715200</StackReserveSize>
+      <StackCommitSize>109715200</StackCommitSize>
+      <HeapReserveSize>
+      </HeapReserveSize>
+      <HeapCommitSize>
+      </HeapCommitSize>
     </Link>
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>

@@ -15,17 +15,12 @@ R_EmptyTexturePage
 */
 static void R_EmptyTexturePage( idImage *image ) {
 	int	c = vt_page_size.GetInteger() * vt_page_size.GetInteger();
-	byte	*data = new byte[c * 4];
-
-	for ( int i = 0 ; i < c ; i++ ) {
-		((int *)data)[i] = 0;
-	}
 
 	// FIXME: this won't live past vid mode changes
-	image->GenerateImage( data, vt_page_size.GetInteger(), vt_page_size.GetInteger(), 
+	image->GenerateImage( NULL, vt_page_size.GetInteger(), vt_page_size.GetInteger(), 
 		TF_NEAREST, false, TR_REPEAT, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
 
-	delete data;
+
 	image->rawBuffer = NULL;
 	//image->CreatePBO();
 }

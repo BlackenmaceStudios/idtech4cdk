@@ -135,9 +135,14 @@ public:
 	virtual void			DebugPolygon( const idVec4 &color, const idWinding &winding, const int lifeTime = 0, const bool depthTest = false );
 
 	virtual void			DrawText( const char *text, const idVec3 &origin, float scale, const idVec4 &color, const idMat3 &viewAxis, const int align = 1, const int lifetime = 0, bool depthTest = false );
+// jmarshall
+	virtual void			ClearVirtualTextureData( void );
+// jmarshall end
 
 	//-----------------------
 // jmarshall
+	
+
 	class bmVirtualTextureFile	*vt;
 // jmarshall end
 

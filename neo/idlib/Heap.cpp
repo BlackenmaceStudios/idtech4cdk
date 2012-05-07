@@ -1193,6 +1193,9 @@ int __cdecl MyAllocHook( int nAllocType, void * pvData, size_t   nSize,int nBloc
 	return TRUE;
 }
 
+void Mem_InitHook( void ) {
+	
+}
 
 /*
 ==================
@@ -1200,10 +1203,8 @@ Mem_Init
 ==================
 */
 void Mem_Init( void ) {
-// jmarshall
 	_CrtSetAllocHook( MyAllocHook );
 
-// jmarshall end
 	mem_heap = new idHeap;
 	Mem_ClearFrameStats();
 }

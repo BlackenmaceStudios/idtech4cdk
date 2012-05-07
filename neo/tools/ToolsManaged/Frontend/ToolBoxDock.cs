@@ -31,8 +31,26 @@ namespace ToolsManaged.Frontend
                 (sender as ListView).DoDragDrop(itemIDs.ToArray(), DragDropEffects.Move);
             };
 
-
+            entityTreeView.MouseClick += new MouseEventHandler(entityTreeView_MouseClick);
+            entityTreeView.MouseDoubleClick += new MouseEventHandler(entityTreeView_MouseDoubleClick);
             AddNewEntityType("", "light");
+        }
+
+        void entityTreeView_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            string[] s = entityTreeView.SelectedNode.Text.Split('(');
+
+            if (s[0] == "Worldspawn")
+                return;
+
+            Private.idLib.idLibNativeAPI.idDictNative dict = Private.NativeAPI.Entity_GetEntityDict(s[0]);
+
+            ToolsManagedPrivate.handle.ShowEntityPropterties(dict);
+        }
+
+        void entityTreeView_MouseClick(object sender, MouseEventArgs e)
+        {
+            
         }
 
         void view_ItemDrag(object sender, ItemDragEventArgs e)
@@ -61,7 +79,10 @@ namespace ToolsManaged.Frontend
                 return;
             }
 
-            view.Nodes[0].Nodes.Add(entityType + "( " + entityName + " ) ");
+            if (entityType.Contains("worldspawn"))
+                return;
+
+            view.Nodes[0].Nodes.Add(entityName + "( " + entityType  + " ) ");
             view.Nodes[0].Expand();
         }
 

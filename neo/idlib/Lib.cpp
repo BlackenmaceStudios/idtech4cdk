@@ -59,7 +59,9 @@ void idLib::Init( void ) {
 	assert( sizeof( bool ) == 1 );
 
 	
+
 // jmarshall
+	Mem_InitHook();
 	allocator = common->GetUnifiedMemoryHandler();
 // jmarshall end
 
