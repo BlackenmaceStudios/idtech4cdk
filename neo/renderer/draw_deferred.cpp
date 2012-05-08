@@ -32,6 +32,10 @@ void	RB_Deferred_DrawPreInteraction( const drawSurf_t *surf ) {
 
 	shader = surf->material;
 
+	// If this shader is part of the vt don't draw it.
+	if(surf->geo->vt_AreaID != -1)
+		return;
+
 	// If the shader doesn't recieve lighting, use forward rendering instead.
 	if(!shader->ReceivesLighting()) {
 		return;
@@ -49,7 +53,14 @@ void	RB_Deferred_DrawPreInteraction( const drawSurf_t *surf ) {
 		qglPolygonOffset( r_offsetFactor.GetFloat(), r_offsetUnits.GetFloat() * shader->GetPolygonOffset() );
 	}
 
-
+	if ( surf->space->entityDef->parms.weaponDepthHack )
+	{
+		GL_State( GLS_DEPTHFUNC_ALWAYS  );
+	}
+	else
+	{
+		GL_State( shader->GetStage( 0 )->drawStateBits );
+	}
 
 		// set the vertex pointers
 	idDrawVert	*ac = (idDrawVert *)vertexCache.Position( surf->geo->ambientCache );
@@ -402,12 +413,18 @@ RB_Deferred_PreInteractionPass
 =========================
 */
 void RB_Deferred_PreInteractionPass( drawSurf_t	 **drawSurfs, int numDrawSurfs ) {
-		// if we are just doing 2D rendering, no need to fill the depth buffer
+	
+
+	// if we are just doing 2D rendering, no need to fill the depth buffer
 	if ( !backEnd.viewDef->viewEntitys ) {
 		return;
 	}
 
+
 	RB_LogComment( "---------- RB_Deferred_PreInteractionPass ----------\n" );
+
+	globalImages->currentRenderImageTargets->BindFBO();
+
 			// enable the vertex arrays
 	qglEnableVertexAttribArrayARB( 8 );
 	qglEnableVertexAttribArrayARB( 9 );
@@ -415,33 +432,34 @@ void RB_Deferred_PreInteractionPass( drawSurf_t	 **drawSurfs, int numDrawSurfs )
 	qglEnableVertexAttribArrayARB( 11 );
 	
 
-	// Bind the pre-interaction program.
+	DEBUG_DEFERRED
+	GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT, GL_COLOR_ATTACHMENT2_EXT };
+    qglDrawBuffers(3, buffers);
+
+	// set the window clipping
+	qglViewport( tr.viewportOffset[0] + backEnd.viewDef->viewport.x1, 
+		tr.viewportOffset[1] + backEnd.viewDef->viewport.y1, 
+		backEnd.viewDef->viewport.x2 + 1 - backEnd.viewDef->viewport.x1,
+		backEnd.viewDef->viewport.y2 + 1 - backEnd.viewDef->viewport.y1 );
+
+	// the scissor may be smaller than the viewport for subviews
+	qglScissor( tr.viewportOffset[0] + backEnd.viewDef->viewport.x1 + backEnd.viewDef->scissor.x1, 
+		tr.viewportOffset[1] + backEnd.viewDef->viewport.y1 + backEnd.viewDef->scissor.y1, 
+		backEnd.viewDef->scissor.x2 + 1 - backEnd.viewDef->scissor.x1,
+		backEnd.viewDef->scissor.y2 + 1 - backEnd.viewDef->scissor.y1 );
+	backEnd.currentScissor = backEnd.viewDef->scissor;
+	DEBUG_DEFERRED
+
+		// Bind the pre-interaction program.
 	progs[PROG_PREINTERACTION].programHandle->Bind();
 	DEBUG_DEFERRED
 
 
-	DEBUG_DEFERRED
-	GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT, 
-                        GL_COLOR_ATTACHMENT1_EXT,
-                         GL_COLOR_ATTACHMENT2_EXT,
-						GL_COLOR_ATTACHMENT3_EXT,
-						GL_COLOR_ATTACHMENT4_EXT,
-					   GL_COLOR_ATTACHMENT5_EXT,
-					  GL_COLOR_ATTACHMENT6_EXT};
 
-    qglDrawBuffers(3, buffers);
-	DEBUG_DEFERRED
 
-	deferredViewLights = backEnd.viewDef->viewLights;
-	deferredEyePos = backEnd.viewDef->renderView.vieworg;
-	deferredViewMatrix = idMat4( backEnd.viewDef->renderView.viewaxis, deferredEyePos );
-	deferredViewMatrix = deferredViewMatrix.Transpose();
 
-	// Preparse the scene for drawing.
-	RB_Deferred_PrepareSceneForDrawing( backEnd.viewDef->viewLights );
-
-	backEnd.depthFunc = GLS_DEPTHFUNC_LESS;
-	GL_State( backEnd.depthFunc );
+	
+	
 	RB_RenderDrawSurfListWithFunction( drawSurfs, numDrawSurfs, RB_Deferred_DrawPreInteraction );
 	
 	DEBUG_DEFERRED
@@ -467,7 +485,7 @@ void RB_Deferred_PreInteractionPass( drawSurf_t	 **drawSurfs, int numDrawSurfs )
 	qglDisableVertexAttribArrayARB( 11 );
 	DEBUG_DEFERRED
 
-	
+	globalImages->currentRenderImageTargets->UnBindFBO();
 }
 
 /*

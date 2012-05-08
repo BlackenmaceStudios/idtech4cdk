@@ -72,6 +72,9 @@ void RB_DiffuseOnly_DrawSurface( drawSurf_t *surf, idImage *image, bool noVt ) {
 
 	shader = surf->material;
 
+	if(surf->geo->vt_AreaID == -1)
+		return;
+
 	// If the shader doesn't recieve lighting, use forward rendering instead.
 	if(!shader->ReceivesLighting()) {
 		return;
@@ -157,6 +160,8 @@ void RB_Draw_DiffuseOnly( drawSurf_t **drawSurfs, int numDrawSurfs ) {
 	for (int i = 0  ; i < numDrawSurfs ; i++ ) {
 		drawSurf = drawSurfs[i];
 
+		
+
 		// change the matrix if needed
 		if ( drawSurf->space != backEnd.currentSpace ) {
 			qglLoadMatrixf( drawSurf->space->modelViewMatrix );
@@ -179,9 +184,6 @@ void RB_Draw_DiffuseOnly( drawSurf_t **drawSurfs, int numDrawSurfs ) {
 				backEnd.currentScissor.y2 + 1 - backEnd.currentScissor.y1 );
 		}
 
-		
-
-		
 
 		RB_DiffuseOnly_DrawSurface( drawSurf, backEnd.viewDef->renderWorld->vt->vtAtlasImage2, true );
 

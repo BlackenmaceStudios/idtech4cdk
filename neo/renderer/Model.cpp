@@ -721,6 +721,8 @@ bool idRenderModelStatic::LoadMD5Static( const char *fileName ) {
 		modelSurface_t surf;
 		modelSurface_t	*modelSurf = &surf; // too lazy to fix this all over the place.
 
+
+
 		uOffset = vOffset = 0.0f;
 			uTiling = vTiling = 1.0f;
 			textureSin = 0.0f;
@@ -759,7 +761,7 @@ bool idRenderModelStatic::LoadMD5Static( const char *fileName ) {
 	// jmarshall
 		tri->shadowCapPlaneBits = 666;
 	// jmarshall end
-
+		tri->vt_AreaID = -1;
 		modelSurf->shader = declManager->FindMaterial( "worlddefault" );
 		modelSurf->id = 0;
 		modelSurf->geometry = tri;
