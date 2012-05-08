@@ -126,7 +126,8 @@ R_CalculateShadowsForModelLight
 ================
 */
 void R_CalculateShadowsForModelLight( idRenderModel *model, viewEntity_t *vEntity,idRenderLightLocal *light, viewLight_t *vLight ) {
-
+	if(vEntity && (vEntity->scissorRect.IsEmpty() < 0 || vEntity->scissorRect.x2 == 0 || vEntity->scissorRect.y2 == 0))
+		return;
 	for(int s = 0; s < model->NumSurfaces(); s++) {
 		srfTriangles_t	*tri = model->Surface( s )->geometry;
 
@@ -165,7 +166,8 @@ void R_CalculateShadowsForModelLight( idRenderModel *model, viewEntity_t *vEntit
 				vertexCache.Touch( tri->indexCache );
 			}
 
-			
+			if(vEntity && vEntity->entityDef && vEntity->entityDef->parms.weaponDepthHack)
+				continue;
 
 			tri->shadowMapVisibleSides[side] = true;
 
@@ -205,7 +207,7 @@ void R_CalculateShadowsForLight( idRenderLightLocal *light, viewLight_t *vLight 
 
 	// Add all the entities for shadowing.
 	for(int i = 0; i < world->entityDefs.Num(); i++) {
-
+		
 
 		R_CalculateShadowsForModelLight( R_EntityDefDynamicModel( world->entityDefs[i] ),  world->entityDefs[i]->viewEntity, light, vLight );
 	}
@@ -504,6 +506,8 @@ void RB_RenderDrawShadowMappedSurfList( drawSurf_t *drawSurfs, int side ) {
 		if(RB_Shadow_CullSurface( drawSurf, globalFrustum )) {
 			continue;
 		}
+
+
 
 		
 		srfCullInfo_t cullInfo;
