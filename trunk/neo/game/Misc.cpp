@@ -1424,14 +1424,16 @@ void idStaticEntity::Spawn( void ) {
 
 	// an inline static model will not do anything at all
 	//if ( spawnArgs.GetBool( "inline" ) || gameLocal.world->spawnArgs.GetBool( "inlineAllStatics" ) ) {
-		Hide();
-		return;
+	//	Hide();
+	//	return;
 	//}
 
-	solid = spawnArgs.GetBool( "solid" );
-	hidden = spawnArgs.GetBool( "hide" );
+	solid = true; //spawnArgs.GetBool( "solid" );
+	hidden = true; //spawnArgs.GetBool( "hide" );
 
-	if ( solid && !hidden ) {
+	
+
+	if ( solid ) {
 		GetPhysics()->SetContents( CONTENTS_SOLID );
 	} else {
 		GetPhysics()->SetContents( 0 );
@@ -1456,6 +1458,11 @@ void idStaticEntity::Spawn( void ) {
 	if ( runGui ) {
 		BecomeActive( TH_THINK );
 	}
+// jmarshall
+	if( hidden ) {
+		idEntity::Hide();
+	}
+// jmarshall end
 }
 
 /*

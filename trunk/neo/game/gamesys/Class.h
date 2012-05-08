@@ -53,22 +53,22 @@ struct idEventFunc {
 #define EVENT( event, function )	{ &( event ), ( void ( idClass::* )( void ) )( &function ) },
 #define END_CLASS					{ NULL, NULL } };
 
-
+// jmarshall
 class idEventArg {
 public:
 	int			type;
-	int			value;
+	INT_PTR			value;
 
 	idEventArg()								{ type = D_EVENT_INTEGER; value = 0; };
 	idEventArg( int data )						{ type = D_EVENT_INTEGER; value = data; };
-	idEventArg( float data )					{ type = D_EVENT_FLOAT; value = *reinterpret_cast<int *>( &data ); };
-	idEventArg( idVec3 &data )					{ type = D_EVENT_VECTOR; value = reinterpret_cast<int>( &data ); };
-	idEventArg( const idStr &data )				{ type = D_EVENT_STRING; value = reinterpret_cast<int>( data.c_str() ); };
-	idEventArg( const char *data )				{ type = D_EVENT_STRING; value = reinterpret_cast<int>( data ); };
-	idEventArg( const class idEntity *data )	{ type = D_EVENT_ENTITY; value = reinterpret_cast<int>( data ); };
-	idEventArg( const struct trace_s *data )	{ type = D_EVENT_TRACE; value = reinterpret_cast<int>( data ); };
+	idEventArg( float data )					{ type = D_EVENT_FLOAT; value = *reinterpret_cast<INT_PTR *>( &data ); };
+	idEventArg( idVec3 &data )					{ type = D_EVENT_VECTOR; value = reinterpret_cast<INT_PTR>( &data ); };
+	idEventArg( const idStr &data )				{ type = D_EVENT_STRING; value = reinterpret_cast<INT_PTR>( data.c_str() ); };
+	idEventArg( const char *data )				{ type = D_EVENT_STRING; value = reinterpret_cast<INT_PTR>( data ); };
+	idEventArg( const class idEntity *data )	{ type = D_EVENT_ENTITY; value = reinterpret_cast<INT_PTR>( data ); };
+	idEventArg( const struct trace_s *data )	{ type = D_EVENT_TRACE; value = reinterpret_cast<INT_PTR>( data ); };
 };
-
+// jmarshall end
 class idAllocError : public idException {
 public:
 	idAllocError( const char *text = "" ) : idException( text ) {}

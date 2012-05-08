@@ -34,6 +34,10 @@ extern idCVar	developer;
 extern idCVar	g_cinematic;
 extern idCVar	g_cinematicMaxSkipTime;
 
+// jmarshall
+extern idCVar	g_mapDeveloperPreview;
+// jmarshall end
+
 extern idCVar	r_aspectRatio;
 
 extern idCVar	g_monsters;

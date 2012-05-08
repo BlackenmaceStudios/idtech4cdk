@@ -3006,9 +3006,9 @@ cm_model_t *idCollisionModelManagerLocal::LoadRenderModel( const char *fileName 
 	collisionSurface = false;
 	for ( i = 0; i < renderModel->NumSurfaces(); i++ ) {
 		surf = renderModel->Surface( i );
-		if ( surf->shader->GetSurfaceFlags() & SURF_COLLISION ) {
+		//if ( surf->shader->GetSurfaceFlags() & SURF_COLLISION ) {
 			collisionSurface = true;
-		}
+		//}
 	}
 
 	for ( i = 0; i < renderModel->NumSurfaces(); i++ ) {
@@ -3019,7 +3019,7 @@ cm_model_t *idCollisionModelManagerLocal::LoadRenderModel( const char *fileName 
 		}
 		// if the model has a collision surface and this surface is not a collision surface
 		if ( collisionSurface && !( surf->shader->GetSurfaceFlags() & SURF_COLLISION ) ) {
-			continue;
+		//	continue;
 		}
 		// get max verts and edges
 		model->maxVertices += surf->geometry->numVerts;
@@ -3045,7 +3045,7 @@ cm_model_t *idCollisionModelManagerLocal::LoadRenderModel( const char *fileName 
 		}
 		// if the model has a collision surface and this surface is not a collision surface
 		if ( collisionSurface && !( surf->shader->GetSurfaceFlags() & SURF_COLLISION ) ) {
-			continue;
+			//continue;
 		}
 
 		for ( j = 0; j < surf->geometry->numIndexes; j += 3 ) {
