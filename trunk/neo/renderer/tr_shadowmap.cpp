@@ -539,7 +539,7 @@ void RB_RenderDrawShadowMappedSurfList( drawSurf_t *drawSurfs, int side ) {
 		*/
 		// render it
 
-		RB_T_FillShadowMapBuffer( drawSurf, drawSurf->geo->shadowCapPlaneBits == 666 );
+		RB_T_FillShadowMapBuffer( drawSurf, false );
 
 		if ( drawSurf->space->weaponDepthHack || drawSurf->space->modelDepthHack != 0.0f ) {
 			//RB_LeaveDepthHack();

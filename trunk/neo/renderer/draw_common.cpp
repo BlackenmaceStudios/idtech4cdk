@@ -1910,6 +1910,9 @@ void	RB_STD_DrawView( void ) {
 		{
 			// Render all the diffuse maps from the VT.
 			vtBackEnd.GenerateSceneTileInfo( drawSurfs, numDrawSurfs );
+
+			// Render dynamic models that aren't part of the VT.
+			RB_Deferred_PreInteractionPass( drawSurfs, numDrawSurfs );
 		}
 		
 		

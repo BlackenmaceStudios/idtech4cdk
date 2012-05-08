@@ -296,6 +296,9 @@ void idMD5Mesh::UpdateSurface( const struct renderEntity_s *ent, const idJointMa
 	}
 
 	tri = surf->geometry;
+// jmarshall
+	tri->vt_AreaID = -1;
+// jmarshall end
 
 	// note that some of the data is references, and should not be freed
 	tri->deformedSurface = true;

@@ -204,6 +204,8 @@ void RB_VirtualTexture_DrawUnpackBuffer( int areaNum ) {
 	renderDevice->RestoreViewMatrix();
 	RB_VirtualTexture_Cleanup();
 
+
+
 		// UnBind the FBO.
 	globalImages->currentRenderImageTargets->UnBindFBO();
 	//renderDevice->ForceDeviceSync();

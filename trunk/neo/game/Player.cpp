@@ -3885,7 +3885,6 @@ void idPlayer::UpdateWeapon( void ) {
 		return;
 	}
 
-	return; // jmarshall
 
 	assert( !spectating );
 
