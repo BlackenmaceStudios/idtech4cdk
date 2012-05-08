@@ -291,12 +291,6 @@ void idPhysics_Actor::ClipTranslation( trace_t &results, const idVec3 &translati
 		gameLocal.clip.TranslationModel( results, clipModel->GetOrigin(), clipModel->GetOrigin() + translation,
 								clipModel, clipModel->GetAxis(), clipMask,
 								model->Handle(), model->GetOrigin(), model->GetAxis() );
-
-		if(results.fraction == 1.0f) {
-			gameLocal.clip.TranslationModel( results, clipModel->GetOrigin()  + translation, clipModel->GetOrigin(),
-								clipModel, clipModel->GetAxis(), clipMask,
-								model->Handle(), model->GetOrigin()  + translation, model->GetAxis() );
-		}
 	}
 	else {
 		gameLocal.clip.Translation( results, clipModel->GetOrigin(), clipModel->GetOrigin() + translation,
