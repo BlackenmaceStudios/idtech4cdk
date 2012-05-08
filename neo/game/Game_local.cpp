@@ -864,7 +864,8 @@ void idGameLocal::LoadMap( const char *mapName, int randseed ) {
 			delete mapFile;
 		}
 		mapFile = new idMapFile;
-		if ( !mapFile->Parse( idStr( mapName ) + WORLD_ENTITIES_FILE_EXT ) ) {
+		// jmarshall: load it from the entities file.
+		if ( !mapFile->Parse( idStr( mapName ), false, false, true ) ) {
 			delete mapFile;
 			mapFile = NULL;
 			Error( "Couldn't load %s", mapName );

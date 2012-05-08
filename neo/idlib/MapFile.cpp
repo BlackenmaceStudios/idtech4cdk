@@ -718,7 +718,8 @@ unsigned int idMapEntity::GetGeometryCRC( void ) const {
 idMapFile::Parse
 ===============
 */
-bool idMapFile::Parse( const char *filename, bool ignoreRegion, bool osPath ) {
+// jmarshall: added keepExtension
+bool idMapFile::Parse( const char *filename, bool ignoreRegion, bool osPath, bool keepExtension ) {
 	// no string concatenation for epairs and allow path names for materials
 	idLexer src( LEXFL_NOSTRINGCONCAT | LEXFL_NOSTRINGESCAPECHARS | LEXFL_ALLOWPATHNAMES );
 	idToken token;
@@ -726,15 +727,28 @@ bool idMapFile::Parse( const char *filename, bool ignoreRegion, bool osPath ) {
 	idMapEntity *mapEnt;
 	int i, j, k;
 
+
+
 	name = filename;
-	name.StripFileExtension();
+	if(!keepExtension)
+	{
+		name.StripFileExtension();
+	}
 	fullName = name;
 	hasPrimitiveData = false;
-
-	if ( !ignoreRegion ) {
-		// try loading a .reg file first
-		fullName.SetFileExtension( "reg" );
+// jmarshall: so we can loaded .entity files
+	if( keepExtension )
+	{
 		src.LoadFile( fullName, osPath );
+	}
+// jmarshall end
+	else
+	{
+		if ( !ignoreRegion ) {
+			// try loading a .reg file first
+			fullName.SetFileExtension( "reg" );
+			src.LoadFile( fullName, osPath );
+		}
 	}
 
 	if ( !src.IsLoaded() ) {
@@ -856,12 +870,12 @@ bool idMapFile::WriteGameEntities( const char *fileName, const char *ext, bool f
 		return false;
 	}
 
-	fp->WriteFloatString( "Version %f\n", (float) CURRENT_MAP_VERSION );
+	fp->WriteFloatString( "Version %f\n\r", (float) CURRENT_MAP_VERSION );
 
 	for ( i = 0; i < entities.Num(); i++ ) {
 		if(i == 0)
 		{
-			fp->WriteFloatString( "// entity 0 {\"classname\" \"worldspawn\"}\n", (float) CURRENT_MAP_VERSION );
+			fp->WriteFloatString( "// entity 0\n\r {\n\"classname\" \"worldspawn\"\n }\n", (float) CURRENT_MAP_VERSION );
 		}
 		else
 		{
@@ -871,7 +885,6 @@ bool idMapFile::WriteGameEntities( const char *fileName, const char *ext, bool f
 				if(kv != NULL)
 				{
 					idStr qpath = kv->GetValue().c_str();
-					qpath.SetFileExtension( "cm" );
 					entities[i]->epairs.Set( "clipmodel", qpath.c_str() );
 					entities[i]->epairs.Set( "model", "");
 				}
