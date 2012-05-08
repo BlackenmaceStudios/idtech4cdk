@@ -865,6 +865,17 @@ bool idMapFile::WriteGameEntities( const char *fileName, const char *ext, bool f
 		}
 		else
 		{
+			if(entities[i]->epairs.FindKey( "classname" )->GetValue() == "func_static")
+			{
+				const idKeyValue *kv = entities[i]->epairs.FindKey( "model" );
+				if(kv != NULL)
+				{
+					idStr qpath = kv->GetValue().c_str();
+					qpath.SetFileExtension( "cm" );
+					entities[i]->epairs.Set( "clipmodel", qpath.c_str() );
+					entities[i]->epairs.Set( "model", "");
+				}
+			}
 			entities[i]->Write( fp, i );
 		}
 	}

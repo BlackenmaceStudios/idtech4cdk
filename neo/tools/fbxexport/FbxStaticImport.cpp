@@ -192,7 +192,7 @@ bool WriteMD5StaticMesh( const char *meshpath ) {
 	// Write the indexes
 	file->WriteFloatString( "tris {\n" );
 		for( int i = 0; i < fbxInterface.indexes.Num(); i+=3 ) {
-			file->WriteFloatString( "\ttri %d %d %d\n", fbxInterface.indexes[i + 0], fbxInterface.indexes[i + 1], fbxInterface.indexes[i + 2] );
+			file->WriteFloatString( "\ttri %d %d %d\n", fbxInterface.indexes[i + 2], fbxInterface.indexes[i + 1], fbxInterface.indexes[i + 0] );
 		}
 	file->WriteFloatString( "}\n\n" );
 

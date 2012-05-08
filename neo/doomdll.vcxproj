@@ -417,8 +417,8 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <EntryPointSymbol>
       </EntryPointSymbol>
-      <StackReserveSize>109715200</StackReserveSize>
-      <StackCommitSize>109715200</StackCommitSize>
+      <StackReserveSize>309715200</StackReserveSize>
+      <StackCommitSize>309715200</StackCommitSize>
       <HeapReserveSize>
       </HeapReserveSize>
       <HeapCommitSize>

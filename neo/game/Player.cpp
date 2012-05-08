@@ -942,7 +942,7 @@ idPlayer::idPlayer
 idPlayer::idPlayer() {
 	memset( &usercmd, 0, sizeof( usercmd ) );
 // jmarshall
-	noclip					= true;
+	noclip					= false;
 // jmarshall end
 	godmode					= false;
 
@@ -1187,7 +1187,7 @@ void idPlayer::Init( void ) {
 	const char			*value;
 	const idKeyValue	*kv;
 
-	noclip					= true;
+	noclip					= false;
 	godmode					= false;
 
 	oldButtons				= 0;
@@ -5506,8 +5506,13 @@ void idPlayer::Move( void ) {
 	// set physics variables
 	physicsObj.SetMaxStepHeight( pm_stepsize.GetFloat() );
 	physicsObj.SetMaxJumpHeight( pm_jumpheight.GetFloat() );
-
-	if ( noclip ) {
+// jmarshall
+	if ( g_mapDeveloperPreview.GetBool() ) {
+		physicsObj.SetContents( CONTENTS_BODY );
+		physicsObj.SetMovementType( PM_SPECTATOR );
+	}
+// jmarshall end
+	else if ( noclip ) {
 		physicsObj.SetContents( 0 );
 		physicsObj.SetMovementType( PM_NOCLIP );
 	} else if ( spectating ) {

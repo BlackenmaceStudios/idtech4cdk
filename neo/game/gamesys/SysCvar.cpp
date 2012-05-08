@@ -228,6 +228,7 @@ idCVar rb_showActive(				"rb_showActive",			"0",			CVAR_GAME | CVAR_BOOL, "show 
 
 // jmarshall
 idCVar dbg_ShowUI(					"dbg_ShowUI",				"0",			CVAR_GAME | CVAR_CHEAT | CVAR_BOOL, "show the debug user interface" );
+idCVar g_mapDeveloperPreview(		"g_mapDeveloperPreview",    "0",            CVAR_GAME | CVAR_CHEAT | CVAR_BOOL, "allows the player to fly through the map to fix any bugs/travel faster/etc" );
 // jmarshall end
 
 // The default values for player movement cvars are set in def/player.def

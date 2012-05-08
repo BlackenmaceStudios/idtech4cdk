@@ -626,7 +626,7 @@ void idIK_Walk::Evaluate( void ) {
 
 		start = jointOrigins[i] + normal * footUpTrace;
 		end = jointOrigins[i] - normal * footDownTrace;
-		gameLocal.clip.Translation( results, start, end, footModel, mat3_identity, CONTENTS_SOLID|CONTENTS_IKCLIP, self );
+		gameLocal.clip.Translation( results, end, start, footModel, mat3_identity, CONTENTS_SOLID|CONTENTS_IKCLIP, self );
 		floorHeights[i] = results.endpos * normal;
 
 		if ( ik_debug.GetBool() && footModel ) {
