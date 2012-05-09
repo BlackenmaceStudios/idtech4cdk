@@ -628,6 +628,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="sys\sys_local.h" />
     <ClInclude Include="sys\sys_public.h" />
+    <ClInclude Include="sys\win32\rc\doom_resource.h" />
     <ClInclude Include="sys\win32\win_local.h" />
     <ClInclude Include="tools\compilers\dmap\vtmodel.h" />
     <ClInclude Include="vt\dxt\dxt.h" />
@@ -2818,8 +2819,10 @@
     <None Include="..\base\renderprogs\virtualtexture.crp" />
     <None Include="ClassDiagram1.cd" />
     <None Include="openal\idal.py" />
+    <None Include="res\engine.ico" />
     <None Include="res\icon2.ico" />
     <None Include="sound\OggVorbis\vorbissrc\lookups.pl" />
+    <None Include="sys\win32\rc\res\engine.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="curllib.vcxproj">

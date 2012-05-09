@@ -43,6 +43,7 @@ void idGameLocal::LoadingFrame( int frameTime, float pct ) {
 
 	// Update the loading percents.
 	loadingGui->SetStateFloat( "map_loading", pct );
+	loadingGui->SetStateString( "loadStr", "This is a development build of the idTech4 community developers kit, some features may or not may not work properly.");
 	loadingGui->StateChanged( frameTime );
 
 
