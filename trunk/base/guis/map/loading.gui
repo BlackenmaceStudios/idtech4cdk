@@ -3,37 +3,9 @@ windowDef Desktop
 	rect	0,0,1280,720
 	windowDef unnamed
 	{
-		rect	598,127,615,459
+		rect	0,0,1280,720
 		visible	1
-		background	"guis/assets/loading/loadbase"
+		background	"guis/assets/splash/launch"
 		matcolor	1,1,1,1
-	}
-	windowDef unnamed1
-	{
-		rect	61,575,571,195
-		visible	1
-		forecolor	1,1,1,1
-		text	"gui::loadStr"
-		textscale	0.29
-	}
-	windowDef Text1
-	{
-		rect	32,0,430,26
-		visible	1
-		forecolor	1,1,1,1
-		text	"Loading..."
-		textscale	0.40000001
-	}
-	windowDef loadbarback
-	{
-		rect	40,38,300,26
-		visible	1
-		backcolor	0.75294119,0.75294119,0.75294119,1
-	}
-	windowDef loadbar
-	{
-		rect	48,43,( "gui::map_loading" *1362 ),20
-		visible	1
-		backcolor	0,0.25098041,0.50196081,1
 	}
 }
