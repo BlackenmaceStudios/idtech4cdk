@@ -656,16 +656,16 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 		}
 	}
 
-	for(int i = 0; i < burnIndexes.Num(); i++)
-	{
-		for(int f = 0; f < parentTris->numIndexes; f++)
-		{
-			if(parentTris->indexes[f] == burnIndexes[i])
-			{
+	//for(int i = 0; i < burnIndexes.Num(); i++)
+	//{
+		//for(int f = 0; f < parentTris->numIndexes; f++)
+		//{
+			//if(parentTris->indexes[f] == burnIndexes[i])
+			//{
 			//	parentTris->indexes[f] = -1;
-			}
-		}
-	}
+			//}
+		//}
+	//}
 	common->Printf("...Number of vertexes %d\n", verts.Num() );
 	common->Printf("...Number of indexes %d-%d\n", realIndexes.Num(), indexes.Num() );
 
@@ -748,6 +748,10 @@ bool VirtualTextureBuilder::GenerateVTVerts_r( bmVTModel *model,  float surfaceS
 		idPlane plane;
 		idVec3 planeNormal;
 		idDrawVert *v = model->tris[d]->verts;
+
+		if(model->tris[d]->vt_AreaID == -1) {
+			continue;
+		}
 		
 		vecs[0] = idVec3(0,0,0);
 		vecs[1] = idVec3(0,0,0);

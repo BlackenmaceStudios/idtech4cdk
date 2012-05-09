@@ -23,6 +23,7 @@ namespace ToolsManaged.Frontend
         public bool is3DView;
         private ToolsManaged.Private.NativeAPI.idManagedEditorWindowNative.Point _lastPoint;
         private ContextMenu _entityContextMenu;
+        private ContextMenu _brushContextMenu;
         private idLibNativeAPI.idDictNative _currentSelectedEntityDict;
         private const int CP_NOCLOSE_BUTTON = 0x200;
         protected override CreateParams CreateParams
@@ -47,6 +48,23 @@ namespace ToolsManaged.Frontend
             mnuItem.Text = name;
             mnuItem.Click += clickHandler;
             menu.MenuItems.Add(mnuItem);
+        }
+
+        private void CreateBrushContextMenu()
+        {
+            _brushContextMenu = new System.Windows.Forms.ContextMenu();
+            AddItemToContextMenu(_brushContextMenu, "Set as CollideOnly Brush", new EventHandler(BrushContextMenu_OnClickSetCollideOnlyBrush));
+            AddItemToContextMenu(_brushContextMenu, "Set as VT Brush", new EventHandler(BrushContextMenu_OnClickSetAsVTBrush));
+        }
+
+        private void BrushContextMenu_OnClickSetCollideOnlyBrush(object sender, EventArgs e)
+        {
+            ((EditorWindow)window).OnNamedEvent("SetAsCollisionBrush");
+        }
+
+        private void BrushContextMenu_OnClickSetAsVTBrush(object sender, EventArgs e)
+        {
+            ((EditorWindow)window).OnNamedEvent("SetAsVTBrush");
         }
 
         private void CreateEntityContextMenu()
@@ -82,7 +100,7 @@ namespace ToolsManaged.Frontend
             this.AllowDrop = true;
 
             CreateEntityContextMenu();
-     
+            CreateBrushContextMenu();
             Invalidate();
         }
 
@@ -230,6 +248,13 @@ namespace ToolsManaged.Frontend
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             
+        }
+
+        public void OpenBrushContextMenu()
+        {
+            _currentSelectedEntityDict = null;
+            this.ContextMenu = _brushContextMenu;
+            this.ContextMenu.Show(panel1, new Point(_lastPoint.x, _lastPoint.y));
         }
 
         

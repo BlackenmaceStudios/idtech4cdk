@@ -56,8 +56,8 @@ namespace ToolsManaged.Frontend
             _dict = dict;
 
             UpdateProperties();
-            
-            Show();
+
+            ShowDialog();
         }
 
         private void EntityProperties_Load(object sender, EventArgs e)

@@ -90,6 +90,15 @@ namespace ToolsManaged.Frontend.WindowAPI
             _nativeWindow.OnAddEntityEvent(_nativeWindow.GetNativeAddress(), entityType, pt);
         }
 
+        public void OpenBrushContextMenu()
+        {
+            Viewport viewport = (Viewport)_window;
+
+
+
+            viewport.OpenBrushContextMenu();
+        }
+
         public void OpenEntityContextMenu(IntPtr dict)
         {
             Viewport viewport = (Viewport)_window;

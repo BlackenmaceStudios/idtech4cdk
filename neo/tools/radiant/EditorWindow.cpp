@@ -30,10 +30,41 @@ void idManagedEditorWindow::OnDropNewmodel(){ }
 BOOL idManagedEditorWindow::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt){ return false; }
 BOOL idManagedEditorWindow::OnCmdMsg( UINT nID, int nCode, void *pExtra, AFX_CMDHANDLERINFO *pHandlerInfo ){ return false; }
 void idManagedEditorWindow::OnNamedEvent( const char *eventName ) {
+	bool eventSetAsCollisionBrush = false;
+	bool eventSetAsVTBrush = false;
 
+	if(!strcmp(eventName, "SetAsCollisionBrush")) {
+		eventSetAsCollisionBrush = true;
+		Sys_MarkMapModified();
+	}
+
+	if(!strcmp(eventName, "SetAsVTBrush")) {
+		eventSetAsVTBrush = true;
+		Sys_MarkMapModified();
+	}
+
+
+	if(eventSetAsCollisionBrush || eventSetAsVTBrush)
+	{
+		for (brush_t * pBrush = selected_brushes.next; pBrush != NULL && pBrush != &selected_brushes; pBrush = pBrush->next) {
+			for(face_t *face = pBrush->brush_faces; face != NULL; face = face->next) {
+				if(eventSetAsCollisionBrush) {
+					face->d_texture = declManager->FindMaterial( "textures/common/caulk" );
+				}
+
+				if(eventSetAsVTBrush) {
+					face->d_texture = declManager->FindMaterial( "worlddefault" );
+				}
+			}
+		}
+	}
 }
 void idManagedEditorWindow::OnAddEntityEvent( const char *entityType, CPoint pt ) {
 
+}
+
+void idManagedEditorWindow::OpenBrushContextMenu() {
+	window->OpenBrushContextMenu();
 }
 
 void idManagedEditorWindow::OpenEntityContextMenu( idDict *entDict ) {

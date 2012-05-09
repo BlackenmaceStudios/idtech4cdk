@@ -444,7 +444,7 @@ void bmRenderShadowMap::RenderLightView( idRenderLightLocal *light ) {
 RB_T_ShadowMapBuffer
 ==================
 */
-void RB_T_FillShadowMapBuffer( const drawSurf_t *surf, bool useFrontCulling ) {
+void RB_T_FillShadowMapBuffer( const drawSurf_t *surf, srfCullInfo_t *cullInfo ) {
 	int			stage;
 	const idMaterial	*shader;
 	const shaderStage_t *pStage;
@@ -461,21 +461,21 @@ void RB_T_FillShadowMapBuffer( const drawSurf_t *surf, bool useFrontCulling ) {
 	qglVertexPointer( 3, GL_FLOAT, sizeof( idDrawVert ), ac->xyz.ToFloatPtr() );
 	qglTexCoordPointer( 2, GL_FLOAT, sizeof( idDrawVert ), reinterpret_cast<void *>(&ac->st) );
 
-	if(useFrontCulling)
-	{
-		GL_Cull( CT_FRONT_SIDED );
-	}
-	else
-	{
+	//if(useFrontCulling)
+	//{
+	//	GL_Cull( CT_FRONT_SIDED );
+	//}
+	//else
+	//{
 		GL_Cull( CT_BACK_SIDED );
-	}
+	//}
 	qglDepthFunc(GL_LESS);
 	
-	qglPolygonOffset( -r_sb_polyOfsFactor.GetFloat(), -r_sb_polyOfsUnits.GetFloat() );
-	qglEnable( GL_POLYGON_OFFSET_FILL );
+	//qglPolygonOffset( -r_sb_polyOfsFactor.GetFloat(), -r_sb_polyOfsUnits.GetFloat() );
+	//qglEnable( GL_POLYGON_OFFSET_FILL );
 	
 	RB_DrawElementsWithCounters( tri );
-	qglDisable( GL_POLYGON_OFFSET_FILL );
+	//qglDisable( GL_POLYGON_OFFSET_FILL );
 }
 
 
@@ -515,16 +515,7 @@ void RB_RenderDrawShadowMappedSurfList( drawSurf_t *drawSurfs, int side ) {
 		
 		R_CalcInteractionFacing(NULL, drawSurf->geo, _currentLight, cullInfo, (float *)&drawSurf->space->modelMatrix[0]);
 
-		int numFaces = drawSurf->geo->numIndexes / 3;
-		int allFront = 1;
-		for ( i = 0; i < numFaces && allFront; i++ ) {
-			allFront &= cullInfo.facing[i];
-		}
-		if ( allFront != 0 ) {
-			
-			continue;
-		}
-
+		
 		
 
 		float	matrix[16];
@@ -543,7 +534,7 @@ void RB_RenderDrawShadowMappedSurfList( drawSurf_t *drawSurfs, int side ) {
 		*/
 		// render it
 
-		RB_T_FillShadowMapBuffer( drawSurf, false );
+		RB_T_FillShadowMapBuffer( drawSurf, &cullInfo );
 
 		if ( drawSurf->space->weaponDepthHack || drawSurf->space->modelDepthHack != 0.0f ) {
 			//RB_LeaveDepthHack();

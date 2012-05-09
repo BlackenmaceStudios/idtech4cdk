@@ -18,5 +18,6 @@ namespace ToolsManaged
         void SetWindowText(string name);
         void OpenEntityContextMenu(IntPtr entdict);
         void ShowWindow();
+       void OpenBrushContextMenu();
     }
 }

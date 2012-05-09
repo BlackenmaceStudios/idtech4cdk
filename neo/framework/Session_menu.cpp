@@ -94,14 +94,14 @@ void idSessionLocal::SetGUI( idUserInterface *gui, HandleGuiCommand_t handle ) {
 	if ( !guiActive ) {
 		return;
 	}
-
+// jmarshall
 	if ( guiActive == guiMainMenu ) {
-		SetSaveGameGuiVars();
-		SetMainMenuGuiVars();
+	//	SetSaveGameGuiVars();
+	//	SetMainMenuGuiVars();
 	} else if ( guiActive == guiRestartMenu ) {
-		SetSaveGameGuiVars();
+	//	SetSaveGameGuiVars();
 	}
-
+// jmarshall end
 	sysEvent_t  ev;
 	memset( &ev, 0, sizeof( ev ) );
 	ev.evType = SE_NONE;
