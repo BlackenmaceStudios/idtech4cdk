@@ -774,11 +774,11 @@ entityDef player_base {
 	"weapon_nightmare"					"weapon_pistol"
 	"current_weapon"					"0"
 	
-	"pm_jumpheight"						"48"
+	"pm_jumpheight"						"100"
 	"pm_stepsize"						"16"
 	"pm_crouchspeed"					"80"
-	"pm_walkspeed"						"140"
-	"pm_runspeed"						"220"
+	"pm_walkspeed"						"440"
+	"pm_runspeed"						"520"
 	"pm_noclipspeed"					"200"
 	"pm_minviewpitch"					"-89"	// looking up
 	"pm_maxviewpitch"					"89"	// looking down
@@ -788,8 +788,8 @@ entityDef player_base {
 	"pm_crouchheight"					"38"
 	"pm_crouchviewheight"				"32"
 
-	"pm_normalheight"					"74"
-	"pm_normalviewheight"				"68"
+	"pm_normalheight"					"274"
+	"pm_normalviewheight"				"364"
 	"pm_deadheight"						"20"
 	"pm_deadviewheight"					"10"
 	"pm_crouchrate"						"0.87"

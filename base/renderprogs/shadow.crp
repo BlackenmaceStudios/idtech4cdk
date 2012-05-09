@@ -32,7 +32,7 @@ FragmentProgram
 
 
 
-		float fDistSquared    = dot( shadowXyz.xyz, shadowXyz.xyz );
+		float fDistSquared    = 1 - dot( shadowXyz.xyz, shadowXyz.xyz );
 		float fDepth = fDistSquared * 0.99;
 
 		vec4 Moments = textureCube ( ShadowMap, shadowXyz.xyz  );
