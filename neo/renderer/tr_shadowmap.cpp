@@ -9,7 +9,7 @@ idCVar r_sb_polyOfsFactor( "r_sb_polyOfsFactor", "2", CVAR_RENDERER | CVAR_FLOAT
 idCVar r_sb_polyOfsUnits( "r_sb_polyOfsUnits", "3000", CVAR_RENDERER | CVAR_FLOAT, "polygonOffset units for drawing shadow buffer" );
 idCVar r_sb_useCulling( "r_sb_useCulling", "1", CVAR_RENDERER | CVAR_BOOL, "cull geometry to individual side frustums" );
 
-idCVar r_sb_frustomFOV( "r_sb_frustomFOV", "92", CVAR_RENDERER | CVAR_FLOAT, "oversize FOV for point light side matching" );
+idCVar r_sb_frustomFOV( "r_sb_frustomFOV", "90", CVAR_RENDERER | CVAR_FLOAT, "oversize FOV for point light side matching" );
 
 float lightProjectionMatrix[16];
 float lightMatrix[16];
@@ -130,7 +130,8 @@ void R_CalculateShadowsForModelLight( idRenderModel *model, viewEntity_t *vEntit
 		return;
 	for(int s = 0; s < model->NumSurfaces(); s++) {
 		srfTriangles_t	*tri = model->Surface( s )->geometry;
-
+		if(tri->numVerts <= 0) // why?
+			continue; 
 
 		for(int side = 0; side < 6; side++)
 		{
@@ -207,7 +208,8 @@ void R_CalculateShadowsForLight( idRenderLightLocal *light, viewLight_t *vLight 
 
 	// Add all the entities for shadowing.
 	for(int i = 0; i < world->entityDefs.Num(); i++) {
-		
+		if(world->entityDefs[i] == NULL)
+			continue;
 
 		R_CalculateShadowsForModelLight( R_EntityDefDynamicModel( world->entityDefs[i] ),  world->entityDefs[i]->viewEntity, light, vLight );
 	}

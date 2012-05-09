@@ -514,7 +514,7 @@ static void GLW_CreateWindowClasses( void ) {
 	wc.cbClsExtra    = 0;
 	wc.cbWndExtra    = 0;
 	wc.hInstance     = win32.hInstance;
-	wc.hIcon         = LoadIcon( win32.hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	wc.hIcon         = LoadIcon( win32.hInstance, MAKEINTRESOURCE(IDI_ICON2));
 	wc.hCursor       = LoadCursor (NULL,IDC_ARROW);
 	wc.hbrBackground = (struct HBRUSH__ *)COLOR_GRAYTEXT;
 	wc.lpszMenuName  = 0;
