@@ -37,6 +37,7 @@ public:
 	virtual void OnNamedEvent( const char *eventName );
 public:
 	void	OpenEntityContextMenu( idDict *entDict );
+	void	OpenBrushContextMenu();
 	void	SetCapture( void );
 	void	BringWindowToTop( void );
 	void	SetFocus( void );

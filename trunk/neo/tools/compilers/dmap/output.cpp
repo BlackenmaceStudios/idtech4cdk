@@ -217,6 +217,8 @@ srfTriangles_t	*ShareMapTriVerts( const mapTri_t *tris ) {
 	numVerts = 0;
 	numIndexes = 0;
 
+	
+
 	for ( step = tris ; step ; step = step->next ) {
 		bool trisIsValid = false;
 		for ( i = 0 ; i < 3 ; i++ ) {
@@ -526,18 +528,20 @@ typedef struct interactionTris_s {
 // jmarshall
 		int tileNum = -1;
 		
-		if(vt != NULL)
-		{
-		//	tileNum = vt->WriteSurfaceTileToVT( ambient->material->GetName() );
-		}
+		
 	//	procFile->WriteFloatString( "/* VTTileNum %d */ ", tileNum  );
 	//	procFile->WriteFloatString( "%d ", tileNum );
 // jmarshall end
 		uTri = ShareMapTriVerts( ambient );
+		if(strstr(ambient->material->GetName(), "caulk")) {
+			uTri->vt_AreaID = -1;
+		}
 		FreeTriList( ambient );
 
 		CleanupUTriangles( uTri );
 		uTri->vt_uvGenerateType = (EditorUVGenerateType)uvGenHandleType;
+
+		
 
 		outModel.AddTris( uTri );
 		R_FreeStaticTriSurf( uTri );

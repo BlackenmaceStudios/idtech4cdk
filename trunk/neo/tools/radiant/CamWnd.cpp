@@ -644,8 +644,10 @@ void CCamWnd::Cam_MouseDown(int x, int y, int buttons) {
 // jmarshall
 	if( (buttons == MK_RBUTTON) && Select_AreObjectsSelected()) 
 	{
+		bool isWorldSelected = false;
 		for (brush_t * pBrush = selected_brushes.next; pBrush != NULL && pBrush != &selected_brushes; pBrush = pBrush->next) {
 			if (pBrush->owner == world_entity) {
+				isWorldSelected = true;
 				continue;
 			}
 			else {
@@ -658,6 +660,12 @@ void CCamWnd::Cam_MouseDown(int x, int y, int buttons) {
 				inEntityProperties = true;
 				return;
 			}
+		}
+		if(isWorldSelected)
+		{
+			isWorldSelected = true;
+			OpenBrushContextMenu();
+			return;
 		}
 	}
 	else if((buttons == MK_LBUTTON) && inEntityProperties) {

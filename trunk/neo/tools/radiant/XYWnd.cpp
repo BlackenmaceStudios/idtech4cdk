@@ -2502,17 +2502,28 @@ void CXYWnd::XY_MouseUp(int x, int y, int buttons) {
 // jmarshall
 	else if( (buttons == MK_RBUTTON) && Select_AreObjectsSelected()) 
 	{
+		bool isWorldSelected = false;
 		for (brush_t * pBrush = selected_brushes.next; pBrush != NULL && pBrush != &selected_brushes; pBrush = pBrush->next) {
 			if (pBrush->owner == world_entity) {
+				isWorldSelected = true;
 				continue;
 			}
 			else {
 				entity_t	*e = pBrush->owner;
+				
 				//oldSelectedModelEntity = selected_brushes.next->modelHandle;
+
 				OpenEntityContextMenu(&e->epairs);
 				selectedEntity = e;
+				Sys_MarkMapModified();
 				return;
 			}
+		}
+		if(isWorldSelected)
+		{
+			OpenBrushContextMenu();
+
+			return;
 		}
 	}
 	else if(selectedEntity != NULL)
