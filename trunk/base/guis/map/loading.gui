@@ -5,7 +5,7 @@ windowDef Desktop
 	{
 		rect	0,0,1280,720
 		visible	1
-		background	"guis/assets/splash/launch"
+		background	"guis/assets/splash/loadsplash"
 		matcolor	1,1,1,1
 	}
 }
