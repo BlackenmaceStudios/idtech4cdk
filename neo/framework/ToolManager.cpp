@@ -15,6 +15,7 @@ bmToolManager::LoadTools
 ==================
 */
 void bmToolManager::LoadTools( void ) {
+#ifdef ID_ALLOW_TOOLS
 	char				dllPath[ MAX_OSPATH ];
 	bmEngineClassExport engineExport;
 
@@ -42,6 +43,7 @@ void bmToolManager::LoadTools( void ) {
 	toolInterface = dllEntry( &engineExport, &win32 );
 
 	common->PrintLoadingMessage( "FINISHING INIT" );
+#endif
 }
 
 /*
@@ -50,10 +52,12 @@ bmToolManager::LoadTools
 ==================
 */
 void bmToolManager::InitTool( const toolFlag_t tool, const idDict *dict ) {
+#ifdef ID_ALLOW_TOOLS
 	if(toolInterface == NULL)
 		return;
 
 	toolInterface->InitTool( tool, dict );
+#endif
 }
 
 /*
@@ -62,8 +66,10 @@ bmToolManager::LoadTools
 ==================
 */
 void bmToolManager::Frame( void ) {
+#ifdef ID_ALLOW_TOOLS
 	if(toolInterface == NULL)
 		return;
 
 	toolInterface->Frame();
+#endif
 }

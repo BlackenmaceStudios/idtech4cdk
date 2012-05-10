@@ -11,6 +11,7 @@
 idCVar vt_backend_fbosize_width( "vt_backend_fbosize_width", "128", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT, "Size of the FBO to readback tile data" );
 idCVar vt_backend_fbosize_height( "vt_backend_fbosize_height", "72", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT, "Size of the FBO to readback tile data" );
 idCVar vt_skiprender( "vt_skiprender", "0", CVAR_RENDERER | CVAR_BOOL | CVAR_CHEAT, "Skips rendering the virtual texture." );
+idCVar vt_syncrender( "vt_syncrender", "0", CVAR_RENDERER | CVAR_BOOL | CVAR_CHEAT, "Sync all VT texture uploads" );
 
 bmVirtualTextureBackend vtBackEnd;
 float vtProjectionMatrix[16];
@@ -127,13 +128,18 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 
 	virtualTextureManager->FlipToDefaultPage();
 
+
+	bool syncRender = vt_syncrender.GetBool();
 	for(int i = 0; i < numCharts; i++) {
 		// If a area isn't visibile in the current scene, no need to render it.
 		if(sceneTiles[i].Num() <= 0) {
 			continue;
 		}
 
-		//renderDevice->BeginDeviceSync();
+		if(syncRender)
+		{
+			renderDevice->BeginDeviceSync();
+		}
 		
 		// Upload the tiles for this area.
 		sceneAreaDist[i] = 255 - sceneAreaDist[i];
@@ -149,14 +155,26 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 		{
 			UploadAreaTiles( i, 0,sceneTiles[i]);
 		}
-		//renderDevice->ForceDeviceSync();
+
+		if(syncRender)
+		{
+			renderDevice->ForceDeviceSync();
+		}
 
 
 		// Render the tiles for this area.
 
-		//renderDevice->BeginDeviceSync();
+		if(syncRender)
+		{
+			renderDevice->BeginDeviceSync();
+		}
+
 		RB_RenderVirtualTextureArea( i );
-		//renderDevice->ForceDeviceSync();
+
+		if(syncRender)
+		{
+			renderDevice->ForceDeviceSync();
+		}
 		
 		virtualTextureManager->FlipPage();
 		virtualTextureManager->GetWorldPage()->ResetPage();

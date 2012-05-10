@@ -97,7 +97,7 @@ static void Session_Map_f( const idCmdArgs &args ) {
 	// make sure the level exists before trying to change, so that
 	// a typo at the server console won't end the game
 	// handle addon packs through reloadEngine
-	sprintf( string, "maps/%s.map", map.c_str() );
+	sprintf( string, "maps/%s.entities", map.c_str() );
 	ff = fileSystem->FindFile( string, true );
 	switch ( ff ) {
 	case FIND_NO:
@@ -138,7 +138,7 @@ static void Session_DevMap_f( const idCmdArgs &args ) {
 	// make sure the level exists before trying to change, so that
 	// a typo at the server console won't end the game
 	// handle addon packs through reloadEngine
-	sprintf( string, "maps/%s.map", map.c_str() );
+	sprintf( string, "maps/%s.entities", map.c_str() );
 	ff = fileSystem->FindFile( string, true );
 	switch ( ff ) {
 	case FIND_NO:
