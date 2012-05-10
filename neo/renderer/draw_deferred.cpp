@@ -9,7 +9,7 @@
 #include "../vt/VirtualTexture_Backend.h"
 
 
-#define DEBUG_DEFERRED GL_CheckErrors();
+#define DEBUG_DEFERRED //GL_CheckErrors();
 
 void RB_STD_T_RenderShaderPasses( const drawSurf_t *surf, bool isDeferred );
 void RB_T_FillDepthBuffer( const drawSurf_t *surf );

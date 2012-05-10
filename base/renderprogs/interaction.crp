@@ -211,7 +211,7 @@ FragmentProgram
 		
 
 		vec3 dm = normalize(vec3(d,d,d));
-		
+	
 		vec4 color = lightingModel( diffuse * var_Color , specular * var_Color, L, var_ViewDir, N, H, shadow );
 			d = sqrt(d) * 8;
 			float atten = 73000 / ( d * d2 + d2 * d * d);
@@ -331,7 +331,7 @@ FragmentProgram
 	//
 	void main( void ) {   
 		vec4 color = vec4(0,0,0,1);
-		vec4 diffuse = CalcBloom();
+		vec4 diffuse = texture2D( u_diffuseTexture, var_TexNormal.st );
 		
 		
 		vec4 var_Shadow = BlurPixelV( ShadowMap, var_TexNormal.st );
@@ -462,8 +462,8 @@ FragmentProgram
 
 
 		//gl_FragColor = (color + 0.4) * var_Shadow * vec4(1,1,1,1) ;
-		gl_FragColor.xyz = color.xyz * diffuse.xyz * (var_Shadow.r + 0.3); //((color.xyz)    ) + (UnlitTransparent()) ;
-	
+		gl_FragColor.xyz = color.xyz * diffuse.xyz * (var_Shadow.r * (diffuse.xyz) + 0.8); //((color.xyz)    ) + (UnlitTransparent()) ;
+
 		gl_FragColor.a = 1;
 	}
 

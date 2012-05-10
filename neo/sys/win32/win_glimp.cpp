@@ -608,7 +608,7 @@ static bool GLW_CreateWindow( glimpParms_t parms ) {
 	win32.hWnd = CreateWindowEx (
 		 exstyle, 
 		 WIN32_WINDOW_CLASS_NAME,
-		 GAME_NAME,
+		 GAME_WINDOW_TITLE,
 		 stylebits,
 		 x, y, w, h,
 		 NULL,

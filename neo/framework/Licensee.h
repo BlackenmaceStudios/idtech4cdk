@@ -55,7 +55,7 @@ If you have questions concerning this license or the applicable additional terms
 #define GAME_WINDOW_TITLE				"Deadly Law"		// appears on window titles and errors
 #endif
 
-#define ENGINE_VERSION					"Deadly Law( " ID_PLATFORM " ) 0.1745" 	// printed in console
+#define ENGINE_VERSION					"Deadly Law( " ID_PLATFORM " ) 0.2312" 	// printed in console
 
 // paths
 #define	CD_BASEDIR						"DeadlyLaw"

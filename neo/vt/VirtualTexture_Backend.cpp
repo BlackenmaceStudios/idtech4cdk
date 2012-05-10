@@ -10,6 +10,7 @@
 
 idCVar vt_backend_fbosize_width( "vt_backend_fbosize_width", "128", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT, "Size of the FBO to readback tile data" );
 idCVar vt_backend_fbosize_height( "vt_backend_fbosize_height", "72", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT, "Size of the FBO to readback tile data" );
+idCVar vt_skiprender( "vt_skiprender", "0", CVAR_RENDERER | CVAR_BOOL | CVAR_CHEAT, "Skips rendering the virtual texture." );
 
 bmVirtualTextureBackend vtBackEnd;
 float vtProjectionMatrix[16];
@@ -140,7 +141,7 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 		{
 			UploadAreaTiles( i, 2,sceneTiles[i]);
 		}
-		else if(sceneAreaDist[i] > 100)
+		else if(sceneAreaDist[i] > 120)
 		{
 			UploadAreaTiles( i, 1,sceneTiles[i]);
 		}
@@ -175,7 +176,8 @@ void bmVirtualTextureBackend::GenerateSceneTileInfo( drawSurf_t **drawSurfs, int
 	idScreenRect oldViewport, oldScissor;
 	idScreenRect viewport,scissor;
 
-	
+	if(vt_skiprender.GetBool())
+		return;
 
 	if(backEnd.viewDef == NULL || backEnd.viewDef->renderWorld == NULL || backEnd.viewDef->renderWorld->vt == NULL)
 		return;

@@ -94,7 +94,7 @@ void bmImagePBO::UnbindPBO( void ) {
 	if(buffer != NULL)
 	{
 		qglUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB); 
-		buffer = NULL;
+
 	}
 	qglBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
 }

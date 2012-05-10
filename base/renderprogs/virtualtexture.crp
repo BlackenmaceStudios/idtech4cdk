@@ -190,7 +190,7 @@ FragmentProgram
 		outColor.g = (inColor.r * 0.0) + (inColor.g * 1.0) + (inColor.b * (-0.5 * 256.0 / 255.0)) + (inColor.a * 1.0);	
 		outColor.b = (inColor.r * -1.0) + (inColor.g * -1.0) + (inColor.b * (1.0 * 256.0 / 255.0)) + (inColor.a * 1.0);	
 
-		return outColor * 0.3;
+		return outColor;
 	}
 
 
@@ -236,13 +236,13 @@ FragmentProgram
 	    c[2][1] = YCocgToRGB(texture2D(color_map,tc + vec2( 0, d)))[ch];
 	    c[2][2] = YCocgToRGB(texture2D(color_map,tc + vec2( d, d)))[ch];
 	    
-	   return c;
+	   return c * 0.6;
    }
 
    vec3 GenerateNormalMap( vec2 texcoord, float texture_size, float bump_level ) {
 		mat3 c = img3x3(u_diffuseTexture, texcoord, texture_size, 0 );// red only
 		vec3 normal = height2normal_sobel(c);
-		return normalize(vec3(normal.xy, normal.z *bump_level));
+		return normalize(vec3(normal.xy, normal.z *bump_level)) ;
    }
 
 
