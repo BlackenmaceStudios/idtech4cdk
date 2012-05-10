@@ -194,10 +194,12 @@ public:
 	virtual void			GetRenderLight( renderLight_t *re );
 	virtual void			ForceUpdate();
 	virtual int				GetIndex();
-
+	virtual renderLight_t   *GetParms() { return &parms; }
 	bmRenderShadowMap       shadowMap;
 
 	renderLight_t			parms;					// specification
+
+	int						lightId;				// Handle to the light
 
 	bool					lightHasMoved;			// the light has changed its position since it was
 													// first added, so the prelight model is not valid
@@ -214,7 +216,6 @@ public:
 													// and should go in the dynamic frame memory, or kept
 													// in the cached memory
 	bool					archived;				// for demo writing
-
 
 	// derived information
 	idPlane					lightProject[4];

@@ -416,7 +416,9 @@ AddLightDef
 qhandle_t idRenderWorldLocal::AddLightDef( const renderLight_t *rlight ) {
 	// try and reuse a free spot
 	int lightHandle = lightDefs.FindNull();
-
+// jmarshall
+//	rlight->lightId = lightHandle;
+// jmarshall end
 	if ( lightHandle == -1 ) {
 		lightHandle = lightDefs.Append( NULL );
 		if ( interactionTable && lightDefs.Num() > interactionTableHeight ) {
