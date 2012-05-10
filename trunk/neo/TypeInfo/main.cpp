@@ -40,7 +40,7 @@ int idEventLoop::JournalLevel( void ) const { return 0; }
 
 class bmMemoryHandlerLocal : public bmMemoryHandler  {
 public:
-	virtual void			*Allocate( size_t size ) { return malloc( size ); }
+	virtual void			*Allocate( size_t size, const char *filename, int line ) { return malloc( size ); }
 	virtual void			Free( void *ptr ) { free( ptr ); }
 
 	virtual void			*AllocAlign( int size, size_t align ) { return malloc( size ); }

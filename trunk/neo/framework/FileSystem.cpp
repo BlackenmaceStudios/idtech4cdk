@@ -4089,7 +4089,10 @@ idFileSystemLocal::FindFile
 	pack_t *pak;
 	idFile *f = OpenFileReadFlags( path, FSFLAG_SEARCH_DIRS | FSFLAG_SEARCH_PAKS | FSFLAG_SEARCH_ADDONS, &pak );
 	if ( !f ) {
-		return FIND_NO;
+		f = OpenFileReadFlags( va("generated/%s",path), FSFLAG_SEARCH_DIRS | FSFLAG_SEARCH_PAKS | FSFLAG_SEARCH_ADDONS, &pak );
+		if ( !f ) {
+			return FIND_NO;
+		}
 	}
 	if ( !pak ) {
 		// found in FS, not even in paks

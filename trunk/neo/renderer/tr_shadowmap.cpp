@@ -282,7 +282,7 @@ void R_CalculateShadowsForLight( idRenderLightLocal *light, viewLight_t *vLight 
 
 		viewEntity_t *vEntity = world->entityDefs[i]->viewEntity;
 
-		if(vEntity && (vEntity->scissorRect.IsEmpty() < 0 || vEntity->scissorRect.x2 == 0 || vEntity->scissorRect.y2 == 0))
+		if(vEntity && (vEntity->scissorRect.IsEmpty() < 0 || vEntity->scissorRect.x2 <= 0 || vEntity->scissorRect.y2 <= 0 || vEntity->scissorRect.x2 >= SCREEN_WIDTH || vEntity->scissorRect.y2 >= SCREEN_HEIGHT))
 			continue;
 
 		if(vEntity && vEntity->entityDef && vEntity->entityDef->parms.weaponDepthHack)
