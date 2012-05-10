@@ -16,7 +16,7 @@
 // jmarshall - cross dll memory allocation code.
 class bmMemoryHandler {
 public:
-	virtual void			*Allocate( size_t size ) = 0;
+	virtual void			*Allocate( size_t size, const char *file = __FILE__, int line = __LINE__ ) = 0;
 	virtual void			Free( void *ptr ) = 0;
 	virtual void			*Realloc( void *ptr, int size ) = 0;
 
@@ -31,7 +31,6 @@ extern bmMemoryHandler		*allocator;
 #ifdef BM_UNIFIED_MEMORY_ALLOCATOR
 // jmarshall
 #include <malloc.h>
-
 
 // jamrshall end
 #ifndef TOOLS_DLL

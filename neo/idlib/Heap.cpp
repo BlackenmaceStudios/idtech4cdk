@@ -1180,19 +1180,6 @@ Mem_DumpCompressed_f
 void Mem_DumpCompressed_f( const idCmdArgs &args ) {
 }
 
-
-/* ALLOCATION HOOK FUNCTION
-   -------------------------
-   An allocation hook function can have many, many different
-   uses. This one simply logs each allocation operation in a file.
-*/
-int __cdecl MyAllocHook( int nAllocType, void * pvData, size_t   nSize,int nBlockUse, long lRequest,const unsigned char * szFileName,int nLine) {
-	if(nSize >= 62914560) {
-		common->Warning("Heap huge alloc detected - %d megs!\n", nSize/1048576  );
-	}
-	return TRUE;
-}
-
 void Mem_InitHook( void ) {
 	
 }
@@ -1203,7 +1190,7 @@ Mem_Init
 ==================
 */
 void Mem_Init( void ) {
-	_CrtSetAllocHook( MyAllocHook );
+	
 
 	mem_heap = new idHeap;
 	Mem_ClearFrameStats();

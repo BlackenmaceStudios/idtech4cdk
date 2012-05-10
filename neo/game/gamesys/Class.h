@@ -175,9 +175,9 @@ class idClass {
 public:
 	ABSTRACT_PROTOTYPE( idClass );
 
-#ifdef ID_REDIRECT_NEWDELETE
+//#ifdef ID_REDIRECT_NEWDELETE
 #undef new
-#endif
+//#endif
 	void *						operator new( size_t );
 	void *						operator new( size_t s, int, int, char *, int );
 	void						operator delete( void * );
