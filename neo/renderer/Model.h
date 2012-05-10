@@ -47,6 +47,7 @@ If you have questions concerning this license or the applicable additional terms
 
 // jmarshall
 class idRenderLight;
+struct surfaceInteraction_t;
 // jmarshall end
 
 // using shorts for triangle indexes can save a significant amount of traffic, but
@@ -165,6 +166,7 @@ typedef struct modelSurface_s {
 	int							id;
 	const idMaterial *			shader;
 	srfTriangles_t *			geometry;
+
 } modelSurface_t;
 
 typedef enum {
@@ -263,6 +265,9 @@ public:
 
 	// get a pointer to a surface
 	virtual const modelSurface_t *Surface( int surfaceNum ) const = 0;
+
+	// Gets the surface interactions 
+	virtual const surfaceInteraction_t *GetSurfaceInteractions( void ) const = 0;
 
 	// Allocates surface triangles.
 	// Allocates memory for srfTriangles_t::verts and srfTriangles_t::indexes

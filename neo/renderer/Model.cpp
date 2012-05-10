@@ -346,6 +346,9 @@ void idRenderModelStatic::AddSurface( modelSurface_t surface ) {
 	if ( surface.geometry ) {
 		bounds += surface.geometry->bounds;
 	}
+// jmarshall
+	interaction.Alloc();
+// jmarshall end
 }
 
 /*
@@ -2183,7 +2186,9 @@ void idRenderModelStatic::PurgeModel() {
 		}
 	}
 	surfaces.Clear();
-
+// jmarshall
+	interaction.Clear();
+// jmarshall end
 	purged = true;
 }
 
@@ -2210,6 +2215,14 @@ void idRenderModelStatic::FreeVertexCache( void ) {
 			tri->shadowCache = NULL;
 		}
 	}
+}
+/*
+================
+idRenderModelStatic::GetSurfaceInteractions
+================
+*/
+const surfaceInteraction_t *idRenderModelStatic::GetSurfaceInteractions( void )  const {
+	return &interaction[0];
 }
 
 /*

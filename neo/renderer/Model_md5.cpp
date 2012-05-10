@@ -802,6 +802,10 @@ idRenderModel *idRenderModelMD5::InstantiateDynamicModel( const struct renderEnt
 			surf->geometry = NULL;
 			surf->shader = NULL;
 			surf->id = i;
+
+// jmarshall
+			staticModel->interaction.Alloc();
+// jmarshall end
 		}
 
 		mesh->UpdateSurface( ent, ent->joints, surf );
