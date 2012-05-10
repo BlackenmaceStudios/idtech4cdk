@@ -55,12 +55,15 @@ void	RB_Deferred_DrawPreInteraction( const drawSurf_t *surf ) {
 
 	if ( surf->space->entityDef->parms.weaponDepthHack )
 	{
-		GL_State( GLS_DEPTHFUNC_ALWAYS  );
+		//GL_State( GLS_DEPTHFUNC_ALWAYS  );	
 	}
 	else
 	{
 		GL_State( shader->GetStage( 0 )->drawStateBits );
 	}
+
+
+	
 
 		// set the vertex pointers
 	idDrawVert	*ac = (idDrawVert *)vertexCache.Position( surf->geo->ambientCache );
@@ -142,7 +145,7 @@ void	RB_Deferred_DrawPreInteraction( const drawSurf_t *surf ) {
 		GL_State( GLS_DEPTHFUNC_LESS );
 	}
 
-	
+
 }
 
 /*

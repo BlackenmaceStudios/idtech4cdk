@@ -126,12 +126,10 @@ R_CalculateShadowsForModelLight
 ================
 */
 void R_CalculateShadowsForModelLight( idRenderModel *model, viewEntity_t *vEntity,idRenderLightLocal *light, viewLight_t *vLight ) {
-	if(vEntity && (vEntity->scissorRect.IsEmpty() < 0 || vEntity->scissorRect.x2 == 0 || vEntity->scissorRect.y2 == 0))
-		return;
+	
 
 	
-	if(vEntity && vEntity->entityDef && vEntity->entityDef->parms.weaponDepthHack)
-		return;
+	
 	for(int s = 0; s < model->NumSurfaces(); s++) {
 		bool isAffectingLight = false;
 
@@ -281,6 +279,14 @@ void R_CalculateShadowsForLight( idRenderLightLocal *light, viewLight_t *vLight 
 			continue;
 
 		idRenderModel *model;
+
+		viewEntity_t *vEntity = world->entityDefs[i]->viewEntity;
+
+		if(vEntity && (vEntity->scissorRect.IsEmpty() < 0 || vEntity->scissorRect.x2 == 0 || vEntity->scissorRect.y2 == 0))
+			continue;
+
+		if(vEntity && vEntity->entityDef && vEntity->entityDef->parms.weaponDepthHack)
+			continue;
 
 		// If we have a cached dynamic model there is no reason to redue the skeletal verts again.
 		if(world->entityDefs[i]->dynamicModel)

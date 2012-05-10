@@ -93,7 +93,7 @@ bmVirtualTexturePageTile_t	*bmVirtualTexturePage::BlitTileToPage( bmVirtualTextu
 		return lastTile;
 	}
 
-	for(i = 0; i < numTiles * numTiles; i++) {
+	for(i = 0; i < numActiveTiles/*numTiles * numTiles*/; i++) {
 //		if(tiles[i].IsDirty(frameNum) && freeTile == NULL) {
 //			freeTile = &tiles[i];
 //		}
