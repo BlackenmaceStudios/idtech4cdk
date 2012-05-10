@@ -128,14 +128,71 @@ R_CalculateShadowsForModelLight
 void R_CalculateShadowsForModelLight( idRenderModel *model, viewEntity_t *vEntity,idRenderLightLocal *light, viewLight_t *vLight ) {
 	if(vEntity && (vEntity->scissorRect.IsEmpty() < 0 || vEntity->scissorRect.x2 == 0 || vEntity->scissorRect.y2 == 0))
 		return;
+
+	
+	if(vEntity && vEntity->entityDef && vEntity->entityDef->parms.weaponDepthHack)
+		return;
 	for(int s = 0; s < model->NumSurfaces(); s++) {
+		bool isAffectingLight = false;
+
+		int shadowId = -1;
+
 		srfTriangles_t	*tri = model->Surface( s )->geometry;
 		if(tri->numVerts <= 0) // why?
 			continue; 
 
+		for(int i = 0; i < MAX_SHADOWS_PER_TRIS; i++)
+		{
+			if(tri->shadowMapLights[i] == NULL && shadowId == -1)
+				shadowId = i;
+
+			if(tri->shadowMapLights[i] == light) {
+				for(int side = 0; side < 6; side++)
+				{
+					if(tri->shadowMapVisibleSides[i][side]) {
+						if(vEntity)
+						{
+							if(tri->shadowMapMeshDist[i] == vEntity->entityDef->GetParms()->origin - light->GetParms()->origin)
+							{
+								isAffectingLight = true;
+							}
+						}
+						else
+						{
+							if(tri->shadowMapMeshDist[i] == light->GetParms()->origin)
+							{
+								isAffectingLight = true;
+							}
+						}
+						break;
+					}
+				}
+				shadowId = i;
+				break;
+			}
+		}
+
+		// If there are too many lights affecting this mesh.
+		if(shadowId == -1) {
+			continue;
+		}
+
+		// This surface is already in the light.
+		if(isAffectingLight) {
+			continue; 
+		}
+
 		for(int side = 0; side < 6; side++)
 		{
+			if(tri->shadowMapVisibleSides[shadowId][side]) {
+				if(defaultMaterial == NULL) {
+					defaultMaterial = declManager->FindMaterial("worlddefault");
+				}
 
+				R_LinkLightSurf( &vLight->globalShadows, tri, vEntity, light, defaultMaterial, vLight->scissorRect, true /* FIXME? */ );
+
+				continue;
+			}
 			// these shadows will all have valid bounds, and can be culled normally
 			if ( r_useShadowCulling.GetBool() ) {
 				RB_Shadow_SetModelViewMatrixForLight( light, side );
@@ -143,7 +200,7 @@ void R_CalculateShadowsForModelLight( idRenderModel *model, viewEntity_t *vEntit
 
 
 				if ( R_CullLocalBox( tri->bounds, tr.viewDef->worldSpace.modelMatrix, 5, globalFrustum) ) {
-					tri->shadowMapVisibleSides[side] = false;
+					tri->shadowMapVisibleSides[shadowId][side] = false;
 					continue;
 				}
 			}
@@ -152,7 +209,7 @@ void R_CalculateShadowsForModelLight( idRenderModel *model, viewEntity_t *vEntit
 			if ( !tri->shadowCache ) {
 				R_CreateShadowMapPrivateShadowCache( tri );
 				if ( !tri->shadowCache ) {
-					tri->shadowMapVisibleSides[side] = false;
+					tri->shadowMapVisibleSides[shadowId][side] = false;
 					continue;
 				}
 			}
@@ -167,16 +224,28 @@ void R_CalculateShadowsForModelLight( idRenderModel *model, viewEntity_t *vEntit
 				vertexCache.Touch( tri->indexCache );
 			}
 
-			if(vEntity && vEntity->entityDef && vEntity->entityDef->parms.weaponDepthHack)
-				continue;
 
-			tri->shadowMapVisibleSides[side] = true;
+			tri->shadowMapVisibleSides[shadowId][side] = true;
 
 			if(defaultMaterial == NULL) {
 				defaultMaterial = declManager->FindMaterial("worlddefault");
 			}
 
 			R_LinkLightSurf( &vLight->globalShadows, tri, vEntity, light, defaultMaterial, vLight->scissorRect, true /* FIXME? */ );
+			isAffectingLight = true;
+			break;
+		}
+
+		if(isAffectingLight) {
+			if(vEntity)
+			{
+				tri->shadowMapMeshDist[shadowId] = vEntity->entityDef->GetParms()->origin - light->GetParms()->origin;
+			}
+			else
+			{
+				tri->shadowMapMeshDist[shadowId] = light->GetParms()->origin;
+			}
+			tri->shadowMapLights[shadowId] = light;
 		}
 	}
 }
@@ -211,7 +280,19 @@ void R_CalculateShadowsForLight( idRenderLightLocal *light, viewLight_t *vLight 
 		if(world->entityDefs[i] == NULL)
 			continue;
 
-		R_CalculateShadowsForModelLight( R_EntityDefDynamicModel( world->entityDefs[i] ),  world->entityDefs[i]->viewEntity, light, vLight );
+		idRenderModel *model;
+
+		// If we have a cached dynamic model there is no reason to redue the skeletal verts again.
+		if(world->entityDefs[i]->dynamicModel)
+		{
+			model = world->entityDefs[i]->dynamicModel;
+		}
+		else
+		{
+			model = R_EntityDefDynamicModel( world->entityDefs[i] );
+		}
+
+		R_CalculateShadowsForModelLight( model,  world->entityDefs[i]->viewEntity, light, vLight );
 	}
 	tr.viewDef->worldSpace.modelMatrix[12] = 0;
 	tr.viewDef->worldSpace.modelMatrix[13] = 0;
@@ -500,8 +581,17 @@ void RB_RenderDrawShadowMappedSurfList( drawSurf_t *drawSurfs, int side ) {
 
 	for (const drawSurf_t *drawSurf = drawSurfs; drawSurf; drawSurf = drawSurf->nextOnLight ) {
 		bool useFrontCulling = false;
+		bool isAffectingLight = false;
 
-		if(!drawSurf->geo->shadowMapVisibleSides[side]) {
+		for(int i = 0; i < MAX_SHADOWS_PER_TRIS; i++)
+		{
+			if(drawSurf->geo->shadowMapVisibleSides[i][side]) {
+				isAffectingLight = true;
+				break;
+			}
+		}
+
+		if(!isAffectingLight) {
 			continue;
 		}
 

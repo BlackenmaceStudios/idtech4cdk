@@ -45,6 +45,10 @@ If you have questions concerning this license or the applicable additional terms
 #define MD5_STATIC_EXT			"md5staticmesh"
 #define MD5_VERSION				10
 
+// jmarshall
+class idRenderLight;
+// jmarshall end
+
 // using shorts for triangle indexes can save a significant amount of traffic, but
 // to support the large models that renderBump loads, they need to be 32 bits
 #if 1
@@ -83,6 +87,10 @@ typedef struct shadowCache_s {
 
 const int SHADOW_CAP_INFINITE	= 64;
 
+// jmarshall
+#define MAX_SHADOWS_PER_TRIS			8				// Max lights that effect this surface.
+// jmarshall end
+
 // our only drawing geometry type
 typedef struct srfTriangles_s {
 	idBounds					bounds;					// for culling
@@ -99,7 +107,10 @@ typedef struct srfTriangles_s {
 // jmarshall
 	int							vt_AreaID;				// The area id for the virtual texture page.
 	enum EditorUVGenerateType   vt_uvGenerateType;
-	bool						shadowMapVisibleSides[6];
+
+	idVec3						shadowMapMeshDist[MAX_SHADOWS_PER_TRIS]; // Distance between mesh and the light(if its different force an update).
+	idRenderLight				*shadowMapLights[MAX_SHADOWS_PER_TRIS];
+	bool						shadowMapVisibleSides[MAX_SHADOWS_PER_TRIS][6]; 
 // jmarshall end
 
 	int							numVerts;				// number of vertices

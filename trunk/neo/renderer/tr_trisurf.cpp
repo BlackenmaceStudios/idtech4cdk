@@ -373,6 +373,13 @@ void R_FreeStaticTriSurfVertexCaches( srfTriangles_t *tri ) {
 	}
 // jmarshall
 	if ( tri->shadowCache && ( tri->shadowVertexes != NULL || tri->verts != NULL ) ) {
+		for(int i = 0; i < MAX_SHADOWS_PER_TRIS; i++)
+		{
+			for(int side = 0; side < 6; side++)
+			{
+				tri->shadowMapVisibleSides[i][side] = false;
+			}
+		}
 		// if we don't have tri->shadowVertexes, these are a reference to a
 		// shadowCache on the original surface, which a vertex program
 		// will take care of making unique for each light
