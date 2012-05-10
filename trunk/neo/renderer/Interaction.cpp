@@ -570,8 +570,9 @@ void idInteraction::FreeSurfaces( void ) {
 			}
 			R_FreeInteractionCullInfo( sint->cullInfo );
 		}
-
-		R_StaticFree( this->surfaces );
+// jmarshall
+		//R_StaticFree( this->surfaces );
+// jmarshall end
 		this->surfaces = NULL;
 	}
 	this->numSurfaces = -1;
@@ -882,7 +883,8 @@ void idInteraction::CreateInteraction( const idRenderModel *model ) {
 	// create slots for each of the model's surfaces
 	//
 	numSurfaces = model->NumSurfaces();
-	surfaces = (surfaceInteraction_t *)R_ClearedStaticAlloc( sizeof( *surfaces ) * numSurfaces );
+	surfaces = (surfaceInteraction_t *)model->GetSurfaceInteractions(); 
+	memset(&surfaces[0], 0, sizeof(surfaceInteraction_t) * model->NumSurfaces());
 
 	interactionGenerated = false;
 

@@ -61,7 +61,7 @@ typedef struct {
 } srfCullInfo_t;
 
 
-typedef struct {		
+struct surfaceInteraction_t {		
 	// if lightTris == LIGHT_TRIS_DEFERRED, then the calculation of the
 	// lightTris has been deferred, and must be done if ambientTris is visible
 	srfTriangles_t *		lightTris;
@@ -78,7 +78,7 @@ typedef struct {
 	int						expCulled;			// only for the experimental shadow buffer renderer
 
 	srfCullInfo_t			cullInfo;
-} surfaceInteraction_t;
+} ;
 
 
 typedef struct areaNumRef_s {
@@ -86,6 +86,9 @@ typedef struct areaNumRef_s {
 	int						areaNum;
 } areaNumRef_t;
 
+// jmarshall
+#define INTERACTION_MAX_SURFACES			100
+// jmarshall end
 
 class idRenderEntityLocal;
 class idRenderLightLocal;
@@ -99,7 +102,7 @@ public:
 	// if there is a whole-entity optimized shadow hull, it will
 	// be present as a surfaceInteraction_t with a NULL ambientTris, but
 	// possibly having a shader to specify the shadow sorting order
-	surfaceInteraction_t *	surfaces;
+	surfaceInteraction_t 	*surfaces;
 	
 	// get space from here, if NULL, it is a pre-generated shadow volume from dmap
 	idRenderEntityLocal *	entityDef;

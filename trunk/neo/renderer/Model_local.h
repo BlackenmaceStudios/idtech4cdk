@@ -29,6 +29,8 @@ If you have questions concerning this license or the applicable additional terms
 #ifndef __MODEL_LOCAL_H__
 #define __MODEL_LOCAL_H__
 
+class idInteraction;
+
 /*
 ===============================================================================
 
@@ -104,9 +106,15 @@ public:
 	bool						DeleteSurfaceWithId( int id );
 	void						DeleteSurfacesWithNegativeId( void );
 	bool						FindSurfaceWithId( int id, int &surfaceNum );
-
+// jmarshall
+	virtual const surfaceInteraction_t *GetSurfaceInteractions( void ) const;
+// jmarshall end
 public:
 	idList<modelSurface_t>		surfaces;
+
+// jmarshall
+	idList<surfaceInteraction_t> interaction;
+// jmarshall end
 	idBounds					bounds;
 	int							overlaysAdded;
 
