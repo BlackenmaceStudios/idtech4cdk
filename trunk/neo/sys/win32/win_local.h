@@ -149,6 +149,7 @@ typedef struct {
 	static idCVar	win_timerUpdate;
 	static idCVar	win_allowMultipleInstances;
 
+
 	CRITICAL_SECTION criticalSections[MAX_CRITICAL_SECTIONS];
 	HANDLE			backgroundDownloadSemaphore;
 

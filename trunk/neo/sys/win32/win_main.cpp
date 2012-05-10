@@ -1513,8 +1513,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 #ifdef ID_ALLOW_TOOLS
 		toolManager.Frame();
 #endif
+
 		// run the game
 		common->Frame();
+
+		
 	}
 
 	// never gets here

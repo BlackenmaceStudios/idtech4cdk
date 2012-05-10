@@ -394,7 +394,7 @@
     <Link>
       <IgnoreSpecificDefaultLibraries>libcmtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <OutputFile>$(OutDir)gamex64.dll</OutputFile>
-      <AdditionalOptions>/DEF:.\game\game.def %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/DEF:.\game\game.def /force %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug with inlines and memory log|Win32'">

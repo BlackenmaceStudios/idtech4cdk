@@ -90,39 +90,7 @@ ID_INLINE void idStrPool::SetCaseSensitive( bool caseSensitive ) {
 	this->caseSensitive = caseSensitive;
 }
 
-/*
-================
-idStrPool::AllocString
-================
-*/
-ID_INLINE const idPoolStr *idStrPool::AllocString( const char *string ) {
-	int i, hash;
-	idPoolStr *poolStr;
 
-	hash = poolHash.GenerateKey( string, caseSensitive );
-	if ( caseSensitive ) {
-		for ( i = poolHash.First( hash ); i != -1; i = poolHash.Next( i ) ) {
-			if ( pool[i]->Cmp( string ) == 0 ) {
-				pool[i]->numUsers++;
-				return pool[i];
-			}
-		}
-	} else {
-		for ( i = poolHash.First( hash ); i != -1; i = poolHash.Next( i ) ) {
-			if ( pool[i]->Icmp( string ) == 0 ) {
-				pool[i]->numUsers++;
-				return pool[i];
-			}
-		}
-	}
-
-	poolStr = new idPoolStr;
-	*static_cast<idStr *>(poolStr) = string;
-	poolStr->pool = this;
-	poolStr->numUsers = 1;
-	poolHash.Add( hash, pool.Append( poolStr ) );
-	return poolStr;
-}
 
 /*
 ================

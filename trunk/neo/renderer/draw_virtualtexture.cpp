@@ -140,7 +140,7 @@ void RB_VirtualTexture_DrawUnpackBuffer( int areaNum ) {
 
 	
 
-	renderDevice->BeginDeviceSync();
+	//renderDevice->BeginDeviceSync();
 	
 
 	globalImages->currentRenderImageTargets->BindFBO();

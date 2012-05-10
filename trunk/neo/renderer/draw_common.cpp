@@ -1900,79 +1900,48 @@ void	RB_STD_DrawView( void ) {
 
 // jmarshall
 	int	processed = 0;
-	if(r_deferredRenderer.GetBool()) {
-		if(backEnd.viewDef->renderView.megaProject != NULL) {
-			globalImages->currentRenderImageTargets->BindFBO();
-				RB_Draw_MegaProject( drawSurfs, numDrawSurfs, backEnd.viewDef->renderView.megaProject);
-			globalImages->currentRenderImageTargets->UnBindFBO();
-		}
-		else if(backEnd.viewDef->renderWorld != NULL)
-		{
-			// Render all the diffuse maps from the VT.
-			vtBackEnd.GenerateSceneTileInfo( drawSurfs, numDrawSurfs );
 
-			// Render dynamic models that aren't part of the VT.
-			RB_Deferred_PreInteractionPass( drawSurfs, numDrawSurfs );
-		}
-		
-		
-		// Create our shadow maps.
-		RB_STD_CreateShadowMaps();
-		
-		// Render Unlit transparent surfaces.
-		RB_Deferred_DrawNoLitTransparent( drawSurfs, numDrawSurfs );
-
-		{
-			// Draw only light dependent passes to _currentRender.
-			if(!backEnd.viewDef->skipPostProcess)
-				globalImages->currentRenderImage->BindFBO();
-			// clear the z buffer, set the projection matrix, etc
-			RB_BeginDrawingView();
-			// fill the depth buffer and clear color buffer to black except on
-			// subviews
-			RB_STD_FillDepthBuffer( drawSurfs, numDrawSurfs );
-
-
-
-			processed += RB_STD_DrawShaderPasses( drawSurfs, numDrawSurfs, false, true );
-
-			/// Unbind the FBO.
-			if(!backEnd.viewDef->skipPostProcess)
-				globalImages->currentRenderImage->UnBindFBO();
-		}
+	if(backEnd.viewDef->renderView.megaProject != NULL) {
+		globalImages->currentRenderImageTargets->BindFBO();
+		RB_Draw_MegaProject( drawSurfs, numDrawSurfs, backEnd.viewDef->renderView.megaProject);
+		globalImages->currentRenderImageTargets->UnBindFBO();
 	}
-	else {
+	else if(backEnd.viewDef->renderWorld != NULL)
+	{
+		// Render all the diffuse maps from the VT.
+		vtBackEnd.GenerateSceneTileInfo( drawSurfs, numDrawSurfs );
+
+		// Render dynamic models that aren't part of the VT.
+		RB_Deferred_PreInteractionPass( drawSurfs, numDrawSurfs );
+	}
+
+
+	// Create our shadow maps.
+	RB_STD_CreateShadowMaps();
+
+	// Render Unlit transparent surfaces.
+	RB_Deferred_DrawNoLitTransparent( drawSurfs, numDrawSurfs );
+
+	{
 		// Draw only light dependent passes to _currentRender.
 		if(!backEnd.viewDef->skipPostProcess)
 			globalImages->currentRenderImage->BindFBO();
-
 		// clear the z buffer, set the projection matrix, etc
 		RB_BeginDrawingView();
-
-		// decide how much overbrighting we are going to do
-		RB_DetermineLightScale();
-
 		// fill the depth buffer and clear color buffer to black except on
 		// subviews
 		RB_STD_FillDepthBuffer( drawSurfs, numDrawSurfs );
 
 
-		// main light renderer
-		RB_ARB2_DrawInteractions();
 
-		// disable stencil shadow test
-		qglStencilFunc( GL_ALWAYS, 128, 255 );
-
-		// uplight the entire screen to crutch up not having better blending range
-		RB_STD_LightScale();
-
-		// Draw in game non-light dependent stuff.
-		processed = RB_STD_DrawShaderPasses( drawSurfs, numDrawSurfs, true );
+		processed += RB_STD_DrawShaderPasses( drawSurfs, numDrawSurfs, false, true );
 
 		/// Unbind the FBO.
 		if(!backEnd.viewDef->skipPostProcess)
 			globalImages->currentRenderImage->UnBindFBO();
 	}
+	
+	
 
 	processed += RB_STD_DrawShaderPasses( drawSurfs, numDrawSurfs );
 

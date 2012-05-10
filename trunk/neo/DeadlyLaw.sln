@@ -279,7 +279,6 @@ Global
 		{6EA6406F-3E65-47D9-8246-D6660A81606F}.Debug x64 with inlines|Mixed Platforms.ActiveCfg = Debug x64 with inlines|x64
 		{6EA6406F-3E65-47D9-8246-D6660A81606F}.Debug x64 with inlines|Mixed Platforms.Build.0 = Debug x64 with inlines|x64
 		{6EA6406F-3E65-47D9-8246-D6660A81606F}.Debug x64 with inlines|Win32.ActiveCfg = Debug x64 with inlines|x64
-		{6EA6406F-3E65-47D9-8246-D6660A81606F}.Debug x64 with inlines|Win32.Build.0 = Debug x64 with inlines|x64
 		{6EA6406F-3E65-47D9-8246-D6660A81606F}.Debug x64 with inlines|x64.ActiveCfg = Debug x64 with inlines|x64
 		{6EA6406F-3E65-47D9-8246-D6660A81606F}.Debug x64 with inlines|x64.Build.0 = Debug x64 with inlines|x64
 		{6EA6406F-3E65-47D9-8246-D6660A81606F}.Debug|Any CPU.ActiveCfg = Debug|Win32
@@ -455,7 +454,6 @@ Global
 		{D4BE311F-2647-4F0B-AD47-9504A2381641}.Debug x64 with inlines|Mixed Platforms.ActiveCfg = Debug x64 with inlines|x64
 		{D4BE311F-2647-4F0B-AD47-9504A2381641}.Debug x64 with inlines|Mixed Platforms.Build.0 = Debug x64 with inlines|x64
 		{D4BE311F-2647-4F0B-AD47-9504A2381641}.Debug x64 with inlines|Win32.ActiveCfg = Debug x64 with inlines|x64
-		{D4BE311F-2647-4F0B-AD47-9504A2381641}.Debug x64 with inlines|Win32.Build.0 = Debug x64 with inlines|x64
 		{D4BE311F-2647-4F0B-AD47-9504A2381641}.Debug x64 with inlines|x64.ActiveCfg = Debug x64 with inlines|x64
 		{D4BE311F-2647-4F0B-AD47-9504A2381641}.Debug x64 with inlines|x64.Build.0 = Debug x64 with inlines|x64
 		{D4BE311F-2647-4F0B-AD47-9504A2381641}.Debug|Any CPU.ActiveCfg = Debug|Win32

@@ -423,6 +423,7 @@
       </HeapReserveSize>
       <HeapCommitSize>
       </HeapCommitSize>
+      <AdditionalOptions>/force %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>

@@ -56,18 +56,61 @@ struct version_s {
 // bmMemoryHandlerLocal
 //
 
+
 // jmarshall
 class bmMemoryHandlerLocal : public bmMemoryHandler  {
 public:
-	virtual void			*Allocate( size_t size ) { return ::malloc( size ); }
-	virtual void			Free( void *ptr ) { ::free( ptr ); }
+
+	bmMemoryHandlerLocal() { memoryUsage = 0; }
+
+	virtual void			*Allocate( size_t size, const char *file, int line ) { return malloc( size); }
+	virtual void			Free( void *ptr ) { free( ptr ); }
 
 	virtual void			*AllocAlign( int size, size_t align ) { return _aligned_malloc( size, align ); }
 	virtual void			FreeAlign( void *ptr ) { _aligned_free( ptr ); }
 	virtual void			*Realloc( void *ptr, int size ) { return ::realloc( ptr, size ); }
+
+	static int bmMemoryHandlerLocal::CustomAllocHook( int nAllocType, void *userData, size_t size, int nBlockType, long requestNumber, const unsigned char *filename, int lineNumber);
+
+	int	memoryUsage;
 };
 
+#include <crtdbg.h>
+
 bmMemoryHandlerLocal  memoryHandlerLocal;
+/* ALLOCATION HOOK FUNCTION
+   -------------------------
+   An allocation hook function can have many, many different
+   uses. This one simply logs each allocation operation in a file.
+*/
+int bmMemoryHandlerLocal::CustomAllocHook( int nAllocType, void *userData, size_t size, 
+                              int nBlockType, long requestNumber, 
+                                   const unsigned char *filename, 
+                                                  int lineNumber)
+{
+    if( nBlockType == _CRT_BLOCK)
+        return TRUE ; // better to not handle
+        switch(nAllocType)
+        {
+            case _HOOK_ALLOC :
+				memoryHandlerLocal.memoryUsage += size;
+            break ;
+
+            case _HOOK_REALLOC:
+				memoryHandlerLocal.memoryUsage += size;
+            break ;
+
+            case _HOOK_FREE :
+				memoryHandlerLocal.memoryUsage -= size;
+            break ;
+        }
+
+    return TRUE ;
+
+	
+}
+
+
 // jmarshall end 
 
 idCVar com_version( "si_version", version.string, CVAR_SYSTEM|CVAR_ROM|CVAR_SERVERINFO, "engine version" );
@@ -232,6 +275,8 @@ private:
 
 idCommonLocal	commonLocal;
 idCommon *		common = &commonLocal;
+
+
 
 
 /*
@@ -1220,7 +1265,16 @@ static void PrintMemInfo_f( const idCmdArgs &args ) {
 	fileSystem->CloseFile( f );
 }
 
+/*
+==================
+Com_DumpMemoryUsage_f
 
+Just throw a fatal error to test error shutdown procedures.
+==================
+*/
+static void Com_DumpMemoryUsage_f( const idCmdArgs &args ) {
+	common->Printf("Using %d memory\n", memoryHandlerLocal.memoryUsage);
+}
 
 /*
 ==================
@@ -2267,6 +2321,9 @@ idCommonLocal::InitCommands
 =================
 */
 void idCommonLocal::InitCommands( void ) {
+// jmarshall
+	cmdSystem->AddCommand( "dumpMemoryUsage", Com_DumpMemoryUsage_f, CMD_FL_SYSTEM|CMD_FL_CHEAT, "dumps memory information" );
+// jmarshall end
 	cmdSystem->AddCommand( "error", Com_Error_f, CMD_FL_SYSTEM|CMD_FL_CHEAT, "causes an error" );
 	cmdSystem->AddCommand( "crash", Com_Crash_f, CMD_FL_SYSTEM|CMD_FL_CHEAT, "causes a crash" );
 	cmdSystem->AddCommand( "freeze", Com_Freeze_f, CMD_FL_SYSTEM|CMD_FL_CHEAT, "freezes the game for a number of seconds" );
@@ -2689,6 +2746,7 @@ idCommonLocal::Init
 */
 void idCommonLocal::Init( int argc, const char **argv, const char *cmdline ) {
 	try {
+		_CrtSetAllocHook( bmMemoryHandlerLocal::CustomAllocHook );
 
 		// set interface pointers used by idLib
 		idLib::sys			= sys;

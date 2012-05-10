@@ -59,7 +59,7 @@ void bmVirtualTextureBackend::Init( void ) {
 
 	for(int i = 0; i < 16; i++)
 	{
-		sceneTiles[i].SetGranularity( 256 );
+		sceneTiles[i].Resize(9216);
 	}
 }
 /*
@@ -133,7 +133,7 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 			continue;
 		}
 
-		renderDevice->BeginDeviceSync();
+		//renderDevice->BeginDeviceSync();
 		
 		// Upload the tiles for this area.
 		sceneAreaDist[i] = 255 - sceneAreaDist[i];
@@ -149,14 +149,14 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 		{
 			UploadAreaTiles( i, 0,sceneTiles[i]);
 		}
-		renderDevice->ForceDeviceSync();
+		//renderDevice->ForceDeviceSync();
 
 
 		// Render the tiles for this area.
 
-		renderDevice->BeginDeviceSync();
+		//renderDevice->BeginDeviceSync();
 		RB_RenderVirtualTextureArea( i );
-		renderDevice->ForceDeviceSync();
+		//renderDevice->ForceDeviceSync();
 		
 		virtualTextureManager->FlipPage();
 		virtualTextureManager->GetWorldPage()->ResetPage();
