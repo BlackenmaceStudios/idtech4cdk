@@ -43,6 +43,23 @@ static void R_EmptyTexturePage2( idImage *image ) {
 }
 
 /*
+===============
+R_EmptyTexturePage2
+===============
+*/
+static void R_EmptyTexturePage3( idImage *image ) {
+	int	c = (vt_page_size.GetInteger() / 4) * (vt_page_size.GetInteger() / 4);
+
+	// FIXME: this won't live past vid mode changes
+	image->GenerateImage( NULL, vt_page_size.GetInteger() /4, vt_page_size.GetInteger()/4, 
+		TF_NEAREST, false, TR_REPEAT, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
+
+
+	image->rawBuffer = NULL;
+	//image->CreatePBO();
+}
+
+/*
 ====================
 bmVirtualTexturePage::ResetPage
 ====================
@@ -132,6 +149,7 @@ void bmVirtualTexturePage::Init( const char *name ) {
 	// Create the virtual texture page.
 	image[0] = globalImages->ImageFromFunction( va( "_vtpage_%s", name), R_EmptyTexturePage );
 	image[1] = globalImages->ImageFromFunction( va( "_vtpage_%s_mip1", name), R_EmptyTexturePage2 );
+	image[2] = globalImages->ImageFromFunction( va( "_vtpage_%s_mip2", name), R_EmptyTexturePage3 );
 	frameNum = 0;
 	isPageDirty = false;
 	pageTime = 0;
@@ -172,12 +190,31 @@ void bmVirtualTexturePage::Upload( int mipLevel ) {
 	isPageDirty = false;
 	image[mipLevel]->Bind(); 
 
+	int imageScale = 1;
+	// Fix me bit shifting would be nice here...
+	switch(mipLevel) {
+		case 0:
+			imageScale = 1;
+		break;
+		case 1:
+			imageScale = 2;
+		break;
+
+		case 2:
+			imageScale = 4;
+		break;
+
+		default:
+			common->FatalError("VT_Upload: miplevel unknown\n");
+		break;
+	}
+
 
 	for(int i = lastBlittedTile; i < numActiveTiles; i++) {
 		if(tiles[i].buffer == NULL)
 			continue;
 
-		image[mipLevel]->CopyBufferIntoRegion( tiles[i].buffer, 0, tiles[i].x / (mipLevel + 1), tiles[i].y / (mipLevel + 1), VIRTUALTEXTURE_TILESIZE / (mipLevel + 1), VIRTUALTEXTURE_TILESIZE / (mipLevel + 1) );
+		image[mipLevel]->CopyBufferIntoRegion( tiles[i].buffer, 0, tiles[i].x / (imageScale), tiles[i].y / (imageScale), VIRTUALTEXTURE_TILESIZE / (imageScale), VIRTUALTEXTURE_TILESIZE / (imageScale) );
 		//image->pbo->WriteToPBO(0, tiles[i].buffer, tiles[i].x, tiles[i].y, VIRTUALTEXTURE_TILESIZE, VIRTUALTEXTURE_TILESIZE );
 	}
 	//image->pbo->Unbind();

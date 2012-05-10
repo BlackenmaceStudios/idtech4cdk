@@ -123,6 +123,23 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 				WriteTile( mippedLevel, w * tileSize, h * tileSize, imgWidth, tileSize );
 			}
 		}
+		
+
+		// Write the next mipmap level.
+		byte *mippedLevel2 = R_MipMap( mippedLevel, imgWidth, imgHeight, true );
+		imgWidth = imgWidth >> 1;
+		imgHeight = imgHeight >> 1;
+		tileSize = tileSize >> 1;
+
+		common->Printf("...Mipmap (%dx%d) %d\n", imgWidth, imgHeight, tileSize );
+		for(int h = 0; h < imgWidth / tileSize; h++) {
+			for(int w = 0; w < imgWidth / tileSize; w++) {
+
+				//common->Printf( "...Tile %d/%d", currentTile, maxTiles);
+				WriteTile( mippedLevel2, w * tileSize, h * tileSize, imgWidth, tileSize );
+			}
+		}
+		R_StaticFree( mippedLevel2 );
 		R_StaticFree( mippedLevel );
 		R_StaticFree( buffer );
 
@@ -333,7 +350,7 @@ void bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum, byte *tileBuffer
 }
 #else
 byte *bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum, int mipLevel ) {
-	int bufferpos = (((4096 * 4096) + (2048 * 2048)) * pageNum);
+	int bufferpos = (((4096 * 4096) + (2048 * 2048) + (1024 * 1024)) * pageNum);
 	
 	if(mipLevel == 0)
 	{
@@ -342,7 +359,20 @@ byte *bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum, int mipLevel ) 
 	else
 	{
 		bufferpos += 4096 * 4096;
-		bufferpos += ((128 * 128) * tileNum);
+
+		if(mipLevel == 1)
+		{
+			bufferpos += ((128 * 128) * tileNum);
+		}
+		else if(mipLevel == 2)
+		{
+			bufferpos += 2048 * 2048;
+			bufferpos += ((64 * 64) * tileNum);
+		}
+		else
+		{
+			common->FatalError("VT_ReadTile: Unknown mipLevel %d\n", mipLevel);
+		}
 	}
 
 	if(bufferpos >= fileBufferLen) {
