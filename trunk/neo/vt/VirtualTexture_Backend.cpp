@@ -135,7 +135,12 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 		renderDevice->BeginDeviceSync();
 		
 		// Upload the tiles for this area.
-		if(sceneAreaDist[i] > 50)
+		sceneAreaDist[i] = 255 - sceneAreaDist[i];
+		if(sceneAreaDist[i] > 170)
+		{
+			UploadAreaTiles( i, 2,sceneTiles[i]);
+		}
+		else if(sceneAreaDist[i] > 100)
 		{
 			UploadAreaTiles( i, 1,sceneTiles[i]);
 		}

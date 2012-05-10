@@ -83,7 +83,7 @@ private:
 	int					frameNum;
 	int					pageTime;
 	int					currentMipLevel;
-	idImage				*image[2]; // Hack for mipmaps.
+	idImage				*image[3]; // Hack for mipmaps.
 	bool				isPageDirty;
 	int					numActiveTiles;
 	int					lastBlittedTile;
