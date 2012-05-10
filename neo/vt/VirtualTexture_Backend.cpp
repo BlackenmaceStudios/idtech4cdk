@@ -66,7 +66,7 @@ void bmVirtualTextureBackend::Init( void ) {
 bmVirtualTextureBackend::UUploadAreaTiles
 ====================
 */
-void bmVirtualTextureBackend::UploadAreaTiles( int pageId, idList<bmVTTileReadback_t> &areaTiles ) {
+void bmVirtualTextureBackend::UploadAreaTiles( int pageId, int mipLevel,  idList<bmVTTileReadback_t> &areaTiles ) {
 	bmVirtualTexturePage *page;
 
 	// Get the current valid world page.
@@ -79,7 +79,7 @@ void bmVirtualTextureBackend::UploadAreaTiles( int pageId, idList<bmVTTileReadba
 		bmVTTileReadback_t *rbtile;
 
 		rbtile = &areaTiles[i];
-		vtTile = page->BlitTileToPage( backEnd.viewDef->renderWorld->vt, rbtile->pageNum, rbtile->tileNum );
+		vtTile = page->BlitTileToPage( backEnd.viewDef->renderWorld->vt, rbtile->pageNum, rbtile->tileNum, mipLevel );
 
 		if(vtTile == NULL) {
 			assert(false);
@@ -97,7 +97,7 @@ void bmVirtualTextureBackend::UploadAreaTiles( int pageId, idList<bmVTTileReadba
 
 
 	// Upload the current page.
-	virtualTextureManager->GetWorldPage()->Upload();
+	virtualTextureManager->GetWorldPage()->Upload(mipLevel);
 
 
 	// Upload the remap buffer.
@@ -135,7 +135,14 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 		renderDevice->BeginDeviceSync();
 		
 		// Upload the tiles for this area.
-		UploadAreaTiles( i, sceneTiles[i] );
+		if(sceneAreaDist[i] > 50)
+		{
+			UploadAreaTiles( i, 1,sceneTiles[i]);
+		}
+		else
+		{
+			UploadAreaTiles( i, 0,sceneTiles[i]);
+		}
 		renderDevice->ForceDeviceSync();
 
 

@@ -103,6 +103,9 @@ void bmVTModel::WriteToFile( const char *file ) {
 		idDrawVert *Vertexes = tri->verts;
 		glIndex_t *indicies = tri->indexes;
 
+		if(tri->vt_AreaID == -1)
+			continue;
+
 
 		for ( int i = 0 ; i <  tri->numVerts ; i++ ) {
 			const idDrawVert *dv;

@@ -10,6 +10,7 @@
 #define VIRTUALTEXTURE_PAGESIZE 4096
 #define VIRTUALTEXTURE_TILESIZE 256
 
+#define VIRTUALTEXTURE_MIPMAP0SIZE (128 * 128)
 #define VIRTUALTEXTURE_TILEMEMSIZE (VIRTUALTEXTURE_TILESIZE * VIRTUALTEXTURE_TILESIZE)
 
 //
@@ -84,11 +85,11 @@ public:
 #if !VT_LOAD_FROMMEMORY
 	void						ReadTile( int pageNum, int tileNum, byte *buffer );
 #else
-	byte *						ReadTile(  int pageNum, int tileNum );
+	byte *						ReadTile(  int pageNum, int tileNum, int mipLevel );
 #endif
 	int							WriteSurfaceTileToVT( const char *path );
 
-	void						WriteTile( byte *buffer, int xoff, int yoff, int DiemWidth );
+	void						WriteTile( byte *buffer, int xoff, int yoff, int DiemWidth, int vtTileSize );
 
 	void						FinishVirtualTextureWrite( void );
 

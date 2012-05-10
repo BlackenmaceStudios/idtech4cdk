@@ -205,7 +205,7 @@ public:
 
 	void		CreatePBO( void );
 	
-	void		CopyBufferIntoRegion( void *buffer, int x, int y, int width, int height );
+	void		CopyBufferIntoRegion( void *buffer, int mipLevel, int x, int y, int width, int height );
 // jmarshall
 	void		GenerateImageHandle( int numImages, unsigned int *texnum );
 	void		CopyFramebuffer( int x, int y, int width, int height, bool useOversizedBuffer );

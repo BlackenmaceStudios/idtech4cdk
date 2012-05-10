@@ -10,12 +10,15 @@ VertexProgram
 	in vec4          	attr_TexCoord;   
 	  
 	smooth out vec2            	var_TexDiffuse; 
+	smooth out float			dist;
 
 	//
 	// Main - Entry Point
 	//
 	void main() {
 		gl_Position = ftransform( );
+
+		dist = gl_Position.w;
 
 
 		// diffuse map texgen     
@@ -29,7 +32,7 @@ FragmentProgram
 	uniform sampler2D   	u_diffuseTexture;    
 	uniform int vtOffset;
 	smooth in vec2            	var_TexDiffuse; 
-
+	smooth in float				dist;
 
 
 	void main( void ) {    
@@ -41,6 +44,6 @@ FragmentProgram
 		gl_FragColor = lookup;
 		//gl_FragColor = vec4(st.x, st.y, 0.0, 1.0);
 		gl_FragColor.b = float(vtOffset) / (255.0);
-		gl_FragColor.a = 1;
+		gl_FragColor.a = gl_FragCoord.w * 255; // Distance from the viewer to the vertex.
 	}
 EndFragmentProgram

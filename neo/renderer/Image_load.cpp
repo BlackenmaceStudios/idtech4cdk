@@ -392,11 +392,11 @@ void idImage::SetImageFilterAndRepeat() const {
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, globalImages->textureMaxFilter );
 		break;
 	case TF_LINEAR:
-		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 		break;
 	case TF_NEAREST:
-		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST );
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
 		break;
 	default:
@@ -732,15 +732,18 @@ void idImage::GenerateImage( const byte *pic, int width, int height,
 	internalFormat = SelectInternalFormat( &pic, 1, width, height, depth, &isMonochrome, compress );
 
 	// copy or resample data as appropriate for first MIP level
-	if(compress != IMAGE_COMPRESS_NONE)
-	{
-		scaledBuffer = (byte *)pic;
-	}
-	else if ( ( scaled_width == width ) && ( scaled_height == height ) ) {
+	if ( ( scaled_width == width ) && ( scaled_height == height ) ) {
 		// we must copy even if unchanged, because the border zeroing
 		// would otherwise modify const data
 		scaledBuffer = (byte *)R_StaticAlloc( sizeof( unsigned ) * scaled_width * scaled_height );
-		memcpy (scaledBuffer, pic, width*height*4);
+		if(pic == NULL)
+		{
+			memset(scaledBuffer, 0, sizeof( unsigned ) * scaled_width * scaled_height );
+		}
+		else
+		{
+			memcpy (scaledBuffer, pic, width*height*4);
+		}
 	} else {
 		// resample down as needed (FIXME: this doesn't seem like it resamples anymore!)
 		// scaledBuffer = R_ResampleTexture( pic, width, height, width >>= 1, height >>= 1 );
@@ -869,45 +872,49 @@ void idImage::GenerateImage( const byte *pic, int width, int height,
 
 	miplevel = 0;
 
-	if(compress == IMAGE_COMPRESS_NONE)
-	{
-		while ( scaled_width > 1 || scaled_height > 1 ) {
-			// preserve the border after mip map unless repeating
-			shrunk = R_MipMap( scaledBuffer, scaled_width, scaled_height, preserveBorder );
-			R_StaticFree( scaledBuffer );
-			scaledBuffer = shrunk;
+	
+	while ( scaled_width > 1 || scaled_height > 1 ) {
+		// preserve the border after mip map unless repeating
+		shrunk = R_MipMap( scaledBuffer, scaled_width, scaled_height, preserveBorder );
+		R_StaticFree( scaledBuffer );
+		scaledBuffer = shrunk;
 
-			scaled_width >>= 1;
-			scaled_height >>= 1;
-			if ( scaled_width < 1 ) {
-				scaled_width = 1;
-			}
-			if ( scaled_height < 1 ) {
-				scaled_height = 1;
-			}
-			miplevel++;
+		scaled_width >>= 1;
+		scaled_height >>= 1;
+		if ( scaled_width < 1 ) {
+			scaled_width = 1;
+		}
+		if ( scaled_height < 1 ) {
+			scaled_height = 1;
+		}
+		miplevel++;
 
-			// this is a visualization tool that shades each mip map
-			// level with a different color so you can see the
-			// rasterizer's texture level selection algorithm
-			// Changing the color doesn't help with lumminance/alpha/intensity formats...
-			if ( depth == TD_DIFFUSE && globalImages->image_colorMipLevels.GetBool() ) {
-				R_BlendOverTexture( (byte *)scaledBuffer, scaled_width * scaled_height, mipBlendColors[miplevel] );
-			}
-
-			// upload the mip map
-			if ( internalFormat == GL_COLOR_INDEX8_EXT ) {
-				UploadCompressedNormalMap( scaled_width, scaled_height, scaledBuffer, miplevel );
-			} else {
-				qglTexImage2D( GL_TEXTURE_2D, miplevel, internalFormat, scaled_width, scaled_height, 
-					0, GL_RGBA, GL_UNSIGNED_BYTE, scaledBuffer );
-			}
+		// this is a visualization tool that shades each mip map
+		// level with a different color so you can see the
+		// rasterizer's texture level selection algorithm
+		// Changing the color doesn't help with lumminance/alpha/intensity formats...
+		if ( depth == TD_DIFFUSE && globalImages->image_colorMipLevels.GetBool() ) {
+			R_BlendOverTexture( (byte *)scaledBuffer, scaled_width * scaled_height, mipBlendColors[miplevel] );
 		}
 
-		if ( scaledBuffer != 0 ) {
-			R_StaticFree( scaledBuffer );
+		// upload the mip map
+		if(compress != IMAGE_COMPRESS_NONE)
+		{
+			// This won't work for DXT1!!!
+			//qglCompressedTexImage2DARB( GL_TEXTURE_2D, miplevel, internalFormat, scaled_width, scaled_height, 0, width * height, scaledBuffer );
+		}
+		else if ( internalFormat == GL_COLOR_INDEX8_EXT ) {
+			UploadCompressedNormalMap( scaled_width, scaled_height, scaledBuffer, miplevel );
+		} else {
+			qglTexImage2D( GL_TEXTURE_2D, miplevel, internalFormat, scaled_width, scaled_height, 
+				0, GL_RGBA, GL_UNSIGNED_BYTE, scaledBuffer );
 		}
 	}
+
+	if ( scaledBuffer != 0 ) {
+		R_StaticFree( scaledBuffer );
+	}
+	
 
 	SetImageFilterAndRepeat();
 
