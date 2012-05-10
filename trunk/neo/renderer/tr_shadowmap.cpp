@@ -515,7 +515,7 @@ void RB_RenderDrawShadowMappedSurfList( drawSurf_t *drawSurfs, int side ) {
 		srfCullInfo_t cullInfo;
 		cullInfo.facing = NULL;
 		
-		R_CalcInteractionFacing(NULL, drawSurf->geo, _currentLight, cullInfo, (float *)&drawSurf->space->modelMatrix[0]);
+		//R_CalcInteractionFacing(NULL, drawSurf->geo, _currentLight, cullInfo, (float *)&drawSurf->space->modelMatrix[0]);
 
 		
 		
@@ -536,7 +536,7 @@ void RB_RenderDrawShadowMappedSurfList( drawSurf_t *drawSurfs, int side ) {
 		*/
 		// render it
 
-		RB_T_FillShadowMapBuffer( drawSurf, &cullInfo );
+		RB_T_FillShadowMapBuffer( drawSurf, NULL );
 
 		if ( drawSurf->space->weaponDepthHack || drawSurf->space->modelDepthHack != 0.0f ) {
 			//RB_LeaveDepthHack();

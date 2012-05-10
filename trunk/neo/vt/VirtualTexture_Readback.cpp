@@ -22,13 +22,18 @@ void bmVirtualTextureBackend::ReadTilesInScene( byte *readbackBuffer, int width,
 	for(int i = 0; i < numCharts; i++)
 	{
 		sceneTiles[i].SetNum( 0, false );
+		sceneAreaDist[i] = 0;
 	}
 
 	// Go through all the tiles and parse them. 
 	for(int i = 0; i < width * height; i++, readbackBuffer+= 4) {
 		tile.tileNum = readbackBuffer[0];
 		tile.pageNum = readbackBuffer[2];
+		tile.dist    = readbackBuffer[3];
 
+		if(sceneAreaDist[tile.pageNum] < tile.dist) {
+			sceneAreaDist[tile.pageNum] = tile.dist;
+		}
 		sceneTiles[tile.pageNum].Append( tile );
 	}
 }

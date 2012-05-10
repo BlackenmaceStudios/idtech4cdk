@@ -90,24 +90,47 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 		}
 		else
 		{
-			common->Printf( "Building VT Area %d/%d...", i + 1, numAreas);
+			common->Printf( "------- VT_BuildArea(%d/%d) ----------\n", i + 1, numAreas);
 		}
 
-		int maxTiles = (imgWidth / VIRTUALTEXTURE_TILESIZE) * (imgWidth / VIRTUALTEXTURE_TILESIZE);
+		int tileSize = VIRTUALTEXTURE_TILESIZE;
+		
+
+		int maxTiles = (imgWidth / tileSize) * (imgWidth / tileSize);
 		int currentTile = 0;
-		for(int h = 0; h < imgWidth / VIRTUALTEXTURE_TILESIZE; h++) {
-			for(int w = 0; w < imgWidth / VIRTUALTEXTURE_TILESIZE; w++, header.numTiles++, currentTile++) {
+
+		for(int h = 0; h < imgWidth / tileSize; h++) {
+			for(int w = 0; w < imgWidth / tileSize; w++, header.numTiles++, currentTile++) {
 
 				//common->Printf( "...Tile %d/%d", currentTile, maxTiles);
-				WriteTile( buffer, w * VIRTUALTEXTURE_TILESIZE, h * VIRTUALTEXTURE_TILESIZE, imgWidth );
+				WriteTile( buffer, w * tileSize, h * tileSize, imgWidth, tileSize );
 			}
 		}
-		common->Printf( "%d\n", f->Length() - sizeof(header) );
+
+		common->Printf("...Non Mipped Level created(%d)\n", f->Length() - sizeof(header)); 
+
+		// Write the next mipmap level.
+		byte *mippedLevel = R_MipMap( buffer, imgWidth, imgHeight, true );
+		imgWidth = imgWidth >> 1;
+		imgHeight = imgHeight >> 1;
+		tileSize = tileSize >> 1;
+
+		common->Printf("...Mipmap (%dx%d) %d\n", imgWidth, imgHeight, tileSize );
+		for(int h = 0; h < imgWidth / tileSize; h++) {
+			for(int w = 0; w < imgWidth / tileSize; w++) {
+
+				//common->Printf( "...Tile %d/%d", currentTile, maxTiles);
+				WriteTile( mippedLevel, w * tileSize, h * tileSize, imgWidth, tileSize );
+			}
+		}
+		R_StaticFree( mippedLevel );
 		R_StaticFree( buffer );
+
+		
 	}
 
 
-	common->Printf( "Done\n");
+	common->Printf("Virtual Texture written successfully\n");
 	return true;
 }
 
@@ -117,7 +140,7 @@ bmVirtualTextureFile::WriteTile
 ===========================
 */
 void R_WriteDDS( const char *path, byte *data, int uploadWidth, int uploadHeight );
-void bmVirtualTextureFile::WriteTile( byte *buffer, int DestX, int DestY, int DiemWidth ) {
+void bmVirtualTextureFile::WriteTile( byte *buffer, int DestX, int DestY, int DiemWidth, int vtTileSize ) {
 	unsigned int  		x, y, z, ConvBps, ConvSizePlane;
 	byte 	*Converted;
 	int Depth = 1;
@@ -126,13 +149,13 @@ void bmVirtualTextureFile::WriteTile( byte *buffer, int DestX, int DestY, int Di
 	byte 	*SrcTemp;
 	float 	Back;
 	int DestZ = 0;
-	unsigned int Width = VIRTUALTEXTURE_TILESIZE;
-	unsigned int Height = VIRTUALTEXTURE_TILESIZE;
+	unsigned int Width = vtTileSize;
+	unsigned int Height = vtTileSize;
 
 	if(compressedBuffer == NULL) {
-		compressedBuffer = new byte[VIRTUALTEXTURE_TILESIZE * VIRTUALTEXTURE_TILESIZE];
+		compressedBuffer = new byte[vtTileSize * vtTileSize];
 	}
-	memset(&compressedBuffer[0], 0, VIRTUALTEXTURE_TILESIZE * VIRTUALTEXTURE_TILESIZE);
+	memset(&compressedBuffer[0], 0, vtTileSize * vtTileSize);
 	
 	ConvBps 	  = 4 * Width;
 	ConvSizePlane = ConvBps   * Height;
@@ -146,8 +169,8 @@ void bmVirtualTextureFile::WriteTile( byte *buffer, int DestX, int DestY, int Di
 	if (Height + DestY > DiemWidth) Height = DiemWidth - DestY;
 	if (Depth  + DestZ > DiemWidth)  Depth  = 1;
 	
-	static byte tempBuffer[ VIRTUALTEXTURE_TILESIZE * VIRTUALTEXTURE_TILESIZE * 4 ];
-	memset(&tempBuffer[0], 0, VIRTUALTEXTURE_TILESIZE * VIRTUALTEXTURE_TILESIZE);
+	byte *tempBuffer = new byte[vtTileSize * vtTileSize * 4];
+	memset(&tempBuffer[0], 0, vtTileSize * vtTileSize);
 	const unsigned int  bpp_without_alpha = 4 - 1;
 		for (z = 0; z < Depth; z++) {
 			for (y = 0; y < Height; y++) {
@@ -169,17 +192,19 @@ void bmVirtualTextureFile::WriteTile( byte *buffer, int DestX, int DestY, int Di
 
 	int numBytes = 0;
 	byte border[4] = { 0, 0, 0, 0 };
-	//R_SetBorderTexels( tempBuffer, VIRTUALTEXTURE_TILESIZE, VIRTUALTEXTURE_TILESIZE, border );
-	CompressImageDXT5YCoCg( tempBuffer, &compressedBuffer[0], VIRTUALTEXTURE_TILESIZE, VIRTUALTEXTURE_TILESIZE, numBytes ); 
+	//R_SetBorderTexels( tempBuffer, vtTileSize, vtTileSize, border );
+	CompressImageDXT5YCoCg( tempBuffer, &compressedBuffer[0], vtTileSize, vtTileSize, numBytes ); 
 
-	//byte *cbuf = toolInterface->CompressImage( tempBuffer, VIRTUALTEXTURE_TILESIZE, VIRTUALTEXTURE_TILESIZE );
+	//byte *cbuf = toolInterface->CompressImage( tempBuffer, vtTileSize, vtTileSize );
 
 	
-	f->Write( &compressedBuffer[0], VIRTUALTEXTURE_TILESIZE * VIRTUALTEXTURE_TILESIZE );
+	f->Write( &compressedBuffer[0], vtTileSize * vtTileSize );
 
 	if(vt_debug_tiles.GetBool()) {
-		R_WriteDDS(va("vt/tiles/%d.dds", header.numTiles), &compressedBuffer[0], VIRTUALTEXTURE_TILESIZE, VIRTUALTEXTURE_TILESIZE );
+		R_WriteDDS(va("vt/tiles/%d.dds", header.numTiles), &compressedBuffer[0], vtTileSize, vtTileSize );
 	}
+
+	delete[] tempBuffer;
 }
 
 /*
@@ -307,8 +332,18 @@ void bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum, byte *tileBuffer
 
 }
 #else
-byte *bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum ) {
-	int bufferpos = ((4096 * 4096) * pageNum) + (VIRTUALTEXTURE_TILEMEMSIZE * (tileNum));
+byte *bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum, int mipLevel ) {
+	int bufferpos = (((4096 * 4096) + (2048 * 2048)) * pageNum);
+	
+	if(mipLevel == 0)
+	{
+		bufferpos += (VIRTUALTEXTURE_TILEMEMSIZE * (tileNum));
+	}
+	else
+	{
+		bufferpos += 4096 * 4096;
+		bufferpos += ((128 * 128) * tileNum);
+	}
 
 	if(bufferpos >= fileBufferLen) {
 		common->FatalError( "VT_ReadTile: %d > %d", bufferpos, fileBufferLen );

@@ -24,6 +24,24 @@ static void R_EmptyTexturePage( idImage *image ) {
 	image->rawBuffer = NULL;
 	//image->CreatePBO();
 }
+
+/*
+===============
+R_EmptyTexturePage2
+===============
+*/
+static void R_EmptyTexturePage2( idImage *image ) {
+	int	c = (vt_page_size.GetInteger() / 2) * (vt_page_size.GetInteger() / 2);
+
+	// FIXME: this won't live past vid mode changes
+	image->GenerateImage( NULL, vt_page_size.GetInteger() /2, vt_page_size.GetInteger()/2, 
+		TF_NEAREST, false, TR_REPEAT, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
+
+
+	image->rawBuffer = NULL;
+	//image->CreatePBO();
+}
+
 /*
 ====================
 bmVirtualTexturePage::ResetPage
@@ -48,7 +66,7 @@ void bmVirtualTexturePage::ResetPage( void ) {
 bmVirtualTexturePage::BlitTileToPage
 ====================
 */
-bmVirtualTexturePageTile_t	*bmVirtualTexturePage::BlitTileToPage( bmVirtualTextureFile *vtfile, int pageNum, int tileNum ) {
+bmVirtualTexturePageTile_t	*bmVirtualTexturePage::BlitTileToPage( bmVirtualTextureFile *vtfile, int pageNum, int tileNum, int mipLevel ) {
 	int i;
 
 	bmVirtualTexturePageTile_t *freeTile = NULL;
@@ -87,7 +105,7 @@ bmVirtualTexturePageTile_t	*bmVirtualTexturePage::BlitTileToPage( bmVirtualTextu
 #if !VT_LOAD_FROMMEMORY
 	vtfile->ReadTile( pageNum, tileNum, freeTile->buffer );
 #else
-	freeTile->buffer = vtfile->ReadTile( pageNum, tileNum );
+	freeTile->buffer = vtfile->ReadTile( pageNum, tileNum, mipLevel );
 #endif
 	// Blit the tile into image.
 	freeTile->vtfile = vtfile;
@@ -112,8 +130,8 @@ void bmVirtualTexturePage::Init( const char *name ) {
 	common->Printf( "Creating Virtual Texture Page(%dx%d)\n", vt_page_size.GetInteger(), vt_page_size.GetInteger());
 
 	// Create the virtual texture page.
-	image = globalImages->ImageFromFunction( va( "_vtpage_%s", name), R_EmptyTexturePage );
-
+	image[0] = globalImages->ImageFromFunction( va( "_vtpage_%s", name), R_EmptyTexturePage );
+	image[1] = globalImages->ImageFromFunction( va( "_vtpage_%s_mip1", name), R_EmptyTexturePage2 );
 	frameNum = 0;
 	isPageDirty = false;
 	pageTime = 0;
@@ -144,22 +162,22 @@ void bmVirtualTexturePage::Init( const char *name ) {
 bmVirtualTexturePage::Upload
 ====================
 */
-void bmVirtualTexturePage::Upload( void ) {
+void bmVirtualTexturePage::Upload( int mipLevel ) {
 	if(!isPageDirty) {
 		return;
 	}
 
 	//image->UploadScratch( image->rawBuffer, image->uploadWidth, image->uploadHeight );
-
+	currentMipLevel = mipLevel;
 	isPageDirty = false;
-	image->Bind(); 
+	image[mipLevel]->Bind(); 
 
 
 	for(int i = lastBlittedTile; i < numActiveTiles; i++) {
 		if(tiles[i].buffer == NULL)
 			continue;
 
-		image->CopyBufferIntoRegion( tiles[i].buffer, tiles[i].x, tiles[i].y, VIRTUALTEXTURE_TILESIZE, VIRTUALTEXTURE_TILESIZE );
+		image[mipLevel]->CopyBufferIntoRegion( tiles[i].buffer, 0, tiles[i].x / (mipLevel + 1), tiles[i].y / (mipLevel + 1), VIRTUALTEXTURE_TILESIZE / (mipLevel + 1), VIRTUALTEXTURE_TILESIZE / (mipLevel + 1) );
 		//image->pbo->WriteToPBO(0, tiles[i].buffer, tiles[i].x, tiles[i].y, VIRTUALTEXTURE_TILESIZE, VIRTUALTEXTURE_TILESIZE );
 	}
 	//image->pbo->Unbind();
@@ -172,7 +190,7 @@ bmVirtualTexturePage::Bind
 */
 void bmVirtualTexturePage::Bind( void ) { 
 
-	image->Bind(); 
+	image[currentMipLevel]->Bind(); 
 }
 
 /*

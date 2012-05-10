@@ -215,7 +215,7 @@ FragmentProgram
 		vec4 color = lightingModel( diffuse * var_Color , specular * var_Color, L, var_ViewDir, N, H, shadow );
 			d = sqrt(d) * 8;
 			float atten = 73000 / ( d * d2 + d2 * d * d);
-				color *=  atten    ; 
+			//	color *=  atten    ; 
 
 			
 			
@@ -295,8 +295,8 @@ FragmentProgram
 		{
 			for (j = -2; j <2; j++)
 			{
-				sum += BlurPixelV( u_diffuseTexture, texcoord + vec2(i, j)*0.003) * 0.25;  
-			   sum += BlurPixelH( u_diffuseTexture, texcoord + vec2(i, j)*0.003) * 0.25;  
+				sum += BlurPixelV( u_diffuseTexture, texcoord + vec2(i, j)*0.003) * 0.025;  
+			   sum += BlurPixelH( u_diffuseTexture, texcoord + vec2(i, j)*0.003) * 0.025;  
 			}
 		}
 
@@ -304,12 +304,12 @@ FragmentProgram
 	
 
 		vec4 vWeightsBW = vec4 ( 0.4,0.5,0.6,0 );
-		vec4 vWeightsSepia = vec4 ( 2.7,2.6,2.7,1 ); 
+		vec4 vWeightsSepia = vec4 ( 3.7,3.6,3.7,1 ); 
 		vec4 cColor = texture2D( u_diffuseTexture, var_TexNormal.st );
 
 
 
-		vec4 bloom = sum*sum*0.1 * cColor;
+		vec4 bloom = sum*sum;
 		bloom += cColor ;
 
 
@@ -323,7 +323,7 @@ FragmentProgram
 		vec4 res = sum + (bloom ) * temp ;
 
 		vec4 diffuse = texture2D( u_diffuseTexture, var_TexNormal.st );
-		return  (res * bloom +bloom  + temp );
+		return  (res * bloom +bloom  + temp ) + cColor;
 	}
 	
 	//

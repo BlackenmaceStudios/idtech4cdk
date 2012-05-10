@@ -71,18 +71,19 @@ class bmVirtualTexturePage {
 public:
 	void				Init( const char *name );
 
-	bmVirtualTexturePageTile_t	*BlitTileToPage( bmVirtualTextureFile *vtfile, int pageNum, int tileNum );
+	bmVirtualTexturePageTile_t	*BlitTileToPage( bmVirtualTextureFile *vtfile, int pageNum, int tileNum, int mipLevel );
 	bmVirtualTexturePageTile_t	*GetTileInfo( int tileNum ) { return &tiles[tileNum]; }
 	void				ResetPage( void );
 
 	void				Bind( void );
 	void				UnBind( void );
 
-	void				Upload( void );
+	void				Upload( int mipLevel );
 private:
 	int					frameNum;
 	int					pageTime;
-	idImage				*image;
+	int					currentMipLevel;
+	idImage				*image[2]; // Hack for mipmaps.
 	bool				isPageDirty;
 	int					numActiveTiles;
 	int					lastBlittedTile;
