@@ -321,6 +321,8 @@ bool bmVirtualTextureFile::InitFromFile( const char *path ) {
 #if VT_LOAD_FROMMEMORY
 	fileBufferLen = f->Length();
 
+	game->UpdateLoadingString("Init Virtual Texture..");
+
 	common->Printf("Init VT Heap %d\n", fileBufferLen);
 	fileBuffer = new byte[fileBufferLen];
 

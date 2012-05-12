@@ -381,6 +381,8 @@ public:
 	virtual void			BeginMapChange( const char *mapPath );
 	virtual void			EndMapChange( void );
 	virtual void			LoadingFrame( int frameTime, float pct );
+
+	virtual void			UpdateLoadingString( const char *str );
 // jmarshall end
 
 	bool					IsPortalSkyAcive();

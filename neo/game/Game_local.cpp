@@ -1201,8 +1201,10 @@ void idGameLocal::InitFromNewMap( const char *mapName, idRenderWorld *renderWorl
 	gameRenderWorld = renderWorld;
 	gameSoundWorld = soundWorld;
 
+	UpdateLoadingString( "Building Entities...");
 	LoadMap( mapName, randseed );
 
+	UpdateLoadingString( "Init Map Scripts...");
 	InitScriptForMap();
 
 	MapPopulate();
@@ -1216,6 +1218,7 @@ void idGameLocal::InitFromNewMap( const char *mapName, idRenderWorld *renderWorl
 
 	gamestate = GAMESTATE_ACTIVE;
 
+	UpdateLoadingString( "Map populated - continuing loading...");
 	Printf( "--------------------------------------\n" );
 }
 

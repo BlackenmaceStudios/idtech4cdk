@@ -8,4 +8,20 @@ windowDef Desktop
 		background	"guis/assets/splash/loadsplash"
 		matcolor	1,1,1,1
 	}
+	windowDef unnamed1
+	{
+		rect	0,8,673,36
+		visible	1
+		forecolor	1,1,1,1
+		text	"gui::mappath"
+		textscale	0.51000001
+	}
+	windowDef unnamed11
+	{
+		rect	697,664,578,51
+		visible	1
+		forecolor	1,1,1,1
+		text	"gui::loadStr"
+		textscale	0.30000002
+	}
 }
