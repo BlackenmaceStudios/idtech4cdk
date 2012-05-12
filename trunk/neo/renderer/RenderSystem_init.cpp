@@ -1913,7 +1913,9 @@ idRenderSystemLocal::BeginLevelLoad
 ========================
 */
 void idRenderSystemLocal::BeginLevelLoad( void ) {
+	
 	renderModelManager->BeginLevelLoad();
+	
 	globalImages->BeginLevelLoad();
 }
 
@@ -1923,7 +1925,10 @@ idRenderSystemLocal::EndLevelLoad
 ========================
 */
 void idRenderSystemLocal::EndLevelLoad( void ) {
+	game->UpdateLoadingString( "Init Models...");
 	renderModelManager->EndLevelLoad();
+
+	game->UpdateLoadingString( "Init Textures...");
 	globalImages->EndLevelLoad();
 	if ( r_forceLoadImages.GetBool() ) {
 		RB_ShowImages();

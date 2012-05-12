@@ -207,6 +207,8 @@ public:
 	virtual bmClientEntity		*SpawnClientEntity( idDict &spawnArgs, idRenderEntity *renderEntity, idRenderWorld *world ) = 0;
 	virtual void				UpdateClientEntity( bmClientEntity *entity ) = 0;
 	virtual void				FreeClientEntity( bmClientEntity *entity ) = 0;
+
+	virtual void			UpdateLoadingString( const char *str ) = 0;
 // jmarshall end
 
 	// Called when the main menu is active.

@@ -19,7 +19,9 @@ void idGameLocal::BeginMapChange( const char *mapPath ) {
 	}
 
 	loadingGui->SetStateFloat( "map_loading", 0 );
-	loadingGui->SetStateString( "loadStr", "This is a development build of the idTech4 community developers kit, some features may or not may not work properly.");
+	loadingGui->SetStateString( "mappath", va("LOADING: %s", mapPath ));
+
+	UpdateLoadingString( "This is a development build of the idTech4 community developers kit, some features may or not may not work properly.");
 }
 
 /*
@@ -29,6 +31,17 @@ idGameLocal::BeginMapChange
 */
 void idGameLocal::EndMapChange( void ) {
 	loadingGui = NULL;
+}
+/*
+=====================
+idGameLocal::UpdateLoadingString
+=====================
+*/
+void idGameLocal::UpdateLoadingString( const char *str ) {
+	renderSystem->BeginFrame( renderSystem->GetScreenWidth(), renderSystem->GetScreenHeight() );
+	loadingGui->SetStateString( "loadStr", str);
+	LoadingFrame( 0, 0 );
+	renderSystem->EndFrame(NULL, NULL);
 }
 
 /*
@@ -43,7 +56,7 @@ void idGameLocal::LoadingFrame( int frameTime, float pct ) {
 
 	// Update the loading percents.
 	loadingGui->SetStateFloat( "map_loading", pct );
-	loadingGui->SetStateString( "loadStr", "This is a development build of the idTech4 community developers kit, some features may or not may not work properly.");
+	
 	loadingGui->StateChanged( frameTime );
 
 
