@@ -124,10 +124,10 @@ static silEdge_t *	silEdges;
 static idHashIndex	silEdgeHash( SILEDGE_HASH_SIZE, MAX_SIL_EDGES );
 static int			numPlanes;
 
-static idBlockAlloc<srfTriangles_t, 1<<8>				srfTrianglesAllocator;
+static idBlockAlloc<srfTriangles_t, 1<<10>				srfTrianglesAllocator;
 
 #ifdef USE_TRI_DATA_ALLOCATOR
-static idDynamicBlockAlloc<idDrawVert, 1<<20, 1<<10>	triVertexAllocator;
+static idDynamicBlockAlloc<idDrawVert, 1<<30, 1<<20>	triVertexAllocator;
 static idDynamicBlockAlloc<glIndex_t, 1<<18, 1<<10>		triIndexAllocator;
 static idDynamicBlockAlloc<shadowCache_t, 1<<18, 1<<10>	triShadowVertexAllocator;
 static idDynamicBlockAlloc<idPlane, 1<<17, 1<<10>		triPlaneAllocator;

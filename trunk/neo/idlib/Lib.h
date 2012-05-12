@@ -58,9 +58,17 @@ public:
 	static void					Init( void );
 	static void					ShutDown( void );
 
+// jmarshall
+	static void					InitCrashHandler( void );
+	static int					CrashHandlerReportHook( int reportType, char *message, int *returnValue );
+	static void					CrashSignalHandler( int signal );
+// jmarshall end
+
 	// wrapper to idCommon functions 
 	static void					Error( const char *fmt, ... );
 	static void					Warning( const char *fmt, ... );
+private:
+	static bool					isErrorHandlerinstalled;
 };
 
 

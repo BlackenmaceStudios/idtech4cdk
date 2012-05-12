@@ -35,6 +35,12 @@ If you have questions concerning this license or the applicable additional terms
 #include <unistd.h>
 #endif
 
+#include <crtdbg.h> // jmarshall - for crash handler
+#include <signal.h> 
+
+// jmarshall
+bool idLib::isErrorHandlerinstalled = false;
+// jmarshall end
 /*
 ===============================================================================
 
@@ -61,7 +67,6 @@ void idLib::Init( void ) {
 	
 
 // jmarshall
-	Mem_InitHook();
 	allocator = common->GetUnifiedMemoryHandler();
 // jmarshall end
 
@@ -88,12 +93,77 @@ void idLib::Init( void ) {
 	idDict::Init();
 }
 
+// jmarshall - this should only be called within dll's.
+
+/*
+================
+idLib::CrashHandlerReportHook
+================
+*/
+int idLib::CrashHandlerReportHook( int reportType, char *message, int *returnValue ) {
+	if(reportType == _CRT_WARN) {
+		//common->Warning("CRT Warning - %s\n", message);
+		return EXCEPTION_EXECUTE_HANDLER; 
+	}
+
+	common->Printf( "****FAILURE**** System is now crashing...\n");
+	common->Printf( "%s\n", message );
+	
+	sys->HandleCrashEvent();
+	
+    return EXCEPTION_EXECUTE_HANDLER; 
+}
+
+/*
+================
+idLib::CrashSignalHandler
+================
+*/
+void idLib::CrashSignalHandler( int signal ) {
+	int ret = 0;
+	CrashHandlerReportHook( _CRT_ERROR, "Access Violation", &ret );
+}
+
+LONG WINAPI MyUnhandledExceptionFilter(PEXCEPTION_POINTERS pExceptionPtrs)
+{
+	int ret = 0;
+ idLib::CrashHandlerReportHook( _CRT_ERROR, "Access Violation", &ret );
+  return EXCEPTION_EXECUTE_HANDLER; 
+} 
+
+
+/*
+================
+idLib::InitCrashHandler
+================
+*/
+void idLib::InitCrashHandler( void ) {
+//	SetErrorMode( SEM_NOGPFAULTERRORBOX );
+
+	_CrtSetReportHook2( _CRT_RPTHOOK_INSTALL, idLib::CrashHandlerReportHook );
+	_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG ) ;
+	_CrtSetReportMode(_CRT_ERROR , _CRTDBG_MODE_DEBUG ) ;
+
+	signal(SIGSEGV , idLib::CrashSignalHandler);
+	signal(SIGILL , idLib::CrashSignalHandler);
+
+	SetUnhandledExceptionFilter(MyUnhandledExceptionFilter);
+
+	
+	isErrorHandlerinstalled = true;
+}
+
 /*
 ================
 idLib::ShutDown
 ================
 */
 void idLib::ShutDown( void ) {
+// jmarshall
+	if(isErrorHandlerinstalled) {
+		_CrtSetReportHook2( _CRT_RPTHOOK_REMOVE, idLib::CrashHandlerReportHook );
+	}
+// jmarshall end
 
 	// shut down the dictionary string pools
 	idDict::Shutdown();

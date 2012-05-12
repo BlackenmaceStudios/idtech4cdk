@@ -263,7 +263,7 @@ Main frame window procedure
 */
 LRESULT CALLBACK rvGEApp::FrameWndProc ( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	rvGEApp* app = (rvGEApp*) GetWindowLong ( hWnd, GWL_USERDATA );
+	rvGEApp* app = (rvGEApp*) GetWindowLongPtr ( hWnd, GWL_USERDATA );
 
 	switch ( uMsg )
 	{		
@@ -348,7 +348,7 @@ LRESULT CALLBACK rvGEApp::FrameWndProc ( HWND hWnd, UINT uMsg, WPARAM wParam, LP
 
 			assert ( app );
 			
-			SetWindowLong ( hWnd, GWL_USERDATA, (LONG)app );
+			SetWindowLongPtr ( hWnd, GWL_USERDATA, (LONG_PTR)app );
 
 			app->mMDIFrame = hWnd;
 			
@@ -365,9 +365,9 @@ LRESULT CALLBACK rvGEApp::FrameWndProc ( HWND hWnd, UINT uMsg, WPARAM wParam, LP
 			app->mToolWindows.Append ( app->mProperties.GetWindow ( ) );
 			app->mToolWindows.Append ( app->mTransformer.GetWindow ( ) );
 			
-			SendMessage ( app->mNavigator.GetWindow ( ), WM_NCACTIVATE, true, (LONG)-1 );
-			SendMessage ( app->mProperties.GetWindow ( ), WM_NCACTIVATE, true, (LONG)-1 );
-			SendMessage ( app->mTransformer.GetWindow ( ), WM_NCACTIVATE, true, (LONG)-1 );			
+			SendMessage ( app->mNavigator.GetWindow ( ), WM_NCACTIVATE, true, (LONG_PTR)-1 );
+			SendMessage ( app->mProperties.GetWindow ( ), WM_NCACTIVATE, true, (LONG_PTR)-1 );
+			SendMessage ( app->mTransformer.GetWindow ( ), WM_NCACTIVATE, true, (LONG_PTR)-1 );			
 
 			break;
 		}
@@ -385,7 +385,7 @@ MDI Child window procedure
 */
 LRESULT CALLBACK rvGEApp::MDIChildProc ( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	rvGEWorkspace* workspace = (rvGEWorkspace*)GetWindowLong ( hWnd, GWL_USERDATA );	
+	rvGEWorkspace* workspace = (rvGEWorkspace*)GetWindowLongPtr ( hWnd, GWL_USERDATA );	
 
 	// Give the active workspace a chance to play with it
 	if ( workspace )
@@ -1159,7 +1159,7 @@ bool rvGEApp::NewFile ( void )
 								SCREEN_HEIGHT,
 								mMDIClient,
 								mInstance,
-								(LONG)workspace );
+								(LONG_PTR)workspace );
 														
 		ShowWindow ( child, SW_SHOW );
 	}
@@ -1210,7 +1210,7 @@ bool rvGEApp::OpenFile ( const char* filename )
 								SCREEN_HEIGHT,
 								mMDIClient,
 								mInstance,
-								(LONG)workspace );
+								(LONG_PTR)workspace );
 														
 		ShowWindow ( child, SW_SHOW );
 		
@@ -1362,7 +1362,7 @@ int	rvGEApp::ToolWindowActivate ( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 		{
 			if ( mToolWindows[i] != hwnd &&	mToolWindows[i] != (HWND) lParam )
 			{
-				SendMessage ( mToolWindows[i], WM_NCACTIVATE, keepActive, (LONG)-1 );
+				SendMessage ( mToolWindows[i], WM_NCACTIVATE, keepActive, (LONG_PTR)-1 );
 			}
 		}
 	}

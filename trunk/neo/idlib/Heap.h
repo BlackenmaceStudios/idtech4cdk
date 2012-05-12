@@ -49,6 +49,10 @@ typedef struct {
 	int		totalSize;
 } memoryStats_t;
 
+void *Mem_HeapAlloc( int size );
+void Mem_HeapFree( void *ptr );
+void *Mem_HeapAlloc16( int size );
+void Mem_HeapFree16( void *ptr );
 
 void		Mem_Init( void );
 void		Mem_InitHook( void );
@@ -308,7 +312,9 @@ type *idDynamicAlloc<type, baseBlockSize, minBlockSize>::Alloc( const int num ) 
 	}
 	numUsedBlocks++;
 	usedBlockMemory += num * sizeof( type );
-	return Mem_Alloc16( num * sizeof( type ) );
+// jmarshall
+	return (type *)Mem_Alloc16( num * sizeof( type ) );
+// jmarshall end
 }
 
 template<class type, int baseBlockSize, int minBlockSize>

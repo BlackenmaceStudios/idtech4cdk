@@ -21,7 +21,7 @@ void bmVirtualTextureBackend::ReadTilesInScene( byte *readbackBuffer, int width,
 	// Clear all the scene tiles. 
 	for(int i = 0; i < numCharts; i++)
 	{
-		sceneTiles[i].SetNum( 0, false );
+		numSceneTiles[i] = 0;
 		sceneAreaDist[i] = 0;
 	}
 
@@ -34,7 +34,7 @@ void bmVirtualTextureBackend::ReadTilesInScene( byte *readbackBuffer, int width,
 		if(sceneAreaDist[tile.pageNum] < tile.dist) {
 			sceneAreaDist[tile.pageNum] = tile.dist;
 		}
-		sceneTiles[tile.pageNum].Append( tile );
+		sceneTiles[tile.pageNum][numSceneTiles[tile.pageNum]++] = tile;
 	}
 }
 

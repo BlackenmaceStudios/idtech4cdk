@@ -148,7 +148,7 @@ bool rvGEWorkspace::Attach ( HWND wnd )
 
 	// Jam the workspace pointer into the userdata window long so 
 	// we can retrieve the workspace from the window later
-	SetWindowLong ( mWnd, GWL_USERDATA, (LONG) this );
+	SetWindowLongPtr ( mWnd, GWL_USERDATA, (LONG_PTR) this );
 	
 	UpdateTitle ( );
 	
@@ -166,7 +166,7 @@ void rvGEWorkspace::Detach ( void )
 {
 	assert ( mWnd );
 	
-	SetWindowLong ( mWnd, GWL_USERDATA, 0 );
+	SetWindowLongPtr ( mWnd, GWL_USERDATA, 0 );
 	mWnd = NULL;
 }
 
@@ -891,7 +891,7 @@ int	rvGEWorkspace::HandleRButtonDown ( WPARAM wParam, LPARAM lParam )
 		AppendMenu ( popup, MF_STRING|MF_ENABLED|(wrapper->IsSelected()?MF_CHECKED:0), ID_GUIED_SELECT_FIRST + i, mSelectMenu[i]->GetName() );
 	}
 
-	InsertMenu ( menu, 1, MF_POPUP|MF_BYPOSITION, (LONG) popup, "Select" );
+	InsertMenu ( menu, 1, MF_POPUP|MF_BYPOSITION, (LONG_PTR) popup, "Select" );
 
 	// Bring up the popup menu
 	ClientToScreen ( mWnd, &point );

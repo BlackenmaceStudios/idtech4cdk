@@ -57,5 +57,5 @@ public:
 	idManagedEditorWindow *GetTopWindow(void);
 private:
 
-	struct ToolsManaged::IEditorWindow	*window;
+	void	*window;
 };

@@ -581,6 +581,9 @@ public:
 // jmarshall end
 };
 
+
+
+
 extern idSys *				sys;
 
 bool Sys_LoadOpenAL( void );

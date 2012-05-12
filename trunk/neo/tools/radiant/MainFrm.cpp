@@ -62,6 +62,11 @@ If you have questions concerning this license or the applicable additional terms
 #include "../comafx/DialogName.h"
 #include "../comafx/DialogColorPicker.h"
 
+// jmarshall
+#include "../tools_managed.h"
+// jmarshall end
+
+
 #ifdef _DEBUG
 	#define new DEBUG_NEW
 	#undef THIS_FILE
@@ -1152,15 +1157,13 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	SetIcon( LoadIcon( win32.hInstance, MAKEINTRESOURCE( EDITOR_ICON_HANDLE  ) ), false );
 
 	UINT	nID = (g_PrefsDlg.m_bWideToolbar) ? IDR_TOOLBAR_ADVANCED : IDR_TOOLBAR1;
-	/*
+	
 	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP
 		| CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) || !m_wndToolBar.LoadToolBar(nID)) {
 		TRACE0("Failed to create toolbar\n");
 		return -1;	// fail to create
 	}
 
-	
-	*/
 	if (!m_wndStatusBar.Create(this) || !m_wndStatusBar.SetIndicators(indicators, sizeof(indicators) / sizeof(UINT))) {
 		TRACE0("Failed to create status bar\n");
 		return -1;	// fail to create
@@ -1168,7 +1171,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	m_bCamPreview = true;
 
 	
-	/*
+	
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SCALELOCKX, FALSE);
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SCALELOCKY, FALSE);
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SCALELOCKZ, FALSE);
@@ -1184,7 +1187,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SOUND_SHOWSELECTEDSOUNDVOLUMES,g_qeglobals.d_savedinfo.showSoundWhenSelected);
 
 	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
-	*/
+	
 	EnableDocking(CBRS_ALIGN_ANY);
 	//DockControlBar(&m_wndToolBar);
 

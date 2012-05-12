@@ -606,6 +606,9 @@ byte *R_ResampleTexture( const byte *in, int inwidth, int inheight,
 							int outwidth, int outheight );
 byte *R_MipMapWithAlphaSpecularity( const byte *in, int width, int height );
 byte *R_MipMap( const byte *in, int width, int height, bool preserveBorder );
+// jmarshall
+void R_MipMap( const byte *in, const byte*out, int width, int height, bool preserveBorder );
+// jmarshall end
 byte *R_MipMap3D( const byte *in, int width, int height, int depth, bool preserveBorder );
 
 // these operate in-place on the provided pixels
@@ -623,6 +626,10 @@ IMAGEFILES
 
 ====================================================================
 */
+
+// jmarshall
+void LoadTGA( const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamp, bool allocMemory );
+// jmarshall end
 
 void R_LoadImage( const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamp, bool makePowerOf2 );
 // pic is in top to bottom raster format

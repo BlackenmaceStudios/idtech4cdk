@@ -66,8 +66,8 @@ public:
 	virtual void			*Allocate( size_t size, const char *file, int line ) { return malloc( size); }
 	virtual void			Free( void *ptr ) { free( ptr ); }
 
-	virtual void			*AllocAlign( int size, size_t align ) { return _aligned_malloc( size, align ); }
-	virtual void			FreeAlign( void *ptr ) { _aligned_free( ptr ); }
+	virtual void			*AllocAlign( int size, size_t align ) { return malloc( size  + 16 + 4); }
+	virtual void			FreeAlign( void *ptr ) { free( ptr ); }
 	virtual void			*Realloc( void *ptr, int size ) { return ::realloc( ptr, size ); }
 
 	static int bmMemoryHandlerLocal::CustomAllocHook( int nAllocType, void *userData, size_t size, int nBlockType, long requestNumber, const unsigned char *filename, int lineNumber);
@@ -2755,6 +2755,7 @@ void idCommonLocal::Init( int argc, const char **argv, const char *cmdline ) {
 		idLib::fileSystem	= fileSystem;
 
 		// initialize memory manager
+
 		Mem_Init();
 
 		// initialize idLib

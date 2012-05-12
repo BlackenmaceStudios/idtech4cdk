@@ -6,6 +6,12 @@
 #include "radiant.h"
 #include "MainFrm.h"
 #include "lightdlg.h"
+
+// jmarshall
+#include "../tools_managed.h"
+// jmarshall end
+
+
 int idManagedEditorWindow::OnCreate(LPCREATESTRUCT lpCreateStruct){ return 0; }
 void idManagedEditorWindow::OnLButtonDown(UINT nFlags, CPoint point){ }
 void idManagedEditorWindow::OnMButtonDown(UINT nFlags, CPoint point){ }
@@ -64,29 +70,29 @@ void idManagedEditorWindow::OnAddEntityEvent( const char *entityType, CPoint pt 
 }
 
 void idManagedEditorWindow::OpenBrushContextMenu() {
-	window->OpenBrushContextMenu();
+	((ToolsManaged::IEditorWindow *)window)->OpenBrushContextMenu();
 }
 
 void idManagedEditorWindow::OpenEntityContextMenu( idDict *entDict ) {
 
-	window->OpenEntityContextMenu( (__int64)entDict );
+	((ToolsManaged::IEditorWindow *)window)->OpenEntityContextMenu( (__int64)entDict );
 }
 
 HWND idManagedEditorWindow::GetSafeHwnd( void ) {
 	HWND hwnd = { 0 };
-	window->GetSafeHandle((__int64 *)&hwnd);
+	((ToolsManaged::IEditorWindow *)window)->GetSafeHandle((__int64 *)&hwnd);
 	return (HWND)hwnd;
 }
 
 void idManagedEditorWindow::GetClientRect( CRect &rect ) {
 	ToolsManaged::RECT r;
-	window->GetScreenRect( &r );
+	((ToolsManaged::IEditorWindow *)window)->GetScreenRect( &r );
 	memcpy(&rect, &r, sizeof(ToolsManaged::RECT));
 }
 
 void idManagedEditorWindow::ShowWindow( int vis ) {
 	if(vis == SW_SHOW) {
-		window->ShowWindow();
+		((ToolsManaged::IEditorWindow *)window)->ShowWindow();
 	}
 }
 
@@ -101,8 +107,8 @@ BOOL idManagedEditorWindow::Create(LPCTSTR lpszText, DWORD dwStyle, const RECT& 
 BOOL idManagedEditorWindow::Create(LPCTSTR id, LPCTSTR lpszText, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID) {
 	_bstr_t bstrt(va("%s", id)); 
 	
-	toolsManaged->CreateEditorWindow( bstrt, (__int64)this, &window );
-	window->Init();
+	toolsManaged->CreateEditorWindow( bstrt, (__int64)this, (ToolsManaged::IEditorWindow **)&window );
+	((ToolsManaged::IEditorWindow *)window)->Init();
 	return TRUE;
 }
 
@@ -110,7 +116,7 @@ BOOL idManagedEditorWindow::RedrawWindow(LPCRECT lpRectUpdate, CRgn* prgnUpdate,
 	if(::IsWindowVisible( win32.hWnd ) ) {
 		return FALSE;
 	}
-	window->Redraw();
+	((ToolsManaged::IEditorWindow *)window)->Redraw();
 	return TRUE;
 }
 
@@ -135,7 +141,7 @@ bool idManagedEditorWindow::OpenClipboard( void ) {
 }
 
 void idManagedEditorWindow::InvalidateRect( void *rect, bool repaint ) {
-//	window->Redraw();
+//	((ToolsManaged::IEditorWindow *)window)->Redraw();
 }
 
 idManagedEditorWindow *idManagedEditorWindow::GetCapture( void ) {
@@ -164,5 +170,5 @@ idManagedEditorWindow *idManagedEditorWindow::GetTopWindow(void) {
 void idManagedEditorWindow::SetWindowText( const char *p ) {
 	_bstr_t bstrt(p);
 
-	window->SetWindowText( bstrt );
+	((ToolsManaged::IEditorWindow *)window)->SetWindowText( bstrt );
 }

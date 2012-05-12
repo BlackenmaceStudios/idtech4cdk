@@ -4,7 +4,6 @@
 #include "../renderer/qgl_linked.h"
 
 #include "tools_platform.h"
-#import "../../base/tools/ToolsManaged.tlb" raw_interfaces_only
 #include "radiant/EditorWindow.h"
 
 #ifdef TOOLS_DLL
@@ -110,5 +109,4 @@ void	ModelStudioEditorRun( void );
 void	ModelStudioEditorShutdown( void );
 // jmarshall end
 
-extern ToolsManaged::IToolsManaged *toolsManaged;
 extern idToolInterfaceLocal		toolInterfaceLocal;

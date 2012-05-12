@@ -260,6 +260,12 @@ void idGameLocal::Init( void ) {
 
 #else
 
+// jmarshall
+#ifdef _DEBUG
+	idLib::InitCrashHandler();
+#endif
+// jmarshall end
+
 	// initialize idLib
 	idLib::Init();
 

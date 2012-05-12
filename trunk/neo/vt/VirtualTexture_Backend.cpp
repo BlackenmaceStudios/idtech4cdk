@@ -19,6 +19,7 @@ float vtProjectionMatrix[16];
 static void R_FrameBufferImageVT( idImage *image ) {
 	image->GenerateFrameBufferImage( vt_backend_fbosize_width.GetInteger(), vt_backend_fbosize_height.GetInteger() );
 	image->CreatePBO();
+	globalImages->BindNull();
 }
 
 /*
@@ -58,17 +59,16 @@ void bmVirtualTextureBackend::Init( void ) {
 	sceneFbo = globalImages->ImageFromFunction( "_vt_feedback", R_FrameBufferImageVT );
 	sceneFboPublic = globalImages->ImageFromFunction( "_vt_scenefbo_public",  R_FeedBackTileTable );
 
-	for(int i = 0; i < 16; i++)
-	{
-		sceneTiles[i].Resize(9216);
-	}
+	memset( &sceneAreaDist[0], 0, sizeof(int) * VT_MAXCHARTS );
+	memset( &numSceneTiles[0], 0, sizeof(int) * VT_MAXCHARTS );
+	memset( &sceneTiles[0], 0, sizeof(bmVTTileReadback_t) * VT_MAXCHARTS * VT_MAXTILES_IN_SCENE );
 }
 /*
 ====================
 bmVirtualTextureBackend::UUploadAreaTiles
 ====================
 */
-void bmVirtualTextureBackend::UploadAreaTiles( int pageId, int mipLevel,  idList<bmVTTileReadback_t> &areaTiles ) {
+void bmVirtualTextureBackend::UploadAreaTiles( int pageId, int mipLevel,  bmVTTileReadback_t *areaTiles, int numTiles ) {
 	bmVirtualTexturePage *page;
 
 	// Get the current valid world page.
@@ -77,7 +77,7 @@ void bmVirtualTextureBackend::UploadAreaTiles( int pageId, int mipLevel,  idList
 	memset(&sceneFboPublic->rawBuffer[0], 0, 16 * 16 * 4);
 
 	bmVirtualTexturePageTile_t *vtTile, *pageTile, *lastVTTile = NULL;
-	for(int i = 0; i < areaTiles.Num(); i++) {
+	for(int i = 0; i < numTiles; i++) {
 		bmVTTileReadback_t *rbtile;
 
 		rbtile = &areaTiles[i];
@@ -132,7 +132,7 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 	bool syncRender = vt_syncrender.GetBool();
 	for(int i = 0; i < numCharts; i++) {
 		// If a area isn't visibile in the current scene, no need to render it.
-		if(sceneTiles[i].Num() <= 0) {
+		if(numSceneTiles[i] <= 0) {
 			continue;
 		}
 
@@ -145,15 +145,15 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 		sceneAreaDist[i] = 255 - sceneAreaDist[i];
 		if(sceneAreaDist[i] > 170)
 		{
-			UploadAreaTiles( i, 2,sceneTiles[i]);
+			UploadAreaTiles( i, 2,&sceneTiles[i][0], numSceneTiles[i]);
 		}
 		else if(sceneAreaDist[i] > 120)
 		{
-			UploadAreaTiles( i, 1,sceneTiles[i]);
+			UploadAreaTiles( i, 1,&sceneTiles[i][0], numSceneTiles[i]);
 		}
 		else
 		{
-			UploadAreaTiles( i, 0,sceneTiles[i]);
+			UploadAreaTiles( i, 0,&sceneTiles[i][0], numSceneTiles[i]);
 		}
 
 		if(syncRender)

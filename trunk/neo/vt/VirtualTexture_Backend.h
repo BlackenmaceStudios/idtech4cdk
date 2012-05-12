@@ -23,6 +23,8 @@ struct bmVTTileReadback_t {
 //
 // bmVirtualTextureBackend
 //
+#define VT_MAXTILES_IN_SCENE	9216
+#define VT_MAXCHARTS			69
 class bmVirtualTextureBackend {
 public:
 	void						Init( void );
@@ -36,10 +38,11 @@ public:
 private:
 	void						ReadCurrentScene( void );
 	void						ReadTilesInScene( byte *readbackBuffer, int width, int height );
-	void						UploadAreaTiles( int pageId, int mipLevel, idList<bmVTTileReadback_t> &areaTiles );
+	void						UploadAreaTiles( int pageId, int mipLevel,  bmVTTileReadback_t *areaTiles, int numTiles );
 
-	int							sceneAreaDist[64];
-	idList<bmVTTileReadback_t>	sceneTiles[64];
+	int							sceneAreaDist[VT_MAXCHARTS];
+	int							numSceneTiles[VT_MAXCHARTS];
+	bmVTTileReadback_t			sceneTiles[VT_MAXCHARTS][VT_MAXTILES_IN_SCENE];
 };
 
 extern bmVirtualTextureBackend vtBackEnd;

@@ -6,6 +6,10 @@
 #include "radiant/QERTYPES.H"
 #include "radiant/editorEntity.h"
 
+// jmarshall
+#include "tools_managed.h"
+// jmarshall end
+
 using namespace ToolsManaged;
 extern bool g_editorAlive;
 
@@ -52,10 +56,9 @@ idToolInterfaceLocal::GetValueFromManagedEnum
 int idToolInterfaceLocal::GetValueFromManagedEnum(const char * enumTypeStrv, const char * enumValStrv)
 {
 	long value = 0;
-	_bstr_t enumTypeStr(enumTypeStrv);
-	_bstr_t enumValStr(enumValStrv);
 
-	toolsManaged->GetValueFromManagedEnum( enumTypeStr, enumValStr, &value );
+
+	toolsManaged->GetValueFromManagedEnum( _com_util::ConvertStringToBSTR(enumTypeStrv), _com_util::ConvertStringToBSTR(enumValStrv), &value );
 	return value;
 }
 
@@ -90,11 +93,8 @@ idToolInterfaceLocal::RadiantPrint
 ==================
 */
 void idToolInterfaceLocal::RadiantPrint( const char *text ) {
-	_bstr_t bstrt(va("%s\r\n", text)); 
-
-	
 	if ( g_editorAlive ) {
-		toolsManaged->PrintToConsole( bstrt );
+		toolsManaged->PrintToConsole( _com_util::ConvertStringToBSTR(text) );
 	}
 
 	

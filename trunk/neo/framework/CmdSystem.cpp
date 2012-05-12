@@ -375,11 +375,11 @@ void idCmdSystemLocal::AddCommand( const char *cmdName, cmdFunction_t function, 
 	}
 
 	cmd = new commandDef_t;
-	cmd->name = Mem_CopyString( cmdName );
+	cmd->name = (char *)cmdName; // jmarshall - was Mem_CopyString removed to avoid memory fragmentation
 	cmd->function = function;
 	cmd->argCompletion = argCompletion;
 	cmd->flags = flags;
-	cmd->description = Mem_CopyString( description );
+	cmd->description = (char *)description; // jmarshall - was Mem_CopyString removed to avoid memory fragmentation
 	cmd->next = commands;
 	commands = cmd;
 }
@@ -395,8 +395,10 @@ void idCmdSystemLocal::RemoveCommand( const char *cmdName ) {
 	for ( last = &commands, cmd = *last; cmd; cmd = *last ) {
 		if ( idStr::Cmp( cmdName, cmd->name ) == 0 ) {
 			*last = cmd->next;
-			Mem_Free( cmd->name );
-			Mem_Free( cmd->description );
+// jmarshall
+			//Mem_Free( cmd->name );
+			//Mem_Free( cmd->description );
+// jmarshall end
 			delete cmd;
 			return;
 		}
