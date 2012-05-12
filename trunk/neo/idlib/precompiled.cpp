@@ -65,6 +65,15 @@ void operator delete[]( void *p ) {
 	allocator->Free( p );
 }
 
+void operator delete[]( void *p, size_t s ) {
+	if(allocator == NULL) {
+		free( p );
+		return;
+	}
+
+	allocator->Free( p );
+}
+
  void* operator new(size_t s, int blocktype, const char * lpszFileName, int nLine) {
 	if(allocator == NULL)
 		return malloc( s );
@@ -77,6 +86,12 @@ void operator delete[]( void *p ) {
 		return malloc( s );
 
 	return allocator->Allocate( s, lpszFileName, nLine );
+}
+  void operator delete[](void *ptr, size_t s, int blocktype, const char * lpszFileName, int nLine) {
+	if(allocator == NULL)
+		return free( ptr );
+
+	return allocator->Free( ptr );
 }
 
 

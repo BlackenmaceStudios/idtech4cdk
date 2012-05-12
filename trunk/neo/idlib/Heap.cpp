@@ -1103,7 +1103,7 @@ void *Mem_Alloc( const int size ) {
 		return allocator->Allocate( size );
 	}
 	void *mem =  allocator->Allocate( size );
-	Mem_UpdateAllocStats( mem_heap->Msize( mem ) );
+	//Mem_UpdateAllocStats( mem_heap->Msize( mem ) );
 	return mem;
 }
 
@@ -1126,7 +1126,7 @@ void Mem_Free( void *ptr ) {
 		allocator->Free( ptr );
 		return;
 	}
-	Mem_UpdateFreeStats( mem_heap->Msize( ptr ) );
+//	Mem_UpdateFreeStats( mem_heap->Msize( ptr ) );
  	allocator->Free( ptr );
 }
 

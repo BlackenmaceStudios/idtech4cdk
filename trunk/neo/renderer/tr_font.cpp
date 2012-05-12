@@ -344,10 +344,16 @@ bool idRenderSystemLocal::RegisterFont( const char *fontName, fontInfoEx_t &font
 		idStr::Copynz( outFont->name, name, sizeof( outFont->name ) );
 
 		len = fileSystem->ReadFile( name, NULL, &ftime );
-		if ( len != sizeof( fontInfo_t ) ) {
+		if ( len <= 0 ) {
 			common->Warning( "RegisterFont: couldn't find font: '%s'", name );
 			return false;
 		}
+// jmarshall - why is this happening?
+		if ( len != sizeof( fontInfo_t ) ) {
+			common->Warning( "RegisterFont: Wierd size detected for '%s' found %d expected %d", name, len, sizeof( fontInfo_t ) );
+		//	return false;
+		}
+// jmarshall end
 
 		fileSystem->ReadFile( name, &faceData, &ftime );
 		fdOffset = 0;

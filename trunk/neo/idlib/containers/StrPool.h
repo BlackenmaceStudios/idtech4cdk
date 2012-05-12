@@ -74,7 +74,9 @@ public:
 	void				FreeString( const idPoolStr *poolStr );
 	const idPoolStr *	CopyString( const idPoolStr *poolStr );
 	void				Clear( void );
-
+// jmarshall
+	const idPoolStr *	GetAt( int index ) const { return pool[index]; }
+// jmarshall
 private:
 	bool				caseSensitive;
 	idList<idPoolStr *>	pool;

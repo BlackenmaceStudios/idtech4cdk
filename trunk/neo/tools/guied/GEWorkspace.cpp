@@ -57,6 +57,10 @@ If you have questions concerning this license or the applicable additional terms
 #include "../../ui/UserInterfaceLocal.h"
 // jmarshall end
 
+// jmarshall
+idCVar idWindow::gui_edit( "gui_edit", "0", CVAR_GUI | CVAR_BOOL, "" );
+// jmarshall end
+
 static float g_ZoomScales[rvGEWorkspace::ZOOM_MAX] = { 0, 0.25f, 0.33f, 0.50f, 0.66f, 1.0f, 1.5f, 2.0f, 3.0f };
 
 static const int ID_GUIED_SELECT_FIRST = 9800;
@@ -318,8 +322,16 @@ void rvGEWorkspace::Render ( HDC hdc )
 	viewDef->isEditor = true;
 	renderSystem->BeginFrame(mWindowWidth, mWindowHeight );
 	
+// jmarshall - force gui_edit/debug draw.
+	idWindow::SetDebugDraw();
+// jmarshall end
+
 	// Draw the gui
 	mInterface->Redraw ( 0 ); // eventLoop->Milliseconds() );
+
+// jmarshall - disable debug draw
+	idWindow::DisableDebugDraw();
+// jmarshall end
 
 	// We are done using the renderSystem now
 	renderSystem->EndFrame( &front, &back );
