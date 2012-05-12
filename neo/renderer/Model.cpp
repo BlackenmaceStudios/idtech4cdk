@@ -2222,6 +2222,14 @@ idRenderModelStatic::GetSurfaceInteractions
 ================
 */
 const surfaceInteraction_t *idRenderModelStatic::GetSurfaceInteractions( void )  const {
+	// I'm spitting out a warning here cause this shouldn't happen(but it is).
+	if(interaction.Num() <= 0) {
+		common->Warning("Surface Interactions not allocated - creating %d\n", NumSurfaces() );
+		for(int i = 0; i < NumSurfaces(); i++)
+		{
+			((idRenderModelStatic *)this)->interaction.Alloc();
+		}
+	}
 	return &interaction[0];
 }
 

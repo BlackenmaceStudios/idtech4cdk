@@ -39,7 +39,11 @@ idGameLocal::UpdateLoadingString
 */
 void idGameLocal::UpdateLoadingString( const char *str ) {
 	renderSystem->BeginFrame( renderSystem->GetScreenWidth(), renderSystem->GetScreenHeight() );
+#ifndef JV_DEVELOPER_BUILD
 	loadingGui->SetStateString( "loadStr", str);
+#else
+	loadingGui->SetStateString( "loadStr", va("%s\nLicensee Build - Internal Testing Copy",str));
+#endif
 	LoadingFrame( 0, 0 );
 	renderSystem->EndFrame(NULL, NULL);
 }
