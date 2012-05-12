@@ -628,9 +628,7 @@ int idSoundSystemLocal::AsyncUpdate( int inTime ) {
 	if ( !isInitialized || shutdown || !snd_audio_hw ) {
 		return 0;
 	}
-#ifdef ID_X64
-	return 0;
-#endif
+
 
 	ulong dwCurrentWritePos;
 	dword dwCurrentBlock;
