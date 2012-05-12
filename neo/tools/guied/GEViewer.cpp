@@ -228,7 +228,7 @@ static int MapKey (int key)
 
 LRESULT CALLBACK rvGEViewer::WndProc ( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
-	rvGEViewer* viewer = (rvGEViewer*) GetWindowLong ( hwnd, GWL_USERDATA );
+	rvGEViewer* viewer = (rvGEViewer*) GetWindowLongPtr ( hwnd, GWL_USERDATA );
 	
 	switch ( msg )
 	{
@@ -364,7 +364,7 @@ LRESULT CALLBACK rvGEViewer::WndProc ( HWND hwnd, UINT msg, WPARAM wParam, LPARA
 		case WM_CREATE:
 		{
 			CREATESTRUCT* cs = (CREATESTRUCT*) lParam;
-			SetWindowLong ( hwnd, GWL_USERDATA, (LONG)cs->lpCreateParams );
+			SetWindowLongPtr ( hwnd, GWL_USERDATA, (LONG_PTR)cs->lpCreateParams );
 					
 			viewer = (rvGEViewer*)cs->lpCreateParams;
 			viewer->mWnd = hwnd;

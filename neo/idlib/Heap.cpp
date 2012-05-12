@@ -53,7 +53,7 @@ bmMemoryHandler		*allocator = NULL;
 
 #define SMALL_HEADER_SIZE		( (int) ( sizeof( byte ) + sizeof( byte ) ) )
 #define MEDIUM_HEADER_SIZE		( (int) ( sizeof( mediumHeapEntry_s ) + sizeof( byte ) ) )
-#define LARGE_HEADER_SIZE		( (int) ( sizeof( MEMORY_LARGE_INT * ) + sizeof( byte ) ) )
+#define LARGE_HEADER_SIZE		( (int) ( sizeof( MEMORY_LARGE_INT* ) + sizeof( byte ) ) )
 
 #define ALIGN_SIZE( bytes )		( ( (bytes) + ALIGN - 1 ) & ~(ALIGN - 1) )
 #define SMALL_ALIGN( bytes )	( ALIGN_SIZE( (bytes) + SMALL_HEADER_SIZE ) - SMALL_HEADER_SIZE )
@@ -996,6 +996,23 @@ static memoryStats_t	mem_total_allocs = { 0, 0x0fffffff, -1, 0 };
 static memoryStats_t	mem_frame_allocs;
 static memoryStats_t	mem_frame_frees;
 
+
+void *Mem_HeapAlloc( int size ) {
+	return mem_heap->Allocate( size );
+}
+
+void Mem_HeapFree( void *ptr ) {
+	mem_heap->Free( ptr );
+}
+
+void *Mem_HeapAlloc16( int size ) {
+	return mem_heap->Allocate16( size );
+}
+
+void Mem_HeapFree16( void *ptr ) {
+	mem_heap->Free16( ptr );
+}
+
 /*
 ==================
 Mem_ClearFrameStats
@@ -1085,7 +1102,7 @@ void *Mem_Alloc( const int size ) {
 #endif
 		return allocator->Allocate( size );
 	}
-	void *mem = mem_heap->Allocate( size );
+	void *mem =  allocator->Allocate( size );
 	Mem_UpdateAllocStats( mem_heap->Msize( mem ) );
 	return mem;
 }
@@ -1110,7 +1127,7 @@ void Mem_Free( void *ptr ) {
 		return;
 	}
 	Mem_UpdateFreeStats( mem_heap->Msize( ptr ) );
- 	mem_heap->Free( ptr );
+ 	allocator->Free( ptr );
 }
 
 /*

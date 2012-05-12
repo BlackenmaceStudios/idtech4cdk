@@ -224,7 +224,8 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <UndefinePreprocessorDefinitions>_USE_32BIT_TIME_T</UndefinePreprocessorDefinitions>
       <AdditionalIncludeDirectories>./tools/MeshTools/MeshTools/Lib</AdditionalIncludeDirectories>
-      <FloatingPointModel>Precise</FloatingPointModel>
+      <FloatingPointModel>Strict</FloatingPointModel>
+      <ExceptionHandling>Sync</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -1103,6 +1104,7 @@
     <ClInclude Include="tools\sound\DialogSound.h" />
     <ClInclude Include="tools\sound\DialogSoundGroup.h" />
     <ClInclude Include="tools\tools_local.h" />
+    <ClInclude Include="tools\tools_managed.h" />
     <ClInclude Include="tools\tools_platform.h" />
     <ClInclude Include="tools\tools_public.h" />
   </ItemGroup>

@@ -1,9 +1,11 @@
 #ifdef ID_X64
 #undef  GetWindowLong
 #undef  SetWindowLong
-
+#undef SetClassLong
+#undef LONG 
 #define GWL_WNDPROC GWLP_WNDPROC
 
+#define SetClassLong	SetClassLongPtr
 #define GetWindowLong	GetWindowLongPtr
 #define SetWindowLong	SetWindowLongPtr
 #define GWL_USERDATA GWLP_USERDATA

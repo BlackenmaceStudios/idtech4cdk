@@ -143,6 +143,10 @@ void bmVTModel::WriteToFile( const char *file ) {
 		for ( int i = 0 ; i < tri->numIndexes; i+=3 ) {
 			objf->WriteFloatString( "f " );
 
+			if(indicies[i+0] < 0 || indicies[i+1] < 0 || indicies[i+2] < 0) {
+				common->FatalError("There was a problem with the generated model, check the source art or call a programmer\n");
+			}
+
 
 			objf->WriteFloatString( "%i", objFaceNum + indicies[i+0] + 1 );
 			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+0] + 1 );

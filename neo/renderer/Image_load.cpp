@@ -872,7 +872,7 @@ void idImage::GenerateImage( const byte *pic, int width, int height,
 
 	miplevel = 0;
 
-	
+
 	while ( scaled_width > 1 || scaled_height > 1 ) {
 		// preserve the border after mip map unless repeating
 		shrunk = R_MipMap( scaledBuffer, scaled_width, scaled_height, preserveBorder );

@@ -161,7 +161,6 @@ void R_WritePalTGA( const char *filename, const byte *data, const byte *palette,
 
 
 static void LoadBMP( const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamp );
-static void LoadTGA( const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamp );
 static void LoadJPG( const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamp );
 
 
@@ -553,7 +552,7 @@ TARGA LOADING
 LoadTGA
 =============
 */
-static void LoadTGA( const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamp ) {
+void LoadTGA( const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamp, bool allocMemory ) {
 	int		columns, rows, numPixels, fileSize, numBytes;
 	byte	*pixbuf;
 	int		row, column;
@@ -567,7 +566,10 @@ static void LoadTGA( const char *name, byte **pic, int *width, int *height, ID_T
 		return;	// just getting timestamp
 	}
 
-	*pic = NULL;
+	if(allocMemory)
+	{
+		*pic = NULL;
+		}
 
 	//
 	// load the file
@@ -628,10 +630,17 @@ static void LoadTGA( const char *name, byte **pic, int *width, int *height, ID_T
 	if ( height ) {
 		*height = rows;
 	}
-
-	targa_rgba = (byte *)R_StaticAlloc(numPixels*4);
-	*pic = targa_rgba;
-
+// jmarshall
+	if(allocMemory)
+	{
+		targa_rgba = (byte *)R_StaticAlloc(numPixels*4);
+		*pic = targa_rgba;
+	}
+	else
+	{
+		targa_rgba = *pic;
+	}
+// jmarshall end
 	if ( targa_header.id_length != 0 ) {
 		buf_p += targa_header.id_length;  // skip TARGA image comment
 	}
@@ -1054,7 +1063,7 @@ void R_LoadImage( const char *cname, byte **pic, int *width, int *height, ID_TIM
 	name.ExtractFileExtension( ext );
 
 	if ( ext == "tga" ) {
-		LoadTGA( name.c_str(), pic, width, height, timestamp );            // try tga first
+		LoadTGA( name.c_str(), pic, width, height, timestamp, true );            // try tga first
 		if ( ( pic && *pic == 0 ) || ( timestamp && *timestamp == -1 ) ) {
 			name.StripFileExtension();
 			name.DefaultFileExtension( ".jpg" );

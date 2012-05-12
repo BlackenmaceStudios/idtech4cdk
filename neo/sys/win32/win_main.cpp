@@ -1056,19 +1056,6 @@ LONG WINAPI Sys_CrashHandler(_EXCEPTION_POINTERS *crash)
 
     return EXCEPTION_EXECUTE_HANDLER; 
 } 
-/*
-================
-Sys_CrashHandlerReportHook
-================
-*/
-int Sys_CrashHandlerReportHook( int reportType, char *message, int *returnValue ) {
-	common->Printf( "****FAILURE**** System is now crashing...\n");
-	common->Printf( "%s\n", message );
-	
-	sys->HandleCrashEvent();
-
-    return EXCEPTION_EXECUTE_HANDLER; 
-}
 
 /*
 ================
@@ -1089,26 +1076,7 @@ void Sys_Init( void ) {
 	timeBeginPeriod( 1 );
 
 // jmarshall
-	SetErrorMode( SEM_NOGPFAULTERRORBOX );
-
-	// Debug error and assert dialogs
-	
-	_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_FILE) ;
-	_CrtSetReportFile( _CRT_ASSERT, _CRTDBG_FILE_STDERR ); 
-
-
-	if(!sys->IsDebuggerPresent())
-	{
-		common->Printf("Init debug crash handler...\n");
-
-		SetUnhandledExceptionFilter(Sys_CrashHandler); 
-		_CrtSetReportHook(Sys_CrashHandlerReportHook);
-	}
-	else {
-		common->Printf("Skipping debug crash handler init, debugger detected.\n");
-
-	}
-	
+	idLib::InitCrashHandler();
 // jmarshall end
 
 	// get WM_TIMER messages pumped every millisecond

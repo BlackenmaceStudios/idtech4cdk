@@ -548,8 +548,88 @@ byte *R_MipMap( const byte *in, int width, int height, bool preserveBorder ) {
 		R_SetBorderTexels( out, width, height, border );
 	}
 
-	return out;
+	return  out;
 }
+
+/*
+================
+R_MipMap
+================
+*/
+
+// jmarshall - needed this so we can reuse the same memory block over and over again.
+void R_MipMap( const byte *in, const byte*out, int width, int height, bool preserveBorder ) {
+	int		i, j;
+	const byte	*in_p;
+	byte	 *out_p;
+	int		row;
+	byte	border[4];
+	int		newWidth, newHeight;
+
+	if ( width < 1 || height < 1 || ( width + height == 2 ) ) {
+		common->FatalError( "R_MipMap called with size %i,%i", width, height );
+	}
+
+	border[0] = in[0];
+	border[1] = in[1];
+	border[2] = in[2];
+	border[3] = in[3];
+
+	row = width * 4;
+
+	newWidth = width >> 1;
+	newHeight = height >> 1;
+	if ( !newWidth ) {
+		newWidth = 1;
+	}
+	if ( !newHeight ) {
+		newHeight = 1;
+	}
+	
+	out_p = (byte *)out;
+
+	in_p = in;
+
+	width >>= 1;
+	height >>= 1;
+
+	if ( width == 0 || height == 0 ) {
+		width += height;	// get largest
+		if ( preserveBorder ) {
+			for (i=0 ; i<width ; i++, out_p+=4 ) {
+				out_p[0] = border[0];
+				out_p[1] = border[1];
+				out_p[2] = border[2];
+				out_p[3] = border[3];
+			}
+		} else {
+			for (i=0 ; i<width ; i++, out_p+=4, in_p+=8 ) {
+				out_p[0] = ( in_p[0] + in_p[4] )>>1;
+				out_p[1] = ( in_p[1] + in_p[5] )>>1;
+				out_p[2] = ( in_p[2] + in_p[6] )>>1;
+				out_p[3] = ( in_p[3] + in_p[7] )>>1;
+			}
+		}
+		return;
+	}
+
+	for (i=0 ; i<height ; i++, in_p+=row) {
+		for (j=0 ; j<width ; j++, out_p+=4, in_p+=8) {
+			out_p[0] = (in_p[0] + in_p[4] + in_p[row+0] + in_p[row+4])>>2;
+			out_p[1] = (in_p[1] + in_p[5] + in_p[row+1] + in_p[row+5])>>2;
+			out_p[2] = (in_p[2] + in_p[6] + in_p[row+2] + in_p[row+6])>>2;
+			out_p[3] = (in_p[3] + in_p[7] + in_p[row+3] + in_p[row+7])>>2;
+		}
+	}
+
+	// copy the old border texel back around if desired
+	if ( preserveBorder ) {
+		R_SetBorderTexels( (byte *)out, width, height, border );
+	}
+
+	return;
+}
+
 
 /*
 ================

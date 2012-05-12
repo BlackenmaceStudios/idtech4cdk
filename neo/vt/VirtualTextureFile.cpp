@@ -45,6 +45,8 @@ static void R_CreateImageAtlasTexture( idImage *image ) {
 	image->Generate2DImageAtlas( 4096, 256, false );
 }
 
+
+
 /*
 ===========================
 bmVirtualTextureFile::InitNewVirtualTextureFile
@@ -77,12 +79,22 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 	int imgHeight = 0;
 	ID_TIME_T timeStamp;
 
+	// Allocate these for resuse inorder not to fragment up memory.
+	buffer = (byte *)R_StaticAlloc( VIRTUALTEXTURE_PAGESIZE * VIRTUALTEXTURE_PAGESIZE * 4 );
+	byte *mippedLevel = (byte *)R_StaticAlloc( 2048 * 2048 * 4 );
+	byte *mippedLevel2 = (byte *)R_StaticAlloc( 1024 * 1024 * 4 );
 	for(int i = 0; i < numAreas; i++)
 	{
 		idStr targaPath = path + idStr(va( "_u%d_v1", i + 1));
 		targaPath.SetFileExtension( ".tga" );
 
-		R_LoadImage( targaPath.c_str(), &buffer, &imgWidth, &imgHeight, &timeStamp, true );
+		//R_LoadImage( targaPath.c_str(), &buffer, &imgWidth, &imgHeight, &timeStamp, true );
+		LoadTGA(targaPath.c_str(), &buffer, &imgWidth, &imgHeight, &timeStamp, false );
+
+		// Check the image stats.
+		if(imgWidth != VIRTUALTEXTURE_PAGESIZE || imgHeight != VIRTUALTEXTURE_PAGESIZE) {
+			common->FatalError("InitNewVirtualTextureFile: Chart image dimensions aren't %d\n", VIRTUALTEXTURE_PAGESIZE);
+		}
 
 		if(imgWidth <= 0 || imgHeight <= 0) {
 			common->Warning("Area texture for VT not found...\n");
@@ -95,6 +107,7 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 
 		int tileSize = VIRTUALTEXTURE_TILESIZE;
 		
+		common->Printf("...Mipmap(level 0) (%dx%d)\n", imgWidth, imgHeight); 
 
 		int maxTiles = (imgWidth / tileSize) * (imgWidth / tileSize);
 		int currentTile = 0;
@@ -107,10 +120,10 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 			}
 		}
 
-		common->Printf("...Non Mipped Level created(%d)\n", f->Length() - sizeof(header)); 
+		
 
 		// Write the next mipmap level.
-		byte *mippedLevel = R_MipMap( buffer, imgWidth, imgHeight, true );
+		R_MipMap( buffer, mippedLevel, imgWidth, imgHeight, true );
 		imgWidth = imgWidth >> 1;
 		imgHeight = imgHeight >> 1;
 		tileSize = tileSize >> 1;
@@ -126,7 +139,7 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 		
 
 		// Write the next mipmap level.
-		byte *mippedLevel2 = R_MipMap( mippedLevel, imgWidth, imgHeight, true );
+		R_MipMap( mippedLevel, mippedLevel2, imgWidth, imgHeight, true );
 		imgWidth = imgWidth >> 1;
 		imgHeight = imgHeight >> 1;
 		tileSize = tileSize >> 1;
@@ -139,13 +152,13 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 				WriteTile( mippedLevel2, w * tileSize, h * tileSize, imgWidth, tileSize );
 			}
 		}
-		R_StaticFree( mippedLevel2 );
-		R_StaticFree( mippedLevel );
-		R_StaticFree( buffer );
-
 		
 	}
+	R_StaticFree( buffer );
+	R_StaticFree( mippedLevel2 );
+	R_StaticFree( mippedLevel );
 
+	delete[] compressedBuffer;
 
 	common->Printf("Virtual Texture written successfully\n");
 	return true;
@@ -407,9 +420,6 @@ void bmVirtualTextureFile::FinishVirtualTextureWrite( void ) {
 
 	fileSystem->CloseFile( f );
 	f = NULL;
-
-	delete compressedBuffer;
-	compressedBuffer = NULL;
 
 	// Rename the temp file to the real path.
 	fileSystem->RenameFile( fileSystem->RelativePathToOSPath( vtpath.c_str() ), temppath.c_str() );

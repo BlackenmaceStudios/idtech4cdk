@@ -417,8 +417,8 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <EntryPointSymbol>
       </EntryPointSymbol>
-      <StackReserveSize>309715200</StackReserveSize>
-      <StackCommitSize>309715200</StackCommitSize>
+      <StackReserveSize>409715200</StackReserveSize>
+      <StackCommitSize>409715200</StackCommitSize>
       <HeapReserveSize>
       </HeapReserveSize>
       <HeapCommitSize>
@@ -433,6 +433,8 @@
       <OpenMPSupport>true</OpenMPSupport>
       <AdditionalIncludeDirectories>C:\dev\darklight\neo\nvidia-texture-tools\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_INLINEDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel>Strict</FloatingPointModel>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

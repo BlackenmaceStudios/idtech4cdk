@@ -5,6 +5,8 @@
 
 #include "../sys/win32/win_local.h"
 
+#include "Tools_Managed.h"
+
 idSys *						sys = NULL;
 idCommon *					common = NULL;
 idCmdSystem *				cmdSystem = NULL;
@@ -39,6 +41,34 @@ void idKeyInput::ClearStates( void ) { common->KeyClearStates(); }
 
 void	RadiantShutdown( void ) {
 
+}
+
+void* PASCAL CObject::operator new(size_t s)
+{
+if(allocator == NULL)
+		return malloc( s );
+
+	return allocator->Allocate( s );
+}
+
+void PASCAL CObject::operator delete(void* p)
+{
+if(allocator == NULL) {
+		free( p );
+		return;
+	}
+
+	allocator->Free( p );
+}
+
+void PASCAL CObject::operator delete(void* p, void*)
+{
+if(allocator == NULL) {
+		free( p );
+		return;
+	}
+
+	allocator->Free( p );
 }
 
 void* AFX_CDECL operator new(size_t s, LPCSTR lpszFileName, int nLine) {
@@ -152,6 +182,11 @@ idToolInterface * ToolsAPI_Init( bmEngineClassExport *engineExport, void *winVar
 	idLib::common		= common;
 	idLib::cvarSystem	= cvarSystem;
 	idLib::fileSystem	= fileSystem;
+// jmarshall
+#ifdef _DEBUG
+	idLib::InitCrashHandler();
+#endif
+// jmarshall end
 
 	// initialize idLib
 	idLib::Init();
@@ -187,6 +222,7 @@ idToolInterface * ToolsAPI_Init( bmEngineClassExport *engineExport, void *winVar
 		common->FatalError( "Managed tools module failed to load\n");
 	}
 
+	afxTraceEnabled = false; 
 
 	return &toolInterfaceLocal;
 }

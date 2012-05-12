@@ -788,8 +788,8 @@ entityDef player_base {
 	"pm_crouchheight"					"38"
 	"pm_crouchviewheight"				"32"
 
-	"pm_normalheight"					"274"
-	"pm_normalviewheight"				"364"
+	"pm_normalheight"					"74"
+	"pm_normalviewheight"				"74"
 	"pm_deadheight"						"20"
 	"pm_deadviewheight"					"10"
 	"pm_crouchrate"						"0.87"

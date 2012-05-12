@@ -1956,6 +1956,7 @@ void idImageManager::BindNull() {
 
 	RB_LogComment( "BindNull()\n" );
 	if ( tmu->textureType == TT_CUBIC ) {
+		qglBindTexture( GL_TEXTURE_CUBE_MAP, 0 );
 		qglDisable( GL_TEXTURE_CUBE_MAP );
 	} else if ( tmu->textureType == TT_3D ) {
 		qglDisable( GL_TEXTURE_3D );
@@ -2081,16 +2082,16 @@ void idImageManager::Init() {
 	borderClampImage = ImageFromFunction( "_borderClamp", R_BorderClampImage );
 	flatNormalMap = ImageFromFunction( "_flat", R_FlatNormalImage );
 	ambientNormalMap = ImageFromFunction( "_ambient", R_AmbientNormalImage );
-	specularTableImage = ImageFromFunction( "_specularTable", R_SpecularTableImage );
-	specular2DTableImage = ImageFromFunction( "_specular2DTable", R_Specular2DTableImage );
-	rampImage = ImageFromFunction( "_ramp", R_RampImage );
-	alphaRampImage = ImageFromFunction( "_alphaRamp", R_RampImage );
-	alphaNotchImage = ImageFromFunction( "_alphaNotch", R_AlphaNotchImage );
-	fogImage = ImageFromFunction( "_fog", R_FogImage );
-	fogEnterImage = ImageFromFunction( "_fogEnter", R_FogEnterImage );
-	normalCubeMapImage = ImageFromFunction( "_normalCubeMap", makeNormalizeVectorCubeMap );
+	//specularTableImage = ImageFromFunction( "_specularTable", R_SpecularTableImage );
+	//specular2DTableImage = ImageFromFunction( "_specular2DTable", R_Specular2DTableImage );
+	//rampImage = ImageFromFunction( "_ramp", R_RampImage );
+	//alphaRampImage = ImageFromFunction( "_alphaRamp", R_RampImage );
+	//alphaNotchImage = ImageFromFunction( "_alphaNotch", R_AlphaNotchImage );
+	//fogImage = ImageFromFunction( "_fog", R_FogImage );
+	//fogEnterImage = ImageFromFunction( "_fogEnter", R_FogEnterImage );
+	//normalCubeMapImage = ImageFromFunction( "_normalCubeMap", makeNormalizeVectorCubeMap );
 	noFalloffImage = ImageFromFunction( "_noFalloff", R_CreateNoFalloffImage );
-	ImageFromFunction( "_quadratic", R_QuadraticImage );
+	//ImageFromFunction( "_quadratic", R_QuadraticImage );
 
 	// cinematicImage is used for cinematic drawing
 	// scratchImage is used for screen wipes/doublevision etc..

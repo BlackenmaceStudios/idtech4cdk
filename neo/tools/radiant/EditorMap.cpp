@@ -30,6 +30,9 @@ If you have questions concerning this license or the applicable additional terms
 #pragma hdrstop
 
 #include "qe3.h"
+// jmarshall
+#include "../tools_managed.h"
+// jmarshall end
 
 int			mapModified;			// for quit confirmation (0 = clean, 1 = unsaved,
 

@@ -513,7 +513,9 @@ enum EditorUVGenerateType
 	Editor_ImportUVs_40Percent,
 	Editor_ImportUVs_50Percent,
 	Editor_ImportUVs_60Percent,
-	Editor_ImportUVs_70Percent
+	Editor_ImportUVs_70Percent,
+	Editor_ImportUVs_80Percent,
+    Editor_ImportUVs_90Percent
 };
 
 enum EditorModelOptimization

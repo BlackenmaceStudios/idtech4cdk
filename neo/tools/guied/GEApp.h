@@ -35,6 +35,11 @@ If you have questions concerning this license or the applicable additional terms
 #include "../../ui/Window.h"
 #include "../../ui/UserInterfaceLocal.h"
 
+// jmarshall
+#undef LONG
+#include "../tools_managed.h"
+// jmarshall end
+
 #ifndef GEOPTIONS_H_
 #include "GEOptions.h"
 #endif // GEOPTIONS_H_

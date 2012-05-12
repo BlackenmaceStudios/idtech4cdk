@@ -306,7 +306,7 @@ void rvOpenFileDialog::HandleInitDialog ( void )
 	SendMessage( mWndLookin,CBEM_SETIMAGELIST,0,(LPARAM) mImageList );
 	
 	// Back button is a bitmap button
-	SendMessage( GetDlgItem ( mWnd, IDC_TOOLS_BACK ), BM_SETIMAGE, IMAGE_BITMAP, (LONG) mBackBitmap );
+	SendMessage( GetDlgItem ( mWnd, IDC_TOOLS_BACK ), BM_SETIMAGE, IMAGE_BITMAP, (LONG_PTR) mBackBitmap );
 	
 	// Allow custom titles
 	SetWindowText ( mWnd, mTitle );
@@ -413,13 +413,13 @@ Dialog Procedure for the open file dialog
 */
 INT_PTR rvOpenFileDialog::DlgProc ( HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam )
 {
-	rvOpenFileDialog* dlg = (rvOpenFileDialog*) GetWindowLong ( wnd, GWL_USERDATA );
+	rvOpenFileDialog* dlg = (rvOpenFileDialog*) GetWindowLongPtr ( wnd, GWL_USERDATA );
 	
 	switch ( msg )
 	{
 		case WM_INITDIALOG:			
 			dlg = (rvOpenFileDialog*) lparam;
-			SetWindowLong ( wnd, GWL_USERDATA, lparam );
+			SetWindowLongPtr ( wnd, GWL_USERDATA, lparam );
 			dlg->mWnd = wnd;
 			dlg->HandleInitDialog ( );
 			return TRUE;
