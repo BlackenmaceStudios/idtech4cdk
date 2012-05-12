@@ -29,8 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 #include "precompiled.h"
 #pragma hdrstop
 
-idStrPool		idDict::globalKeys;
-idStrPool		idDict::globalValues;
+// jmarshall: modified idDict to pull from a globally shared string pool.
 
 /*
 ================
@@ -53,8 +52,8 @@ idDict &idDict::operator=( const idDict &other ) {
 	argHash = other.argHash;
 
 	for ( i = 0; i < args.Num(); i++ ) {
-		args[i].key = globalKeys.CopyString( args[i].key );
-		args[i].value = globalValues.CopyString( args[i].value );
+		args[i].key = common->GetGlobalDictKeys()->CopyString( args[i].key );
+		args[i].value = common->GetGlobalDictValues()->CopyString( args[i].value );
 	}
 
 	return *this;
@@ -91,11 +90,11 @@ void idDict::Copy( const idDict &other ) {
 		if ( found && found[i] != -1 ) {
 			// first set the new value and then free the old value to allow proper self copying
 			const idPoolStr *oldValue = args[found[i]].value;
-			args[found[i]].value = globalValues.CopyString( other.args[i].value );
-			globalValues.FreeString( oldValue );
+			args[found[i]].value = common->GetGlobalDictValues()->CopyString( other.args[i].value );
+			common->GetGlobalDictValues()->FreeString( oldValue );
 		} else {
-			kv.key = globalKeys.CopyString( other.args[i].key );
-			kv.value = globalValues.CopyString( other.args[i].value );
+			kv.key = common->GetGlobalDictKeys()->CopyString( other.args[i].key );
+			kv.value = common->GetGlobalDictValues()->CopyString( other.args[i].value );
 			argHash.Add( argHash.GenerateKey( kv.GetKey(), false ), args.Append( kv ) );
 		}
 	}
@@ -115,7 +114,7 @@ void idDict::TransferKeyValues( idDict &other ) {
 		return;
 	}
 
-	if ( other.args.Num() && other.args[0].key->GetPool() != &globalKeys ) {
+	if ( other.args.Num() && other.args[0].key->GetPool() != common->GetGlobalDictKeys()) {
 		common->FatalError( "idDict::TransferKeyValues: can't transfer values across a DLL boundary" );
 		return;
 	}
@@ -186,8 +185,8 @@ void idDict::SetDefaults( const idDict *dict ) {
 		def = &dict->args[i];
 		kv = FindKey( def->GetKey() );
 		if ( !kv ) {
-			newkv.key = globalKeys.CopyString( def->key );
-			newkv.value = globalValues.CopyString( def->value );
+			newkv.key = common->GetGlobalDictKeys()->CopyString( def->key );
+			newkv.value = common->GetGlobalDictValues()->CopyString( def->value );
 			argHash.Add( argHash.GenerateKey( newkv.GetKey(), false ), args.Append( newkv ) );
 		}
 	}
@@ -202,8 +201,8 @@ void idDict::Clear( void ) {
 	int i;
 
 	for( i = 0; i < args.Num(); i++ ) {
-		globalKeys.FreeString( args[i].key );
-		globalValues.FreeString( args[i].value );
+		common->GetGlobalDictKeys()->FreeString( args[i].key );
+		common->GetGlobalDictValues()->FreeString( args[i].value );
 	}
 
 	args.Clear();
@@ -284,11 +283,11 @@ void idDict::Set( const char *key, const char *value ) {
 	if ( i != -1 ) {
 		// first set the new value and then free the old value to allow proper self copying
 		const idPoolStr *oldValue = args[i].value;
-		args[i].value = globalValues.AllocString( value );
-		globalValues.FreeString( oldValue );
+		args[i].value = common->GetGlobalDictValues()->AllocString( value );
+		common->GetGlobalDictValues()->FreeString( oldValue );
 	} else {
-		kv.key = globalKeys.AllocString( key );
-		kv.value = globalValues.AllocString( value );
+		kv.key = common->GetGlobalDictKeys()->AllocString( key );
+		kv.value = common->GetGlobalDictValues()->AllocString( value );
 		argHash.Add( argHash.GenerateKey( kv.GetKey(), false ), args.Append( kv ) );
 	}
 }
@@ -499,8 +498,8 @@ void idDict::Delete( const char *key ) {
 	hash = argHash.GenerateKey( key, false );
 	for ( i = argHash.First( hash ); i != -1; i = argHash.Next( i ) ) {
 		if ( args[i].GetKey().Icmp( key ) == 0 ) {
-			globalKeys.FreeString( args[i].key );
-			globalValues.FreeString( args[i].value );
+			common->GetGlobalDictKeys()->FreeString( args[i].key );
+			common->GetGlobalDictValues()->FreeString( args[i].value );
 			args.RemoveIndex( i );
 			argHash.RemoveIndex( hash, i );
 			break;
@@ -625,8 +624,8 @@ idDict::Init
 ================
 */
 void idDict::Init( void ) {
-	globalKeys.SetCaseSensitive( false );
-	globalValues.SetCaseSensitive( true );
+	common->GetGlobalDictKeys()->SetCaseSensitive( false );
+	common->GetGlobalDictValues()->SetCaseSensitive( true );
 }
 
 /*
@@ -635,8 +634,8 @@ idDict::Shutdown
 ================
 */
 void idDict::Shutdown( void ) {
-	globalKeys.Clear();
-	globalValues.Clear();
+	common->GetGlobalDictKeys()->Clear();
+	common->GetGlobalDictValues()->Clear();
 }
 
 /*
@@ -645,8 +644,8 @@ idDict::ShowMemoryUsage_f
 ================
 */
 void idDict::ShowMemoryUsage_f( const idCmdArgs &args ) {
-	idLib::common->Printf( "%5d KB in %d keys\n", globalKeys.Size() >> 10, globalKeys.Num() );
-	idLib::common->Printf( "%5d KB in %d values\n", globalValues.Size() >> 10, globalValues.Num() );
+	idLib::common->Printf( "%5d KB in %d keys\n", common->GetGlobalDictKeys()->Size() >> 10, common->GetGlobalDictKeys()->Num() );
+	idLib::common->Printf( "%5d KB in %d values\n", common->GetGlobalDictValues()->Size() >> 10, common->GetGlobalDictValues()->Num() );
 }
 
 /*
@@ -669,8 +668,8 @@ void idDict::ListKeys_f( const idCmdArgs &args ) {
 	int i;
 	idList<const idPoolStr *> keyStrings;
 
-	for ( i = 0; i < globalKeys.Num(); i++ ) {
-		keyStrings.Append( globalKeys[i] );
+	for ( i = 0; i < common->GetGlobalDictKeys()->Num(); i++ ) {
+		keyStrings.Append( common->GetGlobalDictKeys()->GetAt( i ) ); // Using GetAt instead because the [] operator doesn't work here.
 	}
 	keyStrings.Sort();
 	for ( i = 0; i < keyStrings.Num(); i++ ) {
@@ -688,8 +687,8 @@ void idDict::ListValues_f( const idCmdArgs &args ) {
 	int i;
 	idList<const idPoolStr *> valueStrings;
 
-	for ( i = 0; i < globalValues.Num(); i++ ) {
-		valueStrings.Append( globalValues[i] );
+	for ( i = 0; i < common->GetGlobalDictValues()->Num(); i++ ) {
+		valueStrings.Append( common->GetGlobalDictValues()->GetAt( i ) ); // Using GetAt instead because the [] operator doesn't work here.
 	}
 	valueStrings.Sort();
 	for ( i = 0; i < valueStrings.Num(); i++ ) {

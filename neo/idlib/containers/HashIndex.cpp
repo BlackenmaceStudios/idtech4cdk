@@ -29,7 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 #include "precompiled.h"
 #pragma hdrstop
 
-int idHashIndex::INVALID_INDEX[1] = { -1 };
+int *idHashIndex::INVALID_INDEX = NULL; // jmarshall - previously setting it to a static int %d={1} wont work cross dll boundary.
 
 /*
 ================
@@ -73,13 +73,13 @@ idHashIndex::Free
 ================
 */
 void idHashIndex::Free( void ) {
-	if ( hash != INVALID_INDEX ) {
+	if ( hash != &INVALID_INDEX[0] ) {
 		delete[] hash;
-		hash = INVALID_INDEX;
+		hash = &INVALID_INDEX[0];
 	}
-	if ( indexChain != INVALID_INDEX ) {
+	if ( indexChain != &INVALID_INDEX[0] ) {
 		delete[] indexChain;
-		indexChain = INVALID_INDEX;
+		indexChain = &INVALID_INDEX[0];
 	}
 	lookupMask = 0;
 }

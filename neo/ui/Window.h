@@ -196,6 +196,17 @@ public:
 		ADJUST_BOTTOMLEFT
 	};
 
+// jmarshall
+	static void SetDebugDraw( void ) {
+		gui_edit.SetBool( true );
+	}
+
+	static void DisableDebugDraw( void ) {
+		gui_edit.SetBool( false );
+	}
+// jmarshall end
+
+
 	static const char *ScriptNames[SCRIPT_COUNT];
 
 	static const idRegEntry RegisterVars[];
@@ -428,6 +439,7 @@ protected:
 
 	static idCVar gui_debug;
 	static idCVar gui_edit;
+
 
 	idGuiScriptList *scripts[SCRIPT_COUNT];
 	bool *saveTemps;

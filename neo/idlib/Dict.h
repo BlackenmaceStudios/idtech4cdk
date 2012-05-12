@@ -165,8 +165,7 @@ private:
 	idList<idKeyValue>	args;
 	idHashIndex			argHash;
 
-	static idStrPool	globalKeys;
-	static idStrPool	globalValues;
+	
 };
 
 

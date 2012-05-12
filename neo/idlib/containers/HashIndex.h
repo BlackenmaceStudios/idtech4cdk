@@ -29,6 +29,8 @@ If you have questions concerning this license or the applicable additional terms
 #ifndef __HASHINDEX_H__
 #define __HASHINDEX_H__
 
+
+
 /*
 ===============================================================================
 
@@ -96,9 +98,10 @@ private:
 	int				granularity;
 	int				hashMask;
 	int				lookupMask;
-
-	static int		INVALID_INDEX[1];
-
+// jmarshall - previously setting it to a static int %d={1} wont work cross dll boundary.
+	//static int		INVALID_INDEX[1]; 
+	static int		*INVALID_INDEX;
+// jmarshall end
 	void			Init( const int initialHashSize, const int initialIndexSize );
 	void			Allocate( const int newHashSize, const int newIndexSize );
 };
@@ -236,6 +239,10 @@ idHashIndex::First
 ================
 */
 ID_INLINE int idHashIndex::First( const int key ) const {
+// jmarshall
+	if(hash == NULL)
+		return -1;
+// jmarshall end
 	return hash[key & hashMask & lookupMask];
 }
 
@@ -245,6 +252,11 @@ idHashIndex::Next
 ================
 */
 ID_INLINE int idHashIndex::Next( const int index ) const {
+// jmarshall
+	if(indexChain == NULL)
+		return -1;
+// jmarshall end
+
 	assert( index >= 0 && index < indexSize );
 	return indexChain[index & lookupMask];
 }

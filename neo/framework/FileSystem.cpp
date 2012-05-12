@@ -1727,7 +1727,7 @@ idFileSystemLocal::FreeFileList
 ===============
 */
 void idFileSystemLocal::FreeFileList( idFileList *fileList ) {
-	delete fileList;
+	allocator->Free(fileList);
 }
 
 /*

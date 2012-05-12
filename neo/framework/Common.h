@@ -234,6 +234,10 @@ public:
 	virtual bool				EditorActive( void ) = 0;
 
 	virtual void				PrintLoadingMessage( const char *msg ) = 0;
+
+								// Dict global string pool is in the engine for shared memory to work properly.
+	virtual idStrPool			*GetGlobalDictKeys( void ) = 0;
+	virtual idStrPool			*GetGlobalDictValues( void ) = 0;
 // jmarshall end
 };
 

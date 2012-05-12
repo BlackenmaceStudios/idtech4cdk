@@ -127,7 +127,7 @@ static int			numPlanes;
 static idBlockAlloc<srfTriangles_t, 1<<10>				srfTrianglesAllocator;
 
 #ifdef USE_TRI_DATA_ALLOCATOR
-static idDynamicBlockAlloc<idDrawVert, 1<<30, 1<<20>	triVertexAllocator;
+static idDynamicBlockAlloc<idDrawVert, 1<<10, 1<<5>	triVertexAllocator;
 static idDynamicBlockAlloc<glIndex_t, 1<<18, 1<<10>		triIndexAllocator;
 static idDynamicBlockAlloc<shadowCache_t, 1<<18, 1<<10>	triShadowVertexAllocator;
 static idDynamicBlockAlloc<idPlane, 1<<17, 1<<10>		triPlaneAllocator;
@@ -2133,7 +2133,9 @@ void R_CleanupTriangles( srfTriangles_t *tri, bool createNormals, bool identifyS
 //	R_RemoveUnusedVerts( tri );
 
 	if ( identifySilEdges ) {
-		R_IdentifySilEdges( tri, true );	// assume it is non-deformable, and omit coplanar edges
+// jmarshall
+	//	R_IdentifySilEdges( tri, true );	// assume it is non-deformable, and omit coplanar edges
+// jmarshall end
 	}
 
 	// bust vertexes that share a mirrored edge into separate vertexes

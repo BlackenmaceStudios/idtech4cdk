@@ -111,6 +111,7 @@ int bmMemoryHandlerLocal::CustomAllocHook( int nAllocType, void *userData, size_
 }
 
 
+
 // jmarshall end 
 
 idCVar com_version( "si_version", version.string, CVAR_SYSTEM|CVAR_ROM|CVAR_SERVERINFO, "engine version" );
@@ -223,7 +224,10 @@ public:
 	void						LocalizeSpecificMapData( const char *fileName, idLangDict &langDict, const idLangDict &replaceArgs );
 
 	void						SetMachineSpec( void );
-	
+// jmarshall - shared memory
+	virtual idStrPool			*GetGlobalDictKeys( void ) { return &globalKeys; }
+	virtual idStrPool			*GetGlobalDictValues( void ) { return &globalValues; }
+// jmarshall end
 private:
 	
 	void						InitCommands( void );
@@ -258,6 +262,9 @@ private:
 // jmarshall
 	idStr						loadMsgPrefix;
 	bool						devToolsStartup;
+
+	static idStrPool			globalKeys;
+	static idStrPool			globalValues;
 // jmarshall end
 
 	idStr						warningCaption;
@@ -276,7 +283,9 @@ private:
 idCommonLocal	commonLocal;
 idCommon *		common = &commonLocal;
 
-
+// jmarshall: Moved here from idDict
+idStrPool		idCommonLocal::globalKeys;
+idStrPool		idCommonLocal::globalValues;
 
 
 /*
