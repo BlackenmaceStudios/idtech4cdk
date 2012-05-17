@@ -123,7 +123,7 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 		
 
 		// Write the next mipmap level.
-		R_MipMap( buffer, mippedLevel, imgWidth, imgHeight, true );
+		R_MipMap( buffer, mippedLevel, imgWidth, imgHeight, false );
 		imgWidth = imgWidth >> 1;
 		imgHeight = imgHeight >> 1;
 		tileSize = tileSize >> 1;
@@ -139,7 +139,7 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 		
 
 		// Write the next mipmap level.
-		R_MipMap( mippedLevel, mippedLevel2, imgWidth, imgHeight, true );
+		R_MipMap( mippedLevel, mippedLevel2, imgWidth, imgHeight, false );
 		imgWidth = imgWidth >> 1;
 		imgHeight = imgHeight >> 1;
 		tileSize = tileSize >> 1;
@@ -365,7 +365,7 @@ void bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum, byte *tileBuffer
 }
 #else
 byte *bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum, int mipLevel ) {
-	int bufferpos = (((4096 * 4096) + (2048 * 2048) + (1024 * 1024)) * pageNum);
+	INT_PTR bufferpos = (((4096 * 4096) + (2048 * 2048) + (1024 * 1024)) * pageNum);
 	
 	if(mipLevel == 0)
 	{
