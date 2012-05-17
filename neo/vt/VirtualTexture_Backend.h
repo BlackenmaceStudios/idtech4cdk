@@ -42,7 +42,7 @@ private:
 
 	int							sceneAreaDist[VT_MAXCHARTS];
 	int							numSceneTiles[VT_MAXCHARTS];
-	bmVTTileReadback_t			sceneTiles[VT_MAXCHARTS][VT_MAXTILES_IN_SCENE];
+	bmVTTileReadback_t			*sceneTiles[VT_MAXCHARTS];
 };
 
 extern bmVirtualTextureBackend vtBackEnd;

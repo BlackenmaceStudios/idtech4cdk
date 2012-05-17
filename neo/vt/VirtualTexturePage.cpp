@@ -18,7 +18,7 @@ static void R_EmptyTexturePage( idImage *image ) {
 
 	// FIXME: this won't live past vid mode changes
 	image->GenerateImage( NULL, vt_page_size.GetInteger(), vt_page_size.GetInteger(), 
-		TF_NEAREST, false, TR_REPEAT, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
+		TF_LINEAR, false, TR_REPEAT, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
 
 
 	image->rawBuffer = NULL;
@@ -35,7 +35,7 @@ static void R_EmptyTexturePage2( idImage *image ) {
 
 	// FIXME: this won't live past vid mode changes
 	image->GenerateImage( NULL, vt_page_size.GetInteger() /2, vt_page_size.GetInteger()/2, 
-		TF_NEAREST, false, TR_REPEAT, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
+		TF_LINEAR, false, TR_REPEAT, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
 
 
 	image->rawBuffer = NULL;
@@ -52,7 +52,7 @@ static void R_EmptyTexturePage3( idImage *image ) {
 
 	// FIXME: this won't live past vid mode changes
 	image->GenerateImage( NULL, vt_page_size.GetInteger() /4, vt_page_size.GetInteger()/4, 
-		TF_NEAREST, false, TR_REPEAT, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
+		TF_LINEAR, false, TR_REPEAT, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
 
 
 	image->rawBuffer = NULL;
@@ -237,9 +237,10 @@ bmVirtualTexturePage::UnBind
 */
 void bmVirtualTexturePage::UnBind( void ) { 
 	int numTiles = (vt_page_size.GetInteger() /  VIRTUALTEXTURE_TILESIZE);
-	//if(numActiveTiles >= (numTiles * numTiles) - 1) {
-		
-	//}
+	nextFreeTile = &tiles[0];
+	lastTile = NULL;
+	lastBlittedTile = 0;
+	numActiveTiles = 0;
 
 	lastBlittedTile = numActiveTiles;
 

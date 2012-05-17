@@ -29,7 +29,7 @@ void idImage::UnBindFBO( void ) {
 idImage::GenerateFrameBufferImage
 ================
 */
-void idImage::GenerateFrameBufferImage( int width, int height ) {
+void idImage::GenerateFrameBufferImage( int width, int height, bool usePCF ) {
 	PurgeImage();
 
 	filter = TF_LINEAR;
@@ -50,8 +50,18 @@ void idImage::GenerateFrameBufferImage( int width, int height ) {
 	qglBindTexture(GL_TEXTURE_2D, texnum);
 	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	if(usePCF)
+	{
+		
+		qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
+	else
+	{
+		qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	}
 	//NULL means reserve texture memory, but texels are undefined
 	qglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width, height, 0, GL_BGRA, GL_FLOAT, NULL);
 

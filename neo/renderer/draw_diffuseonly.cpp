@@ -152,11 +152,12 @@ void RB_Draw_DiffuseOnly( drawSurf_t **drawSurfs, int numDrawSurfs ) {
 
 	RB_DiffuseOnly_Init();
 
-
+	qglClear( GL_COLOR_BUFFER_BIT );
 
 	if( backEnd.viewDef->renderWorld->vt->vtAtlasImage2 == NULL ) {
 		backEnd.viewDef->renderWorld->vt = virtualTextureManager->GetCurrentVirtualTextureFile();
 	}
+
 	for (int i = 0  ; i < numDrawSurfs ; i++ ) {
 		drawSurf = drawSurfs[i];
 
@@ -167,29 +168,22 @@ void RB_Draw_DiffuseOnly( drawSurf_t **drawSurfs, int numDrawSurfs ) {
 			qglLoadMatrixf( drawSurf->space->modelViewMatrix );
 		}
 
-		if ( drawSurf->space->weaponDepthHack ) {
-			RB_EnterWeaponDepthHack();
-		}
-
 		if ( drawSurf->space->modelDepthHack != 0.0f ) {
-			RB_EnterModelDepthHack( drawSurf->space->modelDepthHack );
+			continue;
 		}
 
 		// change the scissor if needed
 		if ( r_useScissor.GetBool() && !backEnd.currentScissor.Equals( drawSurf->scissorRect ) ) {
 			backEnd.currentScissor = drawSurf->scissorRect;
-			qglScissor( backEnd.viewDef->viewport.x1 + backEnd.currentScissor.x1, 
-				backEnd.viewDef->viewport.y1 + backEnd.currentScissor.y1,
-				backEnd.currentScissor.x2 + 1 - backEnd.currentScissor.x1,
-				backEnd.currentScissor.y2 + 1 - backEnd.currentScissor.y1 );
+	//		qglScissor( backEnd.viewDef->viewport.x1 + backEnd.currentScissor.x1, 
+	//			backEnd.viewDef->viewport.y1 + backEnd.currentScissor.y1,
+	//			(backEnd.currentScissor.x2 + 1 - backEnd.currentScissor.x1) / 10,
+	//			(backEnd.currentScissor.y2 + 1 - backEnd.currentScissor.y1)  / 10 );
 		}
 
 
 		RB_DiffuseOnly_DrawSurface( drawSurf, backEnd.viewDef->renderWorld->vt->vtAtlasImage2, true );
 
-		if ( drawSurf->space->weaponDepthHack || drawSurf->space->modelDepthHack != 0.0f ) {
-			RB_LeaveDepthHack();
-		}
 
 		backEnd.currentSpace = drawSurf->space;
 	}

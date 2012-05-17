@@ -523,7 +523,7 @@ void idImage::Generate2DImageAtlas( int atlasSize, int tileSize, bool intStorage
 
 	filter = TF_NEAREST;
 	allowDownSize = false;
-	repeat = TR_REPEAT;
+	repeat = TR_CLAMP;
 	depth = TD_HIGH_QUALITY;
 
 	// if we don't have a rendering context, just return after we
@@ -586,12 +586,12 @@ void idImage::Generate2DImageAtlas( int atlasSize, int tileSize, bool intStorage
 		qglTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA32I, atlasSize, atlasSize, 0, GL_RGBA_INTEGER, GL_UNSIGNED_BYTE, buffer );
 	}
 	else {
-		internalFormat = GL_RGBA8;
-		qglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, atlasSize, atlasSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer );
+		internalFormat = GL_RGBA;
+		qglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, atlasSize, atlasSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer );
 	}
 
-	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
@@ -2297,8 +2297,8 @@ void idImage::UploadScratch( const byte *data, int cols, int rows ) {
 			// it and don't try and do a texture compression
 			qglTexSubImage2D( target, 0, 0, 0, cols, rows, GL_RGBA, GL_UNSIGNED_BYTE, data );
 		}
-		qglTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-		qglTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+		qglTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+		qglTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
 		// these probably should be clamp, but we have a lot of issues with editor
 		// geometry coming out with texcoords slightly off one side, resulting in
 		// a smear across the entire polygon

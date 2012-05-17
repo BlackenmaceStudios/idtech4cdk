@@ -138,10 +138,6 @@ RB_VirtualTexture_Prepass
 void RB_VirtualTexture_DrawUnpackBuffer( int areaNum ) {
 	bmRenderProgram *program = progs[PROG_VIRTUALTEXTURE].programHandle;
 
-	
-
-	//renderDevice->BeginDeviceSync();
-	
 
 	globalImages->currentRenderImageTargets->BindFBO();
 
@@ -211,6 +207,8 @@ void RB_VirtualTexture_DrawUnpackBuffer( int areaNum ) {
 	//renderDevice->ForceDeviceSync();
 
 	GL_State( 0 );
+
+
 }
 
 /*
@@ -221,7 +219,7 @@ RB_VirtualTexture_Prepass
 void RB_VirtualTexture_Prepass( drawSurf_t	 **drawSurfs, int numDrawSurfs, int areaNum ) {
 	drawSurf_t *drawSurf;
 	bmRenderProgram *program;
-	
+	bool sync = vt_syncrender.GetBool();
 	program = progs[PROG_VIRTUALTEXTURE].programHandle;
 
 	// Set the current pass for this shader.
@@ -238,11 +236,11 @@ void RB_VirtualTexture_Prepass( drawSurf_t	 **drawSurfs, int numDrawSurfs, int a
 	// Bind the rendertargets FBO
 	//renderDevice->BeginDeviceSync();
 	globalImages->currentVTRemapImage->BindFBO();
-
 	qglClear( GL_COLOR_BUFFER_BIT  );
+
 	GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT,GL_COLOR_ATTACHMENT2_EXT,GL_COLOR_ATTACHMENT3_EXT};
     qglDrawBuffers(4, buffers);
-
+	
 
 
 	
@@ -266,6 +264,11 @@ void RB_VirtualTexture_Prepass( drawSurf_t	 **drawSurfs, int numDrawSurfs, int a
 
 
 	for (int i = 0  ; i < numDrawSurfs ; i++ ) {
+		if(sync)
+		{
+			renderDevice->BeginDeviceSync();
+		}
+	
 		drawSurf = drawSurfs[i];
 
 		// change the matrix if needed
@@ -298,6 +301,12 @@ void RB_VirtualTexture_Prepass( drawSurf_t	 **drawSurfs, int numDrawSurfs, int a
 		}
 
 		backEnd.currentSpace = drawSurf->space;
+
+		if(sync)
+		{
+			renderDevice->ForceDeviceSync();
+		}
+	
 	}
 
 	//RB_RenderDrawSurfListWithFunction( drawSurfs, numDrawSurfs, RB_Deferred_DrawPreInteraction );

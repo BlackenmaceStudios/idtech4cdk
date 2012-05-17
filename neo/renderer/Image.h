@@ -196,7 +196,7 @@ public:
 						textureFilter_t filter, bool allowDownSize, 
 						textureDepth_t depth );
 // jmarshall: fbo support
-	void		GenerateFrameBufferImage( int width, int height );
+	void		GenerateFrameBufferImage( int width, int height, bool usePCF = true );
 	void		GenerateFrameBufferDepthImage( int width, int height );
 	void		GenerateFrameBufferCubeImage( int width, int height );
 	void		GenerateFrameBufferColorTargetFromFBO( void );

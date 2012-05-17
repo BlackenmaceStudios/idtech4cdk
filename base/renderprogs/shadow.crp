@@ -53,7 +53,7 @@ FragmentProgram
 		gl_FragColor.r = max( p, p_max) ;
 
 		gl_FragColor.g =Moments.x;
-		gl_FragColor.b = float(lightNum) / 256.0;
+		gl_FragColor.b = float(lightNum) / 255.0;
 		gl_FragColor.a = 1;
 	}
 EndFragmentProgram
