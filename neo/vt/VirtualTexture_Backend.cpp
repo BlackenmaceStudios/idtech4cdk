@@ -9,7 +9,7 @@
 
 
 idCVar vt_backend_fbosize_width( "vt_backend_fbosize_width", "512", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT, "Size of the FBO to readback tile data" );
-idCVar vt_backend_fbosize_height( "vt_backend_fbosize_height", "256", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT, "Size of the FBO to readback tile data" );
+idCVar vt_backend_fbosize_height( "vt_backend_fbosize_height", "316", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT, "Size of the FBO to readback tile data" );
 idCVar vt_skiprender( "vt_skiprender", "0", CVAR_RENDERER | CVAR_BOOL | CVAR_CHEAT, "Skips rendering the virtual texture." );
 idCVar vt_syncrender( "vt_syncrender", "0", CVAR_RENDERER | CVAR_BOOL | CVAR_CHEAT, "Sync all VT texture uploads" );
 
