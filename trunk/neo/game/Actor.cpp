@@ -1891,8 +1891,12 @@ void idActor::SetAnimState( int channel, const char *statename, int blendFrames 
 
 	func = scriptObject.GetFunction( statename );
 	if ( !func ) {
-		assert( 0 );
-		gameLocal.Error( "Can't find function '%s' in object '%s'", statename, scriptObject.GetTypeName() );
+// jmarshall
+		//assert( 0 );
+		//gameLocal.Error( "Can't find function '%s' in object '%s'", statename, scriptObject.GetTypeName() );
+		gameLocal.Warning("idActor::SetAnimState: Can't find function '%s' in object '%s'", statename, scriptObject.GetTypeName() );
+		return;
+// jmarshall end
 	}
 
 	switch( channel ) {

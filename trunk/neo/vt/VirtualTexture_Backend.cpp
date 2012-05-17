@@ -8,8 +8,8 @@
 #include "VirtualTexture_Backend.h"
 
 
-idCVar vt_backend_fbosize_width( "vt_backend_fbosize_width", "128", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT, "Size of the FBO to readback tile data" );
-idCVar vt_backend_fbosize_height( "vt_backend_fbosize_height", "72", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT, "Size of the FBO to readback tile data" );
+idCVar vt_backend_fbosize_width( "vt_backend_fbosize_width", "512", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT, "Size of the FBO to readback tile data" );
+idCVar vt_backend_fbosize_height( "vt_backend_fbosize_height", "256", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT, "Size of the FBO to readback tile data" );
 idCVar vt_skiprender( "vt_skiprender", "0", CVAR_RENDERER | CVAR_BOOL | CVAR_CHEAT, "Skips rendering the virtual texture." );
 idCVar vt_syncrender( "vt_syncrender", "0", CVAR_RENDERER | CVAR_BOOL | CVAR_CHEAT, "Sync all VT texture uploads" );
 
@@ -17,7 +17,7 @@ bmVirtualTextureBackend vtBackEnd;
 float vtProjectionMatrix[16];
 
 static void R_FrameBufferImageVT( idImage *image ) {
-	image->GenerateFrameBufferImage( vt_backend_fbosize_width.GetInteger(), vt_backend_fbosize_height.GetInteger() );
+	image->GenerateFrameBufferImage( vt_backend_fbosize_width.GetInteger(), vt_backend_fbosize_height.GetInteger(), false );
 	image->CreatePBO();
 	globalImages->BindNull();
 }
@@ -61,7 +61,13 @@ void bmVirtualTextureBackend::Init( void ) {
 
 	memset( &sceneAreaDist[0], 0, sizeof(int) * VT_MAXCHARTS );
 	memset( &numSceneTiles[0], 0, sizeof(int) * VT_MAXCHARTS );
-	memset( &sceneTiles[0], 0, sizeof(bmVTTileReadback_t) * VT_MAXCHARTS * VT_MAXTILES_IN_SCENE );
+
+	for(int i = 0; i < VT_MAXCHARTS; i++)
+	{
+		sceneTiles[i] = new bmVTTileReadback_t[vt_backend_fbosize_width.GetInteger() * vt_backend_fbosize_height.GetInteger()];	
+	}
+
+	
 }
 /*
 ====================
@@ -117,7 +123,7 @@ void RB_VirtualTexture_DrawUnpackBuffer( int areaNum ) ;
 
 void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 	int numCharts = 0;
-
+	RB_BeginDrawingView();
 	numCharts = virtualTextureManager->GetCurrentVirtualTextureFile()->NumCharts();
 
 	// Read in the current tiles for the scene.
@@ -143,11 +149,11 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 		
 		// Upload the tiles for this area.
 		sceneAreaDist[i] = 255 - sceneAreaDist[i];
-		if(sceneAreaDist[i] > 170)
+		if(sceneAreaDist[i] > 210)
 		{
 			UploadAreaTiles( i, 2,&sceneTiles[i][0], numSceneTiles[i]);
 		}
-		else if(sceneAreaDist[i] > 120)
+		else if(sceneAreaDist[i] > 170)
 		{
 			UploadAreaTiles( i, 1,&sceneTiles[i][0], numSceneTiles[i]);
 		}
@@ -163,18 +169,8 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 
 
 		// Render the tiles for this area.
-
-		if(syncRender)
-		{
-			renderDevice->BeginDeviceSync();
-		}
-
 		RB_RenderVirtualTextureArea( i );
 
-		if(syncRender)
-		{
-			renderDevice->ForceDeviceSync();
-		}
 		
 		virtualTextureManager->FlipPage();
 		virtualTextureManager->GetWorldPage()->ResetPage();
@@ -205,23 +201,21 @@ void bmVirtualTextureBackend::GenerateSceneTileInfo( drawSurf_t **drawSurfs, int
 	viewport = oldViewport = backEnd.viewDef->viewport;
 	scissor = oldScissor = backEnd.viewDef->scissor;
 
-	scissor.x2 = viewport.x2 = vt_backend_fbosize_width.GetInteger()-1;
-	scissor.y2 = viewport.y2 = vt_backend_fbosize_height.GetInteger()-1;
+	scissor.x2 = viewport.x2 = vt_backend_fbosize_width.GetInteger();
+	scissor.y2 = viewport.y2 = vt_backend_fbosize_height.GetInteger();
 
 	((viewDef_t *)backEnd.viewDef)->viewport = viewport;
 	((viewDef_t *)backEnd.viewDef)->scissor = scissor;
 
 	//RB_SetupVTProjectionMatrix();
 
-	
-
 	// Render the scene to a small FBO to get the visible tiles in the scene.
 	//renderDevice->BeginDeviceSync();
 	sceneFbo->BindFBO();
 	
 	RB_Draw_DiffuseOnly( drawSurfs, numDrawSurfs );
-
 	sceneFbo->pbo->ReadPBO( false ); //ReadDriverPixels();
+	
 	sceneFbo->UnBindFBO();
 	//renderDevice->ForceDeviceSync();
 

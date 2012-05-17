@@ -27,6 +27,9 @@ void bmVirtualTextureBackend::ReadTilesInScene( byte *readbackBuffer, int width,
 
 	// Go through all the tiles and parse them. 
 	for(int i = 0; i < width * height; i++, readbackBuffer+= 4) {
+		if(readbackBuffer[3] == 0)
+			continue;
+
 		tile.tileNum = readbackBuffer[0];
 		tile.pageNum = readbackBuffer[2];
 		tile.dist    = readbackBuffer[3];

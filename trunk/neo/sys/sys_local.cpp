@@ -37,8 +37,19 @@ const char * sysLanguageNames[] = {
 
 idCVar sys_lang( "sys_lang", "english", CVAR_SYSTEM | CVAR_ARCHIVE,  "", sysLanguageNames, idCmdSystem::ArgCompletion_String<sysLanguageNames> );
 
+// jmarshall
+idCVar sys_forceDebuggerPresent( "sys_forceDebuggerPresent", "0", CVAR_SYSTEM | CVAR_CHEAT | CVAR_BOOL, "When a crash occurs the crash handler won't catch it if enabled" );
+// jmarshall end
+
 idSysLocal			sysLocal;
 idSys *				sys = &sysLocal;
+
+bool idSysLocal::IsDebuggerPresent( void ) { 
+	if(sys_forceDebuggerPresent.GetBool()) {
+		return true;
+	}
+	return ::IsDebuggerPresent(); 
+}
 
 void idSysLocal::DebugPrintf( const char *fmt, ... ) {
 	va_list argptr;

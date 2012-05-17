@@ -1298,6 +1298,7 @@ void RB_DetermineLightScale( void );
 void RB_STD_LightScale( void );
 // jmarshall
 void RB_BeginDrawingView (bool clearBuffer = true);
+
 // jmarshall end
 /*
 ============================================================

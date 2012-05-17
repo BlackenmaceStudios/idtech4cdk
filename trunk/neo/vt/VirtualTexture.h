@@ -20,6 +20,7 @@ A virtual texutre is a gigantic texture
 
 class bmVirtualTexturePage;
 extern idCVar vt_debug_atlas;
+extern idCVar vt_syncrender;
 
 //
 // bmVirtualTexturePageTile

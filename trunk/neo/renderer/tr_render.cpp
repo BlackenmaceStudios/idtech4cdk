@@ -599,6 +599,53 @@ void RB_BeginDrawingView (bool clearBuffer) {
 }
 
 /*
+=================
+RB_BeginDrawingViewCustomSize 
+
+=================
+*/
+void RB_BeginDrawingViewCustomSize (bool clearBuffer, idScreenRect *viewport, idScreenRect *scissor) {
+	// set the modelview matrix for the viewer
+	qglMatrixMode(GL_PROJECTION);
+	qglLoadMatrixf( backEnd.viewDef->projectionMatrix );
+	qglMatrixMode(GL_MODELVIEW);
+
+	// set the window clipping
+	qglViewport( viewport->x1, viewport->y1, viewport->x2, viewport->y2 );
+
+	// the scissor may be smaller than the viewport for subviews
+	qglScissor( scissor->x1, scissor->y1, scissor->x2, scissor->y2 );
+	backEnd.currentScissor = backEnd.viewDef->scissor;
+
+	// ensures that depth writes are enabled for the depth clear
+	GL_State( GLS_DEFAULT );
+
+	// we don't have to clear the depth / stencil buffer for 2D rendering
+	if ( backEnd.viewDef->viewEntitys ) {
+		qglStencilMask( 0xff );
+		// some cards may have 7 bit stencil buffers, so don't assume this
+		// should be 128
+
+		// jmarshall
+		if(clearBuffer)
+		{
+			qglClearStencil( 1<<(glConfig.stencilBits-1) );
+			qglClear( GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
+		}
+		// jmarshall end
+		qglEnable( GL_DEPTH_TEST );
+	} else {
+		qglDisable( GL_DEPTH_TEST );
+		qglDisable( GL_STENCIL_TEST );
+	}
+
+	backEnd.glState.faceCulling = -1;		// force face culling to set next time
+	GL_Cull( CT_FRONT_SIDED );
+
+}
+
+
+/*
 ==================
 R_SetDrawInteractions
 ==================

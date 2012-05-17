@@ -109,7 +109,7 @@ FragmentProgram
 		// Convert VT atlas coords to page atlas coords
 		vec3 textureAtlasST =  texture2DRect( u_indexTexture, textureVTPosition.zw + 0.5 ).xyz;
 
-		if(textureAtlasST.b * 255 != float(vtOffset)) {
+		if(textureAtlasST.b * 255 != vtOffset) {
 			gl_FragData[0] = vec4(0,0,0,0);
 			gl_FragData[1] = vec4(0,0,0,0);
 			gl_FragData[2] = vec4(0,0,0,0);
@@ -222,7 +222,7 @@ FragmentProgram
 
 	mat3 img3x3(sampler2D color_map, vec2 tc, float ts, int ch)
 	{
-	    float   d = 1.0/ts; // ts, texture sampling size
+	    float   d = 0.04/ts; // ts, texture sampling size
 	    mat3 c;     
 	    c[0][0] = YCocgToRGB(texture2D(color_map,tc + vec2(-d,-d)))[ch];
 	    c[0][1] = YCocgToRGB(texture2D(color_map,tc + vec2( 0,-d)))[ch];
@@ -283,7 +283,7 @@ FragmentProgram
 		vec4 diffuse = YCocgToRGB(texture2D( u_diffuseTexture, st   ));
 
 		if(textureST.rbga == vec4(0, 0, 0, 0)) {
-		//	discard;
+	
 		   gl_FragData[0] = vec4(0,0,0,0);
 		   gl_FragData[1] = vec4(0,0,0,0);
 		   gl_FragData[2] = vec4(0,0,0,0);
@@ -292,11 +292,22 @@ FragmentProgram
 	//	diffuse.r = vtOffset / 255.0;
 		diffuse.a = 1.0;
 
+		// Unpainted area.
+		if(diffuse.xyz == vec3( 0, 0, 0 )) {
+			diffuse.xyz = vec3( 1, 0, 0 );
 
-		gl_FragData[0] = diffuse  ;
-		gl_FragData[0].a = 1;
-		gl_FragData[1].xyz = GenerateNormalMap( st, 4096, 0.9 )  * TangentBinormalNormalMatrix(var_TexDiffuse.st);// * var_TangentToWorldMatrix;//normalize((vec3(0.45, 0.45, 1) * 2.0 - vec3(1.0,1.0,1.0)) * var_TangentToWorldMatrix);
-		gl_FragData[1].a = 1;
+			gl_FragData[0] = diffuse  ;
+			gl_FragData[0].a = 1;
+			gl_FragData[1].xyz = vec3( 1, 1, 1 )  * TangentBinormalNormalMatrix(var_TexDiffuse.st);// * var_TangentToWorldMatrix;//normalize((vec3(0.45, 0.45, 1) * 2.0 - vec3(1.0,1.0,1.0)) * var_TangentToWorldMatrix);
+			gl_FragData[1].a = 1;
+		}
+		else
+		{
+			gl_FragData[0] = diffuse  ;
+			gl_FragData[0].a = 1;
+			gl_FragData[1].xyz = GenerateNormalMap( st, 4096, 0.6 )  * TangentBinormalNormalMatrix(var_TexDiffuse.st);// * var_TangentToWorldMatrix;//normalize((vec3(0.45, 0.45, 1) * 2.0 - vec3(1.0,1.0,1.0)) * var_TangentToWorldMatrix);
+			gl_FragData[1].a = 1;
+		}
 		gl_FragData[2] = PixelVertex(var_TexDiffuse.st);
 
 	}

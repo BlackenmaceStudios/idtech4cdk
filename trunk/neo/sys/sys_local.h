@@ -77,7 +77,7 @@ public:
 	virtual void			GrabMouseCursor( bool grab ) { Sys_GrabMouseCursor( grab ); }
 	virtual long			FileTimeStamp(struct _iobuf *io) { return Sys_FileTimeStamp( io ); };
 	virtual const unsigned char *GetScanTable( void ) { return Sys_GetScanTable(); }
-	virtual bool			IsDebuggerPresent( void ) { return ::IsDebuggerPresent(); }
+	virtual bool			IsDebuggerPresent( void );
 
 	virtual void			HandleCrashEvent( void );
 #else

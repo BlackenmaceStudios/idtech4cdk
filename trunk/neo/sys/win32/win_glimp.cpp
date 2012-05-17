@@ -592,10 +592,10 @@ static bool GLW_CreateWindow( glimpParms_t parms ) {
 		// adjust window coordinates if necessary 
 		// so that the window is completely on screen
 		if ( x + w > win32.desktopWidth ) {
-			x = ( win32.desktopWidth - w );
+	//		x = ( win32.desktopWidth - w );
 		}
 		if ( y + h > win32.desktopHeight ) {
-			y = ( win32.desktopHeight - h );
+		//	y = ( win32.desktopHeight - h );
 		}
 		if ( x < 0 ) {
 			x = 0;

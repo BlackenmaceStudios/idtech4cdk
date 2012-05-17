@@ -28,7 +28,10 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "precompiled.h"
 #pragma hdrstop
+
+#ifdef TOOLS_DLL
 #include "../../tools/tools_platform.h"
+#endif
 
 #include "../../sys/win32/rc/guied_resource.h"
 #include "../../renderer/tr_local.h"

@@ -321,8 +321,9 @@ void idSoundSystemLocal::Init() {
 	}
 
 	// make a 16 byte aligned finalMixBuffer
-	finalMixBuffer = (float *) ( ( ( (int)realAccum ) + 15 ) & ~15 );
-
+// jmarshall - switch to int_ptr
+	finalMixBuffer = (float *) ( ( ( (INT_PTR)realAccum ) + 15 ) & ~15 );
+// jmarshall end
 	graph = NULL;
 
 	if ( !s_noSound.GetBool() ) {
