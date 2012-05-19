@@ -37,6 +37,8 @@ If you have questions concerning this license or the applicable additional terms
 #include <GL/gl.h>
 #endif
 
+#include "../../../renderer/qgl_linked.h"
+
 /*
 
   New vertexes will be created where edges cross.
@@ -61,6 +63,7 @@ static bool IsTriangleValid( const optVertex_t *v1, const optVertex_t *v2, const
 static bool IsTriangleDegenerate( const optVertex_t *v1, const optVertex_t *v2, const optVertex_t *v3 );
 
 static idRandom orandom;
+
 
 /*
 ==============

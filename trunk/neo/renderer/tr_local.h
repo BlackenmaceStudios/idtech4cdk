@@ -752,6 +752,8 @@ public:
 	virtual void			RenderLightFrustum( const struct renderLight_t &renderLight, idPlane lightFrustum[6] );
 // jmarshall
 	virtual idImage			*FindImage( const char *path );
+	virtual void			DeriveLightData(class idRenderLightLocal *light);
+	virtual void			FreeLightDefDerivedData(class idRenderLightLocal *light);
 // jmarshall end
 public:
 	// internal functions

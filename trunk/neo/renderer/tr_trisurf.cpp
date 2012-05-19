@@ -159,7 +159,11 @@ public:
 	virtual void				AllocStaticTriSurfVerts(struct srfTriangles_s *surf,int numTris) { R_AllocStaticTriSurfVerts( surf, numTris ); };
 	virtual struct srfTriangles_s * AllocStaticTriSurf(void) { return R_AllocStaticTriSurf(); };
 	virtual void				FreeStaticTriSurf(struct srfTriangles_s *surf) { R_FreeStaticTriSurf( surf ); };
+#ifndef BSPCOMPILER
 	virtual struct srfTriangles_s *PolytopeSurface(int i,class idPlane const * p,class idWinding * * w) { return R_PolytopeSurface( i, p, w ); }
+#else
+	virtual struct srfTriangles_s *PolytopeSurface(int i,class idPlane const * p,class idWinding * * w) { return NULL; }
+#endif
 };
 
 idRenderTriSurfaceManagerLocal renderTriSurfaceManagerLocal;
@@ -357,6 +361,7 @@ R_FreeStaticTriSurfVertexCaches
 ==============
 */
 void R_FreeStaticTriSurfVertexCaches( srfTriangles_t *tri ) {
+#ifndef BSPCOMPILER
 	if ( tri->ambientSurface == NULL ) {
 		// this is a real model surface
 		vertexCache.Free( tri->ambientCache );
@@ -387,6 +392,7 @@ void R_FreeStaticTriSurfVertexCaches( srfTriangles_t *tri ) {
 		tri->shadowCache = NULL;
 	}
 // jmarshall
+#endif
 }
 
 /*
@@ -513,7 +519,7 @@ This will defer the free until the current frame has run through the back end.
 */
 void R_FreeStaticTriSurf( srfTriangles_t *tri ) {
 	frameData_t		*frame;
-
+#ifndef BSPCOMPILER
 	if ( !tri ) {
 		return;
 	}
@@ -538,6 +544,7 @@ void R_FreeStaticTriSurf( srfTriangles_t *tri ) {
 		}
 		frame->lastDeferredFreeTriSurf = tri;
 	}
+#endif
 }
 
 /*
@@ -742,14 +749,16 @@ static int *R_CreateSilRemap( const srfTriangles_t *tri ) {
 	const idDrawVert *v1, *v2;
 
 	remap = (int *)R_ClearedStaticAlloc( tri->numVerts * sizeof( remap[0] ) );
-
+// jmarshall
+/*
 	if ( !r_useSilRemap.GetBool() ) {
 		for ( i = 0 ; i < tri->numVerts ; i++ ) {
 			remap[i] = i;
 		}
 		return remap;
 	}
-
+*/
+// jmarshall end
 	idHashIndex		hash( 1024, tri->numVerts );
 
 	c_removed = 0;

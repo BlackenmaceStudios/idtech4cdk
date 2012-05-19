@@ -195,7 +195,7 @@ idToolInterface * ToolsAPI_Init( bmEngineClassExport *engineExport, void *winVar
 	idCVar::RegisterStaticVars();
 
 	// initialize processor specific SIMD
-	idSIMD::InitProcessor( "game", true );
+	idSIMD::InitProcessor( "tools", true );
 
 	win32 = *(Win32Vars_t *)winVars;
 
@@ -208,7 +208,14 @@ idToolInterface * ToolsAPI_Init( bmEngineClassExport *engineExport, void *winVar
 	cmdSystem->AddCommand( "editScripts", Com_EditScripts_f, CMD_FL_TOOL, "launches the in-game Script Editor" );
 	cmdSystem->AddCommand( "debugger", Com_ScriptDebugger_f, CMD_FL_TOOL, "launches the Script Debugger" );
 
-	
+	// compilers
+	cmdSystem->AddCommand( "dmap", Dmap_f, CMD_FL_TOOL, "compiles a map", idCmdSystem::ArgCompletion_MapName );
+	//cmdSystem->AddCommand( "renderbump", RenderBump_f, CMD_FL_TOOL, "renders a bump map", idCmdSystem::ArgCompletion_ModelName );
+	//cmdSystem->AddCommand( "renderbumpFlat", RenderBumpFlat_f, CMD_FL_TOOL, "renders a flat bump map", idCmdSystem::ArgCompletion_ModelName );
+	cmdSystem->AddCommand( "runAAS", RunAAS_f, CMD_FL_TOOL, "compiles an AAS file for a map", idCmdSystem::ArgCompletion_MapName );
+	cmdSystem->AddCommand( "runAASDir", RunAASDir_f, CMD_FL_TOOL, "compiles AAS files for all maps in a folder", idCmdSystem::ArgCompletion_MapName );
+	cmdSystem->AddCommand( "runReach", RunReach_f, CMD_FL_TOOL, "calculates reachability for an AAS file", idCmdSystem::ArgCompletion_MapName );
+	cmdSystem->AddCommand( "roq", RoQFileEncode_f, CMD_FL_TOOL, "encodes a roq file" );
 	
 	afxContextIsDLL = true;
 	
@@ -364,4 +371,106 @@ BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID
    }
 
 	return true;
+}
+
+
+void GL_CheckErrors( bool ) {
+
+}
+
+/*
+=================
+R_StaticAlloc
+=================
+*/
+void *R_StaticAlloc( int bytes ) {
+	byte *buffer = (byte *)allocator->Allocate( bytes );
+
+	memset( buffer, 0, bytes );
+
+	return buffer;
+}
+
+/*
+=================
+R_ClearedStaticAlloc
+=================
+*/
+void *R_ClearedStaticAlloc( int bytes ) {
+	byte *buffer = (byte *)allocator->Allocate( bytes );
+
+	memset( buffer, 0, bytes );
+
+	return buffer;
+}
+
+/*
+=================
+R_StaticFree
+=================
+*/
+void R_StaticFree( void *data ) {
+	free( data );
+}
+
+/*
+================
+R_FrameAlloc
+
+This data will be automatically freed when the
+current frame's back end completes.
+
+This should only be called by the front end.  The
+back end shouldn't need to allocate memory.
+
+If we passed smpFrame in, the back end could
+alloc memory, because it will always be a
+different frameData than the front end is using.
+
+All temporary data, like dynamic tesselations
+and local spaces are allocated here.
+
+The memory will not move, but it may not be
+contiguous with previous allocations even
+from this frame.
+
+The memory is NOT zero filled.
+Should part of this be inlined in a macro?
+================
+*/
+void *R_FrameAlloc( int bytes ) {
+	byte *buffer = (byte *)allocator->Allocate( bytes );
+
+	memset( buffer, 0, bytes );
+
+	return buffer;
+}
+
+/*
+==================
+R_ClearedFrameAlloc
+==================
+*/
+void *R_ClearedFrameAlloc( int bytes ) {
+	byte *buffer = (byte *)allocator->Allocate( bytes );
+
+	memset( buffer, 0, bytes );
+
+	return buffer;
+}
+
+
+/*
+==================
+R_FrameFree
+
+This does nothing at all, as the frame data is reused every frame
+and can only be stack allocated.
+
+The only reason for it's existance is so functions that can
+use either static or frame memory can set function pointers
+to both alloc and free.
+==================
+*/
+void R_FrameFree( void *data ) {
 }

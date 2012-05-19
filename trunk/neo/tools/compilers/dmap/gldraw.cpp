@@ -47,7 +47,7 @@ void Draw_ClearWindow( void ) {
 
 	glDrawBuffer( GL_FRONT );
 
-	renderDevice->SetDevice2DState();
+	//renderDevice->SetDevice2DState();
 
 	glClearColor( 0.5, 0.5, 0.5, 0 );
 	glClear( GL_COLOR_BUFFER_BIT );

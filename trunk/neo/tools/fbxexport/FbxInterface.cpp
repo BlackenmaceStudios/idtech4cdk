@@ -126,7 +126,7 @@ void FbxInterface::ParseMeshTexture( KFbxGeometry* pGeometry, bmFbxMesh *Mesh ) 
 						KFbxFileTexture *lFileTexture = KFbxCast<KFbxFileTexture>(pTexture);
 
 
-						Mesh->material = fileSystem->OSPathToRelativePath( "worlddefault" );
+						Mesh->material = fileSystem->OSPathToRelativePath( lFileTexture->GetFileName() );
 						Mesh->material.StripFileExtension();
 
 						common->Printf("\tMaterial %s\n",  Mesh->material.c_str());

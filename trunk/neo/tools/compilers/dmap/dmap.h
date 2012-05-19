@@ -28,6 +28,31 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "../../../renderer/tr_local.h"
 
+// jmarshall - this needs to get removed when dmap goes to tools.dll
+enum EditorUVGenerateType
+{
+	Editor_GenerateUVs_Q3Style = 0,
+	Editor_GenerateUVs_Orient,
+	Editor_ImportUVs_AutoSpacing,
+	Editor_ImportUVs_SinglePage,
+	Editor_ImportUVs_10Percent,
+	Editor_ImportUVs_20Percent,
+	Editor_ImportUVs_30Percent,
+	Editor_ImportUVs_40Percent,
+	Editor_ImportUVs_50Percent,
+	Editor_ImportUVs_60Percent,
+	Editor_ImportUVs_70Percent,
+	Editor_ImportUVs_80Percent,
+    Editor_ImportUVs_90Percent,
+	Editor_NotPartOfVirtualTexture
+};
+
+enum EditorModelOptimization
+{
+        EditorModelOptimize = 0,
+        EditorModelDontOptimize
+};
+// jmarshall end
 
 typedef struct primitive_s {
 	struct primitive_s *next;
@@ -67,9 +92,9 @@ typedef struct mapTri_s {
 	void *				mergeGroup;		// we want to avoid merging triangles
 											// from different fixed groups, like guiSurfs and mirrors
 	int					planeNum;			// not set universally, just in some areas
-
-
-
+// jmarshall
+	EditorUVGenerateType uvGenType;
+// jmarshall end
 	idDrawVert			v[3];
 	const struct hashVert_s *hashVert[3];
 	struct optVertex_s *optVert[3];
@@ -255,6 +280,7 @@ typedef struct {
 	bool	verbose;
 // jmarshall
 	bool	onlyEntities;
+	bool    novtupdate;
 // jmarshall end
 	bool	glview;
 	bool	noOptimize;
@@ -500,27 +526,3 @@ void		CarveTriByBeamTree( const struct beamTree_s *beamTree, const mapTri_t *tri
 extern idCVar bsp_inlinemesh_maxfacespertri;
 // jmarshall end
 
-// jmarshall - this needs to get removed when dmap goes to tools.dll
-enum EditorUVGenerateType
-{
-	Editor_GenerateUVs_Q3Style = 0,
-	Editor_GenerateUVs_Orient,
-	Editor_ImportUVs_AutoSpacing,
-	Editor_ImportUVs_SinglePage,
-	Editor_ImportUVs_10Percent,
-	Editor_ImportUVs_20Percent,
-	Editor_ImportUVs_30Percent,
-	Editor_ImportUVs_40Percent,
-	Editor_ImportUVs_50Percent,
-	Editor_ImportUVs_60Percent,
-	Editor_ImportUVs_70Percent,
-	Editor_ImportUVs_80Percent,
-    Editor_ImportUVs_90Percent
-};
-
-enum EditorModelOptimization
-{
-        EditorModelOptimize = 0,
-        EditorModelDontOptimize
-};
-// jmarshall end

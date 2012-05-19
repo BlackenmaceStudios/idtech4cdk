@@ -174,6 +174,7 @@ void ResetDmapGlobals( void ) {
 	dmapGlobals.uEntities = NULL;
 	dmapGlobals.entityNum = 0;
 	dmapGlobals.mapLights.Clear();
+	dmapGlobals.novtupdate = false;
 	dmapGlobals.verbose = false;
 	dmapGlobals.glview = false;
 	dmapGlobals.noOptimize = false;
@@ -290,6 +291,8 @@ void Dmap( const idCmdArgs &args ) {
 			noAAS = true;
 			common->Printf( "noAAS = true\n" );
 // jmarshall
+		} else if ( !idStr::Icmp( s, "novtupdate" ) ) {
+			dmapGlobals.novtupdate = true;
 		} else if ( !idStr::Icmp( s, "updateents" ) ) {
 			dmapGlobals.onlyEntities = true;
 		} 
@@ -364,7 +367,10 @@ void Dmap( const idCmdArgs &args ) {
 		}
 	}
 // jmarshall end
+
+	common->Printf("Cleaning up temporary memory...\n");
 	FreeDMapFile();
+
 
 	end = sys->Milliseconds();
 	common->Printf( "-----------------------\n" );

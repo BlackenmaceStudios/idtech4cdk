@@ -56,7 +56,7 @@ idRenderLightLocal::idRenderLightLocal() {
 	foggedPortals			= NULL;
 	firstInteraction		= NULL;
 	lastInteraction			= NULL;
-
+#ifndef BSPCOMPILER
 	if(!shadowMap.IsValid()) {
 		shadowMap.Init( va("light%d", index ), this);
 		
@@ -65,10 +65,13 @@ idRenderLightLocal::idRenderLightLocal() {
 	{
 	//	shadowMap.RenderLightView( this );
 	}
+#endif
 }
 
 void idRenderLightLocal::FreeRenderLight() {
+#ifndef BSPCOMPILER
 	shadowMap.Clear();
+#endif
 }
 void idRenderLightLocal::UpdateRenderLight( const renderLight_t *re, bool forceUpdate ) {
 }
