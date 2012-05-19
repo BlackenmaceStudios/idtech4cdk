@@ -75,7 +75,12 @@ If you have questions concerning this license or the applicable additional terms
 #endif
 
 #ifndef ID_ENABLE_CURL
+// jmarshall
+#ifdef BSPCOMPILER
+	#define ID_ENABLE_CURL 0
+#else
 	#define ID_ENABLE_CURL 1
+#endif
 #endif
 
 // fake a pure client. useful to connect an all-debug client to a server

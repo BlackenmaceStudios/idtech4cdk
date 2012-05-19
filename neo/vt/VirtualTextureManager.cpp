@@ -36,7 +36,7 @@ void bmVirtualTextureManager::Init( void ) {
 	common->Printf( "----------- VirtualTextureManager_Init -----------\n");
 
 	
-
+#ifndef BSPCOMPILER
 	// Create all of our texture pages.
 	for(int i = 0; i < VT_NUMPAGES; i++) {
 		common->PrintLoadingMessage( va("INIT VIRTUAL TEXTURE PAGE...%d/%d",i+1, VT_NUMPAGES ));
@@ -46,6 +46,7 @@ void bmVirtualTextureManager::Init( void ) {
 	currentPage = 0;
 
 	vtBackEnd.Init();
+#endif
 }
 
 /*
@@ -121,6 +122,7 @@ bmVirtualTextureManager::CreateVirtualTextureFileForMap
 ===========================
 */
 bmVirtualTextureFile* bmVirtualTextureManager::CreateNewVirtualTextureFile( const char *path, int numAreas ) {
+#ifdef BSPCOMPILER
 	// If there is a current virtual texture file thats currently open, free it.
 	FreeVirtualTextureFile();
 
@@ -132,4 +134,7 @@ bmVirtualTextureFile* bmVirtualTextureManager::CreateNewVirtualTextureFile( cons
 	}
 
 	return currentVirtualTextureFile;
+#else
+	return NULL;
+#endif
 }

@@ -242,7 +242,7 @@ public:
 	bool			HadError( void ) const;
 
 // jmarshall
-
+	const char		*ReadToken();
 // jmarshall end
 
 					// set the base folder to load files from

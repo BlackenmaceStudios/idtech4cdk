@@ -633,10 +633,15 @@
     <ClInclude Include="sys\sys_public.h" />
     <ClInclude Include="sys\win32\rc\doom_resource.h" />
     <ClInclude Include="sys\win32\win_local.h" />
-    <ClInclude Include="tools\compilers\dmap\vtmodel.h" />
+    <ClInclude Include="tools\compilers\aas\AASCluster.h" />
+    <ClInclude Include="tools\compilers\aas\AASFile.h" />
+    <ClInclude Include="tools\compilers\aas\AASFileManager.h" />
+    <ClInclude Include="tools\compilers\aas\AASFile_local.h" />
+    <ClInclude Include="tools\compilers\aas\AASReach.h" />
+    <ClInclude Include="tools\compilers\aas\Brush.h" />
+    <ClInclude Include="tools\compilers\aas\BrushBSP.h" />
     <ClInclude Include="vt\dxt\dxt.h" />
     <ClInclude Include="vt\VirtualTexture.h" />
-    <ClInclude Include="vt\VirtualTextureBuild.h" />
     <ClInclude Include="vt\VirtualTextureFile.h" />
     <ClInclude Include="vt\VirtualTexture_Backend.h" />
     <ClInclude Include="vt\VirtualTexture_RectPack.h" />
@@ -2010,21 +2015,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Dedicated Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Dedicated Release|x64'">true</ExcludedFromBuild>
     </CustomBuildStep>
-    <ClInclude Include="tools\compilers\aas\AASBuild_local.h" />
-    <ClInclude Include="tools\compilers\aas\AASCluster.h" />
-    <ClInclude Include="tools\compilers\aas\AASFile.h" />
-    <ClInclude Include="tools\compilers\aas\AASFileManager.h" />
-    <ClInclude Include="tools\compilers\aas\AASFile_local.h" />
-    <ClInclude Include="tools\compilers\aas\AASReach.h" />
-    <ClInclude Include="tools\compilers\aas\Brush.h" />
-    <ClInclude Include="tools\compilers\aas\BrushBSP.h" />
-    <ClInclude Include="tools\compilers\compiler_public.h" />
-    <ClInclude Include="tools\compilers\dmap\dmap.h" />
-    <ClInclude Include="tools\compilers\roqvq\codec.h" />
-    <ClInclude Include="tools\compilers\roqvq\gdefs.h" />
-    <ClInclude Include="tools\compilers\roqvq\quaddefs.h" />
-    <ClInclude Include="tools\compilers\roqvq\roq.h" />
-    <ClInclude Include="tools\compilers\roqvq\roqParam.h" />
     <ClInclude Include="ui\BindWindow.h" />
     <ClInclude Include="ui\ChoiceWindow.h" />
     <ClInclude Include="ui\DeviceContext.h" />
@@ -2215,7 +2205,6 @@
     <ClCompile Include="renderer\tr_shadowbounds.cpp" />
     <ClCompile Include="renderer\tr_shadowmap.cpp" />
     <ClCompile Include="renderer\tr_shadowmap_cache.cpp" />
-    <ClCompile Include="renderer\tr_stencilshadow.cpp" />
     <ClCompile Include="renderer\tr_subview.cpp" />
     <ClCompile Include="renderer\tr_trace.cpp" />
     <ClCompile Include="renderer\tr_trisurf.cpp" />
@@ -2749,11 +2738,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Dedicated Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="sys\win32\win_wndproc.cpp" />
-    <ClCompile Include="tools\compilers\aas\AASBuild.cpp" />
-    <ClCompile Include="tools\compilers\aas\AASBuild_file.cpp" />
-    <ClCompile Include="tools\compilers\aas\AASBuild_gravity.cpp" />
-    <ClCompile Include="tools\compilers\aas\AASBuild_ledge.cpp" />
-    <ClCompile Include="tools\compilers\aas\AASBuild_merge.cpp" />
     <ClCompile Include="tools\compilers\aas\AASCluster.cpp" />
     <ClCompile Include="tools\compilers\aas\AASFile.cpp" />
     <ClCompile Include="tools\compilers\aas\AASFileManager.cpp" />
@@ -2762,27 +2746,6 @@
     <ClCompile Include="tools\compilers\aas\AASReach.cpp" />
     <ClCompile Include="tools\compilers\aas\Brush.cpp" />
     <ClCompile Include="tools\compilers\aas\BrushBSP.cpp" />
-    <ClCompile Include="tools\compilers\dmap\dmap.cpp" />
-    <ClCompile Include="tools\compilers\dmap\facebsp.cpp" />
-    <ClCompile Include="tools\compilers\dmap\gldraw.cpp" />
-    <ClCompile Include="tools\compilers\dmap\glfile.cpp" />
-    <ClCompile Include="tools\compilers\dmap\leakfile.cpp" />
-    <ClCompile Include="tools\compilers\dmap\map.cpp" />
-    <ClCompile Include="tools\compilers\dmap\optimize.cpp" />
-    <ClCompile Include="tools\compilers\dmap\optimize_gcc.cpp" />
-    <ClCompile Include="tools\compilers\dmap\output.cpp" />
-    <ClCompile Include="tools\compilers\dmap\portals.cpp" />
-    <ClCompile Include="tools\compilers\dmap\shadowopt3.cpp" />
-    <ClCompile Include="tools\compilers\dmap\tritjunction.cpp" />
-    <ClCompile Include="tools\compilers\dmap\tritools.cpp" />
-    <ClCompile Include="tools\compilers\dmap\ubrush.cpp" />
-    <ClCompile Include="tools\compilers\dmap\usurface.cpp" />
-    <ClCompile Include="tools\compilers\dmap\vtmodel.cpp" />
-    <ClCompile Include="tools\compilers\renderbump\renderbump.cpp" />
-    <ClCompile Include="tools\compilers\roqvq\codec.cpp" />
-    <ClCompile Include="tools\compilers\roqvq\NSBitmapImageRep.cpp" />
-    <ClCompile Include="tools\compilers\roqvq\roq.cpp" />
-    <ClCompile Include="tools\compilers\roqvq\roqParam.cpp" />
     <ClCompile Include="tools\guied\GEWindowWrapper.cpp" />
     <ClCompile Include="ui\BindWindow.cpp" />
     <ClCompile Include="ui\ChoiceWindow.cpp" />
@@ -2805,7 +2768,6 @@
     <ClCompile Include="ui\Winvar.cpp" />
     <ClCompile Include="vt\dxt\dxt.cpp" />
     <ClCompile Include="vt\dxt\Dxt_Intrinsics.cpp" />
-    <ClCompile Include="vt\VirtualTextureBuild.cpp" />
     <ClCompile Include="vt\VirtualTextureFile.cpp" />
     <ClCompile Include="vt\VirtualTextureManager.cpp" />
     <ClCompile Include="vt\VirtualTexturePage.cpp" />

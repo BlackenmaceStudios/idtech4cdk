@@ -945,7 +945,7 @@ void idInteraction::CreateInteraction( const idRenderModel *model ) {
 			if ( lightDef->parms.prelightModel == NULL || !model->IsStaticWorldModel() || !r_useOptimizedShadows.GetBool() ) {
 
 				// this is the only place during gameplay (outside the utilities) that R_CreateShadowVolume() is called
-				sint->shadowTris = R_CreateShadowVolume( entityDef, tri, lightDef, shadowGen, sint->cullInfo );
+				//sint->shadowTris = R_CreateShadowVolume( entityDef, tri, lightDef, shadowGen, sint->cullInfo );
 				if ( sint->shadowTris ) {
 					if ( shader->Coverage() != MC_OPAQUE || ( !r_skipSuppress.GetBool() && entityDef->parms.suppressSurfaceInViewID ) ) {
 						// if any surface is a shadow-casting perforated or translucent surface, or the

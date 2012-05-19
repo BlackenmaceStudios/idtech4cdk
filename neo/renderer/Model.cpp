@@ -765,7 +765,7 @@ bool idRenderModelStatic::LoadMD5Static( const char *fileName ) {
 		tri->shadowCapPlaneBits = 666;
 	// jmarshall end
 		tri->vt_AreaID = -1;
-		modelSurf->shader = declManager->FindMaterial( "worlddefault" );
+		modelSurf->shader = declManager->FindMaterial( mesh->material );
 		modelSurf->id = 0;
 		modelSurf->geometry = tri;
 

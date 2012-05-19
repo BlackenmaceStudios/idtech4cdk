@@ -163,8 +163,9 @@ Modified from DevIL image library
 ===============
 */
 void idImage::CopyBufferIntoRegion( void *buffer, int mipLevel, int DestX, int DestY, int Width, int Height ) {
+#ifndef BSPCOMPILER
 	qglCompressedTexSubImage2DARB( GL_TEXTURE_2D, mipLevel, DestX, DestY, Width, Height, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, Width * Height, buffer );
-
+#endif
 }
 
 /*

@@ -19,6 +19,7 @@ namespace ToolsManaged.Private.Editor
         Editor_ImportUVs_60Percent,
         Editor_ImportUVs_70Percent,
         Editor_ImportUVs_80Percent,
-        Editor_ImportUVs_90Percent
+        Editor_ImportUVs_90Percent,
+        Editor_NotPartOfVirtualTexture
     }
 }

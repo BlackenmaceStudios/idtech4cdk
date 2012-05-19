@@ -144,10 +144,6 @@ idRenderModel *idRenderWorldLocal::ParseModel( idLexer *src ) {
 
 		src->ExpectAnyToken( &token );
 
-// jmarshall
-		surf.shader = declManager->FindMaterial( "worlddefault" );
-// jmarshall end
-		((idMaterial*)surf.shader)->AddReference();
 
 		tri = R_AllocStaticTriSurf();
 		surf.geometry = tri;
@@ -161,11 +157,26 @@ idRenderModel *idRenderWorldLocal::ParseModel( idLexer *src ) {
 		if(vt != NULL)
 		{
 			tri->vt_AreaID = src->ParseInt();
+
+			if(tri->vt_AreaID == -1) {
+				surf.shader = declManager->FindMaterial( src->ReadToken() );
+			}
+			else
+			{
+				surf.shader = declManager->FindMaterial( "worlddefault" );
+			}
 		}
 		else {
 			src->ParseInt();
 			tri->vt_AreaID = -1;
+			
+			const char *shader = src->ReadToken();
+
+		
+			surf.shader = declManager->FindMaterial( shader );
 		}
+
+		((idMaterial*)surf.shader)->AddReference();
 // jmarshall end
 
 		R_AllocStaticTriSurfVerts( tri, tri->numVerts );

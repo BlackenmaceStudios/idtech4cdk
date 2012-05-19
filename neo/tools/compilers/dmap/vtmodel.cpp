@@ -15,12 +15,15 @@ void bmVTModel::Init( void ) {
 		}
 	}
 	tris.Resize( 0 );
+	materials.Clear();
 }
 
 void bmVTModel::AllocTriangleAtPosition( int triId ) {
 	srfTriangles_t	*uTri = R_AllocStaticTriSurf();
 
 	tris.Insert( uTri, triId );
+
+	materials.Insert( "worlddefault", triId );
 }
 
 void bmVTModel::FreeTri( int triId ) { 

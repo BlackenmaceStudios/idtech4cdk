@@ -1799,3 +1799,19 @@ bool idLexer::HadError( void ) const {
 	return hadError;
 }
 
+/*
+================
+idLexer::ReadToken
+================
+*/
+// jmarshall
+const char * idLexer::ReadToken() {
+	static idToken token;
+
+	if(ReadToken( &token ) <= 0) {
+		return NULL;
+	}
+
+	return token.c_str();
+}
+// jmarshall end

@@ -85,7 +85,7 @@ bmVirtualTexturePage::BlitTileToPage
 */
 bmVirtualTexturePageTile_t	*bmVirtualTexturePage::BlitTileToPage( bmVirtualTextureFile *vtfile, int pageNum, int tileNum, int mipLevel ) {
 	int i;
-
+#ifndef BSPCOMPILER
 	bmVirtualTexturePageTile_t *freeTile = NULL;
 	int numTiles = vt_page_size.GetInteger() / VIRTUALTEXTURE_TILESIZE;
 
@@ -136,6 +136,9 @@ bmVirtualTexturePageTile_t	*bmVirtualTexturePage::BlitTileToPage( bmVirtualTextu
 	isPageDirty = true;
 	
 	return lastTile;
+#else
+	return NULL;
+#endif
 }
 
 /*
@@ -145,7 +148,7 @@ bmVirtualTexturePage::Init
 */
 void bmVirtualTexturePage::Init( const char *name ) {
 	common->Printf( "Creating Virtual Texture Page(%dx%d)\n", vt_page_size.GetInteger(), vt_page_size.GetInteger());
-
+#ifndef BSPCOMPILER
 	// Create the virtual texture page.
 	image[0] = globalImages->ImageFromFunction( va( "_vtpage_%s", name), R_EmptyTexturePage );
 	image[1] = globalImages->ImageFromFunction( va( "_vtpage_%s_mip1", name), R_EmptyTexturePage2 );
@@ -172,6 +175,7 @@ void bmVirtualTexturePage::Init( const char *name ) {
 	nextFreeTile = &tiles[0];
 	lastTile = NULL;
 	lastBlittedTile = numActiveTiles = 0;
+#endif
 }
 
 
@@ -226,8 +230,9 @@ bmVirtualTexturePage::Bind
 ====================
 */
 void bmVirtualTexturePage::Bind( void ) { 
-
+#ifndef BSPCOMPILER
 	image[currentMipLevel]->Bind(); 
+#endif
 }
 
 /*

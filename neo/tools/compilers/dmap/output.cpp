@@ -280,16 +280,21 @@ WriteUTriangles
 Writes text verts and indexes to procfile
 ====================
 */
-static void WriteUTriangles( const srfTriangles_t *uTris ) {
+static void WriteUTriangles( const srfTriangles_t *uTris, const char *mtr ) {
 	int			col;
 	int			i;
 
 	// emit this chain
-	procFile->WriteFloatString( "/* numVerts = */ %i /* numIndexes = */ %i /* vt_AreaID = */ %i\n", 
-		uTris->numVerts, uTris->numIndexes, uTris->vt_AreaID );
-
-	
-
+	if(uTris->vt_AreaID != -1)
+	{
+		procFile->WriteFloatString( "/* numVerts = */ %i /* numIndexes = */ %i /* vt_AreaID = */ %i\n", 
+			uTris->numVerts, uTris->numIndexes, uTris->vt_AreaID );
+	}
+	else
+	{
+		procFile->WriteFloatString( "/* numVerts = */ %i /* numIndexes = */ %i /* vt_AreaID = */ %i /* material = */ %s\n", 
+			uTris->numVerts, uTris->numIndexes, uTris->vt_AreaID, mtr );
+	}
 
 	// verts
 	col = 0;
@@ -437,11 +442,14 @@ typedef struct interactionTris_s {
 		uvGenHandleType = toolInterface->GetValueFromManagedEnum( "EditorUVGenerateType", uvHandleTypeStr );
 	}
 
+	
+
 	if(dmapGlobals.uEntities[entityNum].meshTri != NULL)
 	{
 		uTri = dmapGlobals.uEntities[entityNum].meshTri;
 		uTri->vt_uvGenerateType = (EditorUVGenerateType)uvGenHandleType;
 		outModel.AddTris( uTri );
+		outModel.materials.Append( "worlddefault" );
 		return;
 	}
 // jmarshall end
@@ -528,12 +536,13 @@ typedef struct interactionTris_s {
 // jmarshall
 		int tileNum = -1;
 		
-		
+		uvGenHandleType = ambient->uvGenType;
 	//	procFile->WriteFloatString( "/* VTTileNum %d */ ", tileNum  );
 	//	procFile->WriteFloatString( "%d ", tileNum );
+		outModel.materials.Append( ambient->material->GetName() );
 // jmarshall end
 		uTri = ShareMapTriVerts( ambient );
-		if(strstr(ambient->material->GetName(), "caulk")) {
+		if(strstr(ambient->material->GetName(), "caulk") || uvGenHandleType == Editor_NotPartOfVirtualTexture) {
 			uTri->vt_AreaID = -1;
 		}
 		FreeTriList( ambient );
@@ -700,7 +709,7 @@ static void WriteOutputSurfaces( void ) {
 		procFile->WriteFloatString( "\"%s\" ", va("vt_%d", surfaceNum) );
 
 		
-		WriteUTriangles( outModel.tris[surfaceNum] );
+		WriteUTriangles( outModel.tris[surfaceNum], outModel.materials[surfaceNum].c_str() );
 		procFile->WriteFloatString( "}\n\n" );
 	}
 
@@ -797,17 +806,24 @@ void WriteOutputFile( void ) {
 
 
 	// Create our virtual texture.
-	vt = virtualTextureManager->CreateNewVirtualTextureFile( vtpath, vtBuilder.NumVTAreas() );
-	if(vt == NULL) {
-		common->Warning("****** VT_BuildError ********\n");
-		common->Warning("Aborting build.\n");
+	if(!dmapGlobals.novtupdate)
+	{
+		vt = virtualTextureManager->CreateNewVirtualTextureFile( vtpath, vtBuilder.NumVTAreas() );
+		if(vt == NULL) {
+			common->Warning("****** VT_BuildError ********\n");
+			common->Warning("Aborting build.\n");
 
-		dmapGlobals.mapCompileError = "*****Virtual Texture Build Error*******";
+			dmapGlobals.mapCompileError = "*****Virtual Texture Build Error*******";
+		}
+		else
+		{
+			vt->FinishVirtualTextureWrite();
+			vt = NULL;
+		}
 	}
 	else
 	{
-		vt->FinishVirtualTextureWrite();
-		vt = NULL;
+		common->Warning("!!!!User requested to skip Virtual Texture update!!!!\n");
 	}
 	// Write out the OBJ.
 	outModel.WriteToFile( objpath.c_str() );

@@ -13,6 +13,7 @@ idGameLocal::LoadMainMenuWorld
 =====================
 */
 void idGameLocal::LoadMainMenuWorld( const char *map ) {
+/*
 	common->Printf( "---------- LoadMainMenuWorld -----------\n" );
 
 	// Alloc the new render world.
@@ -67,7 +68,7 @@ void idGameLocal::LoadMainMenuWorld( const char *map ) {
 			SpawnClientEntity( dict, mainMenuRenderWorld );
 		}
 	}
-
+*/
 }
 
 /*
@@ -76,6 +77,7 @@ idGameLocal::SetMainMenuWorldViewFromEntity
 =====================
 */
 void idGameLocal::SetMainMenuWorldViewFromEntity( const renderEntity_t *entity ) {
+/*
 	memset( &mainMenuRenderWorldView, 0, sizeof( mainMenuRenderWorldView ) );
 
 	// copy global shader parms
@@ -95,7 +97,7 @@ void idGameLocal::SetMainMenuWorldViewFromEntity( const renderEntity_t *entity )
 
 	mainMenuRenderWorldView.vieworg = entity->origin;
 	mainMenuRenderWorldView.viewaxis = entity->axis;
-
+*/
 	
 }
 
@@ -105,6 +107,7 @@ idGameLocal::FreeMainMenuWorld
 =====================
 */
 void idGameLocal::FreeMainMenuWorld( void ) {
+/*
 	if(!mainMenuRenderWorld) {
 		common->Warning( "FreeMainMenuWorld called when world isn't valid.\n");
 		return;
@@ -120,6 +123,7 @@ void idGameLocal::FreeMainMenuWorld( void ) {
 
 	renderSystem->FreeRenderWorld( mainMenuRenderWorld );
 	mainMenuRenderWorld = NULL;
+*/
 }
 
 /*
@@ -128,6 +132,7 @@ idGameLocal::MainMenuFrame
 =====================
 */
 void idGameLocal::MainMenuFrame( idUserInterface *mainMenuGui, int frametime ) {
+/*
 	if(!mainMenuRenderWorld) {
 		return;
 	}
@@ -141,4 +146,5 @@ void idGameLocal::MainMenuFrame( idUserInterface *mainMenuGui, int frametime ) {
 	mainMenuRenderWorld->RenderScene( &mainMenuRenderWorldView );
 
 	gameLocal.DrawDefferedPass();
+*/
 }

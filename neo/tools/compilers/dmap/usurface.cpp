@@ -539,7 +539,7 @@ AddMapTriToAreas
 Used for curves and inlined models
 ==================
 */
-void AddMapTriToAreas( mapTri_t *tri, uEntity_t *e ) {
+void AddMapTriToAreas( mapTri_t *tri, uEntity_t *e, EditorUVGenerateType optimize ) {
 	int				area;
 	idWinding		*w;
 
@@ -561,6 +561,9 @@ void AddMapTriToAreas( mapTri_t *tri, uEntity_t *e ) {
 	if ( area == -1 ) {
 		return;
 	}
+// jmarshall
+	tri->uvGenType = optimize;
+// jmarshall end
 	if ( area >= 0 ) {
 		mapTri_t	*newTri;
 		idPlane		plane;
@@ -576,7 +579,7 @@ void AddMapTriToAreas( mapTri_t *tri, uEntity_t *e ) {
 
 		TexVecForTri( &texVec, newTri );
 // jmarshall
-		//newTri->vt_AreaID = -1;
+		newTri->uvGenType = optimize;
 // jmarshall end
 		AddTriListToArea( e, newTri, planeNum, area, &texVec );
 	} else {
@@ -640,8 +643,11 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 	side_t			*side;
 	primitive_t		*prim;
 	mapTri_t		*tri;
+	idMapEntity		*mapEntity;
 
 	common->Printf( "----- PutPrimitivesInAreas -----\n");
+
+	
 
 	// allocate space for surface chains for each area
 	e->areas = (uArea_t *)Mem_Alloc( e->numAreas * sizeof( e->areas[0] ) );
@@ -655,7 +661,7 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 		if ( !b ) {
 			// add curve triangles
 			for ( tri = prim->tris ; tri ; tri = tri->next ) {
-				AddMapTriToAreas( tri, e );
+				AddMapTriToAreas( tri, e, Editor_GenerateUVs_Orient ); // jmarshall
 			}
 			continue;
 		}
@@ -677,6 +683,8 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 
 		for ( int eNum = 1 ; eNum < dmapGlobals.num_entities ; eNum++ ) {
 			uEntity_t *entity = &dmapGlobals.uEntities[eNum];
+			mapEntity = entity->mapEntity;
+
 			const char *className = entity->mapEntity->epairs.GetString( "classname" );
 			if ( idStr::Icmp( className, "func_static" ) ) {
 				continue;
@@ -689,15 +697,28 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 				continue;
 			}
 			idRenderModel	*model = renderModelManager->FindModel( modelName );
-
-			idStr modelOptStr = entity->mapEntity->epairs.GetString("model_optimize");
+// jmarshall
+			idStr modelOptStr = mapEntity->epairs.GetString("model_optimize");
 			EditorModelOptimization optimize = EditorModelOptimize;
+			EditorUVGenerateType uvGenType;
 			if(modelOptStr.Length() > 0 ) {
 				optimize = (EditorModelOptimization)toolInterface->GetValueFromManagedEnum( "EditorModelOptimization", modelOptStr );
 			}
 
-			common->Printf( "inlining %s.\n", entity->mapEntity->epairs.GetString( "name" ) );
+			idStr uvHandleTypeStr = mapEntity->epairs.GetString("vthandletype");
+			if(uvHandleTypeStr.Length() > 0 ) {
+				uvGenType = (EditorUVGenerateType)toolInterface->GetValueFromManagedEnum( "EditorUVGenerateType", uvHandleTypeStr );
+			}
 
+			if(uvGenType != Editor_NotPartOfVirtualTexture)
+			{
+				common->Printf( "loading vt tris for %s - %s.\n", mapEntity->epairs.GetString( "name" ), mapEntity->epairs.GetString( "model" ) );
+			}
+			else
+			{
+				common->Printf( "loading non-vt tris for %s - %s.\n", mapEntity->epairs.GetString( "name" ), mapEntity->epairs.GetString( "model" ) );
+			}
+// jmarshall end
 			idMat3	axis;
 			// get the rotation matrix in either full form, or single angle form
 			if ( !entity->mapEntity->epairs.GetMatrix( "rotation", "1 0 0 0 1 0 0 0 1", axis ) ) {
@@ -743,7 +764,15 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 					}
 
 	// jmarshall - changed this so it pulls another fake material to avoid grouping...need to this right.
-					mapTri.material = declManager->FindMaterial( VT_GetNextMaterial() );
+					if(uvGenType != Editor_NotPartOfVirtualTexture)
+					{
+						mapTri.material = declManager->FindMaterial( VT_GetNextMaterial() );
+					}
+					else
+					{
+						// If this model isn't part of the VT load the material as usual.
+						mapTri.material = surface->shader;
+					}
 	// jmarshall end
 
 	// jmarshall -- Checks to see if bsp optimization is screwing up my uvs.
@@ -759,11 +788,12 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 								mapTri.v[k].normal = tri->verts[tri->indexes[j+k]].normal * axis;
 								mapTri.v[k].st = tri->verts[tri->indexes[j+k]].st;
 							}
-							AddMapTriToAreas( &mapTri, e );
+							AddMapTriToAreas( &mapTri, e, uvGenType );
 						}
 					}
 					else
 					{
+						
 						if(nextSurface == NULL)
 						{
 							entity->meshTri = CreateModelSurfaceForMapEntity( startIndex, numIndexes, axis, origin, tri );

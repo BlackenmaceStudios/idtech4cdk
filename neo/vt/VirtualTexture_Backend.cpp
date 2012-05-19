@@ -149,11 +149,11 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 		
 		// Upload the tiles for this area.
 		sceneAreaDist[i] = 255 - sceneAreaDist[i];
-		if(sceneAreaDist[i] > 210)
+		if(sceneAreaDist[i] > 190)
 		{
 			UploadAreaTiles( i, 2,&sceneTiles[i][0], numSceneTiles[i]);
 		}
-		else if(sceneAreaDist[i] > 170)
+		else if(sceneAreaDist[i] > 130)
 		{
 			UploadAreaTiles( i, 1,&sceneTiles[i][0], numSceneTiles[i]);
 		}
