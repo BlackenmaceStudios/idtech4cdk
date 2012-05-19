@@ -244,9 +244,11 @@
       </HeapReserveSize>
       <HeapCommitSize>
       </HeapCommitSize>
-      <LargeAddressAware>false</LargeAddressAware>
-      <StackReserveSize>26777216</StackReserveSize>
-      <StackCommitSize>26777216</StackCommitSize>
+      <LargeAddressAware>true</LargeAddressAware>
+      <StackReserveSize>
+      </StackReserveSize>
+      <StackCommitSize>
+      </StackCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

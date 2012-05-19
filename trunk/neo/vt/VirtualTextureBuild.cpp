@@ -905,6 +905,7 @@ generatePage:
 					storedTris.Clear();
 
 					srfTriangles_t *tris = model->tris[d];
+					
 
 					if(firstTrisOnPage != d)
 					{
@@ -955,9 +956,8 @@ generatePage:
 						common->Warning("%d untouched indexes in mesh\n", numUntouchedIndexes);
 					}
 
-					// Remove the only triangles.
-					R_FreeStaticTriSurf( tris ); 
-					model->tris.Remove( tris );
+					// Remove the old surface, it isn't needed anymore.
+					model->FreeTri( model->tris.FindIndex( tris ) );
 
 					d += cellId;
 					

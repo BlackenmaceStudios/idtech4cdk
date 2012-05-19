@@ -1809,7 +1809,7 @@ void RB_BeginVirtualTexturePass( void ) {
 
 	// Clear the depth buffer.
 
-	qglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	qglClear( GL_DEPTH_BUFFER_BIT);
 
 
 	// UnBind the FBO.
@@ -1908,9 +1908,17 @@ void	RB_STD_DrawView( void ) {
 	}
 	else if(backEnd.viewDef->renderWorld != NULL)
 	{
-		// Render all the diffuse maps from the VT.
-		vtBackEnd.GenerateSceneTileInfo( drawSurfs, numDrawSurfs );
-
+		if(!backEnd.viewDef->renderView.noVirtualTexture)
+		{
+			// Render all the diffuse maps from the VT.
+			vtBackEnd.GenerateSceneTileInfo( drawSurfs, numDrawSurfs );
+		}
+		else
+		{
+			RB_BeginDrawingView();
+			RB_BeginVirtualTexturePass();
+			RB_EndVirtualTexturePass();
+		}
 		// Render dynamic models that aren't part of the VT.
 		RB_Deferred_PreInteractionPass( drawSurfs, numDrawSurfs );
 	}

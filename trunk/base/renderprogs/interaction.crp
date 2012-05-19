@@ -133,6 +133,8 @@ FragmentProgram
 
 	uniform int diffuseOnly;
 
+	vec3 ambient;
+
 	// traditional lambertian blinn-phong lighting model 
 	vec4 lightingModel( vec4 diffuse, vec4 specular, vec3 L, vec3 V, vec3 N, vec3 H, vec4 shadow ) { 
 	
@@ -150,6 +152,11 @@ FragmentProgram
 
 
 		vec3 N = texture2D( u_normalTexture, var_TexNormal.st).xyz;
+
+		if(N == vec3(0,0,0)) {
+			ambient += texture2D( u_diffuseTexture, var_TexNormal.st ).xyz;
+			return vec4(0,0,0,0);
+		}
 		vec3 var_ViewDir = normalize(u_viewOrigin.xyz - var_Vertex.xyz ).xyz;
 
 #endif
@@ -332,10 +339,18 @@ FragmentProgram
 	void main( void ) {   
 		vec4 color = vec4(0,0,0,1);
 		vec4 diffuse = texture2D( u_diffuseTexture, var_TexNormal.st );
+
+		if(numLights <= 0) {
+			gl_FragColor.xyz = diffuse.xyz;
+			gl_FragColor.a = 0;
+			return;
+		}
 		
 		
 		vec4 var_Shadow = BlurPixelV( ShadowMap, var_TexNormal.st );
 		var_Shadow += BlurPixelH( ShadowMap, var_TexNormal.st );
+
+		ambient = vec3(0,0,0);
 
 	    var_Shadow.r = clamp( 1 - var_Shadow.r, 0.0, 1) * 0.5;
 		if(var_Shadow.r < 0) {
@@ -463,7 +478,7 @@ FragmentProgram
 
 		//gl_FragColor = (color + 0.4) * var_Shadow * vec4(1,1,1,1) ;
 		gl_FragColor.xyz = color.xyz * diffuse.xyz * (var_Shadow.r * (diffuse.xyz) + 0.8); //((color.xyz)    ) + (UnlitTransparent()) ;
-
+		gl_FragColor.xyz += ambient;
 		gl_FragColor.a = 1;
 	}
 

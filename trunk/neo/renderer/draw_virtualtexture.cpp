@@ -78,11 +78,6 @@ void RB_VirtualTexture_DrawSurface( drawSurf_t *surf, int areaNum ) {
 
 	shader = surf->material;
 
-	// If we aren't rendering this area don't render this surface.
-	if(surf->geo->vt_AreaID != areaNum) {
-		return;
-	}
-
 	// If the shader doesn't recieve lighting, use forward rendering instead.
 	if(!shader->ReceivesLighting()) {
 		return;
@@ -262,14 +257,22 @@ void RB_VirtualTexture_Prepass( drawSurf_t	 **drawSurfs, int numDrawSurfs, int a
 	}
 
 
-
+	int numSurfsInView = 0;
 	for (int i = 0  ; i < numDrawSurfs ; i++ ) {
+		drawSurf = drawSurfs[i];
+
+		// If we aren't rendering this area don't render this surface.
+		if(drawSurf->geo->vt_AreaID != areaNum) {
+			continue;
+		}
+
+		numSurfsInView++;
 		if(sync)
 		{
 			renderDevice->BeginDeviceSync();
 		}
 	
-		drawSurf = drawSurfs[i];
+		
 
 		// change the matrix if needed
 		if ( drawSurf->space != backEnd.currentSpace ) {
@@ -313,17 +316,12 @@ void RB_VirtualTexture_Prepass( drawSurf_t	 **drawSurfs, int numDrawSurfs, int a
 	//renderDevice->ForceDeviceSync();
 	virtualTextureManager->GetWorldPage()->UnBind();
 	RB_VirtualTexture_Cleanup();
-	
 
 		// UnBind the FBO.
 	globalImages->currentVTRemapImage->UnBindFBO();
 	
-	RB_VirtualTexture_DrawUnpackBuffer( areaNum );
-	
-
-	
-
-	
-	
-	
+	if(numSurfsInView > 0)
+	{
+		RB_VirtualTexture_DrawUnpackBuffer( areaNum );
+	}
 }

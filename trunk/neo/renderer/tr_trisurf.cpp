@@ -127,7 +127,7 @@ static int			numPlanes;
 static idBlockAlloc<srfTriangles_t, 1<<10>				srfTrianglesAllocator;
 
 #ifdef USE_TRI_DATA_ALLOCATOR
-static idDynamicBlockAlloc<idDrawVert, 1<<10, 1<<5>	triVertexAllocator;
+static idDynamicBlockAlloc<idDrawVert, 1<<20, 1<<10>	triVertexAllocator;
 static idDynamicBlockAlloc<glIndex_t, 1<<18, 1<<10>		triIndexAllocator;
 static idDynamicBlockAlloc<shadowCache_t, 1<<18, 1<<10>	triShadowVertexAllocator;
 static idDynamicBlockAlloc<idPlane, 1<<17, 1<<10>		triPlaneAllocator;

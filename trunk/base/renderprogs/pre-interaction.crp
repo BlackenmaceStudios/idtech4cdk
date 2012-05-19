@@ -59,7 +59,18 @@ FragmentProgram
 	void main( void ) {    
 		gl_FragData[0] = texture2D( u_diffuseTexture, var_TexNormal.st );
 		gl_FragData[0].a = 1;
-		gl_FragData[1].xyz = normalize((texture2D( u_normalTexture, var_TexNormal.st ).xyz * 2 - vec3(1.0,1.0,1.0)) * var_TangentToWorldMatrix);
+		
+		vec3 normal = texture2D( u_normalTexture, var_TexNormal.st ).xyz;
+
+		// fixme this is a nasty hack
+		if(normal == vec3(0,0,0))
+		{
+			gl_FragData[1].xyz = vec3(0,0,0);
+		}
+		else
+		{
+			gl_FragData[1].xyz = normalize((texture2D( u_normalTexture, var_TexNormal.st ).xyz * 2 - vec3(1.0,1.0,1.0)) * var_TangentToWorldMatrix);
+		}
 		gl_FragData[1].a = 1;
 		gl_FragData[2] = var_Vertex;
 	}

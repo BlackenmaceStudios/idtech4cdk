@@ -1,14 +1,5 @@
-textures/skies/podsky
+models/skies/skydome_test
 {
-      qer_editorimage   textures/skies/podsky.tga
-   noFragment
-   noshadows
-   nooverlays
-   forceOpaque            // so transparent windows can draw on top of it
-   {
-      blend      add      // so transparent windows can draw on top of it
-      cameraCubeMap   env/podsky/podsky
-      texgen      skybox
-      texgen         wobblesky .0 .0 .0
-   }
+	diffusemap models/skies/skydome_test.tga
+	bumpmap models/skies/skydome_test_local.tga
 }

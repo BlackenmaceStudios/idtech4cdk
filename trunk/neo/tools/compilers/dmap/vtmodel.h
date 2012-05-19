@@ -15,7 +15,10 @@ public:
 	void WriteToFile( const char *file ) ;
 	int						NumTrisForArea( int areaNum );
 	idList<idStr>			materials;
+	idList<int>				areas;
 	idList<srfTriangles_t*> tris;
 	int						numAreas;
+
+	int						numNodeAreas;
 };
 

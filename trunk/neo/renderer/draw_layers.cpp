@@ -136,7 +136,7 @@ void RB_Draw_MegaProject( drawSurf_t **drawSurfs, int numDrawSurfs, bmMegaProjec
 
 	RB_LogComment( "---------- RB_Layers_Prepass ----------\n" );
 	
-	qglClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT );
+	qglClear( GL_DEPTH_BUFFER_BIT  );
 	
 	// clear the z buffer, set the projection matrix, etc
 	RB_BeginDrawingView();
