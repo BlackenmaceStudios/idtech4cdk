@@ -292,7 +292,7 @@ static void WriteUTriangles( const srfTriangles_t *uTris, const char *mtr ) {
 	}
 	else
 	{
-		procFile->WriteFloatString( "/* numVerts = */ %i /* numIndexes = */ %i /* vt_AreaID = */ %i /* material = */ %s\n", 
+		procFile->WriteFloatString( "/* numVerts = */ %i /* numIndexes = */ %i /* vt_AreaID = */ %i /* material = */ \"%s\"\n", 
 			uTris->numVerts, uTris->numIndexes, uTris->vt_AreaID, mtr );
 	}
 
@@ -316,6 +316,11 @@ static void WriteUTriangles( const srfTriangles_t *uTris, const char *mtr ) {
 		vec[5] = dv->normal[0];
 		vec[6] = dv->normal[1];
 		vec[7] = dv->normal[2];
+
+		if(vec[0] == vec[1] || vec[1] == vec[2] || vec[0] == vec[2]) {
+			common->Warning("WriteUTriangles: Degenerate triangle detected\n");
+		}
+
 		Write1DMatrix( procFile, 8, vec );
 
 		if ( ++col == 3 ) {
@@ -435,6 +440,10 @@ typedef struct interactionTris_s {
 	area = &dmapGlobals.uEntities[entityNum].areas[areaNum];
 	entity = dmapGlobals.uEntities[entityNum].mapEntity;
 
+	if(outModel.numNodeAreas - 1 < areaNum) {
+		outModel.numNodeAreas = areaNum + 1;
+	}
+
 // jmarshall
 
 	idStr uvHandleTypeStr = entity->epairs.GetString("vthandletype");
@@ -449,6 +458,7 @@ typedef struct interactionTris_s {
 		uTri = dmapGlobals.uEntities[entityNum].meshTri;
 		uTri->vt_uvGenerateType = (EditorUVGenerateType)uvGenHandleType;
 		outModel.AddTris( uTri );
+		outModel.areas.Append( 0 ); // should be -1?
 		outModel.materials.Append( "worlddefault" );
 		return;
 	}
@@ -539,6 +549,7 @@ typedef struct interactionTris_s {
 		uvGenHandleType = ambient->uvGenType;
 	//	procFile->WriteFloatString( "/* VTTileNum %d */ ", tileNum  );
 	//	procFile->WriteFloatString( "%d ", tileNum );
+		outModel.areas.Append( areaNum );
 		outModel.materials.Append( ambient->material->GetName() );
 // jmarshall end
 		uTri = ShareMapTriVerts( ambient );
@@ -700,20 +711,33 @@ WriteOutputSurfaces
 */
 static void WriteOutputSurfaces( void ) {
 	
+	for(int i = 0; i < outModel.numNodeAreas; i++)
+	{
+		int numSurfaces = 0;
+		for(int surfaceNum = 0; surfaceNum < outModel.tris.Num(); surfaceNum++) {
+			if(outModel.areas[surfaceNum] != i) {
+				continue;
+			}
 
-	procFile->WriteFloatString( "model { /* name = */ \"_area%i\" /* numSurfaces = */ %i\n\n", 0, outModel.tris.Num() );
+			numSurfaces++;
+		}
+		procFile->WriteFloatString( "model { /* name = */ \"_area%i\" /* numSurfaces = */ %i\n\n", i, numSurfaces );
 
-	for(int surfaceNum = 0; surfaceNum < outModel.tris.Num(); surfaceNum++) {
-		procFile->WriteFloatString( "/* surface %i */ { ", surfaceNum );
+		for(int surfaceNum = 0; surfaceNum < outModel.tris.Num(); surfaceNum++) {
+			if(outModel.areas[surfaceNum] != i) {
+				continue;
+			}
+			procFile->WriteFloatString( "/* surface %i */ { ", surfaceNum );
 	
-		procFile->WriteFloatString( "\"%s\" ", va("vt_%d", surfaceNum) );
+			procFile->WriteFloatString( "\"%s\" ", va("vt_%d", surfaceNum) );
 
 		
-		WriteUTriangles( outModel.tris[surfaceNum], outModel.materials[surfaceNum].c_str() );
+			WriteUTriangles( outModel.tris[surfaceNum], outModel.materials[surfaceNum].c_str() );
+			procFile->WriteFloatString( "}\n\n" );
+		}
+
 		procFile->WriteFloatString( "}\n\n" );
 	}
-
-	procFile->WriteFloatString( "}\n\n" );
 }
 
 /*
@@ -825,11 +849,13 @@ void WriteOutputFile( void ) {
 	{
 		common->Warning("!!!!User requested to skip Virtual Texture update!!!!\n");
 	}
-	// Write out the OBJ.
-	outModel.WriteToFile( objpath.c_str() );
+	
 
 	common->Printf("-------WorldOutputSurfaces------\n");
 	WriteOutputSurfaces();
+
+	// Write out the OBJ.
+	outModel.WriteToFile( objpath.c_str() );
 
 	// Now write out the geometry with the modified coordinates for VT.
 	for ( i=dmapGlobals.num_entities - 1 ; i >= 0 ; i-- ) {

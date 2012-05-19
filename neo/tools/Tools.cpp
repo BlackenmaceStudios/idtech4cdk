@@ -167,7 +167,7 @@ static void Com_EditScripts_f( const idCmdArgs &args ) {
 ToolsAPI_Init
 ===============
 */
-
+void R_InitTriSurfData( void ) ;
 idToolInterface * ToolsAPI_Init( bmEngineClassExport *engineExport, void *winVars ) {
 	toolInterfaceLocal.InitToolsManaged();
 
@@ -230,7 +230,7 @@ idToolInterface * ToolsAPI_Init( bmEngineClassExport *engineExport, void *winVar
 	}
 
 	afxTraceEnabled = false; 
-
+	R_InitTriSurfData();
 	return &toolInterfaceLocal;
 }
 /*
@@ -410,7 +410,7 @@ R_StaticFree
 =================
 */
 void R_StaticFree( void *data ) {
-	free( data );
+	allocator->Free( data );
 }
 
 /*
@@ -473,4 +473,5 @@ to both alloc and free.
 ==================
 */
 void R_FrameFree( void *data ) {
+	allocator->Free( data );
 }

@@ -201,7 +201,14 @@ bool WriteMD5StaticMesh( const char *meshpath ) {
 	for( int i = 0; i < fbxInterface.meshes.Num(); i++ ) {
 		file->WriteFloatString( "mesh %d {\n", i );
 
-		file->WriteFloatString( "\tshader %s\n", /*fbxInterface.meshes[i].material.c_str()*/ "modeldefault" );
+		if(strstr(fbxInterface.meshes[i].material.c_str(), "modeldefault"))
+		{
+			file->WriteFloatString( "\tshader %s\n", "modeldefault" );
+		}
+		else
+		{
+			file->WriteFloatString( "\tshader %s\n", fbxInterface.meshes[i].material.c_str() );
+		}
 		file->WriteFloatString( "\tstartVertex %d\n", fbxInterface.meshes[i].startVertex );
 		file->WriteFloatString( "\tnumVertexes %d\n", fbxInterface.meshes[i].numVertexes );
 

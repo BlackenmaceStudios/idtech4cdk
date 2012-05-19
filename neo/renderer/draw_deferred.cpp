@@ -108,6 +108,9 @@ void	RB_Deferred_DrawPreInteraction( const drawSurf_t *surf ) {
 
 	progs[PROG_PREINTERACTION].programHandle->SetVarMatrix4fv( VV_TEX_MATVIEW, 1, &surf->space->modelMatrix[0] );
 
+	if(bump == NULL) {
+		return;
+	}
 
 		
 	// texture 1 will be the per-surface bump map

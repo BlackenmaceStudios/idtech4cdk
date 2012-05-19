@@ -16,19 +16,25 @@ void bmVTModel::Init( void ) {
 	}
 	tris.Resize( 0 );
 	materials.Clear();
+	areas.Clear();
+
+	numNodeAreas = 1;
 }
 
 void bmVTModel::AllocTriangleAtPosition( int triId ) {
 	srfTriangles_t	*uTri = R_AllocStaticTriSurf();
 
 	tris.Insert( uTri, triId );
-
+	areas.Insert( 0, triId );
 	materials.Insert( "worlddefault", triId );
 }
 
 void bmVTModel::FreeTri( int triId ) { 
+	
+	tris.RemoveIndex( triId ); 
+	materials.RemoveIndex( triId );
+	areas.RemoveIndex( triId );
 	R_FreeStaticTriSurf( tris[triId] ); 
-	tris.Remove( tris[triId] ); 
 }
 
 void bmVTModel::SetVertexesForTris( srfTriangles_t	*uTri, idDrawVert *verts, int numVerts, int *indexes, int numIndexes ) {

@@ -2048,7 +2048,7 @@ void idMaterial::ParseMaterial( idLexer &src ) {
 			newSrc.FreeSource();
 			continue;
 		}
-		// normalmap for stage shortcut
+		// bump for stage shortcut
 		else if ( !token.Icmp( "bumpmap" ) ) {
 			str = R_ParsePastImageProgram( src );
 			idStr::snPrintf( buffer, sizeof( buffer ), "blend bumpmap\nmap %s\n}\n", str );

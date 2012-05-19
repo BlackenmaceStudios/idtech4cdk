@@ -261,6 +261,7 @@ typedef struct renderView_s {
 // jmarshall
 	idImage					*fboImage;
 	bool					depthOnly;
+	bool					noVirtualTexture;	// This is used for skyportals, ignore vt pass.
 	int						shadowTarget;
 
 	bmMegaProjectFile		*megaProject;		// Mega project file that will be used in this render if assigned.

@@ -256,7 +256,7 @@ void GL_State( int stateBits ) {
 	//
 	if ( diff & ( GLS_DEPTHFUNC_EQUAL | GLS_DEPTHFUNC_LESS | GLS_DEPTHFUNC_ALWAYS ) ) {
 		if ( stateBits & GLS_DEPTHFUNC_EQUAL ) {
-			qglDepthFunc( GL_EQUAL );
+			qglDepthFunc( GL_LEQUAL );
 		} else if ( stateBits & GLS_DEPTHFUNC_ALWAYS ) {
 			qglDepthFunc( GL_ALWAYS );
 		} else {

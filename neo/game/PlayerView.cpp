@@ -447,12 +447,14 @@ void idPlayerView::SingleView( idUserInterface *hud, const renderView_t *view ) 
 	renderView_t	hackedView = *view;
 	hackedView.viewaxis = hackedView.viewaxis * ShakeAxis();
 
+	
+
 	if ( gameLocal.portalSkyEnt.GetEntity()) {
 		renderView_t	portalView = hackedView;
 		portalView.vieworg = gameLocal.portalSkyEnt.GetEntity()->GetPhysics()->GetOrigin();
 
 		// setup global fixup projection vars
-		if ( 1 ) {
+		if ( 0 ) {
 			int vidWidth, vidHeight;
 			idVec2 shiftScale;
 
@@ -470,10 +472,10 @@ void idPlayerView::SingleView( idUserInterface *hud, const renderView_t *view ) 
 			hackedView.shaderParms[4] = shiftScale.x;
 			hackedView.shaderParms[5] = shiftScale.y;
 		}
-
+		portalView.noVirtualTexture = true;
 		gameRenderWorld->RenderScene( &portalView );
 		gameLocal.DrawDefferedPass();
-		renderSystem->CaptureRenderToImage( "_scratch2" );
+	//	renderSystem->CaptureRenderToImage( "_scratch2" );
 
 		hackedView.forceUpdate = true;				// FIX: for smoke particles not drawing when portalSky present
 	}

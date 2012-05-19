@@ -1,6 +1,7 @@
 {
 "mapspath" "C:\dev\darklight\maps"
 "bsp Full Compile" ""
+"bsp Dont Update VT-novtupdate" ""
 "bsp NoFlood Compile-noflood" ""
 "bsp Update Entities-updateents" ""
 "bsp Compile World updatevt-updatevt" ""
