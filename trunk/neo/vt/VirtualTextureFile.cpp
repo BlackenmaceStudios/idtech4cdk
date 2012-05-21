@@ -102,8 +102,32 @@ bmVirtualTextureFile::ReadTile
 */
 
 #if !VT_LOAD_FROMMEMORY
-void bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum, byte *tileBuffer ) {
-	int bufferpos = sizeof(bmVirtualTextureHeader_t) + ((4096 * 4096) * pageNum) + (VIRTUALTEXTURE_TILEMEMSIZE * (tileNum));
+void bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum, int mipLevel, byte *tileBuffer ) {
+	int bufferpos = sizeof(bmVirtualTextureHeader_t) + (((4096 * 4096) + (2048 * 2048) + (1024 * 1024)) * pageNum);
+
+	
+	if(mipLevel == 0)
+	{
+		bufferpos += (VIRTUALTEXTURE_TILEMEMSIZE * (tileNum));
+	}
+	else
+	{
+		bufferpos += 4096 * 4096;
+
+		if(mipLevel == 1)
+		{
+			bufferpos += ((128 * 128) * tileNum);
+		}
+		else if(mipLevel == 2)
+		{
+			bufferpos += 2048 * 2048;
+			bufferpos += ((64 * 64) * tileNum);
+		}
+		else
+		{
+			common->FatalError("VT_ReadTile: Unknown mipLevel %d\n", mipLevel);
+		}
+	}
 
 	assert(tileBuffer != NULL);
 	if(bufferpos >= f->Length()) {

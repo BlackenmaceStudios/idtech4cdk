@@ -73,7 +73,6 @@ public:
 	virtual void			StartProcess( const char *exeName, bool quit );
 // jmarshall
 #ifndef TYPEINFO
-#ifndef BSPCOMPILER
 	virtual int				Milliseconds( void ) { return Sys_Milliseconds(); }
 	virtual void			GrabMouseCursor( bool grab ) { Sys_GrabMouseCursor( grab ); }
 	virtual long			FileTimeStamp(struct _iobuf *io) { return Sys_FileTimeStamp( io ); };
@@ -88,7 +87,6 @@ public:
 	virtual const unsigned char *GetScanTable( void ) { return (const unsigned char*)""; }
 	virtual bool			IsDebuggerPresent( void ) { return false; }
 	virtual void			HandleCrashEvent( void ) {};
-#endif
 #endif
 	void Sys_DumpCallStack( void );
 

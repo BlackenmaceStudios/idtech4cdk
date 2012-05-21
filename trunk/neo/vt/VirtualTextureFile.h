@@ -1,7 +1,7 @@
 // VirtualTextureFile.h
 //
 
-#define VT_LOAD_FROMMEMORY		3
+#define VT_LOAD_FROMMEMORY		1
 
 #define VIRTUALTEXTURE_EXTEN	".virtualtexture"
 #define VIRTUALTEXTURE_IDEN		(('F'<<24)+('T'<<16)+('V'<<8)+'J')
@@ -83,7 +83,7 @@ public:
 	bool						InitFromFile( const char *path );
 	bool						InitNewVirtualTextureFile( const char *path, int numAreas );
 #if !VT_LOAD_FROMMEMORY
-	void						ReadTile( int pageNum, int tileNum, byte *buffer );
+	void						ReadTile( int pageNum, int tileNum, int mipLevel, byte *buffer );
 #else
 	byte *						ReadTile(  int pageNum, int tileNum, int mipLevel );
 #endif

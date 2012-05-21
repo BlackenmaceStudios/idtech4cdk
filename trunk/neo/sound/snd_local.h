@@ -743,7 +743,7 @@ public:
 
 	unsigned int			nextWriteBlock;
 
-	float 					realAccum[6*MIXBUFFER_SAMPLES+16];
+	float 					realAccum[6*MIXBUFFER_SAMPLES+16]; // jmarshall
 	float *					finalMixBuffer;			// points inside realAccum at a 16 byte aligned boundary
 
 	bool					isInitialized;

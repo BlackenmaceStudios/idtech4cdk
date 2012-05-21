@@ -345,8 +345,10 @@ void idCmdSystemLocal::Shutdown( void ) {
 
 	for ( cmd = commands; cmd; cmd = commands ) {
 		commands = commands->next;
-		Mem_Free( cmd->name );
-		Mem_Free( cmd->description );
+// jmarshall
+	//	Mem_Free( cmd->name );
+	//	Mem_Free( cmd->description );
+// jmarshall end
 		delete cmd;
 	}
 
