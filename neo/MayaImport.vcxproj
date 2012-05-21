@@ -369,9 +369,11 @@
       <OutputFile>$(OutDir)$(TargetName)x64$(TargetExt)</OutputFile>
       <AdditionalOptions>/DEF:MayaImport/mayaimport.def %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>libcmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>MayaImport/maya2013/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ClCompile>
       <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>./MayaImport/maya2013/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>

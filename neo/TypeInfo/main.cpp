@@ -66,7 +66,6 @@ bmMemoryHandlerLocal  memoryHandlerLocal;
 	printf( post );					\
 	va_end( argptr )
 
-
 class idCommonLocal : public idCommon {
 public:
 							idCommonLocal( void ) {}
@@ -113,7 +112,19 @@ public:
 	virtual int					GetActiveEditors() { return 0; }
 	// Unified memory handler to handle cross dll issues.
 	virtual bmMemoryHandler		*GetUnifiedMemoryHandler( void ) { return &memoryHandlerLocal; }
+
+
+								// Dict global string pool is in the engine for shared memory to work properly.
+	virtual idStrPool			*GetGlobalDictKeys( void ) { return &globalKeys; }
+	virtual idStrPool			*GetGlobalDictValues( void ) { return &globalValues; }
+private:
+	static idStrPool		globalKeys;
+	static idStrPool		globalValues;
 };
+
+// jmarshall: Moved here from idDict
+idStrPool		idCommonLocal::globalKeys;
+idStrPool		idCommonLocal::globalValues;
 
 idCVar com_developer( "developer", "0", CVAR_BOOL|CVAR_SYSTEM, "developer mode" );
 

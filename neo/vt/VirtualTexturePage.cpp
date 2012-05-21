@@ -120,7 +120,7 @@ bmVirtualTexturePageTile_t	*bmVirtualTexturePage::BlitTileToPage( bmVirtualTextu
 	freeTile = nextFreeTile++;
 	assert( freeTile != NULL );
 #if !VT_LOAD_FROMMEMORY
-	vtfile->ReadTile( pageNum, tileNum, freeTile->buffer );
+	vtfile->ReadTile( pageNum, tileNum, mipLevel, freeTile->buffer );
 #else
 	freeTile->buffer = vtfile->ReadTile( pageNum, tileNum, mipLevel );
 #endif

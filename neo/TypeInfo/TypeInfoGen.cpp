@@ -279,7 +279,7 @@ idEnumTypeInfo *idTypeInfoGen::ParseEnumType( const char *scope, bool isTemplate
 		// add a constant for the enum value
 		idConstantInfo *constantInfo = new idConstantInfo;
 		constantInfo->name = scope + enumValue.name;
-		constantInfo->type = "int";
+		constantInfo->type = "INT_PTR"; // jmarshall
 		constantInfo->value = va( "%d", value );
 		constants.Append( constantInfo );
 
@@ -814,7 +814,9 @@ void idTypeInfoGen::CreateTypeInfo( const char *path ) {
 		common->Printf( "processing '%s' for type info...\n", fileName.c_str() );
 
 		if(!strstr( fileName.c_str(), "precompiled.h" )) {
-			fileName = fileSystem->RelativePathToOSPath(va("../%s/idLib/precompiled.h", SOURCE_CODE_BASE_FOLDER));
+			// jmarshall
+			fileName = fileSystem->RelativePathToOSPath(va("../../%s/idLib/precompiled.h", SOURCE_CODE_BASE_FOLDER));
+			// jmarshall end
 		}
 
 		if ( !src.LoadFile( fileName, true ) ) {
