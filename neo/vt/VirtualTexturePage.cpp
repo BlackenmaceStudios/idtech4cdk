@@ -168,6 +168,9 @@ void bmVirtualTexturePage::Init( const char *name ) {
 			tiles[tileNum].tileNum = tileNum;
 			tiles[tileNum].px = w ;
 			tiles[tileNum].py = h; 
+#if !VT_LOAD_FROMMEMORY
+			tiles[tileNum].buffer = new byte[ VIRTUALTEXTURE_TILEMEMSIZE ];
+#endif
 		}
 	}
 

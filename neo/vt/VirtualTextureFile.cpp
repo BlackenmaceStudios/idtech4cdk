@@ -136,9 +136,33 @@ void bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum, int mipLevel, by
 
 	f->Seek(bufferpos, FS_SEEK_SET);
 
-	int len = f->Read( tileBuffer, VIRTUALTEXTURE_TILEMEMSIZE );
-	if(len < VIRTUALTEXTURE_TILEMEMSIZE) {
-		common->FatalError( "VT_ReadTile: read < VIRTUALTEXTURE_TILEMEMSIZE" );
+	switch( mipLevel)
+	{
+		case 0:
+			{
+				int len = f->Read( tileBuffer, VIRTUALTEXTURE_TILEMEMSIZE );
+				if(len < VIRTUALTEXTURE_TILEMEMSIZE) {
+					common->FatalError( "VT_ReadTile: read < VIRTUALTEXTURE_TILEMEMSIZE" );
+				}
+			}
+		break;
+		case 1:
+			{
+				int len = f->Read( tileBuffer, 128 * 128 );
+				if(len < 128 * 128) {
+					common->FatalError( "VT_ReadTile: read < VIRTUALTEXTURE_TILEMEMSIZE" );
+				}
+			}
+		break;
+
+		case 2:
+			{
+				int len = f->Read( tileBuffer, 64 * 64 );
+				if(len < 64 * 64) {
+					common->FatalError( "VT_ReadTile: read < VIRTUALTEXTURE_TILEMEMSIZE" );
+				}
+			}
+		break;
 	}
 
 }
