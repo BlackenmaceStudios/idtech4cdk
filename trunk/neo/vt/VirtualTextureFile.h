@@ -1,7 +1,7 @@
 // VirtualTextureFile.h
 //
 
-#define VT_LOAD_FROMMEMORY		1
+#define VT_LOAD_FROMMEMORY		0
 
 #define VIRTUALTEXTURE_EXTEN	".virtualtexture"
 #define VIRTUALTEXTURE_IDEN		(('F'<<24)+('T'<<16)+('V'<<8)+'J')
