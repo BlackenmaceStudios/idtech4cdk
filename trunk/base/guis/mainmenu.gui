@@ -3,82 +3,79 @@ windowDef Desktop
 	rect	0 ,0 ,1280 ,720
 	backcolor	0, 0, 0, 0
 	menugui	1
-	windowDef unnamed4
+	float doomme	1
+	onESC {
+		if ("desktop::doomme" == 0) { 
+			showcursor "1" ;
+			set "idlogo::rect" "0 0 0 0" ;		
+			set "demoEnd::rect" "0 0 0 0" ;
+			resetTime "SoundrunMenu" "0" ;					
+			set "desktop::doomme" "1" ;
+			set "cmd" "play """ ;
+		}
+		set "cmd" "close" ;
+		
+		if ("desktop::doomme" == 666) { 
+			set	"cmd"	"quit" ; 
+		}		
+	}
+
+	windowDef unnamed5
 	{
-		rect	1038,477,383,241
+		rect	0,0,1280,720
 		visible	1
-		backcolor	0,0,0,1
+		background	"guis/assets/mainmenu/mainmenu"
+		matcolor	1,1,1,1
 	}
 	windowDef unnamed1
 	{
-		rect	1066,483,179,38
+		rect	1069,609,180,38
 		visible	1
-		forecolor	1,1,1,1
-		text	"New Game"
+		forecolor	0.6, 1, 1, 1
+		text	"Play Game"
 		textscale	0.5
 		textalign	2
 		textalignx	-10
 		textaligny	4
 		backcolor	0,0,0,1
-	}
-	windowDef unnamed11
-	{
-		rect	1060,527,186,34
-		visible	1
-		forecolor	1,1,1,1
-		text	"Load Game"
-		textscale	0.5
-		textalign	2
-		textalignx	-7
-		textaligny	3
-		backcolor	0,0,0,1
-	}
-	windowDef unnamed111
-	{
-		rect	1090,568,153,38
-		visible	1
-		forecolor	1,1,1,1
-		text	"Options"
-		textscale	0.5
-		textalign	2
-		textalignx	-9
-		textaligny	4
-		backcolor	0,0,0,1
+
+		onMouseEnter {
+					transition "forecolor" "0.6 1 1 1" "1 1 1 1" "250" ;
+	
+				}
+		onMouseExit {
+					transition "forecolor" "1 1 1 1" "0.6 1 1 1" "250" ;
+
+		}
+
+		onAction {
+			set	"cmd"	"startGame" ; 
+		}
 	}
 	windowDef unnamed1111
 	{
-		rect	1102,605,141,36
+		rect	1102,656,141,36
 		visible	1
-		forecolor	1,1,1,1
+		forecolor	0.6, 1, 1, 1
 		text	"Quit"
 		textscale	0.5
 		textalign	2
 		textalignx	-10
 		textaligny	4
 		backcolor	0,0,0,1
-	}
-	windowDef unnamed2
-	{
-		rect	0,0,1386,67
-		visible	1
-		backcolor	0,0,0,1
-	}
-	windowDef unnamed3
-	{
-		rect	-6,645,1418,106
-		visible	1
-		backcolor	0,0,0,1
-		forecolor	1,1,1,1
-		text	"gui::gameversion"
-		textscale	0.2
-		textaligny	20
-		textalignx	12
-	}
-	windowDef unnamed
-	{
-		rect	533,2,281,60
-		visible	1
-		forecolor	1,1,1,1
-		background	"guis/assets/logo"
+
+		onMouseEnter {
+					transition "forecolor" "0.6 1 1 1" "1 1 1 1" "250" ;
+	
+				}
+		onMouseExit {
+					transition "forecolor" "1 1 1 1" "0.6 1 1 1" "250" ;
+
+		}
+		
+
+		onAction {
+			set	"cmd"	"quit" ; 
+		}
 	}
 }
