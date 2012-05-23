@@ -368,12 +368,15 @@
     <Link>
       <OutputFile>$(OutDir)$(TargetName)x64$(TargetExt)</OutputFile>
       <AdditionalOptions>/DEF:MayaImport/mayaimport.def %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>libcmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>MayaImport/maya2013/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ClCompile>
       <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>./MayaImport/maya2013/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <OpenMPSupport>false</OpenMPSupport>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>

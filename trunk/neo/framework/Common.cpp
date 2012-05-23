@@ -64,7 +64,7 @@ public:
 	bmMemoryHandlerLocal() { memoryUsage = 0; }
 
 	virtual void			*Allocate( size_t size, const char *file, int line ) { return malloc( size); }
-	virtual void			Free( void *ptr ) { free( ptr ); }
+	virtual void			Free( void *ptr ) { if(useNonDebugFree == false) { free( ptr ); } }
 
 	virtual void			*AllocAlign( int size, size_t align ) { return malloc( size  + 16 + 4); }
 	virtual void			FreeAlign( void *ptr ) { free( ptr ); }
@@ -73,6 +73,7 @@ public:
 	static int bmMemoryHandlerLocal::CustomAllocHook( int nAllocType, void *userData, size_t size, int nBlockType, long requestNumber, const unsigned char *filename, int lineNumber);
 
 	int	memoryUsage;
+	bool useNonDebugFree;
 };
 
 #include <crtdbg.h>
@@ -227,6 +228,7 @@ public:
 // jmarshall - shared memory
 	virtual idStrPool			*GetGlobalDictKeys( void ) { return &globalKeys; }
 	virtual idStrPool			*GetGlobalDictValues( void ) { return &globalValues; }
+
 // jmarshall end
 private:
 	
@@ -2418,6 +2420,13 @@ idCommonLocal::Frame
 =================
 */
 void idCommonLocal::Frame( void ) {
+#ifdef ID_ALLOW_TOOLS
+	if(!com_shuttingDown)
+	{
+		toolManager.Frame();
+	}
+#endif
+
 	try {
 
 		// pump all the events
@@ -2869,8 +2878,8 @@ idCommonLocal::Shutdown
 =================
 */
 void idCommonLocal::Shutdown( void ) {
-
 	com_shuttingDown = true;
+	memoryHandlerLocal.useNonDebugFree = true;
 
 	idAsyncNetwork::server.Kill();
 	idAsyncNetwork::client.Shutdown();
@@ -2892,6 +2901,10 @@ void idCommonLocal::Shutdown( void ) {
 
 	// shut down the console command system
 	cmdSystem->Shutdown();
+
+// jmarshall
+	toolManager.Shutdown();
+// jmarshall end
 
 #ifdef ID_WRITE_VERSION
 	delete config_compressor;

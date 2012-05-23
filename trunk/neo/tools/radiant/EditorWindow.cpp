@@ -85,6 +85,8 @@ HWND idManagedEditorWindow::GetSafeHwnd( void ) {
 }
 
 void idManagedEditorWindow::GetClientRect( CRect &rect ) {
+	if(g_pParentWnd == NULL)
+		return;
 	ToolsManaged::RECT r;
 	((ToolsManaged::IEditorWindow *)window)->GetScreenRect( &r );
 	memcpy(&rect, &r, sizeof(ToolsManaged::RECT));

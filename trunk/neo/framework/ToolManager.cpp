@@ -59,6 +59,20 @@ void bmToolManager::InitTool( const toolFlag_t tool, const idDict *dict ) {
 	toolInterface->InitTool( tool, dict );
 #endif
 }
+/*
+==================
+bmToolManager:Shutdown
+==================
+*/
+void bmToolManager::Shutdown( void ) {
+	if(toolInterface == NULL)
+		return;
+
+	common->Printf("Unloading Tools DLL...\n");
+	sys->DLL_Unload( toolDLLHandle );
+
+	toolInterface = NULL;
+}
 
 /*
 ==================
@@ -69,6 +83,7 @@ void bmToolManager::Frame( void ) {
 #ifdef ID_ALLOW_TOOLS
 	if(toolInterface == NULL)
 		return;
+
 
 	toolInterface->Frame();
 #endif

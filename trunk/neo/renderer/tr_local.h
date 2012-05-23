@@ -32,6 +32,8 @@ If you have questions concerning this license or the applicable additional terms
 #include "Image.h"
 
 // jmarshall
+#include "gpuworker/GpuWorker.h"
+
 #include "tr_shadowmap_cache.h"
 // jmarshall end
 

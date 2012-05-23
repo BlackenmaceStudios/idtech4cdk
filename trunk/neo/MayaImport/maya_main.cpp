@@ -47,7 +47,6 @@ using namespace std;
 #include "exporter.h"
 #include "maya_main.h"
 
-idStr	errorMessage;
 bool	initialized = false;
 
 #define DEFAULT_ANIM_EPSILON	0.125f
@@ -3091,9 +3090,9 @@ dll setup
 Maya_Shutdown
 ===============
 */
-void Maya_Shutdown( void ) {
+__declspec(dllexport) void Maya_Shutdown( void ) {
 	if ( initialized ) {
-		errorMessage.Clear();
+		//errorMessage.Clear();
 		initialized = false;
 
 		// This shuts down the entire app somehow, so just ignore it.
@@ -3106,8 +3105,8 @@ void Maya_Shutdown( void ) {
 Maya_ConvertModel
 ===============
 */
-const char *Maya_ConvertModel( const char *ospath, const char *commandline ) {
-	
+__declspec(dllexport) const char *Maya_ConvertModel( const char *ospath, const char *commandline ) {
+	idStr	errorMessage;
 	errorMessage = "Ok";
  
 	try {
@@ -3129,11 +3128,14 @@ const char *Maya_ConvertModel( const char *ospath, const char *commandline ) {
 dllEntry
 ===============
 */
-bool dllEntry( int version, idCommon *common, idSys *sys ) {
+__declspec(dllexport) bool dllEntry( int version, idCommon *common, idSys *sys, bmMemoryHandler *sharedAllocator ) {
 
 	if ( !common || !sys ) {
 		return false;
 	}
+// jmarshall
+	::allocator = sharedAllocator;
+// jmarshall end
 
 	::common = common;
 	::sys = sys;
@@ -3146,6 +3148,12 @@ bool dllEntry( int version, idCommon *common, idSys *sys ) {
 
 	idLib::Init();
 
+// jmarshall
+#ifdef _DEBUG
+	idLib::InitCrashHandler();
+#endif
+// jmarshall end
+
 	if ( version != MD5_VERSION ) {
 		common->Printf( "Error initializing Maya exporter: DLL version %d different from .exe version %d\n", MD5_VERSION, version );
 		return false;
@@ -3153,7 +3161,9 @@ bool dllEntry( int version, idCommon *common, idSys *sys ) {
 
 	if ( !initialized ) {
 		MStatus	status;
-
+// jmarshall
+		common->Printf( "Init Maya API(this may take a few moments)...\n");
+// jmarshall end
 		status = MLibrary::initialize( GAME_NAME, true );
 		if ( !status ) {
 			common->Printf( "Error calling MLibrary::initialize (%s)\n", status.errorString().asChar() );
@@ -3162,6 +3172,15 @@ bool dllEntry( int version, idCommon *common, idSys *sys ) {
 
 		initialized = true;
 	}
+
+	return true;
+}
+
+
+extern "C" BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID
+/*lpReserved*/)
+
+{
 
 	return true;
 }
