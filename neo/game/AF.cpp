@@ -452,6 +452,7 @@ void idAF::AddBody( idAFBody *body, const idJointMat *joints, const char *jointN
 	handle = animator->GetJointHandle( jointName );
 	if ( handle == INVALID_JOINT ) {
 		gameLocal.Error( "idAF for entity '%s' at (%s) modifies unknown joint '%s'", self->name.c_str(), self->GetPhysics()->GetOrigin().ToString(0), jointName );
+		
 	}
 
 	assert( handle < animator->NumJoints() );

@@ -1809,18 +1809,29 @@ void RB_BeginVirtualTexturePass( void ) {
 
 	// Clear the depth buffer.
 
+	GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT,GL_COLOR_ATTACHMENT2_EXT,GL_COLOR_ATTACHMENT3_EXT};
+    qglDrawBuffers(3, buffers);
+
 	qglClear( GL_DEPTH_BUFFER_BIT);
 
 
 	// UnBind the FBO.
+		qglDrawBuffer( GL_COLOR_ATTACHMENT0_EXT );
 	globalImages->currentRenderImageTargets->UnBindFBO();
 
 	globalImages->currentVTRemapImage->BindFBO();
 		// Clear the depth buffer.
+
+
+    qglDrawBuffers(3, buffers);
+
+		// Clear the depth buffer.
 	
 		qglClear( GL_DEPTH_BUFFER_BIT );
-	
+	qglDrawBuffer( GL_COLOR_ATTACHMENT0_EXT );
 	globalImages->currentVTRemapImage->UnBindFBO();
+
+
 }
 /*
 =====================
