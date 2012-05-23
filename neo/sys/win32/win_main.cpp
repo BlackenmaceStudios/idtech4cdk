@@ -1478,10 +1478,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		Sys_MemFrame();
 #endif
 
-#ifdef ID_ALLOW_TOOLS
-		toolManager.Frame();
-#endif
-
 		// run the game
 		common->Frame();
 

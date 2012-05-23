@@ -411,14 +411,14 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">
     <Link>
-      <AdditionalLibraryDirectories>./mayaimport/maya2013/lib/;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64;openal\lib;sys\win32\dongle;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>./renderer/gpuworker/cl/lib/x64/;./mayaimport/maya2013/lib/;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64;openal\lib;sys\win32\dongle;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalDependencies>libcmtd.lib;Wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenCL.lib;libcmtd.lib;Wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <EntryPointSymbol>
       </EntryPointSymbol>
-      <StackReserveSize>524288000</StackReserveSize>
-      <StackCommitSize>524288000</StackCommitSize>
+      <StackReserveSize>124288000</StackReserveSize>
+      <StackCommitSize>124288000</StackCommitSize>
       <HeapReserveSize>
       </HeapReserveSize>
       <HeapCommitSize>
@@ -430,8 +430,8 @@
     </ClCompile>
     <ClCompile>
       <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
-      <OpenMPSupport>true</OpenMPSupport>
-      <AdditionalIncludeDirectories>./mayaimport/maya2013/include;C:\dev\darklight\neo\nvidia-texture-tools\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OpenMPSupport>false</OpenMPSupport>
+      <AdditionalIncludeDirectories>./renderer/gpuworker/;./mayaimport/maya2013/include;C:\dev\darklight\neo\nvidia-texture-tools\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_INLINEDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <FloatingPointModel>Strict</FloatingPointModel>
@@ -531,6 +531,18 @@
     <ClInclude Include="idlib\precompiled.h" />
     <ClInclude Include="renderer\Cinematic.h" />
     <ClInclude Include="renderer\glext.h" />
+    <ClInclude Include="renderer\gpuworker\cl\cl.h" />
+    <ClInclude Include="renderer\gpuworker\cl\cl_d3d10_ext.h" />
+    <ClInclude Include="renderer\gpuworker\cl\cl_d3d11_ext.h" />
+    <ClInclude Include="renderer\gpuworker\cl\cl_d3d9_ext.h" />
+    <ClInclude Include="renderer\gpuworker\cl\cl_ext.h" />
+    <ClInclude Include="renderer\gpuworker\cl\cl_gl.h" />
+    <ClInclude Include="renderer\gpuworker\cl\cl_gl_ext.h" />
+    <ClInclude Include="renderer\gpuworker\cl\cl_platform.h" />
+    <ClInclude Include="renderer\gpuworker\cl\cl_utils.h" />
+    <ClInclude Include="renderer\gpuworker\cl\opencl.h" />
+    <ClInclude Include="renderer\gpuworker\GpuWorker.h" />
+    <ClInclude Include="renderer\gpuworker\GpuWorker_Local.h" />
     <ClInclude Include="renderer\GuiModel.h" />
     <ClInclude Include="renderer\Image.h" />
     <ClInclude Include="renderer\image_pbo.h" />
@@ -2095,6 +2107,8 @@
     <ClCompile Include="renderer\draw_shadows.cpp" />
     <ClCompile Include="renderer\draw_transparancy.cpp" />
     <ClCompile Include="renderer\draw_virtualtexture.cpp" />
+    <ClCompile Include="renderer\gpuworker\cl\OpenCL_Utils.cpp" />
+    <ClCompile Include="renderer\gpuworker\GpuWorker.cpp" />
     <ClCompile Include="renderer\GuiModel.cpp" />
     <ClCompile Include="renderer\Image_fbo.cpp" />
     <ClCompile Include="renderer\Image_files.cpp" />

@@ -364,10 +364,12 @@ BOOL CRadiantApp::InitInstance()
 
 int CRadiantApp::ExitInstance() 
 {
-	common->Shutdown();
 	g_pParentWnd = NULL;
 	int ret = CWinApp::ExitInstance();
-	ExitProcess(0);
+
+	// jmarshall
+	cmdSystem->BufferCommandText(CMD_EXEC_INSERT, "quit\n");
+
 	return ret;
 }
 

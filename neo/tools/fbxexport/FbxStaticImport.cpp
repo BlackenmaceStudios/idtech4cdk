@@ -207,7 +207,15 @@ bool WriteMD5StaticMesh( const char *meshpath ) {
 		}
 		else
 		{
-			file->WriteFloatString( "\tshader %s\n", fbxInterface.meshes[i].material.c_str() );
+			if(strlen(fbxInterface.meshes[i].material.c_str()) <= 0)
+			{
+				common->Warning("No default material used - using default...\n");
+				file->WriteFloatString( "\tshader %s\n", "modeldefault" );
+			}
+			else
+			{
+				file->WriteFloatString( "\tshader %s\n", fbxInterface.meshes[i].material.c_str() );
+			}
 		}
 		file->WriteFloatString( "\tstartVertex %d\n", fbxInterface.meshes[i].startVertex );
 		file->WriteFloatString( "\tnumVertexes %d\n", fbxInterface.meshes[i].numVertexes );

@@ -1904,6 +1904,10 @@ void idRenderSystemLocal::Shutdown( void ) {
 
 	Clear();
 
+// jmarshall
+	gpuWorker->Shutdown();
+// jmarshall end
+
 	ShutdownOpenGL();
 }
 
@@ -1953,6 +1957,8 @@ void idRenderSystemLocal::InitOpenGL( void ) {
 
 // jmarshall
 		backEnd.shadowMapCache.Init( -1, -1 );
+
+		gpuWorker->Init();
 // jmarshall end
 
 		err = qglGetError();

@@ -42,7 +42,7 @@ static idStr				Maya_Error;
 
 static exporterInterface_t	Maya_ConvertModel = NULL;
 static exporterShutdown_t	Maya_Shutdown = NULL;
-static int					importDLL = 0;
+static ID_SYS_HANDLE		importDLL = 0; // jmarshall - this took me fucking 5 hours to find :/ damn.
 
 bool idModelExport::initialized = false;
 
@@ -122,7 +122,8 @@ void idModelExport::LoadMayaDll( void ) {
 	}
 
 	// initialize the DLL
-	if ( !dllEntry( MD5_VERSION, common, sys ) ) {
+// jmarshall: allocator
+	if ( !dllEntry( MD5_VERSION, common, sys, allocator ) ) {
 		// init failed
 		Maya_ConvertModel = NULL;
 		Maya_Shutdown = NULL;
@@ -208,8 +209,9 @@ bool idModelExport::ConvertMayaToMD5( void ) {
 	}
 
 	// we need to make sure we have a full path, so convert the filename to an OS path
-	src = fileSystem->RelativePathToOSPath( src );
-	dest = fileSystem->RelativePathToOSPath( dest );
+	// jmarshall - fs_basepath.
+	src = fileSystem->RelativePathToOSPath( src, "fs_basepath"  );
+	dest = fileSystem->RelativePathToOSPath( dest, "fs_basepath" );
 
 	dest.ExtractFilePath( path );
 	if ( path.Length() ) {
@@ -217,11 +219,12 @@ bool idModelExport::ConvertMayaToMD5( void ) {
 	}
 
 	// get the os path in case it needs to create one
-	path = fileSystem->RelativePathToOSPath( "" );
+	// jmarshall - fsbasepath.
+	path = fileSystem->RelativePathToOSPath( "", "fs_basepath"  );
 
-	common->SetRefreshOnPrint( true );
+	
 	Maya_Error = Maya_ConvertModel( path, commandLine );
-	common->SetRefreshOnPrint( false );
+	
 	if ( Maya_Error != "Ok" ) {
 		return false;
 	}
@@ -258,12 +261,15 @@ bool idModelExport::ExportModel( const char *model ) {
 	dest = model;
 	dest.SetFileExtension( MD5_MESH_EXT );
 
+	common->SetRefreshOnPrint( true );
+
 	sprintf( commandLine, "mesh %s -dest %s -game %s", src.c_str(), dest.c_str(), game );
 	if ( !ConvertMayaToMD5() ) {
 		gameLocal.Printf( "Failed to export '%s' : %s", src.c_str(), Maya_Error.c_str() );
+		common->SetRefreshOnPrint( false );
 		return false;
 	}
-
+	common->SetRefreshOnPrint( false );
 	return true;
 }
 

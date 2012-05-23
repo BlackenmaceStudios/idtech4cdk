@@ -1418,7 +1418,10 @@ BOOL CMainFrame::OnCommand(WPARAM wParam, LPARAM lParam) {
  =======================================================================================================================
  */
 LRESULT CMainFrame::DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam) {
-	toolsManaged->UpdateDockedWindows();
+	if(message != WM_DESTROY)
+	{
+		toolsManaged->UpdateDockedWindows();
+	}
 	//RoutineProcessing();
 	return CFrameWnd::DefWindowProc(message, wParam, lParam);
 }

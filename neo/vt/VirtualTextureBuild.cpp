@@ -473,6 +473,7 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 			continue;
 		}
 
+
 		remapIndex[0] = RemapVertexFromParentToChildTri( parentTris, verts, index, false);
 		remapIndex[1] = RemapVertexFromParentToChildTri( parentTris, verts,  parentTris->indexes[i+1], false);
 		remapIndex[2] = RemapVertexFromParentToChildTri( parentTris, verts,  parentTris->indexes[i+2], false);
@@ -673,8 +674,8 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 	common->Printf("...Number of indexes %d-%d\n", realIndexes.Num(), indexes.Num() );
 
 	// Now that we have all the verts and indexes for this section(alloc verts and indexes as well here for the tris).
-	model->SetVertexesForTris( tris, &verts[0], verts.Num(), &realIndexes[0], realIndexes.Num() );
 
+	model->SetVertexesForTris( tris, &verts[0], verts.Num(), &realIndexes[0], realIndexes.Num() );
 	// The UV's might be outside of the target range if the a triangle is barely within the requested bounds.
 	// This will create duplicate triangles in places fixme!
 	uvRegion.Clear();
@@ -753,6 +754,11 @@ bool VirtualTextureBuilder::GenerateVTVerts_r( bmVTModel *model,  float surfaceS
 		idDrawVert *v = model->tris[d]->verts;
 
 		if(model->tris[d]->vt_uvGenerateType == Editor_NotPartOfVirtualTexture) {
+			continue;
+		}
+
+		if(model->tris[d]->vt_uvGenerateType == Editor_GenerateUVs_Q3Style) {
+			common->Warning("Editor_GenerateUVs_Q3Style is not supported.\n");
 			continue;
 		}
 

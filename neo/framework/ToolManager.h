@@ -9,6 +9,7 @@ public:
 	void				LoadTools( void );
 	void				InitTool( const toolFlag_t tool, const idDict *dict );
 	void				Frame( void );
+	void				Shutdown( void );
 private:
 	ID_SYS_HANDLE		toolDLLHandle;
 };

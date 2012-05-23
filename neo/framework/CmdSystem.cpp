@@ -419,8 +419,10 @@ void idCmdSystemLocal::RemoveFlaggedCommands( int flags ) {
 	for ( last = &commands, cmd = *last; cmd; cmd = *last ) {
 		if ( cmd->flags & flags ) {
 			*last = cmd->next;
-			Mem_Free( cmd->name );
-			Mem_Free( cmd->description );
+// jmarshall
+//			Mem_Free( cmd->name );
+//			Mem_Free( cmd->description );
+// jmarshall end
 			delete cmd;
 			continue;
 		}

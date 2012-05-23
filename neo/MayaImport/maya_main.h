@@ -38,7 +38,9 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 
-typedef bool ( *exporterDLLEntry_t )( int version, idCommon *common, idSys *sys );
+// jmarshall
+typedef bool ( *exporterDLLEntry_t )( int version, idCommon *common, idSys *sys, bmMemoryHandler *sharedAllocator );
+// jmarshall end
 typedef const char *( *exporterInterface_t )( const char *ospath, const char *commandline );
 typedef void ( *exporterShutdown_t )( void );
 
