@@ -256,9 +256,11 @@ void GL_State( int stateBits ) {
 	//
 	if ( diff & ( GLS_DEPTHFUNC_EQUAL | GLS_DEPTHFUNC_LESS | GLS_DEPTHFUNC_ALWAYS ) ) {
 		if ( stateBits & GLS_DEPTHFUNC_EQUAL ) {
-			qglDepthFunc( GL_LEQUAL );
+			qglDepthFunc( GL_EQUAL );
 		} else if ( stateBits & GLS_DEPTHFUNC_ALWAYS ) {
 			qglDepthFunc( GL_ALWAYS );
+		} else if (stateBits & GLS_DEPTHFUNC_GREATER ) {
+			qglDepthFunc( GL_GEQUAL ); // jmarshall 
 		} else {
 			qglDepthFunc( GL_LEQUAL );
 		}

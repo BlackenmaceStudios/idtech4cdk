@@ -2588,7 +2588,7 @@ idPlayer::DrawHUD
 void idPlayer::DrawHUD( idUserInterface *_hud ) {
 
 	if ( !weapon.GetEntity() || influenceActive != INFLUENCE_NONE || privateCameraView || gameLocal.GetCamera() || !_hud || !g_showHud.GetBool() ) {
-		return;
+	//	return;
 	}
 
 	UpdateHudStats( _hud );
@@ -5948,7 +5948,9 @@ void idPlayer::Think( void ) {
 
 	if ( !g_stopTime.GetBool() ) {
 		UpdateAnimation();
-
+// jmarshall - nasty
+		renderEntity.origin[2] -= 75.0f;
+// jmarshall end
         Present();
 
 		UpdateDamageEffects();

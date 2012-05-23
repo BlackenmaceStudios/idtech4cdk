@@ -37,9 +37,9 @@ void	RB_Deferred_DrawPreInteraction( const drawSurf_t *surf ) {
 		return;
 
 	// If the shader doesn't recieve lighting, use forward rendering instead.
-	if(!shader->ReceivesLighting()) {
-		return;
-	}
+	//if(!shader->ReceivesLighting()) {
+	//	return;
+	//}
 
 	// translucent surfaces don't put anything in the depth buffer and don't
 	// test against it, which makes them fail the mirror clip plane operation
@@ -59,7 +59,8 @@ void	RB_Deferred_DrawPreInteraction( const drawSurf_t *surf ) {
 	}
 	else
 	{
-		GL_State( shader->GetStage( 0 )->drawStateBits );
+		//GL_State( shader->GetStage( 0 )->drawStateBits );
+
 	}
 
 
@@ -428,6 +429,7 @@ void RB_Deferred_PreInteractionPass( drawSurf_t	 **drawSurfs, int numDrawSurfs )
 
 
 	RB_LogComment( "---------- RB_Deferred_PreInteractionPass ----------\n" );
+	GL_State( GLS_DEPTHFUNC_LESS );
 
 	globalImages->currentRenderImageTargets->BindFBO();
 
@@ -460,12 +462,9 @@ void RB_Deferred_PreInteractionPass( drawSurf_t	 **drawSurfs, int numDrawSurfs )
 	progs[PROG_PREINTERACTION].programHandle->Bind();
 	DEBUG_DEFERRED
 
-
-
-
-
-	
-	
+	backEnd.glState.faceCulling = -1;		// force face culling to set next time
+	GL_Cull( CT_FRONT_SIDED );
+	qglClear( GL_DEPTH_BUFFER_BIT);
 	RB_RenderDrawSurfListWithFunction( drawSurfs, numDrawSurfs, RB_Deferred_DrawPreInteraction );
 	
 	DEBUG_DEFERRED

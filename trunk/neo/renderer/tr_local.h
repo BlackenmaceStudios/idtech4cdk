@@ -1071,6 +1071,9 @@ const int GLS_POLYMODE_LINE						= 0x00002000;
 
 const int GLS_DEPTHFUNC_ALWAYS					= 0x00010000;
 const int GLS_DEPTHFUNC_EQUAL					= 0x00020000;
+// jmarshall
+const int GLS_DEPTHFUNC_GREATER					= 0x00040000;
+// jmarshall end
 const int GLS_DEPTHFUNC_LESS					= 0x0;
 
 const int GLS_ATEST_EQ_255						= 0x10000000;

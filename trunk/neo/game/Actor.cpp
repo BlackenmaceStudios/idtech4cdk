@@ -1153,12 +1153,13 @@ void idActor::CheckBlink( void ) {
 	}
 
 	idEntity *headEnt = head.GetEntity();
+// jmarshall - not needed - blinking
 	if ( headEnt ) {
-		headEnt->GetAnimator()->PlayAnim( ANIMCHANNEL_EYELIDS, blink_anim, gameLocal.time, 1 );
+//		headEnt->GetAnimator()->PlayAnim( ANIMCHANNEL_EYELIDS, blink_anim, gameLocal.time, 1 );
 	} else {
-		animator.PlayAnim( ANIMCHANNEL_EYELIDS, blink_anim, gameLocal.time, 1 );
+//		animator.PlayAnim( ANIMCHANNEL_EYELIDS, blink_anim, gameLocal.time, 1 );
 	}
-
+// jmarshall end
 	// set the next blink time
 	blink_time = gameLocal.time + blink_min + gameLocal.random.RandomFloat() * ( blink_max - blink_min );
 }
