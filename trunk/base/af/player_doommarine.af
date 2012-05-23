@@ -30,11 +30,11 @@ body "waist" {
 	contents corpse
 	clipMask solid, corpse
 	selfCollision 1
-	containedJoints "*origin -*Waist -*Rupleg -*Lupleg"
+	containedJoints "*origin -*waist -*Rupleg -*Lupleg"
 }
 
 body "chest" {
-	joint "Waist"
+	joint "waist"
 	mod orientation
 	model cylinder( ( -10.5, -8, -8 ), ( 10.5, 8, 8 ), 5 )
 	origin ( -1, 0, 59 )
@@ -43,11 +43,11 @@ body "chest" {
 	contents corpse
 	clipMask solid, corpse
 	selfCollision 0
-	containedJoints "*Waist -*Ruparm -*Luparm -*Loneck"
+	containedJoints "*waist -*rarmupper -*larmupper -*bodyupper"
 }
 
 body "head" {
-	joint "Loneck"
+	joint "bodyupper"
 	mod orientation
 	model box( ( -4, -3.5, -4.5 ), ( 4, 3.5, 4.5 ) )
 	origin ( 3, 0, 71 )
@@ -56,20 +56,20 @@ body "head" {
 	contents corpse
 	clipMask solid, corpse
 	selfCollision 0
-	containedJoints "*Loneck"
+	containedJoints "*bodyupper"
 }
 
-body "ruparm" {
-	joint "Ruparm"
+body "rarmupper" {
+	joint "rarmupper"
 	mod orientation
-	model bone( joint( "Ruparm" ), joint( "Rloarm" ), 8 )
-	origin bonecenter( "Ruparm", "Rloarm" )
+	model bone( joint( "rarmupper" ), joint( "Rloarm" ), 8 )
+	origin bonecenter( "rarmupper", "Rloarm" )
 	density 0.3000000119
 	friction 0.0099999998, 0.0099999998, 0.8000000119
 	contents corpse
 	clipMask solid, corpse
 	selfCollision 0
-	containedJoints "*Ruparm -*Rloarm"
+	containedJoints "*rarmupper -*Rloarm"
 }
 
 body "rloarm" {
@@ -85,17 +85,17 @@ body "rloarm" {
 	containedJoints "*Rloarm"
 }
 
-body "luparm" {
-	joint "Luparm"
+body "larmupper" {
+	joint "larmupper"
 	mod orientation
-	model bone( joint( "Luparm" ), joint( "Lloarm" ), 8 )
-	origin bonecenter( "Luparm", "Lloarm" )
+	model bone( joint( "larmupper" ), joint( "Lloarm" ), 8 )
+	origin bonecenter( "larmupper", "Lloarm" )
 	density 0.1199999973
 	friction 0.0099999998, 0.0099999998, 0.8000000119
 	contents corpse
 	clipMask solid, corpse
 	selfCollision 0
-	containedJoints "*Luparm -*Lloarm"
+	containedJoints "*larmupper -*Lloarm"
 }
 
 body "lloarm" {
@@ -168,7 +168,7 @@ body "lloleg" {
 universalJoint "waist" {
 	body1 "chest"
 	body2 "waist"
-	anchor joint( "Waist" )
+	anchor joint( "waist" )
 	shafts ( 0, 0, 1 ), ( 0, 0, -1 )
 	friction 0.8000000119
 	coneLimit ( 0, 0, 1 ), 60
@@ -177,16 +177,16 @@ universalJoint "waist" {
 universalJoint "head" {
 	body1 "head"
 	body2 "chest"
-	anchor joint( "Loneck" )
+	anchor joint( "bodyupper" )
 	shafts ( 0, 0, 1 ), ( 0, 0, -1 )
 	friction 0.8000000119
 	coneLimit ( 0, 0, 1 ), 60
 }
 
-universalJoint "ruparm" {
-	body1 "ruparm"
+universalJoint "rarmupper" {
+	body1 "rarmupper"
 	body2 "chest"
-	anchor joint( "Ruparm" )
+	anchor joint( "rarmupper" )
 	shafts ( 0, -1, 0 ), ( 0, 1, 0 )
 	friction 0.8000000119
 	coneLimit ( 0, -0.7999989986, -0.600001514 ), 80
@@ -194,17 +194,17 @@ universalJoint "ruparm" {
 
 hinge "rloarm" {
 	body1 "rloarm"
-	body2 "ruparm"
+	body2 "rarmupper"
 	anchor joint( "Rloarm" )
 	axis ( 0, 0, -1 )
 	friction 0.8000000119
 	limit -65, 70, -90
 }
 
-universalJoint "luparm" {
-	body1 "luparm"
+universalJoint "larmupper" {
+	body1 "larmupper"
 	body2 "chest"
-	anchor joint( "Luparm" )
+	anchor joint( "larmupper" )
 	shafts ( 0, 1, 0 ), ( 0, -1, 0 )
 	friction 0.8000000119
 	coneLimit ( 0, 0.7999989986, -0.600001514 ), 80
@@ -212,7 +212,7 @@ universalJoint "luparm" {
 
 hinge "lloarm" {
 	body1 "lloarm"
-	body2 "luparm"
+	body2 "larmupper"
 	anchor joint( "Lloarm" )
 	axis ( 0, 0, -1 )
 	friction 0.8000000119
