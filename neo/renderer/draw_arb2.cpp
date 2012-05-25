@@ -329,7 +329,7 @@ const int	MAX_GLPROGS = 200;
 
 // a single file can have both a vertex program and a fragment program
 progDef_t	progs[MAX_GLPROGS] = {
-	{ "pre-interaction.crp", 1, NULL },
+	{ "pre-interaction.crp", 2, NULL },
 	{ "interaction.crp",1,  NULL },
 	{ "shadow.crp", 1, NULL },
 	{ "depth.crp", 1, NULL },

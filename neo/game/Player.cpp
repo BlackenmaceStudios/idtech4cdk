@@ -5949,7 +5949,8 @@ void idPlayer::Think( void ) {
 	if ( !g_stopTime.GetBool() ) {
 		UpdateAnimation();
 // jmarshall - nasty
-		renderEntity.origin[2] -= 75.0f;
+		renderEntity.origin[2] -= 55.0f;
+
 // jmarshall end
         Present();
 

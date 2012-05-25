@@ -259,7 +259,6 @@ Determines if the surface is visible or not.
 */
 void R_CalculateShadowsForLight( idRenderLightLocal *light, viewLight_t *vLight ) {
 
-
 	idRenderWorldLocal *world = tr.viewDef->renderWorld;
 	tr.viewDef->worldSpace.modelMatrix[12] = light->globalLightOrigin.x;
 	tr.viewDef->worldSpace.modelMatrix[13] = light->globalLightOrigin.y;
@@ -274,13 +273,13 @@ void R_CalculateShadowsForLight( idRenderLightLocal *light, viewLight_t *vLight 
 	}
 
 	// Add all the entities for shadowing.
-	for(int i = 0; i < world->entityDefs.Num(); i++) {
-		if(world->entityDefs[i] == NULL)
-			continue;
-
+	for(viewEntity_t *vEntity = tr.viewDef->viewEntitys; vEntity != NULL ; vEntity = vEntity->next) {
 		idRenderModel *model;
 
-		viewEntity_t *vEntity = world->entityDefs[i]->viewEntity;
+		if(vEntity->entityDef == NULL)
+			continue;
+
+		model = vEntity->entityDef->parms.hModel;
 
 		if(vEntity && (vEntity->scissorRect.IsEmpty() < 0 || vEntity->scissorRect.x2 <= 0 || vEntity->scissorRect.y2 <= 0 || vEntity->scissorRect.x2 >= SCREEN_WIDTH || vEntity->scissorRect.y2 >= SCREEN_HEIGHT))
 			continue;
@@ -289,16 +288,16 @@ void R_CalculateShadowsForLight( idRenderLightLocal *light, viewLight_t *vLight 
 			continue;
 
 		// If we have a cached dynamic model there is no reason to redue the skeletal verts again.
-		if(world->entityDefs[i]->dynamicModel)
+		if(vEntity->entityDef->dynamicModel)
 		{
-			model = world->entityDefs[i]->dynamicModel;
+			model = vEntity->entityDef->dynamicModel;
 		}
 		else
 		{
-			model = R_EntityDefDynamicModel( world->entityDefs[i] );
+			model = R_EntityDefDynamicModel( vEntity->entityDef );
 		}
 
-		R_CalculateShadowsForModelLight( model,  world->entityDefs[i]->viewEntity, light, vLight );
+		R_CalculateShadowsForModelLight( model,  vEntity->entityDef->viewEntity, light, vLight );
 	}
 	tr.viewDef->worldSpace.modelMatrix[12] = 0;
 	tr.viewDef->worldSpace.modelMatrix[13] = 0;

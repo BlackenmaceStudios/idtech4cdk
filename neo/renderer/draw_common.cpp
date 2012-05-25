@@ -1921,22 +1921,33 @@ void	RB_STD_DrawView( void ) {
 	{
 		if(!backEnd.viewDef->renderView.noVirtualTexture)
 		{
+			
+			
 			// Render all the diffuse maps from the VT.
 			vtBackEnd.GenerateSceneTileInfo( drawSurfs, numDrawSurfs );
+
+			
+			// Render dynamic models that aren't part of the VT.
+			RB_Deferred_PreInteractionPass( drawSurfs, numDrawSurfs );
+
+
+			// Create our shadow maps.
+			RB_STD_CreateShadowMaps();
 		}
 		else
 		{
 			RB_BeginDrawingView();
 			RB_BeginVirtualTexturePass();
 			RB_EndVirtualTexturePass();
+
+			// Render dynamic models that aren't part of the VT.
+			RB_Deferred_PreInteractionPass( drawSurfs, numDrawSurfs );
 		}
-		// Render dynamic models that aren't part of the VT.
-		RB_Deferred_PreInteractionPass( drawSurfs, numDrawSurfs );
+		
 	}
 
 
-	// Create our shadow maps.
-	RB_STD_CreateShadowMaps();
+	
 
 	// Render Unlit transparent surfaces.
 	RB_Deferred_DrawNoLitTransparent( drawSurfs, numDrawSurfs );

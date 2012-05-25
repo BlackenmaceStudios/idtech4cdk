@@ -666,6 +666,20 @@ void idRenderSystemLocal::WriteDemoPics() {
 void idRenderSystemLocal::DrawDemoPics() {
 	demoGuiModel->EmitFullScreen();
 }
+/*
+=============
+ClearFrameBuffer
+
+Needed to set when to clear the frame buffer.
+=============
+*/
+void idRenderSystemLocal::ClearFrameBuffer( void ) {
+	emptyCommand_t *cmd;
+
+	// add the swapbuffers command
+	cmd = (emptyCommand_t *)R_GetCommandBuffer( sizeof( *cmd ) );
+	cmd->commandId = RC_CLEAR_FRAMEBUFFER;
+}
 
 /*
 =============

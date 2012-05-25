@@ -28,6 +28,7 @@ entityDef info_player_start {
 	"editor_var skin"		"skin to use for player model"
 
 	"spawnclass"			"idPlayerStart"
+	"model"					"model_dreadnaught"
 }
 
 entityDef info_player_teleport {

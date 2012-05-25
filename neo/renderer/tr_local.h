@@ -491,6 +491,7 @@ typedef enum {
 	RC_DRAW_VIEW,
 	RC_SET_BUFFER,
 	RC_COPY_RENDER,
+	RC_CLEAR_FRAMEBUFFER, // jmarshall - clear the framebuffer
 	RC_SWAP_BUFFERS		// can't just assume swap at end of list because
 						// of forced list submission before syncs
 } renderCommand_t;
@@ -756,6 +757,8 @@ public:
 	virtual idImage			*FindImage( const char *path );
 	virtual void			DeriveLightData(class idRenderLightLocal *light);
 	virtual void			FreeLightDefDerivedData(class idRenderLightLocal *light);
+
+	virtual void			ClearFrameBuffer( void );
 // jmarshall end
 public:
 	// internal functions
