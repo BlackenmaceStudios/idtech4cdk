@@ -169,7 +169,7 @@ void RB_Draw_DiffuseOnly( drawSurf_t **drawSurfs, int numDrawSurfs ) {
 		}
 
 		if ( drawSurf->space->modelDepthHack != 0.0f ) {
-			continue;
+		//	continue;
 		}
 
 		// change the scissor if needed

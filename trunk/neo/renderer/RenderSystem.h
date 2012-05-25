@@ -270,6 +270,9 @@ public:
 
 	virtual void			DeriveLightData(class idRenderLightLocal *light) = 0;
 	virtual void			FreeLightDefDerivedData(class idRenderLightLocal *light) = 0;
+
+	// Clears the frame buffer data.
+	virtual void			ClearFrameBuffer( void ) = 0;
 // jmarshall end
 };
 

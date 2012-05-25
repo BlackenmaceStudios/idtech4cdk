@@ -413,6 +413,57 @@ void RB_Deferred_DrawDeferredInteraction( const drawSurf_t *surf ) {
 
 	//tr.cbRenderScene->UnBind();
 }
+/*
+=========================
+RB_Deferred_PreInteractionDrawFinal
+=========================
+*/
+void RB_Deferred_PreInteractionDrawFinal( void ) {
+	globalImages->currentRenderImageTargets->BindFBO();
+	progs[PROG_PREINTERACTION].programHandle->SetCurrentPass( 1 );
+	progs[PROG_PREINTERACTION].programHandle->Bind();
+
+	GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT, GL_COLOR_ATTACHMENT2_EXT };
+    qglDrawBuffers(3, buffers);
+
+
+	GL_SelectTextureNoClient( 0 );
+	globalImages->currentVTRemapImage->fboColorTargets[0]->Bind();
+	progs[PROG_PREINTERACTION].programHandle->BindTextureVar( PP_TEX_NORMAL );
+
+	// texture 4 is the per-surface diffuse map
+	GL_SelectTextureNoClient( 1 );
+	globalImages->currentVTRemapImage->Bind();
+	progs[PROG_PREINTERACTION].programHandle->BindTextureVar( PP_TEX_DIFFUSE );
+
+	// texture 5 is the per-surface specular map
+	GL_SelectTextureNoClient( 2 );
+	globalImages->whiteImage->Bind();
+	progs[PROG_PREINTERACTION].programHandle->BindTextureVar( PP_TEX_SPEC );
+
+	renderDevice->Set2DViewMatrix();
+	GL_State(GLS_SRCBLEND_ONE| GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA);
+	renderDevice->DrawImage( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 1, 1, NULL );
+	renderDevice->RestoreViewMatrix();
+
+	GL_State( GLS_DEPTHFUNC_LESS );
+
+	// Unbind all the textures.
+	GL_SelectTextureNoClient( 2 );
+	globalImages->BindNull();
+
+	GL_SelectTextureNoClient( 1 );
+	globalImages->BindNull();
+
+	backEnd.glState.currenttmu = -1;
+	GL_SelectTexture( 0 );
+
+	progs[PROG_PREINTERACTION].programHandle->UnBind();
+	progs[PROG_PREINTERACTION].programHandle->SetCurrentPass( 0 );
+
+	qglDrawBuffer( GL_COLOR_ATTACHMENT0_EXT );
+	globalImages->currentRenderImageTargets->UnBindFBO();
+}
 
 /*
 =========================
@@ -431,7 +482,8 @@ void RB_Deferred_PreInteractionPass( drawSurf_t	 **drawSurfs, int numDrawSurfs )
 	RB_LogComment( "---------- RB_Deferred_PreInteractionPass ----------\n" );
 	GL_State( GLS_DEPTHFUNC_LESS );
 
-	globalImages->currentRenderImageTargets->BindFBO();
+	// We use the vtremapimage fbo here because the currentRenderMapImage fbo is 2d only.
+	globalImages->currentVTRemapImage->BindFBO();
 
 			// enable the vertex arrays
 	qglEnableVertexAttribArrayARB( 8 );
@@ -464,7 +516,7 @@ void RB_Deferred_PreInteractionPass( drawSurf_t	 **drawSurfs, int numDrawSurfs )
 
 	backEnd.glState.faceCulling = -1;		// force face culling to set next time
 	GL_Cull( CT_FRONT_SIDED );
-	qglClear( GL_DEPTH_BUFFER_BIT);
+	qglClear( GL_COLOR_BUFFER_BIT);			// Clear the color buffer bit just incase there is anything left over from the VT.
 	RB_RenderDrawSurfListWithFunction( drawSurfs, numDrawSurfs, RB_Deferred_DrawPreInteraction );
 	
 	DEBUG_DEFERRED
@@ -489,8 +541,10 @@ void RB_Deferred_PreInteractionPass( drawSurf_t	 **drawSurfs, int numDrawSurfs )
 	qglDisableVertexAttribArrayARB( 10 );
 	qglDisableVertexAttribArrayARB( 11 );
 	DEBUG_DEFERRED
+   
+	globalImages->currentVTRemapImage->UnBindFBO();
 
-	globalImages->currentRenderImageTargets->UnBindFBO();
+	RB_Deferred_PreInteractionDrawFinal();
 }
 
 /*

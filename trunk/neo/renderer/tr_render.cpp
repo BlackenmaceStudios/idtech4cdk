@@ -236,11 +236,13 @@ void RB_RenderDrawSurfListWithFunction( drawSurf_t **drawSurfs, int numDrawSurfs
 
 	backEnd.currentSpace = NULL;
 
+
 	for (i = 0  ; i < numDrawSurfs ; i++ ) {
 		drawSurf = drawSurfs[i];
 
 		// change the matrix if needed
 		if ( drawSurf->space != backEnd.currentSpace ) {
+
 			qglLoadMatrixf( drawSurf->space->modelViewMatrix );
 		}
 

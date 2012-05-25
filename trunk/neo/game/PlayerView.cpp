@@ -434,6 +434,9 @@ void idPlayerView::SingleView( idUserInterface *hud, const renderView_t *view ) 
 		return;
 	}
 
+	// Clear the framebuffer.
+	renderSystem->ClearFrameBuffer();
+
 	// place the sound origin for the player
 	gameSoundWorld->PlaceListener( view->vieworg, view->viewaxis, player->entityNumber + 1, gameLocal.time, hud ? hud->State().GetString( "location" ) : "Undefined" );
 
@@ -474,7 +477,7 @@ void idPlayerView::SingleView( idUserInterface *hud, const renderView_t *view ) 
 		}
 		portalView.noVirtualTexture = true;
 		gameRenderWorld->RenderScene( &portalView );
-		gameLocal.DrawDefferedPass();
+	//	gameLocal.DrawDefferedPass();
 	//	renderSystem->CaptureRenderToImage( "_scratch2" );
 
 		hackedView.forceUpdate = true;				// FIX: for smoke particles not drawing when portalSky present

@@ -591,6 +591,26 @@ const void	RB_CopyRender( const void *data ) {
 }
 
 /*
+=============
+RB_ClearFrameBuffer
+
+Clears the frame buffer.
+=============
+*/
+void RB_ClearFrameBuffer( void ) {
+	globalImages->currentRenderImageTargets->BindFBO();
+
+	GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT, GL_COLOR_ATTACHMENT2_EXT };
+    qglDrawBuffers(3, buffers);
+
+	qglClear( GL_COLOR_BUFFER_BIT );
+
+	qglDrawBuffer( GL_COLOR_ATTACHMENT0_EXT );
+
+	globalImages->currentRenderImageTargets->UnBindFBO();
+}
+
+/*
 ====================
 RB_ExecuteBackEndCommands
 
@@ -628,6 +648,11 @@ void RB_ExecuteBackEndCommands( const emptyCommand_t *cmds ) {
 				c_draw2d++;
 			}
 			break;
+// jmarshall
+		case RC_CLEAR_FRAMEBUFFER:
+			RB_ClearFrameBuffer();
+			break;
+// jmarshall end
 		case RC_SET_BUFFER:
 			RB_SetBuffer( cmds );
 			c_setBuffers++;
@@ -658,4 +683,6 @@ void RB_ExecuteBackEndCommands( const emptyCommand_t *cmds ) {
 		common->Printf( "3d: %i, 2d: %i, SetBuf: %i, SwpBuf: %i, CpyRenders: %i, CpyFrameBuf: %i\n", c_draw3d, c_draw2d, c_setBuffers, c_swapBuffers, c_copyRenders, backEnd.c_copyFrameBuffer );
 		backEnd.c_copyFrameBuffer = 0;
 	}
+
+	backEnd.viewDef = NULL;
 }

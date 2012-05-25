@@ -1,6 +1,5 @@
 models/md5/player/section01_texture_combined
 {
-	twoSided
 	diffusemap models/md5/player/section01_texture_combined.tga
 	bumpmap models/md5/player/section01_texture_combined_n.tga
 }
