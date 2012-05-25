@@ -58,13 +58,14 @@ void bmShadowMapCache::RenderToScreenBuffer( struct viewLight_s *vLight ) {
 
 	if(enableShadowBlend) {
 		RB_BeginDrawingView(false);
+		GL_State( 0 );
 		GL_State( GLS_SRCBLEND_ONE | GLS_DSTBLEND_ONE | GLS_DEPTHMASK  );
 	
 	}
 	else {
 		// clear the z buffer, set the projection matrix, etc
 		RB_BeginDrawingView();
-
+		GL_State( 0 );
 		qglClearColor(0,0,0,0);
 		qglClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	}
@@ -75,5 +76,5 @@ void bmShadowMapCache::RenderToScreenBuffer( struct viewLight_s *vLight ) {
 
 	globalImages->currentRenderShadows->UnBindFBO();
 
-	GL_State( GLS_DEFAULT );
+	GL_State( 0 );
 }

@@ -719,6 +719,9 @@ void idWeapon::InitWorldModel( const idDeclEntityDef *def ) {
 	const char *model = def->dict.GetString( "model_world" );
 	const char *attach = def->dict.GetString( "joint_attach" );
 
+	if(strlen(model) <= 0)
+		return;
+
 	ent->SetSkin( NULL );
 	if ( model[0] && attach[0] ) {
 		ent->Show();
@@ -1861,6 +1864,7 @@ idWeapon::PresentWeapon
 ================
 */
 void idWeapon::PresentWeapon( bool showViewModel ) {
+
 	playerViewOrigin = owner->firstPersonViewOrigin;
 	playerViewAxis = owner->firstPersonViewAxis;
 
