@@ -10,14 +10,14 @@ VertexProgram
 
 	void main( void ) {
 
-		
+		gl_Position = ftransform();
 
 		vec4 world_position = u_matview * gl_Vertex   ;
 		gl_TexCoord[0] =  -(vec4(r_lightOrigin, 0) -  world_position  );
 		
 		
 
-		gl_Position = ftransform();
+		
 	}
 EndVertexProgram
 
@@ -39,7 +39,7 @@ FragmentProgram
 
 
 		
-		float p = (( Moments.x < 0.5f ) ? 1.0f : 0.2f) ;
+		float p = (( Moments.x < 0.5f ) ? 1.0f : 0.3f) ;
 
 		// Compute variance.  
 	   float Variance =  Moments.y - (Moments.x*Moments.x);  

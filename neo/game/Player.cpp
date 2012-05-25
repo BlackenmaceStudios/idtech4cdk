@@ -5941,7 +5941,7 @@ void idPlayer::Think( void ) {
 		}
 	}
 	// never cast shadows from our first-person muzzle flashes
-	renderEntity.suppressShadowInLightID = LIGHTID_VIEW_MUZZLE_FLASH + entityNumber;
+	renderEntity.suppressShadowInLightID = 0;//LIGHTID_VIEW_MUZZLE_FLASH + entityNumber;
 	if ( headRenderEnt ) {
 		headRenderEnt->suppressShadowInLightID = LIGHTID_VIEW_MUZZLE_FLASH + entityNumber;
 	}

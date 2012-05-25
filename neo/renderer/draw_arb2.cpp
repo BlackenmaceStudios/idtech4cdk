@@ -396,8 +396,11 @@ bmRenderProgram	*R_FindARBProgram( const char *program, bool force ) {
 
 	// add it to the list and load it
 	strncpy( progs[i].name, program, sizeof( progs[i].name ) - 1 );
+	if(progs[i].numPasses <= 0 || progs[i].numPasses >= 20) {
+		progs[i].numPasses = 1;
+	}
 	progs[i].programHandle = new bmRenderProgram( progs[i].name, progs[i].numPasses );
-
+	
 	R_LoadProgramVars( (progHandle_t)i );
 
 	return progs[i].programHandle;

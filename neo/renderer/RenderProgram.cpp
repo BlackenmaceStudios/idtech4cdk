@@ -437,7 +437,7 @@ void bmRenderProgram::PreprocessProgram( idStr &buffer, idStr &vertexProgBuffer,
 
 	// Support for legacy tokens.
 	if(strstr( buffer.c_str(), "varying")) {
-		preprocessedStr = "#version 120\n\r";
+		preprocessedStr = "#version 330 compatibility\n\r";
 	}
 	else {
 		preprocessedStr = "#version 330 compatibility\n\r";

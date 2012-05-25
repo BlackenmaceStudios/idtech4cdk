@@ -5,7 +5,7 @@
 
 #include "tr_local.h"
 
-idCVar r_backend_shadowMapCacheSize( "r_backend_shadowMapCacheSize", "1024", CVAR_RENDERER | CVAR_INTEGER, "size of the shadowmap used for realtime shadows" );
+idCVar r_backend_shadowMapCacheSize( "r_backend_shadowMapCacheSize", "2048", CVAR_RENDERER | CVAR_INTEGER, "size of the shadowmap used for realtime shadows" );
 
 //
 // R_CreateCubemapShadowCacheFBO

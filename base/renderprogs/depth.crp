@@ -49,7 +49,7 @@ VertexProgram
 
 		gl_Position = ftransform( );
 		
-		vec4 position = u_matview * gl_Position;
+		vec4 position = u_matview * gl_Vertex;
 
 		gl_TexCoord[0]=  position  - vec4(r_lightOrigin.xyz, 0) ;
 		gl_TexCoord[1]= (position  - vec4(r_lightOrigin.xyz, 0)) ;
