@@ -39,11 +39,11 @@ FragmentProgram
 
 
 		
-		float p = (( fDepth - Moments.y < 0.0f ) ? 1.0f : 0.1f) ;
+		float p = (( Moments.x < 0.5f ) ? 1.0f : 0.2f) ;
 
 		// Compute variance.  
 	   float Variance =  Moments.y - (Moments.x*Moments.x);  
-	  Variance = max(Variance, 0.002);  
+	  Variance = max(Variance, 0.2);  
 	 // Compute probabilistic upper bound.  
 	   float d =  fDepth - Moments.x;  
 	  float p_max = Variance / (Variance + (d * d ));  

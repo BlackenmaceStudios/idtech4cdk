@@ -34,8 +34,7 @@ void RB_T_FillShadowBuffer( const drawSurf_t *surf ) {
 	if(!shader->SurfaceCastsShadow()) {
 //		return;
 	}
-	
-	qglDepthFunc(GL_LEQUAL);
+
 	GL_Cull( CT_FRONT_SIDED );
 	progs[PROG_SHADOW].programHandle->SetVarMatrix4fv( VV_TEX_MATVIEW, 1, &surf->space->modelMatrix[0] );
 

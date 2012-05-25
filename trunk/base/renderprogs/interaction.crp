@@ -352,14 +352,7 @@ FragmentProgram
 
 		ambient = vec3(0,0,0);
 
-	    var_Shadow.r = clamp( 1 - var_Shadow.r, 0.0, 1) * 0.5;
-		if(var_Shadow.r < 0) {
-			var_Shadow.r = 0;
-		}
 
-		if(var_Shadow.g == 0) {
-			var_Shadow = vec4(1,0,0,1);
-		}
 		
 
 		vec4 var_Vertex = texture2D( u_vertTexture, var_TexNormal.st );
@@ -477,7 +470,7 @@ FragmentProgram
 
 
 		//gl_FragColor = (color + 0.4) * var_Shadow * vec4(1,1,1,1) ;
-		gl_FragColor.xyz = color.xyz * diffuse.xyz * (var_Shadow.r * (diffuse.xyz) + 0.8); //((color.xyz)    ) + (UnlitTransparent()) ;
+		gl_FragColor.xyz = color.xyz * diffuse.xyz * (var_Shadow.r * (diffuse.xyz)); //((color.xyz)    ) + (UnlitTransparent()) ;
 		gl_FragColor.xyz += ambient;
 		gl_FragColor.a = 1;
 	}

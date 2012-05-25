@@ -66,7 +66,7 @@ entityDef weapon_pistol {
 	"model"						"models/weapons/pistol/w_pistol.lwo"
 	"model_view" 				"viewmodel_pistol"
 	"model_world" 				"worldmodel_pistol"
-	"joint_attach"				"PISTOL_ATTACHER"
+	// "joint_attach"				"PISTOL_ATTACHER"
 	"def_dropItem"				"moveable_item_pistol"
 
 	"inv_name"					"Pistol"

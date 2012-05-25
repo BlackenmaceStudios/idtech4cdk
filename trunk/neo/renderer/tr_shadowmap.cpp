@@ -297,6 +297,11 @@ void R_CalculateShadowsForLight( idRenderLightLocal *light, viewLight_t *vLight 
 			model = R_EntityDefDynamicModel( vEntity->entityDef );
 		}
 
+		// Don't shadow default models.
+		if(model->IsDefaultModel()) {
+			continue;
+		}
+
 		R_CalculateShadowsForModelLight( model,  vEntity->entityDef->viewEntity, light, vLight );
 	}
 	tr.viewDef->worldSpace.modelMatrix[12] = 0;
@@ -555,7 +560,7 @@ void RB_T_FillShadowMapBuffer( const drawSurf_t *surf, srfCullInfo_t *cullInfo )
 	//}
 	//else
 	//{
-		GL_Cull( CT_BACK_SIDED );
+		
 	//}
 	qglDepthFunc(GL_LESS);
 	
@@ -583,7 +588,7 @@ void RB_RenderDrawShadowMappedSurfList( drawSurf_t *drawSurfs, int side ) {
 
 	backEnd.currentSpace = NULL;
 	qglMatrixMode( GL_MODELVIEW );
-
+	GL_Cull( CT_BACK_SIDED );
 	for (const drawSurf_t *drawSurf = drawSurfs; drawSurf; drawSurf = drawSurf->nextOnLight ) {
 		bool useFrontCulling = false;
 		bool isAffectingLight = false;
@@ -601,7 +606,7 @@ void RB_RenderDrawShadowMappedSurfList( drawSurf_t *drawSurfs, int side ) {
 		}
 
 		if(RB_Shadow_CullSurface( drawSurf, globalFrustum )) {
-			continue;
+		//	continue;
 		}
 
 
@@ -656,9 +661,8 @@ void bmRenderShadowMap::RenderShadowMap( drawSurf_t	 *drawSurfs,  int side  ) {
 	qglViewport( 0, 0, lightBufferSize, lightBufferSize );
 	qglScissor( 0, 0, lightBufferSize, lightBufferSize );
 
-	GL_State( GLS_DEFAULT );
+	GL_State( GLS_DEPTHFUNC_LESS );
 	backEnd.glState.faceCulling = -1;		// force face culling to set next time
-	GL_Cull( CT_FRONT_SIDED );
 
 	qglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
@@ -678,7 +682,7 @@ void bmRenderShadowMap::RenderShadowMap( drawSurf_t	 *drawSurfs,  int side  ) {
 	backEnd.shadowMapCache.UnBind();
 
 
-	GL_State( GLS_DEFAULT );
+	GL_State( 0 );
 }
 
 
