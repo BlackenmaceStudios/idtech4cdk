@@ -169,7 +169,11 @@ void R_CreateEntityRefs( idRenderEntityLocal *def ) {
 	int			i;
 	idVec3		transformed[8];
 	idVec3		v;
-
+// jmarshall
+	if(def->parms.hModel->IsDefaultModel()) {
+		return;
+	}
+// jmarshall end
 	if ( !def->parms.hModel ) {
 		def->parms.hModel = renderModelManager->DefaultModel();
 	}

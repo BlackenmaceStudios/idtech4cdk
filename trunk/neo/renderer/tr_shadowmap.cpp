@@ -265,6 +265,8 @@ void R_CalculateShadowsForLight( idRenderLightLocal *light, viewLight_t *vLight 
 	tr.viewDef->worldSpace.modelMatrix[14] = light->globalLightOrigin.z;
 	tr.viewDef->worldSpace.modelMatrix[15] = 1.0f;
 
+	vLight->globalShadows = NULL;
+
 	// Add the world surfaces for shadow.
 	for(int i = 0; i < world->localModels.Num(); i++) {
 		idRenderModel *model = world->localModels[i];
@@ -281,8 +283,8 @@ void R_CalculateShadowsForLight( idRenderLightLocal *light, viewLight_t *vLight 
 
 		model = vEntity->entityDef->parms.hModel;
 
-		if(vEntity && (vEntity->scissorRect.IsEmpty() < 0 || vEntity->scissorRect.x2 <= 0 || vEntity->scissorRect.y2 <= 0 || vEntity->scissorRect.x2 >= SCREEN_WIDTH || vEntity->scissorRect.y2 >= SCREEN_HEIGHT))
-			continue;
+//		if(vEntity && (vEntity->scissorRect.IsEmpty() < 0 || vEntity->scissorRect.x2 <= 0 || vEntity->scissorRect.y2 <= 0 || vEntity->scissorRect.x2 >= SCREEN_WIDTH || vEntity->scissorRect.y2 >= SCREEN_HEIGHT))
+//			continue;
 
 		if(vEntity && vEntity->entityDef && vEntity->entityDef->parms.weaponDepthHack)
 			continue;
@@ -529,7 +531,7 @@ void bmRenderShadowMap::RenderLightView( idRenderLightLocal *light ) {
 
 	qglLoadMatrixf( backEnd.viewDef->worldSpace.modelViewMatrix );
 
-	GL_State( GLS_DEFAULT );
+	GL_State( 0 );
 }
 
 /*
@@ -562,7 +564,7 @@ void RB_T_FillShadowMapBuffer( const drawSurf_t *surf, srfCullInfo_t *cullInfo )
 	//{
 		
 	//}
-	qglDepthFunc(GL_LESS);
+
 	
 	//qglPolygonOffset( -r_sb_polyOfsFactor.GetFloat(), -r_sb_polyOfsUnits.GetFloat() );
 	//qglEnable( GL_POLYGON_OFFSET_FILL );
@@ -602,7 +604,7 @@ void RB_RenderDrawShadowMappedSurfList( drawSurf_t *drawSurfs, int side ) {
 		}
 
 		if(!isAffectingLight) {
-			continue;
+//			continue;
 		}
 
 		if(RB_Shadow_CullSurface( drawSurf, globalFrustum )) {

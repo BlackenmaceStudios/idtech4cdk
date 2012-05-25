@@ -43,7 +43,7 @@ model model_dreadnaught {
 	anim crouch_walk_backwards				models/md5/player/dreadnaught_walk.md5anim
 
 	anim walk						models/md5/player/dreadnaught_walk.md5anim {
-		prevent_idle_override
+		
 		frame 2							leftfoot
 		frame 11						rightfoot
 	}
@@ -53,7 +53,6 @@ model model_dreadnaught {
 	}
 
 	anim walk_strafe_left					models/md5/player/dreadnaught_walk.md5anim {
-		
 		frame 4							rightfoot
 		frame 11						leftfoot
 		frame 17						rightfoot
@@ -61,7 +60,6 @@ model model_dreadnaught {
 	}
 
 	anim walk_strafe_right				        models/md5/player/dreadnaught_walk.md5anim {
-		
 		frame 3							rightfoot
 		frame 10						leftfoot
 		frame 17						rightfoot
@@ -89,17 +87,17 @@ model model_dreadnaught {
 		frame 21						leftfoot
 	}
 	anim run_strafe_right				      models/md5/player/dreadnaught_walk.md5anim {
-		prevent_idle_override
+		
 		frame 5							leftfoot
 		frame 8							rightfoot
 		frame 18						leftfoot
 		frame 20						rightfoot
 	}
-	anim jump						models/md5/player/dreadnaught_idle.md5anim {
+	anim jump						models/md5/player/dreadnaught_walk.md5anim {
 		
 		frame 1							sound_body player_sounds_jump_small
 	}
-	anim run_jump						models/md5/player/dreadnaught_idle.md5anim{
+	anim run_jump						models/md5/player/dreadnaught_walk.md5anim{
 		
 		frame 1							sound_body player_sounds_jump
 	}
@@ -116,31 +114,31 @@ model model_dreadnaught {
 		frame 3							rightfoot
 	}
 	anim fall						models/md5/player/dreadnaught_idle.md5anim {
-		prevent_idle_override
+		
 	}
 	anim turn_left						models/md5/player/dreadnaught_idle.md5anim {
-		prevent_idle_override
+		
 	}
 	anim turn_right						models/md5/player/dreadnaught_idle.md5anim  {
-		prevent_idle_override
+		
 	}
-	anim pain						models/md5/player/dreadnaught_idle.md5anim {
-		prevent_idle_override
+	anim pain						models/md5/player/dreadnaught_walk.md5anim {
+		
 	}
-	anim pain_head						models/md5/player/dreadnaught_idle.md5anim {
-		prevent_idle_override
-	}
-
-	anim pain_right_arm					models/md5/player/dreadnaught_idle.md5anim {
-		prevent_idle_override
+	anim pain_head						models/md5/player/dreadnaught_walk.md5anim {
+		
 	}
 
-	anim pain_left_arm					models/md5/player/dreadnaught_idle.md5anim {
-		prevent_idle_override
+	anim pain_right_arm					models/md5/player/dreadnaught_walk.md5anim {
+		
 	}
 
-	anim pain_chest						models/md5/player/dreadnaught_idle.md5anim {
-		prevent_idle_override
+	anim pain_left_arm					models/md5/player/dreadnaught_walk.md5anim {
+		
+	}
+
+	anim pain_chest						models/md5/player/dreadnaught_walk.md5anim {
+		
 	}
 
 	anim fists_raise					models/md5/player/dreadnaught_idle.md5anim
@@ -297,8 +295,8 @@ entityDef player_base {
 	"pm_jumpheight"						"100"
 	"pm_stepsize"						"16"
 	"pm_crouchspeed"					"80"
-	"pm_walkspeed"						"80"
-	"pm_runspeed"						"90"
+	"pm_walkspeed"						"440"
+	"pm_runspeed"						"520"
 	"pm_noclipspeed"					"200"
 	"pm_minviewpitch"					"-89"	// looking up
 	"pm_maxviewpitch"					"89"	// looking down
@@ -308,8 +306,8 @@ entityDef player_base {
 	"pm_crouchheight"					"38"
 	"pm_crouchviewheight"				"32"
 
-	"pm_normalheight"					"44"
-	"pm_normalviewheight"				"44"
+	"pm_normalheight"					"74"
+	"pm_normalviewheight"				"74"
 	"pm_deadheight"						"20"
 	"pm_deadviewheight"					"10"
 	"pm_crouchrate"						"0.87"
@@ -354,11 +352,11 @@ entityDef player_base {
 	"bone_chest"						"bodycenter"		// AI aim location
 	"bone_head"							"bodyupper"	// AI aim location
 
-	"damage_zone head"					"*bodyupper"
-	"damage_zone chest"					"*waist -*bodyupper"
-	"damage_zone left_arm"				"*rarmupper"
-	"damage_zone right_arm"				"*larmupper"
-	"damage_zone legs"					"origin Body2"
+	"damage_zone head"					"*loneckcontrol"
+	"damage_zone chest"					"*Waist -*loneckcontrol"
+	"damage_zone left_arm"				"*Luparm"
+	"damage_zone right_arm"				"*Ruparm"
+	"damage_zone legs"					"origin origin"
 	"damage_scale head"					"1"
 
 	"ragdoll"							"player_npcs"
@@ -436,8 +434,8 @@ entityDef player_doommarine {
 	"snd_decompress"					"sound/air_and_vents/decompress.wav"
 	"snd_recompress"					"sound/air_and_vents/recompress.wav"
 	"snd_airless"						"player_sounds_noAir"
-	// "def_head"							"head_player"
-	// `"head_joint"						"bodyupper"
+	"def_head"							"head_player"
+	"head_joint"						"bodyupper"
 	"copy_joint neckcontrol"			"neckcontrol"
 	"copy_joint headcontrol"			"headcontrol"
 	"copy_joint_world eyecontrol"		"eyecontrol"

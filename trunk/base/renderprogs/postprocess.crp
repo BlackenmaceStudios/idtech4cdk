@@ -68,9 +68,9 @@ FragmentProgram
 		int j;
 		int i;
 
-		for( i= -2 ;i < 2; i++)
+		for( i= -1 ;i < 1; i++)
 		{
-			for (j = -2; j <2; j++)
+			for (j = -1; j <1; j++)
 			{
 				sum += BlurPixelV( texcoord + vec2(i, j)*0.003) * 0.25;  
 			   sum += BlurPixelH( texcoord + vec2(i, j)*0.003) * 0.25;  
@@ -80,14 +80,16 @@ FragmentProgram
 
 	
 
-		vec4 vWeightsBW = vec4 ( 0.1,1.06,1.11,0 );
-		vec4 vWeightsSepia = vec4 ( 0.7,0.3,0.7,1 ); 
+		vec4 vWeightsBW = vec4 ( 0.4,0.5,0.6,0 );
+		vec4 vWeightsSepia = vec4 ( 0.2,0.1,0.34,1 ); 
 		vec4 cColor = texture2D( u_diffuseTexture, texcoord );
 
+		
 
+		vec4 bloom = sum*sum*0.0002;
+		bloom += cColor;
+		
 
-		vec4 bloom = sum*sum*0.00002 * cColor;
-		bloom += cColor ;
 
 
 		float  brightness=dot( cColor,vWeightsBW );
@@ -100,7 +102,14 @@ FragmentProgram
 		vec4 res = sum + (bloom ) * temp ;
 
 		vec4 diffuse = texture2D( u_diffuseTexture, var_TexDiffuse );
-		gl_FragColor =  (res * bloom + temp );
-		
+		gl_FragColor =  (res * bloom + temp ) ;
+		if(gl_FragColor.x + gl_FragColor.y + gl_FragColor.z < 0.5) {
+			gl_FragColor += cColor * 0.7;
+		}
+		else
+		{
+		gl_FragColor += cColor * 0.7;
+	
+		}
 	}
 EndFragmentProgram

@@ -140,6 +140,8 @@ FragmentProgram
 	
 		float NdotL = clamp( dot( N , L ), 0.1,1.0 ) ;
 		float NdotH = pow( max( dot( N, H ), 0.0001 ), 16 )  ;
+
+
 		
 		return (( diffuse * NdotL ) + (specular * NdotH)); 
 	} 
@@ -152,6 +154,7 @@ FragmentProgram
 
 
 		vec3 N = texture2D( u_normalTexture, var_TexNormal.st).xyz;
+
 
 		if(N == vec3(0,0,0)) {
 			ambient += texture2D( u_diffuseTexture, var_TexNormal.st ).xyz;
@@ -311,7 +314,7 @@ FragmentProgram
 	
 
 		vec4 vWeightsBW = vec4 ( 0.4,0.5,0.6,0 );
-		vec4 vWeightsSepia = vec4 ( 3.7,3.6,3.7,1 ); 
+		vec4 vWeightsSepia = vec4 ( 1.1,1.1,1.24,1 ); 
 		vec4 cColor = texture2D( u_diffuseTexture, var_TexNormal.st );
 
 
@@ -327,10 +330,10 @@ FragmentProgram
 		//float depthinfluence = pow( depthrgb, 128.0 );
 
 		sum = BlurPixelH( u_diffuseTexture, var_TexDiffuse ) + BlurPixelV( u_diffuseTexture, var_TexDiffuse );
-		vec4 res = sum + (bloom ) * temp ;
+		vec4 res = (bloom ) * temp ;
 
 		vec4 diffuse = texture2D( u_diffuseTexture, var_TexNormal.st );
-		return  (res * bloom +bloom  + temp ) + cColor;
+		return  res;
 	}
 	
 	//
@@ -346,6 +349,7 @@ FragmentProgram
 			return;
 		}
 		
+
 		
 		vec4 var_Shadow = BlurPixelV( ShadowMap, var_TexNormal.st );
 		var_Shadow += BlurPixelH( ShadowMap, var_TexNormal.st );
@@ -359,7 +363,6 @@ FragmentProgram
 		vec3 N = texture2D( u_normalTexture, var_TexNormal.st).xyz;
 		vec3 var_ViewDir = normalize(u_viewOrigin.xyz - var_Vertex.xyz ).xyz;
 
-		
 
 		// Calculate the parallax offset vector max length.
 		// This is equivalent to the tangent of the angle between the
@@ -465,6 +468,7 @@ FragmentProgram
 		
 
 			 color += LightPass( i / numLights, var_Vertex, vCurrOffset, vec4(r_lightOrigin[i], 0.0), vec4(r_diffuseColor[i], 0) , vec4(r_diffuseColor[i], 0), lightProjectS, lightProjectT, r_lightProjectionQ[i], r_lightFalloff[i], vec4(1,1,1,1) )  ;
+			 color += 0.2;
 		}
 		
 

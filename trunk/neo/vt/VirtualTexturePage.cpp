@@ -18,7 +18,7 @@ static void R_EmptyTexturePage( idImage *image ) {
 
 	// FIXME: this won't live past vid mode changes
 	image->GenerateImage( NULL, vt_page_size.GetInteger(), vt_page_size.GetInteger(), 
-		TF_LINEAR, false, TR_REPEAT, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
+		TF_LINEAR, false, TR_CLAMP_TO_BORDER, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
 
 
 	image->rawBuffer = NULL;
@@ -35,7 +35,7 @@ static void R_EmptyTexturePage2( idImage *image ) {
 
 	// FIXME: this won't live past vid mode changes
 	image->GenerateImage( NULL, vt_page_size.GetInteger() /2, vt_page_size.GetInteger()/2, 
-		TF_LINEAR, false, TR_REPEAT, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
+		TF_LINEAR, false, TR_CLAMP_TO_BORDER, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
 
 
 	image->rawBuffer = NULL;
@@ -52,7 +52,7 @@ static void R_EmptyTexturePage3( idImage *image ) {
 
 	// FIXME: this won't live past vid mode changes
 	image->GenerateImage( NULL, vt_page_size.GetInteger() /4, vt_page_size.GetInteger()/4, 
-		TF_LINEAR, false, TR_REPEAT, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
+		TF_LINEAR, false, TR_CLAMP_TO_BORDER, TD_HIGH_QUALITY,0, IMAGE_COMPRESS_DXT5 );
 
 
 	image->rawBuffer = NULL;
