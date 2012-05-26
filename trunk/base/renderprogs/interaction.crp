@@ -223,9 +223,9 @@ FragmentProgram
 		vec3 dm = normalize(vec3(d,d,d));
 	
 		vec4 color = lightingModel( diffuse * var_Color , specular * var_Color, L, var_ViewDir, N, H, shadow );
-			d = sqrt(d) * 8;
-			float atten = 73000 / ( d * d2 + d2 * d * d);
-			//	color *=  atten    ; 
+			d = sqrt(d) * 16;
+			float atten = 19000 / ( d * d2 + d2 * d * d);
+			color *=  atten    ; 
 
 			
 			
@@ -240,8 +240,8 @@ FragmentProgram
 
 	// vec4 LightPass( vec4 u_lightOrigin, vec4 u_diffuseColor, vec4 u_specularColor, vec4 u_lightProjectionS, vec4 u_lightProjectionT, vec4 u_lightProjectionQ, vec4 u_lightFalloff )
 	
-	const float blurSize = 1.0/1024.0; // I've chosen this size because this will result in that every step will be one pixel wide if the RTScene texture is of size 512x512
-	const float blurSizeh = 1.0/1024.0; // I've chosen this size because this will result in that every step will be one pixel wide if the RTScene texture is of size 512x512
+	const float blurSize = 1.0/256.0; // I've chosen this size because this will result in that every step will be one pixel wide if the RTScene texture is of size 512x512
+	const float blurSizeh = 1.0/256.0; // I've chosen this size because this will result in that every step will be one pixel wide if the RTScene texture is of size 512x512
 	vec4 BlurPixelH( sampler2D u_diffuseTexture, vec2 vTexCoord ) { 
 	   vec4 sum = vec4(0.0);
  
@@ -468,7 +468,7 @@ FragmentProgram
 		
 
 			 color += LightPass( i / numLights, var_Vertex, vCurrOffset, vec4(r_lightOrigin[i], 0.0), vec4(r_diffuseColor[i], 0) , vec4(r_diffuseColor[i], 0), lightProjectS, lightProjectT, r_lightProjectionQ[i], r_lightFalloff[i], vec4(1,1,1,1) )  ;
-			 color += 0.2;
+			 color += 0.6;
 		}
 		
 

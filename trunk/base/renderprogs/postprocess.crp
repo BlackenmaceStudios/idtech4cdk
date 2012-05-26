@@ -80,8 +80,8 @@ FragmentProgram
 
 	
 
-		vec4 vWeightsBW = vec4 ( 0.4,0.5,0.6,0 );
-		vec4 vWeightsSepia = vec4 ( 0.2,0.1,0.34,1 ); 
+		vec4 vWeightsBW = vec4 ( 1,1,1,0 );
+		vec4 vWeightsSepia = vec4 ( 0.2,0.1,0.04,1 ); 
 		vec4 cColor = texture2D( u_diffuseTexture, texcoord );
 
 		
@@ -104,11 +104,11 @@ FragmentProgram
 		vec4 diffuse = texture2D( u_diffuseTexture, var_TexDiffuse );
 		gl_FragColor =  (res * bloom + temp ) ;
 		if(gl_FragColor.x + gl_FragColor.y + gl_FragColor.z < 0.5) {
-			gl_FragColor += cColor * 0.7;
+			gl_FragColor += cColor * 0.9;
 		}
 		else
 		{
-		gl_FragColor += cColor * 0.7;
+		gl_FragColor += cColor * 0.9;
 	
 		}
 	}
