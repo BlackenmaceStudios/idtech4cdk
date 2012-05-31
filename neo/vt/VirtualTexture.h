@@ -71,6 +71,7 @@ struct bmVirtualTexturePageTile_t {
 class bmVirtualTexturePage {
 public:
 	void				Init( const char *name );
+	void				InitDevice( void );
 
 	bmVirtualTexturePageTile_t	*BlitTileToPage( bmVirtualTextureFile *vtfile, int pageNum, int tileNum, int mipLevel );
 	bmVirtualTexturePageTile_t	*GetTileInfo( int tileNum ) { return &tiles[tileNum]; }
@@ -104,6 +105,7 @@ public:
 
 	// Init the virtual texture manager.
 	void						Init( void );
+	void						InitDevice( void );
 
 	bmVirtualTexturePage		*GetWorldPage( int pageId ) { return &pages[pageId]; };
 	bmVirtualTexturePage		*GetWorldPage() { return &pages[currentPage]; };
@@ -120,8 +122,6 @@ public:
 
 	void						FreeVirtualTextureFile( void );
 private:
-	
-
 	int							currentPage;
 	bmVirtualTexturePage		pages[VT_NUMPAGES];
 	bmVirtualTextureFile		*currentVirtualTextureFile;

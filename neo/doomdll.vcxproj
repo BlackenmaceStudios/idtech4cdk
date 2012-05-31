@@ -543,6 +543,8 @@
     <ClInclude Include="renderer\gpuworker\cl\opencl.h" />
     <ClInclude Include="renderer\gpuworker\GpuWorker.h" />
     <ClInclude Include="renderer\gpuworker\GpuWorker_Local.h" />
+    <ClInclude Include="renderer\gpuworker\GpuWorker_Program.h" />
+    <ClInclude Include="renderer\gpuworker\GpuWorker_VTCache.h" />
     <ClInclude Include="renderer\GuiModel.h" />
     <ClInclude Include="renderer\Image.h" />
     <ClInclude Include="renderer\image_pbo.h" />
@@ -2109,6 +2111,8 @@
     <ClCompile Include="renderer\draw_virtualtexture.cpp" />
     <ClCompile Include="renderer\gpuworker\cl\OpenCL_Utils.cpp" />
     <ClCompile Include="renderer\gpuworker\GpuWorker.cpp" />
+    <ClCompile Include="renderer\gpuworker\GpuWorker_Program.cpp" />
+    <ClCompile Include="renderer\gpuworker\GpuWorker_VTCache.cpp" />
     <ClCompile Include="renderer\GuiModel.cpp" />
     <ClCompile Include="renderer\Image_fbo.cpp" />
     <ClCompile Include="renderer\Image_files.cpp" />
@@ -2796,6 +2800,7 @@
     <None Include="..\base\renderprogs\shadow.crp" />
     <None Include="..\base\renderprogs\ui_emit.crp" />
     <None Include="..\base\renderprogs\virtualtexture.crp" />
+    <None Include="..\base\renderWorkerProgs\vt_cache.renderworkerprog" />
     <None Include="ClassDiagram1.cd" />
     <None Include="openal\idal.py" />
     <None Include="res\engine.ico" />

@@ -28,6 +28,7 @@ struct bmVTTileReadback_t {
 class bmVirtualTextureBackend {
 public:
 	void						Init( void );
+	void						InitDevice( void );
 	void						GenerateSceneTileInfo( struct drawSurf_s **drawSurfs, int numDrawSurfs );
 	void						Bind( void );
 	void						UpdateSceneVT( void );
@@ -35,6 +36,7 @@ public:
 	idImage						*sceneFbo;
 	idImage						*sceneFboPublic;
 
+	class bmVirtualTextureCacheGPUWorker *gpuTextureWorkerProgram;
 private:
 	void						ReadCurrentScene( void );
 	void						ReadTilesInScene( byte *readbackBuffer, int width, int height );
@@ -43,6 +45,8 @@ private:
 	int							sceneAreaDist[VT_MAXCHARTS];
 	int							numSceneTiles[VT_MAXCHARTS];
 	bmVTTileReadback_t			*sceneTiles[VT_MAXCHARTS];
+
+	
 };
 
 extern bmVirtualTextureBackend vtBackEnd;

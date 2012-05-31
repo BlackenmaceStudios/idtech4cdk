@@ -39,7 +39,7 @@ FragmentProgram
 
 
 		
-		float p = ((  Moments.y - fDepth < 0.0f ) ? 1.0f : 0.3f) ;
+		float p = ((  Moments.y - fDepth < 0.0f ) ? 1.04f : 0.28f) ;
 
 		// Compute variance.  
 	   float Variance =  Moments.y - (Moments.x*Moments.x);  

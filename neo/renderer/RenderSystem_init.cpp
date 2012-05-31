@@ -1959,6 +1959,8 @@ void idRenderSystemLocal::InitOpenGL( void ) {
 		backEnd.shadowMapCache.Init( -1, -1 );
 
 		gpuWorker->Init();
+
+		virtualTextureManager->InitDevice();
 // jmarshall end
 
 		err = qglGetError();

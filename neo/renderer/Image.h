@@ -153,6 +153,11 @@ typedef enum {
 	IMAGE_COMPRESS_DXT1,
 	IMAGE_COMPRESS_DXT5
 } imageCompression_t;
+
+typedef enum {
+	IMG_STORAGE_RGBF,
+	IMG_STORAGE_RGBAF
+} imageStorageType_t;
 // jmarshall end
 
 #define	MAX_IMAGE_NAME	256
@@ -196,7 +201,7 @@ public:
 						textureFilter_t filter, bool allowDownSize, 
 						textureDepth_t depth );
 // jmarshall: fbo support
-	void		GenerateFrameBufferImage( int width, int height, bool usePCF = true );
+	void		GenerateFrameBufferImage( int width, int height, bool usePCF = true, imageStorageType_t storageType = IMG_STORAGE_RGBAF );
 	void		GenerateFrameBufferDepthImage( int width, int height );
 	void		GenerateFrameBufferCubeImage( int width, int height );
 	void		GenerateFrameBufferColorTargetFromFBO( void );
@@ -206,6 +211,8 @@ public:
 	void		CreatePBO( void );
 	
 	void		CopyBufferIntoRegion( void *buffer, int mipLevel, int x, int y, int width, int height );
+
+	int			GetStorageType( imageStorageType_t type ); 
 // jmarshall
 	void		GenerateImageHandle( int numImages, unsigned int *texnum );
 	void		CopyFramebuffer( int x, int y, int width, int height, bool useOversizedBuffer );
@@ -246,6 +253,8 @@ public:
 	void		ImageProgramStringToCompressedFileName( const char *imageProg, char *fileName ) const;
 	int			NumLevelsForImageSize( int width, int height ) const;
 
+	const char  *Name( void ) { return &imgName[0]; }
+
 // jmarshall
 	byte		*ReadDriverPixels( int x = 0, int y = 0, int width = -1, int height = -1 );
 // jmarshall end
@@ -277,6 +286,9 @@ public:
 	textureFilter_t		filter;
 	textureRepeat_t		repeat;
 	textureDepth_t		depth;
+// jmarshall
+	imageStorageType_t  storageType;
+// jmarshall end
 	cubeFiles_t			cubeFiles;				// determines the naming and flipping conventions for the six images
 
 	bool				referencedOutsideLevelLoad;

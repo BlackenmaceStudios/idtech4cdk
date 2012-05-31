@@ -8,6 +8,7 @@
 
 #include "../renderer/tr_local.h"
 
+
 bmVirtualTextureManager		virtualTextureManagerLocal;
 bmVirtualTextureManager		*virtualTextureManager = &virtualTextureManagerLocal;
 
@@ -46,6 +47,21 @@ void bmVirtualTextureManager::Init( void ) {
 	currentPage = 0;
 
 	vtBackEnd.Init();
+#endif
+}
+/*
+====================
+bmVirtualTextureManager::InitDevice
+====================
+*/
+void bmVirtualTextureManager::InitDevice( void ) {
+#ifndef BSPCOMPILER
+	common->Printf( "----------- VirtualTextureManager_InitDevice -----------\n");
+
+	vtBackEnd.InitDevice();
+	for(int i = 0; i < VT_NUMPAGES; i++) {
+		pages[i].InitDevice();
+	}
 #endif
 }
 
@@ -95,12 +111,15 @@ bmVirtualTextureManager::LoadVirtualTextureFile
 */
 bmVirtualTextureFile * bmVirtualTextureManager::LoadVirtualTextureFile( const char *path ) {
 	// Don't load over vt if it isn't present on the filesystem.
-	if(fileSystem->ReadFile( va( "vt/%s%s", path, VIRTUALTEXTURE_EXTEN ), NULL) == -1) {
-		if(currentVirtualTextureFile != NULL)
-		{
-			common->Warning("Failed to open virtual texture %s, keeping old data\n", path );
+	for(int i = 0; i < VIRTUALTEXTURE_NUMLEVELS; i++)
+	{
+		if(fileSystem->ReadFile( va( "vt/%s_level%d%s", path, i,VIRTUALTEXTURE_EXTEN ), NULL) == -1) {
+			if(currentVirtualTextureFile != NULL)
+			{
+				common->Warning("Failed to open virtual texture %s, keeping old data\n", path );
+			}
+			return NULL;
 		}
-		return NULL;
 	}
 
 	// If there is a current virtual texture file thats currently open, free it.

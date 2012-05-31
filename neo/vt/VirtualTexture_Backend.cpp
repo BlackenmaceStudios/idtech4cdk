@@ -5,8 +5,8 @@
 #include "VirtualTexture.h"
 
 #include "../renderer/tr_local.h"
+#include "../renderer/gpuworker/GpuWorker_VTCache.h"
 #include "VirtualTexture_Backend.h"
-
 
 idCVar vt_backend_fbosize_width( "vt_backend_fbosize_width", "512", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT, "Size of the FBO to readback tile data" );
 idCVar vt_backend_fbosize_height( "vt_backend_fbosize_height", "316", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT, "Size of the FBO to readback tile data" );
@@ -69,6 +69,15 @@ void bmVirtualTextureBackend::Init( void ) {
 
 	
 }
+/*
+====================
+bmVirtualTextureBackend::InitDevice
+====================
+*/
+void bmVirtualTextureBackend::InitDevice( void ) {
+	gpuTextureWorkerProgram = (bmVirtualTextureCacheGPUWorker *)bmGpuWorkerHelper::LoadProgram<bmVirtualTextureCacheGPUWorker>( "vt_cache" );
+}
+
 /*
 ====================
 bmVirtualTextureBackend::UUploadAreaTiles
@@ -149,11 +158,11 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 		
 		// Upload the tiles for this area.
 		sceneAreaDist[i] = 255 - sceneAreaDist[i];
-		if(sceneAreaDist[i] > 190)
+		if(sceneAreaDist[i] > 180)
 		{
 			UploadAreaTiles( i, 2,&sceneTiles[i][0], numSceneTiles[i]);
 		}
-		else if(sceneAreaDist[i] > 130)
+		else if(sceneAreaDist[i] > 120)
 		{
 			UploadAreaTiles( i, 1,&sceneTiles[i][0], numSceneTiles[i]);
 		}
