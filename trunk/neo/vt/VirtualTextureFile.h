@@ -1,17 +1,20 @@
 // VirtualTextureFile.h
 //
 
-#define VT_LOAD_FROMMEMORY		1
+#define VT_LOAD_FROMMEMORY		0
 
 #define VIRTUALTEXTURE_EXTEN	".virtualtexture"
 #define VIRTUALTEXTURE_IDEN		(('F'<<24)+('T'<<16)+('V'<<8)+'J')
 #define VIRTUALTEXTURE_VERSION	2
+
+#define VIRTUALTEXTURE_NUMLEVELS 3
 
 #define VIRTUALTEXTURE_PAGESIZE 4096
 #define VIRTUALTEXTURE_TILESIZE 256
 
 #define VIRTUALTEXTURE_MIPMAP0SIZE (128 * 128)
 #define VIRTUALTEXTURE_TILEMEMSIZE (VIRTUALTEXTURE_TILESIZE * VIRTUALTEXTURE_TILESIZE)
+
 
 //
 // bmVirtualTextureHeader_t
@@ -83,13 +86,13 @@ public:
 	bool						InitFromFile( const char *path );
 	bool						InitNewVirtualTextureFile( const char *path, int numAreas );
 #if !VT_LOAD_FROMMEMORY
-	void						ReadTile( int pageNum, int tileNum, int mipLevel, byte *buffer );
+	byte *						ReadTile( int pageNum, int tileNum, int mipLevel, byte *buffer );
 #else
 	byte *						ReadTile(  int pageNum, int tileNum, int mipLevel );
 #endif
 	int							WriteSurfaceTileToVT( const char *path );
 
-	void						WriteTile( byte *buffer, int xoff, int yoff, int DiemWidth, int vtTileSize );
+	void						WriteTile( byte *buffer, int xoff, int yoff, int DiemWidth, int vtTileSize, int level );
 
 	void						FinishVirtualTextureWrite( void );
 
@@ -100,14 +103,14 @@ public:
 	idImage						*vtAtlasImage2;
 private:
 
-	idFile *f;
-	byte *fileBuffer;
+	idFile *f[VIRTUALTEXTURE_NUMLEVELS];
+	byte *fileBuffer[VIRTUALTEXTURE_NUMLEVELS];
 	int fileBufferLen;
 
 	idFile *image;
 	idList< idStr > imglist;
 
 	idImage						*vtAtlasImage;
-	idStr						vtpath;
+	idStr						vtpath[VIRTUALTEXTURE_NUMLEVELS];
 	bmVirtualTextureHeader_t	header;
 };

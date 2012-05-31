@@ -169,6 +169,33 @@ void idImage::CopyBufferIntoRegion( void *buffer, int mipLevel, int DestX, int D
 }
 
 /*
+===============
+GetStorageType
+===============
+*/
+// jmarshall
+int idImage::GetStorageType( imageStorageType_t type ) {
+	int ret = 0;
+
+	switch( type ) {
+		case IMG_STORAGE_RGBF:
+			ret = GL_RGB32F_ARB;
+			break;
+
+		case IMG_STORAGE_RGBAF:
+			ret = GL_RGBA32F_ARB;
+			break;
+
+		default:
+			common->FatalError( "idImage::GetStorageType: Invalid Type %d\n", type );
+			break;
+	}
+
+	return ret;
+}
+// jmarshall end
+
+/*
 =================
 R_FillImageBufferRegion
 =================

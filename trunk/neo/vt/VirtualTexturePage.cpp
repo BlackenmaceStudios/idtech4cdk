@@ -6,6 +6,11 @@
 #include "VirtualTexture.h"
 #include "../renderer/tr_local.h"
 
+#ifndef BSPCOMPILER
+#include "VirtualTexture_Backend.h"
+#include "../renderer/gpuworker/GpuWorker_VTCache.h"
+#endif
+
 idCVar vt_page_size( "vt_page_size", "4096", CVAR_RENDERER | CVAR_INTEGER , "Size of the paging texture" );
 
 /*
@@ -140,6 +145,16 @@ bmVirtualTexturePageTile_t	*bmVirtualTexturePage::BlitTileToPage( bmVirtualTextu
 	return NULL;
 #endif
 }
+/*
+====================
+bmVirtualTexturePage::InitDevice
+====================
+*/
+void bmVirtualTexturePage::InitDevice( void ) {
+#ifndef BSPCOMPILER
+	//vtBackEnd.gpuTextureWorkerProgram->CreateSharedTexturePage( image[2] );
+#endif
+}
 
 /*
 ====================
@@ -153,6 +168,9 @@ void bmVirtualTexturePage::Init( const char *name ) {
 	image[0] = globalImages->ImageFromFunction( va( "_vtpage_%s", name), R_EmptyTexturePage );
 	image[1] = globalImages->ImageFromFunction( va( "_vtpage_%s_mip1", name), R_EmptyTexturePage2 );
 	image[2] = globalImages->ImageFromFunction( va( "_vtpage_%s_mip2", name), R_EmptyTexturePage3 );
+
+	
+
 	frameNum = 0;
 	isPageDirty = false;
 	pageTime = 0;

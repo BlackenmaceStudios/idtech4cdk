@@ -995,18 +995,24 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 
 	common->Printf( "----------- VT_InitNewVirtualTextureFile ----------\n" );
 
-	vtpath = va( "%s%s", path, VIRTUALTEXTURE_EXTEN );
+	
 
 	// Open the virtual texture for writing.
-	f = fileSystem->OpenFileWrite( va( "%s%s_temp", path, VIRTUALTEXTURE_EXTEN ), "fs_devpath" );
-	if(f == NULL) {
-		common->Warning("Failed to open %s for writing\n", path );
-		return false;
+	header.numCharts = numAreas;
+	for(int i = 0; i < VIRTUALTEXTURE_NUMLEVELS; i++)
+	{
+		vtpath[i] = va( "%s_level%d%s", path, i, VIRTUALTEXTURE_EXTEN );
+		f[i] = fileSystem->OpenFileWrite( va( "%s_level%d%s_temp", path, i, VIRTUALTEXTURE_EXTEN ), "fs_devpath" );
+		if(f[i] == NULL) {
+			common->Warning("Failed to open %s for writing\n", path );
+			return false;
+		}
+
+		// Write the header out first so everything gets positioned correctly and we can write in real time.
+		header.WriteToFile( f[i] );
 	}
 
-	// Write the header out first so everything gets positioned correctly and we can write in real time.
-	header.numCharts = numAreas;
-	header.WriteToFile( f );
+	
 
 	imglist.Clear();
 	
@@ -1054,7 +1060,7 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 			for(int w = 0; w < imgWidth / tileSize; w++, header.numTiles++, currentTile++) {
 
 				//common->Printf( "...Tile %d/%d", currentTile, maxTiles);
-				WriteTile( buffer, w * tileSize, h * tileSize, imgWidth, tileSize );
+				WriteTile( buffer, w * tileSize, h * tileSize, imgWidth, tileSize, 0 );
 			}
 		}
 
@@ -1071,7 +1077,7 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 			for(int w = 0; w < imgWidth / tileSize; w++) {
 
 				//common->Printf( "...Tile %d/%d", currentTile, maxTiles);
-				WriteTile( mippedLevel, w * tileSize, h * tileSize, imgWidth, tileSize );
+				WriteTile( mippedLevel, w * tileSize, h * tileSize, imgWidth, tileSize, 1 );
 			}
 		}
 		
@@ -1087,7 +1093,7 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 			for(int w = 0; w < imgWidth / tileSize; w++) {
 
 				//common->Printf( "...Tile %d/%d", currentTile, maxTiles);
-				WriteTile( mippedLevel2, w * tileSize, h * tileSize, imgWidth, tileSize );
+				WriteTile( mippedLevel2, w * tileSize, h * tileSize, imgWidth, tileSize, 2 );
 			}
 		}
 		
@@ -1108,7 +1114,7 @@ bmVirtualTextureFile::WriteTile
 ===========================
 */
 void R_WriteDDS( const char *path, byte *data, int uploadWidth, int uploadHeight );
-void bmVirtualTextureFile::WriteTile( byte *buffer, int DestX, int DestY, int DiemWidth, int vtTileSize ) {
+void bmVirtualTextureFile::WriteTile( byte *buffer, int DestX, int DestY, int DiemWidth, int vtTileSize, int level ) {
 	unsigned int  		x, y, z, ConvBps, ConvSizePlane;
 	byte 	*Converted;
 	int Depth = 1;
@@ -1166,7 +1172,7 @@ void bmVirtualTextureFile::WriteTile( byte *buffer, int DestX, int DestY, int Di
 	//byte *cbuf = toolInterface->CompressImage( tempBuffer, vtTileSize, vtTileSize );
 
 	
-	f->Write( &compressedBuffer[0], vtTileSize * vtTileSize );
+	f[level]->Write( &compressedBuffer[0], vtTileSize * vtTileSize );
 
 	if(vt_debug_tiles.GetBool()) {
 		R_WriteDDS(va("vt/tiles/%d.dds", header.numTiles), &compressedBuffer[0], vtTileSize, vtTileSize );
@@ -1242,23 +1248,26 @@ bmVirtualTextureFile::FinishVirtualTextureWrite
 void bmVirtualTextureFile::FinishVirtualTextureWrite( void ) {
 	idStr temppath;
 
-	if( f == NULL ) {
-		common->FatalError( "FinishVirtualTextureWrite: f == null\n");
-	}
+
 	//header.numTiles = imglist.Num();
 
 	common->Printf("-------VT_FinishTextureWrite------\n");
-	common->Printf( "Wrote %d tiles - %d bytes\n", header.numTiles, f->Length());
+	for(int i = 0; i < VIRTUALTEXTURE_NUMLEVELS; i++)
+	{
+		common->Printf( "Level %d - %d tiles - %d bytes\n", i, header.numTiles, f[i]->Length());
 
-	temppath = f->GetFullPath();
+		temppath = f[i]->GetFullPath();
 
-	// Re-write the header and close the file.
-	header.WriteToFile( f );
-	f->Flush();
+		// Re-write the header and close the file.
+		header.WriteToFile( f[i] );
+		f[i]->Flush();
 
-	fileSystem->CloseFile( f );
-	f = NULL;
+		fileSystem->CloseFile( f[i] );
+		f[i] = NULL;
 
-	// Rename the temp file to the real path.
-	fileSystem->RenameFile( fileSystem->RelativePathToOSPath( vtpath.c_str() ), temppath.c_str() );
+		// Rename the temp file to the real path.
+		fileSystem->RenameFile( fileSystem->RelativePathToOSPath( vtpath[i].c_str() ), temppath.c_str() );
+	}
+
+	
 }

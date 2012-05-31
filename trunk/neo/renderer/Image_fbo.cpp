@@ -29,7 +29,11 @@ void idImage::UnBindFBO( void ) {
 idImage::GenerateFrameBufferImage
 ================
 */
-void idImage::GenerateFrameBufferImage( int width, int height, bool usePCF ) {
+void idImage::GenerateFrameBufferImage( int width, int height, bool usePCF, imageStorageType_t storageType ) {
+	int texStorageType;
+
+	texStorageType = GetStorageType( storageType );
+
 	PurgeImage();
 
 	filter = TF_LINEAR;
@@ -48,6 +52,10 @@ void idImage::GenerateFrameBufferImage( int width, int height, bool usePCF ) {
 	// generate the texture number
 	GenerateImageHandle( 1, &texnum );
 	qglBindTexture(GL_TEXTURE_2D, texnum);
+	
+	//NULL means reserve texture memory, but texels are undefined
+	qglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width, height, 0, GL_BGRA, GL_FLOAT, NULL);
+	
 	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
@@ -62,8 +70,7 @@ void idImage::GenerateFrameBufferImage( int width, int height, bool usePCF ) {
 		qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	}
-	//NULL means reserve texture memory, but texels are undefined
-	qglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width, height, 0, GL_BGRA, GL_FLOAT, NULL);
+
 
 	qglGenFramebuffersEXT(1, &fboHandle);
 

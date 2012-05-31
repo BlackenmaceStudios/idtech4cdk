@@ -1,0 +1,15 @@
+// vt_cache.renderworkerprog
+//
+
+/*
+=============
+UploadTile
+
+pageData <-- Pointer to the virtual texture file data.
+deviceTextureData <-- Texture device data.
+=============
+*/
+__kernel void UploadTile( __global char *pageData, __global char *deviceTextureData ) {
+
+}
+
