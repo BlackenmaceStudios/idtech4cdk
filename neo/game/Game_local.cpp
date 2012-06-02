@@ -106,6 +106,29 @@ __declspec(dllexport) gameExport_t * GetGameAPI( gameImport_t *import ) {
 	gameExport.game = game;
 	gameExport.gameEdit = gameEdit;
 
+#ifndef GAME_DLL
+
+	TestGameAPI();
+
+#else
+
+// jmarshall
+#ifdef _DEBUG
+	idLib::InitCrashHandler();
+#endif
+// jmarshall end
+
+	// initialize idLib
+	idLib::Init();
+
+	// register static cvars declared in the game
+	idCVar::RegisterStaticVars();
+
+	// initialize processor specific SIMD
+	idSIMD::InitProcessor( "game", com_forceGenericSIMD.GetBool() );
+
+#endif
+
 	return &gameExport;
 }
 
@@ -253,29 +276,6 @@ idGameLocal::Init
 void idGameLocal::Init( void ) {
 	const idDict *dict;
 	idAAS *aas;
-
-#ifndef GAME_DLL
-
-	TestGameAPI();
-
-#else
-
-// jmarshall
-#ifdef _DEBUG
-	idLib::InitCrashHandler();
-#endif
-// jmarshall end
-
-	// initialize idLib
-	idLib::Init();
-
-	// register static cvars declared in the game
-	idCVar::RegisterStaticVars();
-
-	// initialize processor specific SIMD
-	idSIMD::InitProcessor( "game", com_forceGenericSIMD.GetBool() );
-
-#endif
 	
 	Printf( "--------- Initializing Game ----------\n" );
 	Printf( "gamename: %s\n", GAME_VERSION );
@@ -294,6 +294,12 @@ void idGameLocal::Init( void ) {
 	declManager->RegisterDeclFolder( "particles",		".prt",				DECL_PARTICLE );
 	declManager->RegisterDeclFolder( "af",				".af",				DECL_AF );
 	declManager->RegisterDeclFolder( "objectives",		".objective",		DECL_OBJECTIVE );
+
+// jmarshall
+#ifndef ID_DEMO_BUILD
+	cmdSystem->AddCommand( "debugScripts", LaunchScriptDebugger_f, CMD_FL_GAME, "Launches the script debugger" );
+#endif
+// jmarshall end
 
 	cmdSystem->AddCommand( "listModelDefs", idListDecls_f<DECL_MODELDEF>, CMD_FL_SYSTEM|CMD_FL_GAME, "lists model defs" );
 	cmdSystem->AddCommand( "printModelDefs", idPrintDecls_f<DECL_MODELDEF>, CMD_FL_SYSTEM|CMD_FL_GAME, "prints a model def", idCmdSystem::ArgCompletion_Decl<DECL_MODELDEF> );
@@ -1218,6 +1224,17 @@ void idGameLocal::InitFromNewMap( const char *mapName, idRenderWorld *renderWorl
 
 	gamestate = GAMESTATE_ACTIVE;
 
+// jmarshall
+#ifndef ID_DEMO_BUILD
+
+	if(g_useScriptDebugger.GetBool())
+	{
+		UpdateLoadingString( "Starting Debugger...");
+		DebuggerServerInit();
+	}
+#endif
+// jmarshall end
+
 	UpdateLoadingString( "Map populated - continuing loading...");
 	Printf( "--------------------------------------\n" );
 }
@@ -1438,6 +1455,17 @@ bool idGameLocal::InitFromSaveGame( const char *mapName, idRenderWorld *renderWo
 
 	gamestate = GAMESTATE_ACTIVE;
 
+// jmarshall
+#ifndef ID_DEMO_BUILD
+
+	if(g_useScriptDebugger.GetBool())
+	{
+		UpdateLoadingString( "Starting Debugger...");
+		DebuggerServerInit();
+	}
+#endif
+// jmarshall end
+
 	Printf( "--------------------------------------\n" );
 
 	return true;
@@ -1492,6 +1520,12 @@ void idGameLocal::MapShutdown( void ) {
 	Printf( "--------- Game Map Shutdown ----------\n" );
 	
 	gamestate = GAMESTATE_SHUTDOWN;
+
+	// jmarshall
+#ifndef ID_DEMO_BUILD
+	DebuggerServerShutdown();
+#endif
+// jmarshall end
 
 	if ( gameRenderWorld ) {
 		// clear any debug lines, text, and polygons
@@ -2204,7 +2238,9 @@ gameReturn_t idGameLocal::RunFrame( const usercmd_t *clientCmds ) {
 		assert( !isClient );
 	}
 #endif
-
+// jmarshall
+	frameCommandThread->DebugFrame( &program );
+// jmarshall end
 	player = GetLocalPlayer();
 
 	if ( !isMultiplayer && g_stopTime.GetBool() ) {

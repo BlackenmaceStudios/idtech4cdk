@@ -149,7 +149,7 @@ bool rvDebuggerWindow::Create ( HINSTANCE instance )
 	}
 
 	// Cache the client pointer for ease of use
-	mClient = &gDebuggerApp.GetClient();
+	mClient = &gDebuggerApp->GetClient();
 
 	// Create the debugger window
 	mWnd = CreateWindow( DEBUGGERWINDOWCLASS, "", 
@@ -167,7 +167,8 @@ bool rvDebuggerWindow::Create ( HINSTANCE instance )
 
 	UpdateTitle ( );
 	
-	Printf ( "Quake 4 Script Debugger v0.1\n\n" );
+	Printf ( DEBUGGER_WINDOW_BUILD );
+	Printf ( "\n\n" );
 	
 	ShowWindow ( mWnd, SW_SHOW );
 	UpdateWindow ( mWnd );	
@@ -248,7 +249,7 @@ LRESULT CALLBACK rvDebuggerWindow::ScriptWndProc ( HWND wnd, UINT msg, WPARAM wp
 {
 	static int		  lastStart = -1;
 	static int		  lastEnd   = -1;
-	rvDebuggerWindow* window    = (rvDebuggerWindow*)GetWindowLong ( wnd, GWL_USERDATA );
+	rvDebuggerWindow* window    = (rvDebuggerWindow*)GetWindowLongPtr ( wnd, GWL_USERDATA );
 	WNDPROC			  wndproc   = window->mOldScriptProc;
 	
 	switch ( msg )
@@ -354,7 +355,7 @@ LRESULT CALLBACK rvDebuggerWindow::ScriptWndProc ( HWND wnd, UINT msg, WPARAM wp
 
 LRESULT CALLBACK rvDebuggerWindow::MarginWndProc ( HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam )
 {
-	rvDebuggerWindow* window = (rvDebuggerWindow*) GetWindowLong ( wnd, GWL_USERDATA );
+	rvDebuggerWindow* window = (rvDebuggerWindow*) GetWindowLongPtr ( wnd, GWL_USERDATA );
 	
 	switch ( msg )
 	{	
@@ -466,7 +467,8 @@ void rvDebuggerWindow::UpdateTitle ( void )
 {
 	idStr title;
 	
-	title = "Quake 4 Script Debugger - ";
+	title = DEBUGGER_WINDOW_TITLE;
+	title += " - ";
 	
 	if ( mClient->IsConnected ( ) )
 	{
@@ -752,7 +754,7 @@ int rvDebuggerWindow::HandleCreate ( WPARAM wparam, LPARAM lparam )
 	LOGFONT		lf;
 	int			i;
 
-	gDebuggerApp.GetOptions().GetWindowPlacement ( "wp_main", mWnd );
+	gDebuggerApp->GetOptions().GetWindowPlacement ( "wp_main", mWnd );
 
 	// Create the main toolbar
 	CreateToolbar ( );
@@ -762,9 +764,9 @@ int rvDebuggerWindow::HandleCreate ( WPARAM wparam, LPARAM lparam )
 	mWndScript = CreateWindow ( "RichEdit20A", "", WS_CHILD|WS_BORDER|ES_NOHIDESEL|ES_READONLY|ES_MULTILINE|ES_WANTRETURN|ES_AUTOVSCROLL|ES_AUTOHSCROLL|WS_VSCROLL|WS_HSCROLL, 0, 0, 100, 100, mWnd, (HMENU) IDC_DBG_SCRIPT, mInstance, 0 );
 	SendMessage ( mWndScript, EM_SETEVENTMASK, 0, ENM_SCROLL|ENM_CHANGE  );
 	SendMessage ( mWndScript, EM_SETWORDBREAKPROC, 0, (LPARAM) ScriptWordBreakProc );
-	mOldScriptProc = (WNDPROC)GetWindowLong ( mWndScript, GWL_WNDPROC );
-	SetWindowLong ( mWndScript, GWL_USERDATA, (LONG)this );
-	SetWindowLong ( mWndScript, GWL_WNDPROC, (LONG)ScriptWndProc );
+	mOldScriptProc = (WNDPROC)GetWindowLongPtr ( mWndScript, GWL_WNDPROC );
+	SetWindowLongPtr ( mWndScript, GWL_USERDATA, (LONG_PTR)this );
+	SetWindowLongPtr ( mWndScript, GWL_WNDPROC, (LONG_PTR)ScriptWndProc );
 
 	SendMessage ( mWndScript, EM_SETTABSTOPS, 1, (LPARAM)&tabsize );
 
@@ -789,8 +791,8 @@ int rvDebuggerWindow::HandleCreate ( WPARAM wparam, LPARAM lparam )
 	SendMessage ( mWndConsole, EM_SETBKGNDCOLOR, 0, GetSysColor ( COLOR_3DFACE ) );			
 
 	mWndMargin = CreateWindow ( "STATIC", "", WS_VISIBLE|WS_CHILD, 0, 0, 0, 0, mWndScript, (HMENU)IDC_DBG_SPLITTER, mInstance, NULL );
-	SetWindowLong ( mWndMargin, GWL_USERDATA, (LONG)this );
-	SetWindowLong ( mWndMargin, GWL_WNDPROC, (LONG)MarginWndProc );
+	SetWindowLongPtr ( mWndMargin, GWL_USERDATA, (LONG_PTR)this );
+	SetWindowLongPtr ( mWndMargin, GWL_WNDPROC, (LONG_PTR)MarginWndProc );
 
 	mWndBorder = CreateWindow ( "STATIC", "", WS_VISIBLE|WS_CHILD|SS_GRAYFRAME, 0, 0, 0, 0, mWnd, (HMENU)IDC_DBG_BORDER, mInstance, NULL );
 
@@ -871,9 +873,9 @@ int rvDebuggerWindow::HandleCreate ( WPARAM wparam, LPARAM lparam )
 	ListView_SetExtendedListViewStyle ( mWndCallstack, LVS_EX_FULLROWSELECT );
 	ListView_SetExtendedListViewStyle ( mWndThreads, LVS_EX_FULLROWSELECT );
 
-	gDebuggerApp.GetOptions().GetColumnWidths ( "cw_callstack", mWndCallstack );
-	gDebuggerApp.GetOptions().GetColumnWidths ( "cw_threads", mWndThreads );
-	gDebuggerApp.GetOptions().GetColumnWidths ( "cw_watch", mWndWatch );
+	gDebuggerApp->GetOptions().GetColumnWidths ( "cw_callstack", mWndCallstack );
+	gDebuggerApp->GetOptions().GetColumnWidths ( "cw_threads", mWndThreads );
+	gDebuggerApp->GetOptions().GetColumnWidths ( "cw_watch", mWndWatch );
 
 	mWndToolTips = CreateWindowEx ( WS_EX_TOPMOST,
 								    TOOLTIPS_CLASS,
@@ -911,7 +913,7 @@ int rvDebuggerWindow::HandleCreate ( WPARAM wparam, LPARAM lparam )
 	// Read in the watches
 	for ( i = 0; ; i ++ )
 	{
-		const char* s = gDebuggerApp.GetOptions().GetString ( va("watch%d", i ) );
+		const char* s = gDebuggerApp->GetOptions().GetString ( va("watch%d", i ) );
 		if ( !s || !s[0] )
 		{
 			break;
@@ -947,10 +949,10 @@ int rvDebuggerWindow::HandleCommand ( WPARAM wparam, LPARAM lparam )
 	if ( LOWORD(wparam) >= ID_DBG_FILE_MRU1 && LOWORD(wparam) < ID_DBG_FILE_MRU1 + rvRegistryOptions::MAX_MRU_SIZE )
 	{
 		idStr filename;
-		filename = gDebuggerApp.GetOptions().GetRecentFile ( gDebuggerApp.GetOptions().GetRecentFileCount() - (LOWORD(wparam)-ID_DBG_FILE_MRU1) - 1 );
+		filename = gDebuggerApp->GetOptions().GetRecentFile ( gDebuggerApp->GetOptions().GetRecentFileCount() - (LOWORD(wparam)-ID_DBG_FILE_MRU1) - 1 );
 		if ( !OpenScript ( filename ) )
 		{
-			MessageBox ( mWnd, va("Failed to open script '%s'", filename.c_str() ), "Quake 4 Script Debugger", MB_OK );
+			MessageBox ( mWnd, va("Failed to open script '%s'", filename.c_str() ), DEBUGGER_WINDOW_TITLE, MB_OK );
 		}
 		return 0;
 	}
@@ -1109,7 +1111,7 @@ int rvDebuggerWindow::HandleCommand ( WPARAM wparam, LPARAM lparam )
 			{				
 				if ( !OpenScript ( dlg.GetFilename ( ) ) )
 				{
-					MessageBox ( mWnd, va("Failed to open script '%s'",dlg.GetFilename ( )), "Quake 4 Script Debugger", MB_OK );
+					MessageBox ( mWnd, va("Failed to open script '%s'",dlg.GetFilename ( )), DEBUGGER_WINDOW_TITLE, MB_OK );
 				}
 			}
 			break;
@@ -1153,7 +1155,7 @@ Window procedure for the deubgger window
 */
 LRESULT CALLBACK rvDebuggerWindow::WndProc ( HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam )
 {
-	rvDebuggerWindow* window = (rvDebuggerWindow*) GetWindowLong ( wnd, GWL_USERDATA );
+	rvDebuggerWindow* window = (rvDebuggerWindow*) GetWindowLongPtr ( wnd, GWL_USERDATA );
 	
 	switch ( msg )
 	{
@@ -1163,20 +1165,20 @@ LRESULT CALLBACK rvDebuggerWindow::WndProc ( HWND wnd, UINT msg, WPARAM wparam, 
 
 		case WM_DESTROY:
 		{
-			gDebuggerApp.GetOptions().SetColumnWidths ( "cw_callstack", window->mWndCallstack );
-			gDebuggerApp.GetOptions().SetColumnWidths ( "cw_threads", window->mWndThreads );			
-			gDebuggerApp.GetOptions().SetColumnWidths ( "cw_watch", window->mWndWatch );
-			gDebuggerApp.GetOptions().SetWindowPlacement ( "wp_main", wnd );
+			gDebuggerApp->GetOptions().SetColumnWidths ( "cw_callstack", window->mWndCallstack );
+			gDebuggerApp->GetOptions().SetColumnWidths ( "cw_threads", window->mWndThreads );			
+			gDebuggerApp->GetOptions().SetColumnWidths ( "cw_watch", window->mWndWatch );
+			gDebuggerApp->GetOptions().SetWindowPlacement ( "wp_main", wnd );
 			
 			int i;
 			for ( i = 0; i < window->mWatches.Num ( ); i ++ )
 			{
-				gDebuggerApp.GetOptions().SetString ( va("watch%d", i ), window->mWatches[i]->mVariable );
+				gDebuggerApp->GetOptions().SetString ( va("watch%d", i ), window->mWatches[i]->mVariable );
 			}
-			gDebuggerApp.GetOptions().SetString ( va("watch%d", i ), "" );
+			gDebuggerApp->GetOptions().SetString ( va("watch%d", i ), "" );
 			
 			window->mWnd = NULL;
-			SetWindowLong ( wnd, GWL_USERDATA, 0 );		
+			SetWindowLongPtr ( wnd, GWL_USERDATA, 0 );		
 			break;
 		}
 	
@@ -1320,7 +1322,7 @@ LRESULT CALLBACK rvDebuggerWindow::WndProc ( HWND wnd, UINT msg, WPARAM wparam, 
 		{					
 			CREATESTRUCT* cs = (CREATESTRUCT*) lparam;
 			window = (rvDebuggerWindow*) cs->lpCreateParams;
-			SetWindowLong ( wnd, GWL_USERDATA, (LONG)cs->lpCreateParams );
+			SetWindowLongPtr ( wnd, GWL_USERDATA, (LONG_PTR)cs->lpCreateParams );
 
 			window->mWnd = wnd;
 			window->HandleCreate ( wparam, lparam );
@@ -1399,8 +1401,8 @@ LRESULT CALLBACK rvDebuggerWindow::WndProc ( HWND wnd, UINT msg, WPARAM wparam, 
 						{
 							NMLVDISPINFO* di = (NMLVDISPINFO*)hdr;
 
-							DWORD style = GetWindowLong ( ListView_GetEditControl ( hdr->hwndFrom ), GWL_STYLE );
-							SetWindowLong ( ListView_GetEditControl ( hdr->hwndFrom ), GWL_STYLE, style & (~WS_BORDER) );
+							DWORD style = GetWindowLongPtr ( ListView_GetEditControl ( hdr->hwndFrom ), GWL_STYLE );
+							SetWindowLongPtr ( ListView_GetEditControl ( hdr->hwndFrom ), GWL_STYLE, style & (~WS_BORDER) );
 
 							rvDebuggerWatch* watch = (rvDebuggerWatch*)di->item.lParam;							
 							if ( watch )
@@ -1493,7 +1495,7 @@ LRESULT CALLBACK rvDebuggerWindow::WndProc ( HWND wnd, UINT msg, WPARAM wparam, 
 		case WM_CLOSE:
 			if ( window->mClient->IsConnected ( ) )
 			{
-				if ( IDNO == MessageBox ( wnd, "The debugger is currently connected to a running version of the game.  Are you sure you want to close now?", "Quake 4 Script Debugger", MB_YESNO|MB_ICONQUESTION ) )
+				if ( IDNO == MessageBox ( wnd, "The debugger is currently connected to a running version of the game.  Are you sure you want to close now?", DEBUGGER_WINDOW_TITLE, MB_YESNO|MB_ICONQUESTION ) )
 				{
 					return 0;
 				}
@@ -1743,8 +1745,10 @@ bool rvDebuggerWindow::OpenScript ( const char* filename, int lineNumber )
 	// If the script isnt open already then open it
 	if ( mActiveScript == -1 )
 	{
+// jmarshall
+/*
 		rvDebuggerScript* script = new rvDebuggerScript;
-		
+
 		// Load the script
 		if ( !script->Load ( filename ) )
 		{
@@ -1752,8 +1756,14 @@ bool rvDebuggerWindow::OpenScript ( const char* filename, int lineNumber )
 			SetCursor ( LoadCursor ( NULL, IDC_ARROW ) );
 			return false;
 		}
-
-		gDebuggerApp.GetOptions().AddRecentFile ( filename );
+*/
+		rvDebuggerScript* script = game->LoadDebugScript( filename );
+		if(script == NULL) {
+			SetCursor ( LoadCursor ( NULL, IDC_ARROW ) );
+			return false;
+		}
+// jmarshall end
+		gDebuggerApp->GetOptions().AddRecentFile ( filename );
 		UpdateRecentFiles ( );
 
 		mActiveScript = mScripts.Append ( script );
@@ -1983,7 +1993,7 @@ int rvDebuggerWindow::HandleActivate ( WPARAM wparam, LPARAM lparam )
 	{
 		if ( mScripts[i]->IsFileModified ( true ) )
 		{
-			if ( IDYES == MessageBox ( mWnd, va("%s\n\nThis file has been modified outside of the debugger.\nDo you want to reload it?", mScripts[i]->GetFilename() ), "Quake 4 Script Debugger", MB_YESNO|MB_ICONQUESTION ) )
+			if ( IDYES == MessageBox ( mWnd, va("%s\n\nThis file has been modified outside of the debugger.\nDo you want to reload it?", mScripts[i]->GetFilename() ), DEBUGGER_WINDOW_TITLE, MB_YESNO|MB_ICONQUESTION ) )
 			{			
 				mScripts[i]->Reload ( );
 
@@ -2119,7 +2129,7 @@ void rvDebuggerWindow::UpdateRecentFiles ( void )
 	}	
 
 	// Make sure there is a separator after the recent files
-	if ( gDebuggerApp.GetOptions().GetRecentFileCount() )
+	if ( gDebuggerApp->GetOptions().GetRecentFileCount() )
 	{
 		MENUITEMINFO info;
 		ZeroMemory ( &info, sizeof(info) );
@@ -2133,11 +2143,11 @@ void rvDebuggerWindow::UpdateRecentFiles ( void )
 	}
 
 	// Add the recent files to the menu now
-	for ( j = 0, i = gDebuggerApp.GetOptions().GetRecentFileCount ( ) - 1; i >= 0; i --, j++ )
+	for ( j = 0, i = gDebuggerApp->GetOptions().GetRecentFileCount ( ) - 1; i >= 0; i --, j++ )
 	{
 		UINT id = ID_DBG_FILE_MRU1 + j;
 		idStr str = va("&%d ", j+1);
-		str.Append ( gDebuggerApp.GetOptions().GetRecentFile ( i ) );
+		str.Append ( gDebuggerApp->GetOptions().GetRecentFile ( i ) );
 		InsertMenu ( mRecentFileMenu, mRecentFileInsertPos+j+1, MF_BYPOSITION|MF_STRING|MF_ENABLED, id, str );
 	}		
 }

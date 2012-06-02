@@ -211,6 +211,8 @@ private:
 	idBlockAlloc<entityNetEvent_t,32>	eventAllocator;
 };
 
+
+
 //============================================================================
 
 template< class type >
@@ -383,6 +385,8 @@ public:
 	virtual void			LoadingFrame( int frameTime, float pct );
 
 	virtual void			UpdateLoadingString( const char *str );
+
+	virtual rvDebuggerScript    *LoadDebugScript( const char *path );
 // jmarshall end
 
 	bool					IsPortalSkyAcive();
@@ -612,11 +616,20 @@ private:
 	void					LoadMainMenuWorld( const char *map );
 	void					FreeMainMenuWorld( void );
 
+	
+
 	void					SetMainMenuWorldViewFromEntity( const renderEntity_t *entity );
 
 	renderView_t			mainMenuRenderWorldView;
 	idRenderWorld *			mainMenuRenderWorld;
 	idMapFile *				mainMenuWorldMapFile;
+// jmarshall end
+
+// jmarshall
+private:
+#ifndef ID_DEMO_BUILD
+	static void				LaunchScriptDebugger_f( const idCmdArgs &args );
+#endif
 // jmarshall end
 };
 
@@ -795,5 +808,11 @@ const int	CINEMATIC_SKIP_DELAY	= SEC2MS( 2.0f );
 #include "script/Script_Compiler.h"
 #include "script/Script_Interpreter.h"
 #include "script/Script_Thread.h"
+
+// Script Debugger
+bool	DebuggerServerInit( void );
+void	DebuggerServerShutdown( void );
+void	DebuggerServerPrint( const char *text );
+
 
 #endif	/* !__GAME_LOCAL_H__ */

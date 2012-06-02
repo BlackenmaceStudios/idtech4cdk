@@ -229,6 +229,10 @@ extern idCVar	g_flushSave;
 // jmarshall
 extern idCVar	dbg_ShowUI;
 extern idCVar   g_debugDeferredRenderer;
+
+#ifndef ID_DEMO_BUILD
+extern idCVar	g_useScriptDebugger;
+#endif
 // jmarshall end
 
 extern idCVar	aas_test;

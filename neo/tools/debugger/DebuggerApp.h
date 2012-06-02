@@ -29,11 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 #define DEBUGGERAPP_H_
 
 #include "../../sys/win32/win_local.h"
-
-// jmarshall <-- fix for legacy stuff
-#define msg_t idBitMsg
-#define MSG_ReadShort( x ) x->ReadShort()
-#define MSG_ReadString( x, r, y ) x->ReadString(r, y)
+#include "DebuggerNet.h"
 
 #include "../../game/game_local.h"
 
@@ -58,6 +54,10 @@ If you have questions concerning this license or the applicable additional terms
 // These were changed to static by ID so to make it easy we just throw them
 // in this header
 const int MAX_MSGLEN = 1400;
+
+#define DEBUGGER_WINDOW_TITLE				GAME_NAME " Script Debugger(" ID_PLATFORM ")"
+
+#define DEBUGGER_WINDOW_BUILD				GAME_NAME " Script Debugger ( " ENGINE_BUILDTYPE " )" " Build( " ID_PLATFORM " )" __DATE__ " " __TIME__
 
 class rvDebuggerApp
 {
@@ -112,6 +112,6 @@ ID_INLINE rvDebuggerWindow& rvDebuggerApp::GetWindow ( void )
 	return *mDebuggerWindow;
 }
 
-extern rvDebuggerApp gDebuggerApp;
+extern rvDebuggerApp *gDebuggerApp;
 
 #endif // DEBUGGERAPP_H_

@@ -1,0 +1,416 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1EBFC60B-95CE-447D-8D0C-1B5E21CEDA83}</ProjectGuid>
+    <RootNamespace>ScriptDebugger</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\_Common.props" />
+    <Import Project="..\_WithInlines.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\_Common.props" />
+    <Import Project="..\_WithInlines.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\_Common.props" />
+    <Import Project="..\_WithInlines.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\_Common.props" />
+    <Import Project="..\_WithInlines.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\base\tools\</OutDir>
+    <IntDir>..\..\build\$(PlatformName)\$(Configuration)\intermediate\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>TOOLS_DLL;BSPCOMPILER;WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_AFX_NO_DEBUG_CRT;ID_TYPEINFO;TYPEINFO;TOOLS_DLL;BSPCOMPILER;WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Wininet.lib;Iphlpapi.lib</AdditionalDependencies>
+      <AdditionalOptions>/force %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>../../base/tools/$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\framework\CmdSystem.h" />
+    <ClInclude Include="..\framework\CVarSystem.h" />
+    <ClInclude Include="..\framework\File.h" />
+    <ClInclude Include="..\framework\FileSystem.h" />
+    <ClInclude Include="..\framework\Licensee.h" />
+    <ClInclude Include="..\framework\Unzip.h" />
+    <ClInclude Include="..\idlib\precompiled.h" />
+    <ClInclude Include="..\sys\sys_local.h" />
+    <ClInclude Include="..\sys\sys_public.h" />
+    <ClInclude Include="..\sys\win32\rc\AFEditor_resource.h" />
+    <ClInclude Include="..\sys\win32\rc\Common_resource.h" />
+    <ClInclude Include="..\sys\win32\rc\CreateResourceIDs.h" />
+    <ClInclude Include="..\sys\win32\rc\Debugger_resource.h" />
+    <ClInclude Include="..\sys\win32\rc\DeclEditor_resource.h" />
+    <ClInclude Include="..\sys\win32\rc\doom_resource.h" />
+    <ClInclude Include="..\sys\win32\rc\GuiEd_resource.h" />
+    <ClInclude Include="..\sys\win32\rc\MaterialEditor_Resource.h" />
+    <ClInclude Include="..\sys\win32\rc\ModelManager_Resource.h" />
+    <ClInclude Include="..\sys\win32\rc\ParticleEditor_resource.h" />
+    <ClInclude Include="..\sys\win32\rc\PDAEditor_resource.h" />
+    <ClInclude Include="..\sys\win32\rc\PropTree_resource.h" />
+    <ClInclude Include="..\sys\win32\rc\Radiant_resource.h" />
+    <ClInclude Include="..\sys\win32\rc\ScriptEditor_resource.h" />
+    <ClInclude Include="..\sys\win32\rc\SoundEditor_resource.h" />
+    <ClInclude Include="..\sys\win32\win_local.h" />
+    <ClInclude Include="..\tools\common\ColorButton.h" />
+    <ClInclude Include="..\tools\common\DialogHelpers.h" />
+    <ClInclude Include="..\tools\common\MaskEdit.h" />
+    <ClInclude Include="..\tools\common\OpenFileDialog.h" />
+    <ClInclude Include="..\tools\common\PropertyGrid.h" />
+    <ClInclude Include="..\tools\common\PropTree\PropTree.h" />
+    <ClInclude Include="..\tools\common\PropTree\PropTreeInfo.h" />
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItem.h" />
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemButton.h" />
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemCheck.h" />
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemColor.h" />
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemCombo.h" />
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemEdit.h" />
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemEditButton.h" />
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemFileEdit.h" />
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemStatic.h" />
+    <ClInclude Include="..\tools\common\PropTree\PropTreeList.h" />
+    <ClInclude Include="..\tools\common\PropTree\PropTreeView.h" />
+    <ClInclude Include="..\tools\common\RegistryOptions.h" />
+    <ClInclude Include="..\tools\common\RollupPanel.h" />
+    <ClInclude Include="..\tools\common\SpinButton.h" />
+    <ClInclude Include="..\tools\debugger\DebuggerApp.h" />
+    <ClInclude Include="..\tools\debugger\DebuggerBreakpoint.h" />
+    <ClInclude Include="..\tools\debugger\DebuggerClient.h" />
+    <ClInclude Include="..\tools\debugger\DebuggerFindDlg.h" />
+    <ClInclude Include="..\tools\debugger\DebuggerMessages.h" />
+    <ClInclude Include="..\tools\debugger\DebuggerQuickWatchDlg.h" />
+    <ClInclude Include="..\tools\debugger\DebuggerWindow.h" />
+    <ClInclude Include="ScriptDebugger.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\framework\CmdSystem.cpp" />
+    <ClCompile Include="..\framework\CVarSystem.cpp" />
+    <ClCompile Include="..\framework\File.cpp" />
+    <ClCompile Include="..\framework\FileSystem.cpp" />
+    <ClCompile Include="..\framework\Unzip.cpp" />
+    <ClCompile Include="..\idlib\precompiled.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">precompiled.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">precompiled.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="..\sys\win32\rc\CreateResourceIDs.cpp" />
+    <ClCompile Include="..\sys\win32\win_cpu.cpp" />
+    <ClCompile Include="..\sys\win32\win_net.cpp" />
+    <ClCompile Include="..\sys\win32\win_shared.cpp" />
+    <ClCompile Include="..\sys\win32\win_taskkeyhook.cpp" />
+    <ClCompile Include="..\tools\common\AlphaPopup.cpp" />
+    <ClCompile Include="..\tools\common\ColorButton.cpp" />
+    <ClCompile Include="..\tools\common\MaskEdit.cpp" />
+    <ClCompile Include="..\tools\common\OpenFileDialog.cpp" />
+    <ClCompile Include="..\tools\common\PropertyGrid.cpp" />
+    <ClCompile Include="..\tools\common\PropTree\PropTree.cpp" />
+    <ClCompile Include="..\tools\common\PropTree\PropTreeInfo.cpp" />
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItem.cpp" />
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemButton.cpp" />
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemCheck.cpp" />
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemColor.cpp" />
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemCombo.cpp" />
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemEdit.cpp" />
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemEditButton.cpp" />
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemFileEdit.cpp" />
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemStatic.cpp" />
+    <ClCompile Include="..\tools\common\PropTree\PropTreeList.cpp" />
+    <ClCompile Include="..\tools\common\PropTree\PropTreeView.cpp" />
+    <ClCompile Include="..\tools\common\RegistryOptions.cpp" />
+    <ClCompile Include="..\tools\common\RollupPanel.cpp" />
+    <ClCompile Include="..\tools\common\SpinButton.cpp" />
+    <ClCompile Include="..\tools\debugger\debugger.cpp" />
+    <ClCompile Include="..\tools\debugger\DebuggerApp.cpp" />
+    <ClCompile Include="..\tools\debugger\DebuggerBreakpoint.cpp" />
+    <ClCompile Include="..\tools\debugger\DebuggerClient.cpp" />
+    <ClCompile Include="..\tools\debugger\DebuggerFindDlg.cpp" />
+    <ClCompile Include="..\tools\debugger\DebuggerQuickWatchDlg.cpp" />
+    <ClCompile Include="..\tools\debugger\DebuggerWindow.cpp" />
+    <ClCompile Include="ScriptDebugger.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\idlib.vcxproj">
+      <Project>{49bec5c6-b964-417a-851e-808886b57400}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\sys\win32\rc\AFEditor.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\Common.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\Debugger.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\DeclEditor.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\doom.rc" />
+    <ResourceCompile Include="..\sys\win32\rc\GuiEd.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\MaterialEditor.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\ModelManager.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\ParticleEditor.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\PDAEditor.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\PropTree.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\Radiant.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\ScriptEditor.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\SoundEditor.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\sys\win32\rc\res\BEVEL.BMP" />
+    <None Include="..\sys\win32\rc\res\BITMAP2.BMP" />
+    <None Include="..\sys\win32\rc\res\BMP00001.BMP" />
+    <None Include="..\sys\win32\rc\res\bmp00002.bmp" />
+    <None Include="..\sys\win32\rc\res\bmp00003.bmp" />
+    <None Include="..\sys\win32\rc\res\bmp00004.bmp" />
+    <None Include="..\sys\win32\rc\res\bmp00005.bmp" />
+    <None Include="..\sys\win32\rc\res\BMP0002.BMP" />
+    <None Include="..\sys\win32\rc\res\cchsb.bmp" />
+    <None Include="..\sys\win32\rc\res\ccrgb.bmp" />
+    <None Include="..\sys\win32\rc\res\dbg_back.bmp" />
+    <None Include="..\sys\win32\rc\res\dbg_breakpoint.ico" />
+    <None Include="..\sys\win32\rc\res\dbg_current.ico" />
+    <None Include="..\sys\win32\rc\res\dbg_currentline.ico" />
+    <None Include="..\sys\win32\rc\res\dbg_empty.ico" />
+    <None Include="..\sys\win32\rc\res\dbg_open.bmp" />
+    <None Include="..\sys\win32\rc\res\dbg_toolbar.bmp" />
+    <None Include="..\sys\win32\rc\res\DEFTEX.WAL">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\sys\win32\rc\res\doom.ico" />
+    <None Include="..\sys\win32\rc\res\ENDCAP.BMP" />
+    <None Include="..\sys\win32\rc\res\fpoint.cur" />
+    <None Include="..\sys\win32\rc\res\fxeditor.ico" />
+    <None Include="..\sys\win32\rc\res\fxed_link.ico" />
+    <None Include="..\sys\win32\rc\res\fxed_toolbar.bmp" />
+    <None Include="..\sys\win32\rc\res\GetString.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\sys\win32\rc\res\guied.ico" />
+    <None Include="..\sys\win32\rc\res\guied_collapse.ico" />
+    <None Include="..\sys\win32\rc\res\guied_expand.ico" />
+    <None Include="..\sys\win32\rc\res\guied_hand.cur" />
+    <None Include="..\sys\win32\rc\res\guied_nav_visible.ico" />
+    <None Include="..\sys\win32\rc\res\guied_nav_visibledisabled.ico" />
+    <None Include="..\sys\win32\rc\res\guied_scripts.ico" />
+    <None Include="..\sys\win32\rc\res\guied_scripts_white.ico" />
+    <None Include="..\sys\win32\rc\res\guied_viewer_toolbar.bmp" />
+    <None Include="..\sys\win32\rc\res\IBEVEL.BMP" />
+    <None Include="..\sys\win32\rc\res\icon2.ico" />
+    <None Include="..\sys\win32\rc\res\IENDCAP.BMP" />
+    <None Include="..\sys\win32\rc\res\logo_sm3dfx.bmp" />
+    <None Include="..\sys\win32\rc\res\matedtree.bmp" />
+    <None Include="..\sys\win32\rc\res\MaterialEditor.ico" />
+    <None Include="..\sys\win32\rc\res\MEFileToolbar.bmp" />
+    <None Include="..\sys\win32\rc\res\MEtoolbar.bmp" />
+    <None Include="..\sys\win32\rc\res\me_disabled_icon.ico" />
+    <None Include="..\sys\win32\rc\res\me_enabled.ico" />
+    <None Include="..\sys\win32\rc\res\me_off_icon.ico" />
+    <None Include="..\sys\win32\rc\res\me_on_icon.ico" />
+    <None Include="..\sys\win32\rc\res\PropTree.rc2">
+      <FileType>RC</FileType>
+    </None>
+    <None Include="..\sys\win32\rc\res\Q.BMP" />
+    <None Include="..\sys\win32\rc\res\qe3.ico" />
+    <None Include="..\sys\win32\rc\res\Radiant.ico" />
+    <None Include="..\sys\win32\rc\res\RADIANT3.GIF">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\sys\win32\rc\res\RadiantDoc.ico" />
+    <None Include="..\sys\win32\rc\res\shaderbar.bmp" />
+    <None Include="..\sys\win32\rc\res\shaderdoc.ico" />
+    <None Include="..\sys\win32\rc\res\shaderframe.ico" />
+    <None Include="..\sys\win32\rc\res\spliter.cur" />
+    <None Include="..\sys\win32\rc\res\Toolbar.bmp" />
+    <None Include="..\sys\win32\rc\res\TOOLBAR1.BMP" />
+    <None Include="..\sys\win32\rc\res\TOOLBAR2.BMP" />
+    <None Include="..\sys\win32\rc\res\VIEWDEFA.BMP" />
+    <None Include="..\sys\win32\rc\res\VIEWOPPO.BMP" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

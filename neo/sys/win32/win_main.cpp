@@ -83,6 +83,22 @@ static sysMemoryStats_t exeLaunchMemoryStats;
 static	xthreadInfo	threadInfo;
 static	HANDLE		hTimer;
 
+void Sys_ForceGameWindowForeground( void ) {
+	// Bring the window back to the foreground	
+	SetForegroundWindow ( win32.hWnd );
+	SetActiveWindow ( win32.hWnd );
+	UpdateWindow ( win32.hWnd );
+	SetFocus ( win32.hWnd );	
+	
+	// Give the mouse cursor back to the game
+	Sys_GrabMouseCursor( true );	
+	
+	// Clear all commands that were generated before we went into suspended mode.  This is
+	// to ensure we dont have mouse downs with no ups because the context was changed.
+	idKeyInput::ClearStates();
+}
+
+
 /*
 ================
 Sys_GetExeLaunchMemoryStatus
@@ -1384,6 +1400,7 @@ void EmailCrashReport( LPSTR messageText ) {
 	}
 }
 
+
 /*
 ==================
 WinMain
@@ -1525,7 +1542,7 @@ void idSysLocal::OpenURL( const char *url, bool doexit ) {
 idSysLocal::StartProcess
 ==================
 */
-void idSysLocal::StartProcess( const char *exePath, bool doexit ) {
+void idSysLocal::StartProcess( const char *exePath,  const char *cmdLine, bool doexit ) {
 	TCHAR				szPathOrig[_MAX_PATH];
 	STARTUPINFO			si;
 	PROCESS_INFORMATION	pi;
@@ -1533,9 +1550,18 @@ void idSysLocal::StartProcess( const char *exePath, bool doexit ) {
 	ZeroMemory( &si, sizeof(si) );
 	si.cb = sizeof(si);
 
-	strncpy( szPathOrig, exePath, _MAX_PATH );
+	if(cmdLine != NULL)
+	{
+		sprintf( szPathOrig, "%s %s", exePath, cmdLine );
+	}
+	else
+	{
+		strncpy( szPathOrig, exePath, _MAX_PATH );
+	}
 
-	if( !CreateProcess( NULL, szPathOrig, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi ) ) {
+	idStr path = Sys_EXEPath();
+	path.StripFilename( );
+	if( !CreateProcess( NULL, szPathOrig, NULL, NULL, FALSE, 0, NULL, path.c_str(), &si, &pi ) ) {
         common->Error( "Could not start process: '%s' ", szPathOrig );
 	    return;
 	}

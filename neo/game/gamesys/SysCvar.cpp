@@ -286,6 +286,10 @@ idCVar g_mpWeaponAngleScale(		"g_mpWeaponAngleScale",		"0",			CVAR_GAME | CVAR_F
 
 // jmarshall
 idCVar g_debugDeferredRenderer(     "g_debugDeferredRenderer",  "0",			CVAR_GAME | CVAR_CHEAT, "Debug the deferred renderer" );
+
+#ifndef ID_DEMO_BUILD
+idCVar g_useScriptDebugger(     "g_useScriptDebugger",		"1",			CVAR_GAME | CVAR_BOOL, "If enabled will enable script debugging," );
+#endif
 // jmarshall end
 
 idCVar g_testParticle(				"g_testParticle",			"0",			CVAR_GAME | CVAR_INTEGER, "test particle visualation, set by the particle editor" );

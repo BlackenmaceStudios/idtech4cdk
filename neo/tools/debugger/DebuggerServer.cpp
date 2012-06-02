@@ -31,13 +31,20 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "../../game/gamesys/Event.h"
 #include "../../game/gamesys/Class.h"
-#include "../../game/script/Script_Program.h"
-#include "../../game/script/Script_Interpreter.h"
-#include "../../game/script/Script_Thread.h"
-#include "../../game/script/Script_Compiler.h"
-#include "../../framework/sync/Msg.h"
-#include "DebuggerApp.h"
+
+// jmarshall
+//#include "../../game/script/Script_Program.h"
+//#include "../../game/script/Script_Interpreter.h"
+//#include "../../game/script/Script_Thread.h"
+//#include "../../game/script/Script_Compiler.h"
+//#include "../../framework/sync/Msg.h"
+//#include "DebuggerApp.h"
+// jmarshall end
+#include "../../tools/debugger/DebuggerNet.h"
 #include "DebuggerServer.h"
+
+#define DEBUG_SERVER_PORT 27980
+#define MAX_MSGLEN 14000
 
 /*
 ================
@@ -77,8 +84,16 @@ debugger server is used.
 bool rvDebuggerServer::Initialize ( void )
 {
 	// Initialize the network connection
-	if ( !mPort.InitForPort ( 27980 ) )
+
+	// jmarshall
+	mPort = sys->AllocPort();
+	// jmarshall end
+
+	common->Printf("Starting Debugger on port %d\n", DEBUG_SERVER_PORT );
+
+	if ( !mPort->InitForPort ( DEBUG_SERVER_PORT ) )
 	{
+		common->FatalError("Failed to start debugger\n");
 		return false;
 	}
 
@@ -90,7 +105,7 @@ bool rvDebuggerServer::Initialize ( void )
 	InitializeCriticalSection ( &mCriticalSection );
 
 	// Server must be running on the local host on port 28980
-	Sys_StringToNetAdr ( "localhost", &mClientAdr, true );
+	sys->StringToNetAdr ( "localhost", &mClientAdr, true );
 	mClientAdr.port = 27981;
 	
 	// Attempt to let the server know we are here.  The server may not be running so this
@@ -121,6 +136,7 @@ Shutdown the debugger server.
 */
 void rvDebuggerServer::Shutdown ( void )
 {
+	common->Printf("Shuttingdown debugger...\n" );
 	// Let the debugger client know we are shutting down
 	if ( mConnected )
 	{
@@ -128,7 +144,7 @@ void rvDebuggerServer::Shutdown ( void )
 		mConnected = false;
 	}
 
-	mPort.Close();
+	mPort->Close();
 
 	// dont need the crit section anymore
 	DeleteCriticalSection ( &mCriticalSection );
@@ -150,12 +166,12 @@ bool rvDebuggerServer::ProcessMessages ( void )
 	MSG_Init( &msg, buffer, sizeof( buffer ) );
 
 	// Check for pending udp packets on the debugger port
-	while ( mPort.GetPacket ( adrFrom, msg.data, msg.cursize, msg.maxsize ) )
+	while ( mPort->GetPacket ( adrFrom, msg.GetData(), msg.curSize, msg.maxSize ) )
 	{
 		unsigned short command;
 
 		// Only accept packets from the debugger server for security reasons
-		if ( !Sys_CompareNetAdrBase ( adrFrom, mClientAdr ) )
+		if ( !sys->CompareNetAdrBase ( adrFrom, mClientAdr ) )
 		{
 			continue;
 		}
@@ -167,23 +183,28 @@ bool rvDebuggerServer::ProcessMessages ( void )
 			case DBMSG_CONNECT:
 				mConnected = true;
 				SendMessage ( DBMSG_CONNECTED );
+				common->Printf("Debugger Connected...\n");
 				break;
 				
 			case DBMSG_CONNECTED:
 				mConnected = true;
+				common->Printf("Debugger Connected...\n");
 				break;
 				
 			case DBMSG_DISCONNECT:
 				ClearBreakpoints ( );
 				Resume ( );				
 				mConnected = false;
+				common->Printf("Debugger Disconnected...\n");
 				break;
 				
 			case DBMSG_ADDBREAKPOINT:
+				common->Printf("Debugger Breakpoint Added...\n");
 				HandleAddBreakpoint ( &msg );
 				break;
 				
 			case DBMSG_REMOVEBREAKPOINT:
+				common->Printf("Debugger Removing Breakpoint...\n");
 				HandleRemoveBreakpoint ( &msg );
 				break;
 				
@@ -247,7 +268,7 @@ void rvDebuggerServer::SendMessage ( EDebuggerMessage dbmsg )
 	MSG_Init( &msg, buffer, sizeof( buffer ) );
 	MSG_WriteShort ( &msg, (int)dbmsg );
 	
-	SendPacket ( msg.data, msg.cursize );
+	SendPacket ( msg.GetData(), msg.curSize );
 }
 
 /*
@@ -392,7 +413,7 @@ void rvDebuggerServer::HandleInspectCallstack ( msg_t* in_msg )
 		MSG_WriteCallstackFunc ( &msg, mBreakInterpreter->GetCallstack ( ) + i );	
 	}
 		
-	SendPacket ( msg.data, msg.cursize );
+	SendPacket ( msg.GetData(), msg.curSize );
 }
 
 /*
@@ -430,7 +451,7 @@ void rvDebuggerServer::HandleInspectThreads ( msg_t* in_msg )
 	}
 
 	// Send off the inspect threads packet to the debugger client
-	SendPacket ( msg.data, msg.cursize );
+	SendPacket ( msg.GetData(), msg.curSize );
 }
 
 /*
@@ -471,7 +492,7 @@ void rvDebuggerServer::HandleInspectVariable ( msg_t* in_msg )
 	MSG_WriteString ( &msg, varname );
 	MSG_WriteString ( &msg, varvalue );
 		
-	SendPacket ( msg.data, msg.cursize );
+	SendPacket ( msg.GetData(), msg.curSize );
 }
 
 /*
@@ -497,10 +518,10 @@ void rvDebuggerServer::CheckBreakpoints	( idInterpreter* interpreter, idProgram*
 	filename = program->GetFilename ( st->file );
 	
 	// Operate on lines, not statements
-	if ( mLastStatementLine == st->linenumber && mLastStatementFile == st->file )
-	{
-		return;
-	}
+//	if ( mLastStatementLine == st->linenumber && mLastStatementFile == st->file )
+//	{
+//		return;
+//	}
 
 	// Save the last visited line and file so we can prevent
 	// double breaks on lines with more than one statement
@@ -608,7 +629,7 @@ void rvDebuggerServer::Break ( idInterpreter* interpreter, idProgram* program, i
 	qpath.BackSlashesToSlashes ( );
 
 	// Give the mouse cursor back to the world
-	Sys_GrabMouseCursor( false );	
+	//Sys_GrabMouseCursor( false );	
 	
 	// Set the break variable so we know the main thread is stopped
 	mBreak = true;
@@ -621,7 +642,7 @@ void rvDebuggerServer::Break ( idInterpreter* interpreter, idProgram* program, i
 	MSG_WriteShort ( &msg, (int)DBMSG_BREAK );
 	MSG_WriteLong ( &msg, st->linenumber );
 	MSG_WriteString ( &msg, qpath );
-	SendPacket ( msg.data, msg.cursize );
+	SendPacket ( msg.GetData(), msg.curSize );
 		
 	// Suspend the game thread.  Since this will be called from within the main game thread
 	// execution wont return until after the thread is resumed
@@ -635,18 +656,8 @@ void rvDebuggerServer::Break ( idInterpreter* interpreter, idProgram* program, i
 	// would just flash
 	Sleep ( 150 );
 
-	// Bring the window back to the foreground	
-	SetForegroundWindow ( win32.hWnd );
-	SetActiveWindow ( win32.hWnd );
-	UpdateWindow ( win32.hWnd );
-	SetFocus ( win32.hWnd );	
-	
-	// Give the mouse cursor back to the game
-	Sys_GrabMouseCursor( true );	
-	
-	// Clear all commands that were generated before we went into suspended mode.  This is
-	// to ensure we dont have mouse downs with no ups because the context was changed.
-	idKeyInput::ClearStates();
+	// Force the game window into the foreground.
+	sys->ForceGameWindowForeground();
 }
 
 /*
@@ -710,5 +721,5 @@ void rvDebuggerServer::Print ( const char* text )
 	MSG_WriteShort ( &msg, (int)DBMSG_PRINT );
 	MSG_WriteString ( &msg, text );	
 	
-	SendPacket ( msg.data, msg.cursize );
+	SendPacket ( msg.GetData(), msg.curSize );
 }	

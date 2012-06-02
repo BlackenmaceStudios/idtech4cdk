@@ -63,17 +63,15 @@ Initialize the debugger client
 */
 bool rvDebuggerClient::Initialize ( void )
 {
-	// Nothing else can run with the debugger
-	com_editors = EDITOR_DEBUGGER;
-
 	// Initialize the network connection
 	if ( !mPort.InitForPort ( 27981 ) )
 	{
+		common->FatalError("Failed to init port\n");
 		return false;
 	}
 
 	// Server must be running on the local host on port 28980
-	Sys_StringToNetAdr ( "localhost", &mServerAdrt, true );
+	Sys_StringToNetAdr ( "localhost", &mServerAdr, true );
 	mServerAdr.port = 27980;
 	
 	// Attempt to let the server know we are here.  The server may not be running so this
@@ -116,7 +114,7 @@ bool rvDebuggerClient::ProcessMessages ( void )
 	MSG_Init( &msg, buffer, sizeof( buffer ) );
 
 	// Check for pending udp packets on the debugger port
-	while ( mPort.GetPacket ( adrFrom, msg.data, msg.cursize, msg.maxsize ) )
+	while ( mPort.GetPacket ( adrFrom, msg.GetData(), msg.curSize, msg.maxSize ) )
 	{
 		unsigned short command;
 
@@ -171,9 +169,12 @@ bool rvDebuggerClient::ProcessMessages ( void )
 		}			
 		
 		// Give the window a chance to process the message
-		msg.readcount = 0;		
-		msg.bit = 0;
-		gDebuggerApp.GetWindow().ProcessNetMessage ( &msg );
+		msg.SetReadCount( 0 );		
+
+		// jmarshall
+		msg.SetReadBit( 0 );
+		// jmarshall end
+		gDebuggerApp->GetWindow().ProcessNetMessage ( &msg );
 	}
 
 	return true;
@@ -230,7 +231,7 @@ void rvDebuggerClient::InspectVariable ( const char* name, int callstackDepth )
 	MSG_WriteShort ( &msg, (short)(mCallstack.Num()-callstackDepth) );
 	MSG_WriteString ( &msg, name );
 	
-	SendPacket ( msg.data, msg.cursize );
+	SendPacket ( msg.GetData(), msg.curSize );
 }
 
 /*
@@ -469,7 +470,7 @@ void rvDebuggerClient::SendMessage ( EDebuggerMessage dbmsg )
 	MSG_Init( &msg, buffer, sizeof( buffer ) );
 	MSG_WriteShort ( &msg, (int)dbmsg );
 		
-	SendPacket ( msg.data, msg.cursize );
+	SendPacket ( msg.GetData(), msg.curSize );
 }
 
 /*
@@ -519,7 +520,7 @@ void rvDebuggerClient::SendAddBreakpoint ( rvDebuggerBreakpoint& bp, bool onceOn
 	MSG_WriteLong ( &msg, bp.GetID ( ) );
 	MSG_WriteString ( &msg, bp.GetFilename() );
 	
-	SendPacket ( msg.data, msg.cursize );
+	SendPacket ( msg.GetData(), msg.curSize );
 }
 
 /*
@@ -543,7 +544,7 @@ void rvDebuggerClient::SendRemoveBreakpoint ( rvDebuggerBreakpoint& bp )
 	MSG_WriteShort ( &msg, (int)DBMSG_REMOVEBREAKPOINT );
 	MSG_WriteLong ( &msg, bp.GetID() );
 	
-	SendPacket ( msg.data, msg.cursize );
+	SendPacket ( msg.GetData(), msg.curSize );
 }
 
 /*

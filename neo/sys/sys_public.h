@@ -415,14 +415,14 @@ public:
 	virtual		~idPort();
 
 	// if the InitForPort fails, the idPort.port field will remain 0
-	bool		InitForPort( int portNumber );
-	int			GetPort( void ) const { return bound_to.port; }
-	netadr_t	GetAdr( void ) const { return bound_to; }
-	void		Close();
+	virtual bool		InitForPort( int portNumber );
+	virtual int			GetPort( void ) const { return bound_to.port; }
+	virtual netadr_t	GetAdr( void ) const { return bound_to; }
+	virtual void		Close();
 
-	bool		GetPacket( netadr_t &from, void *data, int &size, int maxSize );
-	bool		GetPacketBlocking( netadr_t &from, void *data, int &size, int maxSize, int timeout );
-	void		SendPacket( const netadr_t to, const void *data, int size );
+	virtual bool		GetPacket( netadr_t &from, void *data, int &size, int maxSize );
+	virtual bool		GetPacketBlocking( netadr_t &from, void *data, int &size, int maxSize, int timeout );
+	virtual void		SendPacket( const netadr_t to, const void *data, int size );
 
 	int			packetsRead;
 	int			bytesRead;
@@ -567,7 +567,7 @@ public:
 	virtual sysEvent_t		GenerateMouseMoveEvent( int deltax, int deltay ) = 0;
 
 	virtual void			OpenURL( const char *url, bool quit ) = 0;
-	virtual void			StartProcess( const char *exePath, bool quit ) = 0;
+	virtual void			StartProcess( const char *exePath,  const char *cmdLine, bool quit ) = 0;
 // jmarshall
 	virtual int				Milliseconds( void ) = 0;
 
@@ -578,6 +578,12 @@ public:
 	virtual bool			IsDebuggerPresent( void ) = 0;
 
 	virtual void			HandleCrashEvent( void ) = 0;
+
+	virtual void			ForceGameWindowForeground( void ) = 0;
+	
+	virtual idPort			*AllocPort( void )  = 0;
+	virtual bool			CompareNetAdrBase( const netadr_t a, const netadr_t b ) = 0;
+	virtual bool			StringToNetAdr( const char *s, netadr_t *a, bool doDNSResolve ) = 0;
 // jmarshall end
 };
 

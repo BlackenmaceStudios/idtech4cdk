@@ -88,15 +88,6 @@ void	GUIEditorShutdown( void );
 void	GUIEditorRun( void );
 bool	GUIEditorHandleMessage( void *msg );
 
-
-// Script Debugger
-void	DebuggerClientLaunch( void );
-void	DebuggerClientInit( const char *cmdline );
-bool	DebuggerServerInit( void );
-void	DebuggerServerShutdown( void );
-void	DebuggerServerPrint( const char *text );
-void	DebuggerServerCheckBreakpoint( idInterpreter *interpreter, idProgram *program, int instructionPointer );
-
 //Material Editor
 void	MaterialEditorInit( void );
 void	MaterialEditorRun( void );

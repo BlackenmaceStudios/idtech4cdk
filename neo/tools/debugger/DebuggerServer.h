@@ -68,7 +68,9 @@ protected:
 	// protected member variables
 	bool							mConnected;
 	netadr_t						mClientAdr;
-	idPort							mPort;
+// jmarshall
+	idPort							*mPort;
+// jmarshall end
 	idList<rvDebuggerBreakpoint*>	mBreakpoints;
 	CRITICAL_SECTION				mCriticalSection;
 	
@@ -127,7 +129,7 @@ rvDebuggerServer::SendPacket
 */
 ID_INLINE void rvDebuggerServer::SendPacket ( void* data, int size )
 {
-	mPort.SendPacket ( mClientAdr, data, size );
+	mPort->SendPacket ( mClientAdr, data, size );
 }
 
 #endif // DEBUGGERSERVER_H_
