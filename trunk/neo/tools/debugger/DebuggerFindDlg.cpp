@@ -80,7 +80,7 @@ INT_PTR CALLBACK rvDebuggerFindDlg::DlgProc ( HWND wnd, UINT msg, WPARAM wparam,
 	
 		case WM_INITDIALOG:	
 			dlg = (rvDebuggerFindDlg*) lparam;
-			SetWindowLong ( wnd, GWL_USERDATA, (LONG) dlg );
+			SetWindowLongPtr ( wnd, GWL_USERDATA, (LONG_PTR)dlg );
 			dlg->mWnd = wnd;
 			SetWindowText ( GetDlgItem ( dlg->mWnd, IDC_DBG_FIND ), dlg->mFindText );
 			return TRUE;

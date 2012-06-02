@@ -29,7 +29,6 @@ If you have questions concerning this license or the applicable additional terms
 #include "precompiled.h"
 #pragma hdrstop
 
-#include "DebuggerApp.h"
 #include "DebuggerBreakpoint.h"
 
 int rvDebuggerBreakpoint::mNextID = 1;

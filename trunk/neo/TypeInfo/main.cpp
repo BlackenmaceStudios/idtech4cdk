@@ -271,7 +271,7 @@ sysEvent_t		idSysLocal::GenerateMouseButtonEvent( int button, bool down ) { sysE
 sysEvent_t		idSysLocal::GenerateMouseMoveEvent( int deltax, int deltay ) { sysEvent_t ev; memset( &ev, 0, sizeof( ev ) ); return ev; }
 
 void			idSysLocal::OpenURL( const char *url, bool quit ) { }
-void			idSysLocal::StartProcess( const char *exeName, bool quit ) { }
+void			idSysLocal::StartProcess( const char *exeName,  const char *cmdLine, bool quit ) { }
 
 void			idSysLocal::FPU_EnableExceptions( int exceptions ) { }
 

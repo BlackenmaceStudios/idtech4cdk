@@ -31,7 +31,6 @@ If you have questions concerning this license or the applicable additional terms
 #undef new
 #undef delete
 
-
 void *operator new( size_t s ) {
 	if(allocator == NULL)
 		return malloc( s );

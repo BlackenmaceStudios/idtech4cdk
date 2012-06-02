@@ -29,11 +29,8 @@ If you have questions concerning this license or the applicable additional terms
 #include "precompiled.h"
 #pragma hdrstop
 
-#include "DebuggerApp.h"
 #include "DebuggerScript.h"
 #include "../../game/script/Script_Program.h"
-#include "../../ui/Window.h"
-#include "../../ui/UserInterfaceLocal.h"
 
 /*
 ================
@@ -93,6 +90,7 @@ the loading of the script fails
 */
 bool rvDebuggerScript::Load ( const char* filename )
 {
+
 	void* buffer;
 	int	  size;
 
@@ -116,7 +114,7 @@ bool rvDebuggerScript::Load ( const char* filename )
 	
 	// Cleanup
 	fileSystem->FreeFile ( buffer );
-
+#ifdef USE_DEBUG_SCRIPTS
 	// Now compile the script so we can tell what a valid line is, etc..  If its 
 	// a gui file then we need to parse it using the userinterface system rather
 	// than the normal script compiler.
@@ -133,13 +131,18 @@ bool rvDebuggerScript::Load ( const char* filename )
 
 			idStr scriptFile = va("script/%s_main.script", gamedir.c_str());
 			if(fileSystem->ReadFile(scriptFile.c_str(), NULL) > 0) {
-				mProgram.CompileFile(scriptFile.c_str());
+// jmarshall
+				mProgram->CompileFile(scriptFile.c_str());
+// jmarshall end
 			}
 
 		}
 		
 		// Make sure the file isnt already compiled before trying to compile it again
-		for ( int f = mProgram->NumFilenames() - 1; f >= 0; f -- )
+// jmarshall
+		int f = 0;
+// jmarshall end
+		for ( f = mProgram->NumFilenames() - 1; f >= 0; f -- )
 		{
 			idStr qpath;
 			qpath = fileSystem->OSPathToRelativePath ( mProgram->GetFilename ( f ) );
@@ -169,7 +172,7 @@ bool rvDebuggerScript::Load ( const char* filename )
 		
 		return false;
 	}
-
+#endif
 	return true;
 }
 
@@ -194,6 +197,7 @@ Determines whether or not the given line number within the script is a valid lin
 */
 bool rvDebuggerScript::IsLineCode ( int linenumber )
 {
+#ifdef USE_DEBUG_SCRIPTS
 	int i;
 	
 	assert ( mProgram );
@@ -209,6 +213,9 @@ bool rvDebuggerScript::IsLineCode ( int linenumber )
 	}
 	
 	return false;
+#else
+	return true;
+#endif
 }
 
 /*
@@ -221,6 +228,7 @@ it was loaded.
 */
 bool rvDebuggerScript::IsFileModified ( bool updateTime )
 {
+#ifdef USE_DEBUG_SCRIPTS
 	ID_TIME_T	t;
 	bool	result = false;		
 
@@ -241,4 +249,7 @@ bool rvDebuggerScript::IsFileModified ( bool updateTime )
 	}
 	
 	return result;	
+#else
+	return false;
+#endif
 }

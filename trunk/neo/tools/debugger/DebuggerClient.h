@@ -93,7 +93,6 @@ public:
 	int							GetBreakpointCount		( void );
 	rvDebuggerBreakpoint*		GetBreakpoint			( int index );
 	rvDebuggerBreakpoint*		FindBreakpoint			( const char* filename, int linenumber );
-		
 protected:
 
 	void						SendMessage				( EDebuggerMessage dbmsg );

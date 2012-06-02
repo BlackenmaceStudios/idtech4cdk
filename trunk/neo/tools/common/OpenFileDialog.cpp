@@ -392,7 +392,7 @@ void rvOpenFileDialog::SetFilter ( const char* s )
 		if ( semi != -1 )
 		{
 			filter  = filters.Left ( semi );
-			filters = filters.Right ( filters.Length ( ) - semi );
+			filters = filters.Right ( (filters.Length ( ) - semi) - 1 ); // jmarshall added -1 otherwise it would go in a nasty loop.
 		}
 		else
 		{

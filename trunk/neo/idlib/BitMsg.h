@@ -42,6 +42,10 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 class idBitMsg {
+// jmarshall
+friend class rvDebuggerClient;
+friend class rvDebuggerServer;
+// jmarshall end
 public:
 					idBitMsg();
 					~idBitMsg() {}
@@ -133,7 +137,9 @@ public:
 	static int		DirToBits( const idVec3 &dir, int numBits );
 	static idVec3	BitsToDir( int bits, int numBits );
 
-private:
+// jmarshall
+protected:
+// jmarshall end
 	byte *			writeData;			// pointer to data for writing
 	const byte *	readData;			// pointer to data for reading
 	int				maxSize;			// maximum size of message in bytes

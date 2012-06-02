@@ -1,0 +1,545 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="DebuggerApp">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ScriptDebugger">
+      <UniqueIdentifier>{cc86fb7a-4d06-4854-a358-e43da86419af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebuggerApp\RC">
+      <UniqueIdentifier>{9ee65af0-0f96-4c3d-a8ab-8801d5bb993f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebuggerApp\RC\res">
+      <UniqueIdentifier>{7eff85dc-7e88-4366-9837-e98e864ff158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{6b9c4625-a474-4492-8e2c-b2c9a5519995}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sys">
+      <UniqueIdentifier>{9b5fb43b-ce8e-4cec-a4f7-b1c2483750db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{0a88be19-a26a-4909-9faf-0059f47bc625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\PropTree">
+      <UniqueIdentifier>{ca8e5898-ce6f-48fa-9880-e19e7f61cc96}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ScriptDebugger.cpp">
+      <Filter>DebuggerApp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\idlib\precompiled.cpp">
+      <Filter>DebuggerApp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\debugger\debugger.cpp">
+      <Filter>ScriptDebugger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\debugger\DebuggerApp.cpp">
+      <Filter>ScriptDebugger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\debugger\DebuggerBreakpoint.cpp">
+      <Filter>ScriptDebugger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\debugger\DebuggerClient.cpp">
+      <Filter>ScriptDebugger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\debugger\DebuggerFindDlg.cpp">
+      <Filter>ScriptDebugger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\debugger\DebuggerQuickWatchDlg.cpp">
+      <Filter>ScriptDebugger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\debugger\DebuggerWindow.cpp">
+      <Filter>ScriptDebugger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sys\win32\rc\CreateResourceIDs.cpp">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\framework\CmdSystem.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\framework\CVarSystem.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\framework\File.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\framework\FileSystem.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\framework\Unzip.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sys\win32\win_cpu.cpp">
+      <Filter>Sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sys\win32\win_net.cpp">
+      <Filter>Sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sys\win32\win_shared.cpp">
+      <Filter>Sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sys\win32\win_taskkeyhook.cpp">
+      <Filter>Sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\AlphaPopup.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\ColorButton.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\MaskEdit.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\OpenFileDialog.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\PropertyGrid.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\RegistryOptions.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\RollupPanel.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\SpinButton.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\PropTree\PropTree.cpp">
+      <Filter>Common\PropTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\PropTree\PropTreeInfo.cpp">
+      <Filter>Common\PropTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItem.cpp">
+      <Filter>Common\PropTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemButton.cpp">
+      <Filter>Common\PropTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemCheck.cpp">
+      <Filter>Common\PropTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemColor.cpp">
+      <Filter>Common\PropTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemCombo.cpp">
+      <Filter>Common\PropTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemEdit.cpp">
+      <Filter>Common\PropTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemEditButton.cpp">
+      <Filter>Common\PropTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemFileEdit.cpp">
+      <Filter>Common\PropTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\PropTree\PropTreeItemStatic.cpp">
+      <Filter>Common\PropTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\PropTree\PropTreeList.cpp">
+      <Filter>Common\PropTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\common\PropTree\PropTreeView.cpp">
+      <Filter>Common\PropTree</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ScriptDebugger.h">
+      <Filter>DebuggerApp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\debugger\DebuggerWindow.h">
+      <Filter>ScriptDebugger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\debugger\DebuggerApp.h">
+      <Filter>ScriptDebugger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\debugger\DebuggerBreakpoint.h">
+      <Filter>ScriptDebugger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\debugger\DebuggerClient.h">
+      <Filter>ScriptDebugger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\debugger\DebuggerFindDlg.h">
+      <Filter>ScriptDebugger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\debugger\DebuggerMessages.h">
+      <Filter>ScriptDebugger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\debugger\DebuggerQuickWatchDlg.h">
+      <Filter>ScriptDebugger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\idlib\precompiled.h">
+      <Filter>DebuggerApp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\AFEditor_resource.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\Common_resource.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\CreateResourceIDs.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\Debugger_resource.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\DeclEditor_resource.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\doom_resource.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\GuiEd_resource.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\MaterialEditor_Resource.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\ModelManager_Resource.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\ParticleEditor_resource.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\PDAEditor_resource.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\PropTree_resource.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\Radiant_resource.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\ScriptEditor_resource.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\rc\SoundEditor_resource.h">
+      <Filter>DebuggerApp\RC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\framework\CmdSystem.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\framework\CVarSystem.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\framework\File.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\framework\FileSystem.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\framework\Licensee.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\framework\Unzip.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\sys_local.h">
+      <Filter>Sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\sys_public.h">
+      <Filter>Sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sys\win32\win_local.h">
+      <Filter>Sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\ColorButton.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\DialogHelpers.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\MaskEdit.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\OpenFileDialog.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\PropertyGrid.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\RegistryOptions.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\RollupPanel.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\SpinButton.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\PropTree\PropTree.h">
+      <Filter>Common\PropTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\PropTree\PropTreeInfo.h">
+      <Filter>Common\PropTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItem.h">
+      <Filter>Common\PropTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemButton.h">
+      <Filter>Common\PropTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemCheck.h">
+      <Filter>Common\PropTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemColor.h">
+      <Filter>Common\PropTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemCombo.h">
+      <Filter>Common\PropTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemEdit.h">
+      <Filter>Common\PropTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemEditButton.h">
+      <Filter>Common\PropTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemFileEdit.h">
+      <Filter>Common\PropTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\PropTree\PropTreeItemStatic.h">
+      <Filter>Common\PropTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\PropTree\PropTreeList.h">
+      <Filter>Common\PropTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\common\PropTree\PropTreeView.h">
+      <Filter>Common\PropTree</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\sys\win32\rc\AFEditor.rc">
+      <Filter>DebuggerApp\RC</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\Common.rc">
+      <Filter>DebuggerApp\RC</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\Debugger.rc">
+      <Filter>DebuggerApp\RC</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\DeclEditor.rc">
+      <Filter>DebuggerApp\RC</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\doom.rc">
+      <Filter>DebuggerApp\RC</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\GuiEd.rc">
+      <Filter>DebuggerApp\RC</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\MaterialEditor.rc">
+      <Filter>DebuggerApp\RC</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\ModelManager.rc">
+      <Filter>DebuggerApp\RC</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\ParticleEditor.rc">
+      <Filter>DebuggerApp\RC</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\PDAEditor.rc">
+      <Filter>DebuggerApp\RC</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\PropTree.rc">
+      <Filter>DebuggerApp\RC</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\Radiant.rc">
+      <Filter>DebuggerApp\RC</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\ScriptEditor.rc">
+      <Filter>DebuggerApp\RC</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\sys\win32\rc\SoundEditor.rc">
+      <Filter>DebuggerApp\RC</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\sys\win32\rc\res\BEVEL.BMP">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\BITMAP2.BMP">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\BMP00001.BMP">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\bmp00002.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\bmp00003.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\bmp00004.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\bmp00005.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\BMP0002.BMP">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\cchsb.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\ccrgb.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\dbg_back.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\dbg_breakpoint.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\dbg_current.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\dbg_currentline.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\dbg_empty.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\dbg_open.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\dbg_toolbar.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\DEFTEX.WAL">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\doom.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\ENDCAP.BMP">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\fpoint.cur">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\fxeditor.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\fxed_link.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\fxed_toolbar.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\GetString.htm">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\guied.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\guied_collapse.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\guied_expand.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\guied_hand.cur">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\guied_nav_visible.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\guied_nav_visibledisabled.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\guied_scripts.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\guied_scripts_white.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\guied_viewer_toolbar.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\IBEVEL.BMP">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\icon2.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\IENDCAP.BMP">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\logo_sm3dfx.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\matedtree.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\MaterialEditor.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\MEFileToolbar.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\MEtoolbar.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\me_disabled_icon.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\me_enabled.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\me_off_icon.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\me_on_icon.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\PropTree.rc2">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\Q.BMP">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\qe3.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\Radiant.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\RADIANT3.GIF">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\RadiantDoc.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\shaderbar.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\shaderdoc.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\shaderframe.ico">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\spliter.cur">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\Toolbar.bmp">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\TOOLBAR1.BMP">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\TOOLBAR2.BMP">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\VIEWDEFA.BMP">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+    <None Include="..\sys\win32\rc\res\VIEWOPPO.BMP">
+      <Filter>DebuggerApp\RC\res</Filter>
+    </None>
+  </ItemGroup>
+</Project>

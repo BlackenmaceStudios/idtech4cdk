@@ -36,18 +36,18 @@ class rvDebuggerScript
 public:
 
 	rvDebuggerScript ( void );
-	~rvDebuggerScript ( void );
+	virtual ~rvDebuggerScript ( void );
 
 	bool	Load		( const char* filename );	
-	bool	Reload		( void );
+	virtual bool	Reload		( void );
 
-	const char*		GetFilename		( void );
-	const char*		GetContents		( void );
+	virtual const char*		GetFilename		( void );
+	virtual const char*		GetContents		( void );
 
-	idProgram&		GetProgram		( void );
+	virtual idProgram&		GetProgram		( void );
 
-	bool			IsLineCode		( int linenumber );
-	bool			IsFileModified	( bool updateTime = false );	
+	virtual bool			IsLineCode		( int linenumber );
+	virtual bool			IsFileModified	( bool updateTime = false );	
 
 protected:
 

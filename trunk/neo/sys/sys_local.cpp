@@ -34,6 +34,7 @@ const char * sysLanguageNames[] = {
 	"english", "spanish", "italian", "german", "french", "russian", 
 	"polish", "korean", "japanese", "chinese", NULL
 };
+void Sys_ForceGameWindowForeground( void );
 
 idCVar sys_lang( "sys_lang", "english", CVAR_SYSTEM | CVAR_ARCHIVE,  "", sysLanguageNames, idCmdSystem::ArgCompletion_String<sysLanguageNames> );
 
@@ -118,6 +119,12 @@ const char * idSysLocal::GetCallStackCurStr( int depth ) {
 void idSysLocal::ShutdownSymbols( void ) {
 
 }
+
+
+void idSysLocal::ForceGameWindowForeground( void ) {
+	Sys_ForceGameWindowForeground();
+}
+
 
 ID_SYS_HANDLE idSysLocal::DLL_Load( const char *dllName ) {
 	return Sys_DLL_Load( dllName );

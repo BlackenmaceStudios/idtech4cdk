@@ -39,6 +39,7 @@ If you have questions concerning this license or the applicable additional terms
 
 // jmarshall
 class bmClientEntity;
+class rvDebuggerScript;
 // jmarshall end
 
 // default scripts
@@ -209,6 +210,8 @@ public:
 	virtual void				FreeClientEntity( bmClientEntity *entity ) = 0;
 
 	virtual void			UpdateLoadingString( const char *str ) = 0;
+
+	virtual rvDebuggerScript    *LoadDebugScript( const char *path ) = 0;
 // jmarshall end
 
 	// Called when the main menu is active.

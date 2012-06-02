@@ -70,7 +70,7 @@ public:
 	virtual sysEvent_t		GenerateMouseMoveEvent( int deltax, int deltay );
 
 	virtual void			OpenURL( const char *url, bool quit );
-	virtual void			StartProcess( const char *exeName, bool quit );
+	virtual void			StartProcess( const char *exeName, const char *cmdLine, bool quit );
 // jmarshall
 #ifndef TYPEINFO
 	virtual int				Milliseconds( void ) { return Sys_Milliseconds(); }
@@ -80,6 +80,10 @@ public:
 	virtual bool			IsDebuggerPresent( void );
 
 	virtual void			HandleCrashEvent( void );
+	virtual void			ForceGameWindowForeground( void );
+	virtual idPort			*AllocPort( void ) { return new idPort(); }
+	virtual bool			CompareNetAdrBase( const netadr_t a, const netadr_t b ) { return Sys_CompareNetAdrBase(a, b); }
+	virtual bool			StringToNetAdr( const char *s, netadr_t *a, bool doDNSResolve ) { return Sys_StringToNetAdr( s, a, doDNSResolve ); }
 #else
 	virtual int				Milliseconds( void ) { return -1; }
 	virtual void			GrabMouseCursor( bool grab ) {  }
@@ -87,6 +91,10 @@ public:
 	virtual const unsigned char *GetScanTable( void ) { return (const unsigned char*)""; }
 	virtual bool			IsDebuggerPresent( void ) { return false; }
 	virtual void			HandleCrashEvent( void ) {};
+	virtual void			ForceGameWindowForeground( void ) { }
+	virtual idPort			*AllocPort( void ) { return NULL; }
+	virtual bool			CompareNetAdrBase( const netadr_t a, const netadr_t b ) { return false; }
+	virtual bool			StringToNetAdr( const char *s, netadr_t *a, bool doDNSResolve ) { return false; }
 #endif
 	void Sys_DumpCallStack( void );
 

@@ -82,8 +82,8 @@ INT_PTR CALLBACK rvDebuggerQuickWatchDlg::DlgProc ( HWND wnd, UINT msg, WPARAM w
 		}
 		
 		case WM_CLOSE:
-			gDebuggerApp.GetOptions().SetWindowPlacement ( "wp_quickwatch", wnd );
-			gDebuggerApp.GetOptions().SetColumnWidths ( "cw_quickwatch", GetDlgItem ( wnd, IDC_DBG_CURVALUE ) );
+			gDebuggerApp->GetOptions().SetWindowPlacement ( "wp_quickwatch", wnd );
+			gDebuggerApp->GetOptions().SetColumnWidths ( "cw_quickwatch", GetDlgItem ( wnd, IDC_DBG_CURVALUE ) );
 			EndDialog ( wnd, 0 );
 			break;
 	
@@ -128,7 +128,7 @@ INT_PTR CALLBACK rvDebuggerQuickWatchDlg::DlgProc ( HWND wnd, UINT msg, WPARAM w
 
 			// Attach the dialog class pointer to the window
 			dlg = (rvDebuggerQuickWatchDlg*) lparam;
-			SetWindowLong ( wnd, GWL_USERDATA, lparam );
+			SetWindowLongPtr ( wnd, GWL_USERDATA, lparam );
 			dlg->mWnd = wnd;
 			
 			GetClientRect ( wnd, &client );
@@ -165,8 +165,8 @@ INT_PTR CALLBACK rvDebuggerQuickWatchDlg::DlgProc ( HWND wnd, UINT msg, WPARAM w
 				SetWindowText( GetDlgItem ( wnd, IDC_DBG_VARIABLE ), dlg->mVariable );
 			}
 
-			gDebuggerApp.GetOptions().GetWindowPlacement ( "wp_quickwatch", wnd );
-			gDebuggerApp.GetOptions().GetColumnWidths ( "cw_quickwatch", GetDlgItem ( wnd, IDC_DBG_CURVALUE ) );
+			gDebuggerApp->GetOptions().GetWindowPlacement ( "wp_quickwatch", wnd );
+			gDebuggerApp->GetOptions().GetColumnWidths ( "cw_quickwatch", GetDlgItem ( wnd, IDC_DBG_CURVALUE ) );
 		
 			return TRUE;
 		}
@@ -233,16 +233,16 @@ void rvDebuggerQuickWatchDlg::SetVariable ( const char* varname, bool force )
 	ListView_DeleteAllItems ( GetDlgItem ( mWnd, IDC_DBG_CURVALUE ) );
 
 	// Get the value of the new variable
-	gDebuggerApp.GetClient().InspectVariable ( varname, mCallstackDepth );
+	gDebuggerApp->GetClient().InspectVariable ( varname, mCallstackDepth );
 
 	// Wait for the variable value to be sent over from the debugger server		
-	if ( !gDebuggerApp.GetClient().WaitFor ( DBMSG_INSPECTVARIABLE, 2500 ) )
+	if ( !gDebuggerApp->GetClient().WaitFor ( DBMSG_INSPECTVARIABLE, 2500 ) )
 	{
 		return;
 	}
 	
 	// Make sure we got the value of the variable
-	if ( !gDebuggerApp.GetClient().GetVariableValue(varname, mCallstackDepth)[0] )
+	if ( !gDebuggerApp->GetClient().GetVariableValue(varname, mCallstackDepth)[0] )
 	{
 		return;
 	}
@@ -259,7 +259,7 @@ void rvDebuggerQuickWatchDlg::SetVariable ( const char* varname, bool force )
 	item.iItem = 0;
 	item.iSubItem = 0;
 	ListView_InsertItem ( GetDlgItem ( mWnd, IDC_DBG_CURVALUE ), &item );				
-	ListView_SetItemText ( GetDlgItem ( mWnd, IDC_DBG_CURVALUE ), 0, 1, (LPSTR)gDebuggerApp.GetClient().GetVariableValue(varname,mCallstackDepth) );
+	ListView_SetItemText ( GetDlgItem ( mWnd, IDC_DBG_CURVALUE ), 0, 1, (LPSTR)gDebuggerApp->GetClient().GetVariableValue(varname,mCallstackDepth) );
 
 	// Give focus back to the variable edit control and set the cursor back to an arrow
 	SetFocus ( GetDlgItem ( mWnd, IDC_DBG_VARIABLE ) );

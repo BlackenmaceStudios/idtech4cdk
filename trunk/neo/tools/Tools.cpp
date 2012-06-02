@@ -195,7 +195,7 @@ idToolInterface * ToolsAPI_Init( bmEngineClassExport *engineExport, void *winVar
 	idCVar::RegisterStaticVars();
 
 	// initialize processor specific SIMD
-	idSIMD::InitProcessor( "tools", true );
+	idSIMD::InitProcessor( "ScriptDebugger", true );
 
 	win32 = *(Win32Vars_t *)winVars;
 

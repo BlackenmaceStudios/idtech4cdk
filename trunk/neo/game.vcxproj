@@ -475,6 +475,7 @@
     <ClCompile Include="game\client\ClientEffects.cpp" />
     <ClCompile Include="game\client\ClientEntity.cpp" />
     <ClCompile Include="game\client\ClientLight.cpp" />
+    <ClCompile Include="game\debugger\Debugger.cpp" />
     <ClCompile Include="game\Effect.cpp" />
     <ClCompile Include="game\gamesys\Class.cpp" />
     <ClCompile Include="game\gamesys\DebugGraph.cpp" />
@@ -490,6 +491,7 @@
     </ClCompile>
     <ClCompile Include="game\Game_Loading.cpp" />
     <ClCompile Include="game\Game_MainMenu.cpp" />
+    <ClCompile Include="game\Game_ScriptDebugger.cpp" />
     <ClCompile Include="game\objectives\Objective.cpp" />
     <ClCompile Include="game\physics\Clip.cpp" />
     <ClCompile Include="game\physics\Force.cpp" />
@@ -551,6 +553,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="tools\debugger\DebuggerBreakpoint.cpp" />
+    <ClCompile Include="tools\debugger\DebuggerScript.cpp" />
+    <ClCompile Include="tools\debugger\DebuggerServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\ai\AAS.h" />
@@ -624,6 +629,10 @@
     <ClInclude Include="game\vehicles\Vehicle_Jeep.h" />
     <ClInclude Include="game\Weapon.h" />
     <ClInclude Include="game\WorldSpawn.h" />
+    <ClInclude Include="tools\debugger\DebuggerBreakpoint.h" />
+    <ClInclude Include="tools\debugger\DebuggerNet.h" />
+    <ClInclude Include="tools\debugger\DebuggerScript.h" />
+    <ClInclude Include="tools\debugger\DebuggerServer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\base\script\ai_base.script" />

@@ -198,6 +198,8 @@ public:
 								// tells the thread manager not to delete this thread when it ends
 	void						ManualDelete( void );
 
+	void						DebugFrame( idProgram *program );
+
 	// save games
 	void						Save( idSaveGame *savefile ) const;				// archives object for save game file
 	void						Restore( idRestoreGame *savefile );				// unarchives object from save game file
@@ -262,6 +264,26 @@ public:
 	static void					ReturnVector( idVec3 const &vec );
 	static void					ReturnEntity( idEntity *ent );
 };
+
+void	DebuggerServerCheckBreakpoint( idInterpreter *interpreter, idProgram *program, int instructionPointer );
+
+/*
+================
+idThread::WaitingOnThread
+================
+*/
+// jmarshall
+ID_INLINE void idThread::DebugFrame( idProgram *program ) {
+
+#ifndef ID_DEMO_BUILD
+	for(int i = 0; i < program->NumStatements(); i++)
+	{
+		DebuggerServerCheckBreakpoint( &interpreter, program, i );
+	}
+#endif
+
+}
+// jmarshall end
 
 /*
 ================
