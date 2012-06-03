@@ -123,7 +123,7 @@ namespace ToolsManaged.Frontend.WindowAPI
         {
             _nativeWindow.OnMouseWheelPtr(_nativeWindow.GetNativeAddress(), 0, delta, point);
         }
-        private KeyHandler.VirtualKeyStates _lastKey;
+        private KeyHandler.VirtualKeyStates _lastKey, _lastKey2;
         public void OnMouseDownLeft(Keys key, NativeAPI.idManagedEditorWindowNative.Point point)
         {
             uint keyval = 0x0001;
@@ -131,6 +131,11 @@ namespace ToolsManaged.Frontend.WindowAPI
             {
                 keyval |= 0x0004;
                 _lastKey = KeyHandler.VirtualKeyStates.VK_SHIFT;
+            }
+            if (KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_LCONTROL))
+            {
+                keyval |= 0x0008;
+                _lastKey2 = KeyHandler.VirtualKeyStates.VK_LCONTROL;
             }
             if (KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_LMENU))
             {
@@ -147,6 +152,11 @@ namespace ToolsManaged.Frontend.WindowAPI
             {
                 keyval |= 0x0004;
                 _lastKey = KeyHandler.VirtualKeyStates.VK_NONAME;
+            }
+            if (!KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_LCONTROL) && _lastKey2 == KeyHandler.VirtualKeyStates.VK_LCONTROL)
+            {
+                keyval |= 0x0008;
+                _lastKey2 = KeyHandler.VirtualKeyStates.VK_NONAME;
             }
             _nativeWindow.OnLButtonUp(_nativeWindow.GetNativeAddress(), keyval, point);
 

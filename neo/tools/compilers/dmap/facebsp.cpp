@@ -183,7 +183,7 @@ void	FreeBspFace( bspface_t *f ) {
 SelectSplitPlaneNum
 ================
 */
-#define	BLOCK_SIZE	1024
+#define	BLOCK_SIZE	4096
 int SelectSplitPlaneNum( node_t *node, bspface_t *list ) {
 	bspface_t	*split;
 	bspface_t	*check;
@@ -203,6 +203,8 @@ int SelectSplitPlaneNum( node_t *node, bspface_t *list ) {
 	// arbitrary distance across the map
 
 	halfSize = ( node->bounds[1] - node->bounds[0] ) * 0.5f;
+
+	
 	for ( int axis = 0; axis < 3; axis++ ) {
 		if ( halfSize[axis] > BLOCK_SIZE ) {
 			dist = BLOCK_SIZE * ( floor( ( node->bounds[0][axis] + halfSize[axis] ) / BLOCK_SIZE ) + 1.0f );
@@ -325,6 +327,7 @@ void	BuildFaceTree_r( node_t *node, bspface_t *list ) {
 				newFace->planenum = split->planenum;
 				childLists[0] = newFace;
 			}
+
 			if ( backWinding ) {
 				newFace = AllocBspFace();
 				newFace->w = backWinding;
@@ -332,6 +335,7 @@ void	BuildFaceTree_r( node_t *node, bspface_t *list ) {
 				newFace->planenum = split->planenum;
 				childLists[1] = newFace;
 			}
+
 			FreeBspFace( split );
 		} else if ( side == SIDE_FRONT ) {
 			split->next = childLists[0];
@@ -341,7 +345,6 @@ void	BuildFaceTree_r( node_t *node, bspface_t *list ) {
 			childLists[1] = split;
 		}
 	}
-
 
 	// recursively process children
 	for ( i = 0 ; i < 2 ; i++ ) {
@@ -441,6 +444,10 @@ bspface_t	*MakeStructuralBspFaceList( primitive_t *list ) {
 				continue;
 			}
 			if ( ( b->contents & CONTENTS_AREAPORTAL ) && ! ( s->material->GetContentFlags() & CONTENTS_AREAPORTAL ) ) {
+				continue;
+			}
+
+			if(!(s->material->GetContentFlags() & CONTENTS_SOLID)) {
 				continue;
 			}
 			f = AllocBspFace();

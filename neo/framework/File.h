@@ -46,7 +46,7 @@ typedef enum {
 
 class idFileSystemLocal;
 
-
+// jmarshall: added support for larger files 6/3/2012
 class idFile {
 public:
 	virtual					~idFile( void ) {};
@@ -60,6 +60,7 @@ public:
 	virtual int				Write( const void *buffer, int len );
 							// Returns the length of the file.
 	virtual int				Length( void );
+	virtual __int64			Length64( void );
 							// Return a time value for reload operations.
 	virtual ID_TIME_T			Timestamp( void );
 							// Returns offset in file.
@@ -70,6 +71,7 @@ public:
 	virtual void			Flush( void );
 							// Seek on a file.
 	virtual int				Seek( long offset, fsOrigin_t origin );
+	virtual __int64			Seek64( __int64 offset, fsOrigin_t origin );
 							// Go back to the beginning of the file.
 	virtual void			Rewind( void );
 							// Like fprintf.
@@ -201,11 +203,13 @@ public:
 	virtual int				Read( void *buffer, int len );
 	virtual int				Write( const void *buffer, int len );
 	virtual int				Length( void );
+	virtual __int64			Length64( void ) { return fileSize; };
 	virtual ID_TIME_T			Timestamp( void );
 	virtual int				Tell( void );
 	virtual void			ForceFlush( void );
 	virtual void			Flush( void );
-	virtual int				Seek( long offset, fsOrigin_t origin );
+	virtual int				Seek( long offset, fsOrigin_t origin ) { return Seek64( offset, origin ); }
+	virtual __int64			Seek64( __int64 offset, fsOrigin_t origin );
 
 	// returns file pointer
 	FILE *					GetFilePtr( void ) { return o; }
@@ -214,7 +218,7 @@ private:
 	idStr					name;			// relative path of the file - relative path
 	idStr					fullPath;		// full file path - OS path
 	int						mode;			// open mode
-	int						fileSize;		// size of the file
+	__int64					fileSize;		// size of the file
 	FILE *					o;				// file handle
 	bool					handleSync;		// true if written data is immediately flushed
 };

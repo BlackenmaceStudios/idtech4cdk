@@ -86,7 +86,7 @@ public:
 	bool						InitFromFile( const char *path );
 	bool						InitNewVirtualTextureFile( const char *path, int numAreas );
 #if !VT_LOAD_FROMMEMORY
-	byte *						ReadTile( int pageNum, int tileNum, int mipLevel, byte *buffer );
+	byte *						ReadTile( __int64 pageNum, __int64 tileNum, __int64 mipLevel, byte *buffer );
 #else
 	byte *						ReadTile(  int pageNum, int tileNum, int mipLevel );
 #endif
@@ -105,7 +105,7 @@ private:
 
 	idFile *f[VIRTUALTEXTURE_NUMLEVELS];
 	byte *fileBuffer[VIRTUALTEXTURE_NUMLEVELS];
-	int fileBufferLen;
+	__int64 fileBufferLen;
 
 	idFile *image;
 	idList< idStr > imglist;

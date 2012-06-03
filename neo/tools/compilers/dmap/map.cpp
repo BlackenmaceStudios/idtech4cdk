@@ -318,10 +318,11 @@ static void ParseBrush( const idMapBrush *mapBrush, int primitiveNum ) {
 		memset( s, 0, sizeof( *s ) );
 		s->planenum = FindFloatPlane( ms->GetPlane(), &fixedDegeneracies );
 
-		if(strstr(ms->GetMaterial(), "caulk"))
+		if(strstr(ms->GetMaterial(), "textures/common"))
 		{
 			// Caulk brush dont include for vt.
-			i = i;
+			idPlane p = ms->GetPlane();
+
 		}
 		else
 		{

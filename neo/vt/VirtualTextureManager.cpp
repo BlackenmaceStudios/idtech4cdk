@@ -111,6 +111,7 @@ bmVirtualTextureManager::LoadVirtualTextureFile
 */
 bmVirtualTextureFile * bmVirtualTextureManager::LoadVirtualTextureFile( const char *path ) {
 	// Don't load over vt if it isn't present on the filesystem.
+/*
 	for(int i = 0; i < VIRTUALTEXTURE_NUMLEVELS; i++)
 	{
 		if(fileSystem->ReadFile( va( "vt/%s_level%d%s", path, i,VIRTUALTEXTURE_EXTEN ), NULL) == -1) {
@@ -121,7 +122,7 @@ bmVirtualTextureFile * bmVirtualTextureManager::LoadVirtualTextureFile( const ch
 			return NULL;
 		}
 	}
-
+*/
 	// If there is a current virtual texture file thats currently open, free it.
 	FreeVirtualTextureFile();
 

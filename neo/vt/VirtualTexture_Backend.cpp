@@ -59,12 +59,21 @@ void bmVirtualTextureBackend::Init( void ) {
 	sceneFbo = globalImages->ImageFromFunction( "_vt_feedback", R_FrameBufferImageVT );
 	sceneFboPublic = globalImages->ImageFromFunction( "_vt_scenefbo_public",  R_FeedBackTileTable );
 
+	sceneAreaDist = new int[VT_MAXCHARTS];
+	numSceneTiles = new int[VT_MAXCHARTS];
+
 	memset( &sceneAreaDist[0], 0, sizeof(int) * VT_MAXCHARTS );
 	memset( &numSceneTiles[0], 0, sizeof(int) * VT_MAXCHARTS );
 
 	for(int i = 0; i < VT_MAXCHARTS; i++)
 	{
-		sceneTiles[i] = new bmVTTileReadback_t[vt_backend_fbosize_width.GetInteger() * vt_backend_fbosize_height.GetInteger()];	
+		bmVTTileReadback_t *vtReadBack = (bmVTTileReadback_t *)allocator->Allocate( sizeof( bmVTTileReadback_t ) * (vt_backend_fbosize_width.GetInteger() * vt_backend_fbosize_height.GetInteger()));
+
+		for(int c = 0; c < vt_backend_fbosize_width.GetInteger() * vt_backend_fbosize_height.GetInteger(); c++)
+		{
+			vtReadBack[c].Reset();
+		}
+		sceneTiles.Append(vtReadBack);	
 	}
 
 	
@@ -158,11 +167,11 @@ void bmVirtualTextureBackend::UpdateSceneVT( void ) {
 		
 		// Upload the tiles for this area.
 		sceneAreaDist[i] = 255 - sceneAreaDist[i];
-		if(sceneAreaDist[i] > 180)
+		if(sceneAreaDist[i] > 220)
 		{
 			UploadAreaTiles( i, 2,&sceneTiles[i][0], numSceneTiles[i]);
 		}
-		else if(sceneAreaDist[i] > 120)
+		else if(sceneAreaDist[i] > 180)
 		{
 			UploadAreaTiles( i, 1,&sceneTiles[i][0], numSceneTiles[i]);
 		}

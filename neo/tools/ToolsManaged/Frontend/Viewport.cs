@@ -55,6 +55,7 @@ namespace ToolsManaged.Frontend
             _brushContextMenu = new System.Windows.Forms.ContextMenu();
             AddItemToContextMenu(_brushContextMenu, "Set as CollideOnly Brush", new EventHandler(BrushContextMenu_OnClickSetCollideOnlyBrush));
             AddItemToContextMenu(_brushContextMenu, "Set as VT Brush", new EventHandler(BrushContextMenu_OnClickSetAsVTBrush));
+            AddItemToContextMenu(_brushContextMenu, "Set as NoDraw/NoCollide Brush", new EventHandler(BrushContextMenu_OnClickSetAsNoDrawBrush));
         }
 
         private void BrushContextMenu_OnClickSetCollideOnlyBrush(object sender, EventArgs e)
@@ -65,6 +66,11 @@ namespace ToolsManaged.Frontend
         private void BrushContextMenu_OnClickSetAsVTBrush(object sender, EventArgs e)
         {
             ((EditorWindow)window).OnNamedEvent("SetAsVTBrush");
+        }
+
+        private void BrushContextMenu_OnClickSetAsNoDrawBrush(object sender, EventArgs e)
+        {
+            ((EditorWindow)window).OnNamedEvent("SetAsNoDrawBrush");
         }
 
         private void CreateEntityContextMenu()
