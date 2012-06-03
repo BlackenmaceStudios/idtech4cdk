@@ -102,7 +102,7 @@ void bmVTModel::WriteToFile( const char *file ) {
 
 			dv = &Vertexes[i];
 
-			objf->WriteFloatString( "v %f %f %f\n", dv->xyz.x, dv->xyz.z, -dv->xyz.y );
+			objf->WriteFloatString( "v %f %f %f\n", dv->xyz.x * 0.30, dv->xyz.z * 0.30, -dv->xyz.y * 0.30 );
 		}
 
 

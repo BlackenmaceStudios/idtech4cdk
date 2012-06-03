@@ -1521,7 +1521,7 @@ void idGameLocal::MapShutdown( void ) {
 	
 	gamestate = GAMESTATE_SHUTDOWN;
 
-	// jmarshall
+// jmarshall
 #ifndef ID_DEMO_BUILD
 	DebuggerServerShutdown();
 #endif
@@ -2239,7 +2239,10 @@ gameReturn_t idGameLocal::RunFrame( const usercmd_t *clientCmds ) {
 	}
 #endif
 // jmarshall
-	frameCommandThread->DebugFrame( &program );
+	if(g_useScriptDebugger.GetBool())
+	{
+		frameCommandThread->DebugFrame( &program );
+	}
 // jmarshall end
 	player = GetLocalPlayer();
 

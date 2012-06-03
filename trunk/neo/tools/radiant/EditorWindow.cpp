@@ -38,6 +38,7 @@ BOOL idManagedEditorWindow::OnCmdMsg( UINT nID, int nCode, void *pExtra, AFX_CMD
 void idManagedEditorWindow::OnNamedEvent( const char *eventName ) {
 	bool eventSetAsCollisionBrush = false;
 	bool eventSetAsVTBrush = false;
+	bool eventSetAsNoDrawBrush = false;
 
 	if(!strcmp(eventName, "SetAsCollisionBrush")) {
 		eventSetAsCollisionBrush = true;
@@ -48,9 +49,14 @@ void idManagedEditorWindow::OnNamedEvent( const char *eventName ) {
 		eventSetAsVTBrush = true;
 		Sys_MarkMapModified();
 	}
+	if(!strcmp(eventName, "SetAsNoDrawBrush")) {
+		eventSetAsNoDrawBrush = true;
+		Sys_MarkMapModified();
+	}
 
+	
 
-	if(eventSetAsCollisionBrush || eventSetAsVTBrush)
+	if(eventSetAsCollisionBrush || eventSetAsVTBrush || eventSetAsNoDrawBrush)
 	{
 		for (brush_t * pBrush = selected_brushes.next; pBrush != NULL && pBrush != &selected_brushes; pBrush = pBrush->next) {
 			for(face_t *face = pBrush->brush_faces; face != NULL; face = face->next) {
@@ -61,6 +67,25 @@ void idManagedEditorWindow::OnNamedEvent( const char *eventName ) {
 				if(eventSetAsVTBrush) {
 					face->d_texture = declManager->FindMaterial( "worlddefault" );
 				}
+
+				if(eventSetAsNoDrawBrush) {
+					face->d_texture = declManager->FindMaterial( "textures/common/nodraw" );
+				}
+			}
+		}
+
+		for(int i = 0; i < g_ptrSelectedFaces.GetCount(); i++) {
+			face_t *face = (face_t *)g_ptrSelectedFaces.GetAt(i);
+			if(eventSetAsCollisionBrush) {
+				face->d_texture = declManager->FindMaterial( "textures/common/caulk" );
+			}
+
+			if(eventSetAsVTBrush) {
+				face->d_texture = declManager->FindMaterial( "worlddefault" );
+			}
+
+			if(eventSetAsNoDrawBrush) {
+			   face->d_texture = declManager->FindMaterial( "textures/common/nodraw" );
 			}
 		}
 	}

@@ -94,7 +94,7 @@ bmVirtualTexturePageTile_t	*bmVirtualTexturePage::BlitTileToPage( bmVirtualTextu
 	bmVirtualTexturePageTile_t *freeTile = NULL;
 	int numTiles = vt_page_size.GetInteger() / VIRTUALTEXTURE_TILESIZE;
 
-	if(lastTile != NULL && lastTile->realTileNum == (tileNum) + (pageNum * 255)) {
+	if(lastTile != NULL && lastTile->realTileNum == (tileNum) + (pageNum * 1255)) {
 		return lastTile;
 	}
 
@@ -104,7 +104,7 @@ bmVirtualTexturePageTile_t	*bmVirtualTexturePage::BlitTileToPage( bmVirtualTextu
 //		}
 
 		// If this tile is already uploaded we don't need to do it again.
-		if(tiles[i].vtfile == vtfile && tiles[i].realTileNum == (tileNum) + (pageNum * 255)) {
+		if(tiles[i].vtfile == vtfile && tiles[i].realTileNum == (tileNum) + (pageNum * 1255)) {
 			lastTile = &tiles[i];
 
 			return lastTile;
@@ -131,7 +131,7 @@ bmVirtualTexturePageTile_t	*bmVirtualTexturePage::BlitTileToPage( bmVirtualTextu
 #endif
 	// Blit the tile into image.
 	freeTile->vtfile = vtfile;
-	freeTile->realTileNum = (tileNum) + (pageNum * 255);
+	freeTile->realTileNum = (tileNum) + (pageNum * 1255);
 	freeTile->frameNum = frameNum + 1;
 	freeTile->page = this;
 

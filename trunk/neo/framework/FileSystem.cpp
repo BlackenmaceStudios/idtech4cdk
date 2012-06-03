@@ -456,7 +456,9 @@ private:
 	int						ListOSFiles( const char *directory, const char *extension, idStrList &list );
 	FILE *					OpenOSFile( const char *name, const char *mode, idStr *caseSensitiveName = NULL );
 	FILE *					OpenOSFileCorrectName( idStr &path, const char *mode );
-	int						DirectFileLength( FILE *o );
+// jmarshall: large files
+	__int64					DirectFileLength( FILE *o );
+// jmarshall end
 	void					CopyFile( idFile *src, const char *toOSPath );
 	int						AddUnique( const char *name, idStrList &list, idHashIndex &hashIndex ) const;
 	void					GetExtensionList( const char *extension, idStrList &extensionList ) const;
@@ -671,16 +673,19 @@ FILE *idFileSystemLocal::OpenOSFileCorrectName( idStr &path, const char *mode ) 
 idFileSystemLocal::DirectFileLength
 ================
 */
-int idFileSystemLocal::DirectFileLength( FILE *o ) {
-	int		pos;
-	int		end;
-
-	pos = ftell( o );
-	fseek( o, 0, SEEK_END );
-	end = ftell( o );
-	fseek( o, pos, SEEK_SET );
+// jmarshall: large files works on x86 and x64
+__int64 idFileSystemLocal::DirectFileLength( FILE *o ) {
+	__int64	pos;
+	__int64	end;
+// jmarshall - _fseeki64,_ftelli64 - large file offsets even in a 32-bit environment
+	pos = _ftelli64( o );
+	_fseeki64( o, 0, SEEK_END );
+	end = _ftelli64( o );
+	_fseeki64( o, pos, SEEK_SET );
+// jmarshall end
 	return end;
 }
+// jmarshall end
 
 /*
 ============
@@ -1071,7 +1076,9 @@ timestamp can be NULL if not required
 int idFileSystemLocal::ReadFile( const char *relativePath, void **buffer, ID_TIME_T *timestamp ) {
 	idFile *	f;
 	byte *		buf;
-	int			len;
+// jmarshall
+	__int64		len;
+// jmarshall end
 	bool		isConfig;
 
 	if ( !searchPaths ) {
@@ -1133,7 +1140,7 @@ int idFileSystemLocal::ReadFile( const char *relativePath, void **buffer, ID_TIM
 		}
 		return -1;
 	}
-	len = f->Length();
+	len = f->Length64();
 
 	if ( timestamp ) {
 		*timestamp = f->Timestamp();

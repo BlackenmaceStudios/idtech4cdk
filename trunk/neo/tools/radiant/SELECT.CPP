@@ -307,7 +307,7 @@ void Select_Ray(idVec3 origin, idVec3 dir, int flags) {
 		return;
 	}
 
-	if (flags == SF_SINGLEFACE) {
+	if ( !t.brush->entityModel && flags == SF_SINGLEFACE) {
 		int		nCount = g_SelectedFaces.GetSize();
 		bool	bOk = true;
 		for (int i = 0; i < nCount; i++) {

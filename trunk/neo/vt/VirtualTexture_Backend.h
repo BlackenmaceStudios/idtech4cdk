@@ -13,7 +13,7 @@ struct bmVTTileReadback_t {
 	byte	dist;				// How far away the tile is.
 
 
-	bmVTTileReadback_t() {
+	void Reset(void) {
 		tileNum = 0;
 		pageNum = 0;
 		dist = 0;
@@ -24,7 +24,7 @@ struct bmVTTileReadback_t {
 // bmVirtualTextureBackend
 //
 #define VT_MAXTILES_IN_SCENE	9216
-#define VT_MAXCHARTS			69
+#define VT_MAXCHARTS			260
 class bmVirtualTextureBackend {
 public:
 	void						Init( void );
@@ -42,9 +42,9 @@ private:
 	void						ReadTilesInScene( byte *readbackBuffer, int width, int height );
 	void						UploadAreaTiles( int pageId, int mipLevel,  bmVTTileReadback_t *areaTiles, int numTiles );
 
-	int							sceneAreaDist[VT_MAXCHARTS];
-	int							numSceneTiles[VT_MAXCHARTS];
-	bmVTTileReadback_t			*sceneTiles[VT_MAXCHARTS];
+	int							*sceneAreaDist;
+	int							*numSceneTiles;
+	idList<bmVTTileReadback_t *> sceneTiles;
 
 	
 };

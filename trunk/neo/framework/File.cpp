@@ -211,6 +211,23 @@ ID_TIME_T idFile::Timestamp( void ) {
 
 /*
 =================
+idFile::Length64
+=================
+*/
+__int64	 idFile::Length64( void ) { 
+	return 0;
+}
+/*
+=================
+idFile::Seek64
+=================
+*/
+__int64 idFile::Seek64( __int64 offset, fsOrigin_t origin ) { 
+	return 0;
+}
+
+/*
+=================
 idFile::Tell
 =================
 */
@@ -896,7 +913,7 @@ idFile_Permanent::Tell
 =================
 */
 int idFile_Permanent::Tell( void ) {
-	return ftell( o );
+	return _ftelli64( o );
 }
 
 /*
@@ -919,12 +936,13 @@ ID_TIME_T idFile_Permanent::Timestamp( void ) {
 
 /*
 =================
-idFile_Permanent::Seek
+idFile_Permanent::Seek64
 
   returns zero on success and -1 on failure
 =================
 */
-int idFile_Permanent::Seek( long offset, fsOrigin_t origin ) {
+// jmarshall
+__int64 idFile_Permanent::Seek64( __int64 offset, fsOrigin_t origin ) {
 	int _origin;
 
 	switch( origin ) {
@@ -947,8 +965,11 @@ int idFile_Permanent::Seek( long offset, fsOrigin_t origin ) {
 		}
 	}
 
-	return fseek( o, offset, _origin );
+	return _fseeki64( o, offset, _origin );
 }
+
+
+// jmarshall end
 
 
 /*

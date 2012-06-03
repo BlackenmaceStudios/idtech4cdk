@@ -554,7 +554,13 @@ static void MoveSelection( const idVec3 &orgMove ) {
 		return;
 	}
 
-	if (g_pParentWnd->ActiveXY()->ScaleMode()) {
+	idVec3	vDistance;
+	VectorSubtract(pressdelta, vPressStart, vDistance);
+	strStatus.Format("Distance x: %.3f  y: %.3f  z: %.3f", vDistance[0], vDistance[1], vDistance[2]);
+	g_pParentWnd->SetStatusText(3, strStatus);
+
+
+	if (g_pParentWnd->ActiveXY()->ScaleMode() ) {
 		idVec3	v;
 		v[0] = v[1] = v[2] = 1.0f;
 		for (int i = 0; i < 3; i++) {
@@ -570,10 +576,7 @@ static void MoveSelection( const idVec3 &orgMove ) {
 		return;
 	}
 
-	idVec3	vDistance;
-	VectorSubtract(pressdelta, vPressStart, vDistance);
-	strStatus.Format("Distance x: %.3f  y: %.3f  z: %.3f", vDistance[0], vDistance[1], vDistance[2]);
-	g_pParentWnd->SetStatusText(3, strStatus);
+	
 
 	// dragging only a part of the selection
 	if (UpdateActiveDragPoint(move)) {

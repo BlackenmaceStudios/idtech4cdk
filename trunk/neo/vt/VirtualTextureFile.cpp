@@ -78,7 +78,7 @@ bool bmVirtualTextureFile::InitFromFile( const char *path ) {
 
 		if(i > 0)
 		{
-			fileBufferLen = f[i]->Length();
+			fileBufferLen = f[i]->Length64();
 
 			game->UpdateLoadingString("Init Virtual Texture..");
 
@@ -112,18 +112,20 @@ bmVirtualTextureFile::ReadTile
 */
 
 #if !VT_LOAD_FROMMEMORY
-byte *bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum, int mipLevel, byte *tileBuffer ) {
-	int bufferpos = 0;
+byte *bmVirtualTextureFile::ReadTile(  __int64 pageNum, __int64 tileNum, __int64 mipLevel, byte *tileBuffer ) {
+	__int64 bufferpos = 0;
 	
 	if(mipLevel == 0)
 	{
-		bufferpos += sizeof(bmVirtualTextureHeader_t) ;
+		bufferpos = sizeof(bmVirtualTextureHeader_t) ;
 	}
 
 	switch(mipLevel) {
 		case 0:
-			bufferpos += ((4096 * 4096) * pageNum);
-			bufferpos += (VIRTUALTEXTURE_TILEMEMSIZE * (tileNum));
+			{
+				bufferpos += (4096 * 4096) * pageNum;
+				bufferpos += (VIRTUALTEXTURE_TILEMEMSIZE * (tileNum));
+			}
 			break;
 
 		case 1:
@@ -147,11 +149,11 @@ byte *bmVirtualTextureFile::ReadTile(  int pageNum, int tileNum, int mipLevel, b
 
 	
 	assert(tileBuffer != NULL);
-	if(bufferpos >= f[mipLevel]->Length()) {
+	if(bufferpos >= f[mipLevel]->Length64()) {
 		common->FatalError( "VT_ReadTile: %d > %d\n", bufferpos, f[mipLevel]->Length());
 	}
 
-	f[mipLevel]->Seek(bufferpos, FS_SEEK_SET);
+	f[mipLevel]->Seek64(bufferpos, FS_SEEK_SET);
 
 	switch( mipLevel)
 	{

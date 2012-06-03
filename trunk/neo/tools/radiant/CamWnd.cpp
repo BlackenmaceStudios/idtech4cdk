@@ -661,6 +661,14 @@ void CCamWnd::Cam_MouseDown(int x, int y, int buttons) {
 				return;
 			}
 		}
+
+		if(!isWorldSelected) {
+			
+			if(g_ptrSelectedFaces.GetCount() > 0) {
+				isWorldSelected = true;
+			}
+		}
+
 		if(isWorldSelected)
 		{
 			isWorldSelected = true;
