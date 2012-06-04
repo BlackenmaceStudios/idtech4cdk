@@ -399,19 +399,19 @@ int VirtualTextureBuilder::RemapVertexFromParentToChildTri( srfTriangles_t *pare
 VirtualTextureBuilder:ScaleUVRegionToFitInTri
 ====================
 */
-#define VT_EPSILON			0.0001f
+#define VT_EPSILON			0.0000f
 
-
-void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriangles_t *parentTris, srfTriangles_t *tris, int triId, int pageId, int widthId, int heightId, float uvScaleW, float uvScaleH, float chartW, float chartH ) {
+idList<int> burnIndexes;
+bool VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriangles_t *parentTris, srfTriangles_t *tris, int triId, int pageId, int widthId, int heightId, float uvScaleW, float uvScaleH, float chartW, float chartH ) {
 	idBounds uvRegion;
 	idList<idDrawVert> verts;
-	idList<int> indexes, burnIndexes, realIndexes;
+	idList<int> indexes, realIndexes;
 	idVec3 epsilon = idVec3(VT_EPSILON, VT_EPSILON, 0.0f);
 
 	verts.SetGranularity( 3000 );
 	indexes.Clear();
 	validIndexes.Clear();
-	burnIndexes.Clear();
+	
 	common->Printf("ScaleUVRegionToFitInTri: Processing %d...\n", pageId );
 
 	// Get the region of UV's we want to use.
@@ -445,27 +445,52 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 		}
 
 		if(appendVert) {
-			for(int d = c; d < c + 3; d++)
+			int ind[3];
+			int numDupIndexes = 0;
+			
+
+			for(int d = c, t = 0; d < c + 3; d++, t++)
 			{
 				int i = parentTris->indexes[d];
 				v = parentTris->verts[i];
 				v.color[0] = 2;
 				parentTris->verts[i].color[0] = 0;
 
-				int ind = verts.Num();
+				ind[t] = -1;
 
 				for(int f = 0; f < verts.Num(); f++) {
 					if(verts[f] == v) {
-						ind = f;
+						ind[t] = f;
 						break;
 					}
 				}
+			}
 
-				if(ind == verts.Num())
+			for(int d = 0; d < 3; d++) {
+				int i = parentTris->indexes[d + c];
+
+				for(int g = 0; g < burnIndexes.Num(); g++) {
+					if(burnIndexes[g] == i) {
+						numDupIndexes++;
+						break;
+					}
+				}
+			}
+
+			if(numDupIndexes == 3) {
+			//	continue;
+			}
+
+			for(int d = 0; d < 3; d++) {
+				int i = parentTris->indexes[d + c];
+				v = parentTris->verts[i];
+				if(ind[d] == -1)
 				{
+					ind[d] = verts.Num();
 					verts.Append( v );
 				}
-				validIndexes.Append( ind );
+				validIndexes.Append( ind[d] );
+				burnIndexes.Append( i );
 			}
 		}
 	}
@@ -568,6 +593,10 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 	}
 
 	realIndexes = validIndexes;
+	if(realIndexes.Num() <= 0) {
+		return false;
+	}
+
 	common->Printf("...Number of vertexes %d\n", verts.Num() );
 	common->Printf("...Number of indexes %d-%d\n", realIndexes.Num(), indexes.Num() );
 
@@ -615,6 +644,8 @@ void VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 		tris->verts[i].st /= scale;
 
 	}
+
+	return true;
 }
 
 /*
@@ -652,11 +683,6 @@ bool VirtualTextureBuilder::GenerateVTVerts_r( bmVTModel *model,  float surfaceS
 		idDrawVert *v = model->tris[d]->verts;
 
 		if(model->tris[d]->vt_uvGenerateType == Editor_NotPartOfVirtualTexture) {
-			continue;
-		}
-
-		if(model->tris[d]->vt_uvGenerateType == Editor_GenerateUVs_Q3Style) {
-			common->Warning("Editor_GenerateUVs_Q3Style is not supported.\n");
 			continue;
 		}
 
@@ -810,7 +836,7 @@ generatePage:
 
 					srfTriangles_t *tris = model->tris[d];
 					
-
+					burnIndexes.Clear();
 					if(firstTrisOnPage != d)
 					{
 						// Prepare a new VT page.
@@ -831,15 +857,21 @@ generatePage:
 					float UVScaleH = (1.0f / cellsPerHeight);
 
 					int cellId = 0;
+					bool allocNewTris = true;
 					for(int h = 0; h < cellsPerHeight; h++)
-					
 					{
 						for(int w = 0; w < cellsPerWidth; w++, cellId++)	
 						{
 							model->AllocTriangleAtPosition( d + cellId );
 
 							srfTriangles_t *newTris = model->tris[d + cellId];
-							ScaleUVRegionToFitInTri( model, tris, newTris, d + cellId, VT_CurrentNumAreas, w, h, UVScaleW, UVScaleH, cellsPerWidth, cellsPerHeight );
+							if(!ScaleUVRegionToFitInTri( model, tris, newTris, d + cellId, VT_CurrentNumAreas, w, h, UVScaleW, UVScaleH, cellsPerWidth, cellsPerHeight )) {
+								common->Warning("!!!!!!! UV Section has no UV's!!!!!!!\n");
+								model->FreeTri( d + cellId );
+								cellId--;
+								allocNewTris = false;
+								continue;
+							}
 							newTris->vt_AreaID = VT_CurrentNumAreas;
 							newTris->vt_uvGenerateType = Editor_ImportUVs_SinglePage; // Just incase we have to go through the UVs again.
 							// Prepare a new VT page.

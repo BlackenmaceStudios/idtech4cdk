@@ -183,7 +183,7 @@ void	FreeBspFace( bspface_t *f ) {
 SelectSplitPlaneNum
 ================
 */
-#define	BLOCK_SIZE	4096
+#define	BLOCK_SIZE	1024
 int SelectSplitPlaneNum( node_t *node, bspface_t *list ) {
 	bspface_t	*split;
 	bspface_t	*check;
@@ -447,9 +447,6 @@ bspface_t	*MakeStructuralBspFaceList( primitive_t *list ) {
 				continue;
 			}
 
-			if(!(s->material->GetContentFlags() & CONTENTS_SOLID)) {
-				continue;
-			}
 			f = AllocBspFace();
 			if ( s->material->GetContentFlags() & CONTENTS_AREAPORTAL ) {
 				f->portal = true;

@@ -30,11 +30,16 @@ void bmVTModel::AllocTriangleAtPosition( int triId ) {
 }
 
 void bmVTModel::FreeTri( int triId ) { 
+	if(tris[triId]->numVerts > 0)
+	{
+		R_FreeStaticTriSurf( tris[triId] ); 
+	}
+
 	
 	tris.RemoveIndex( triId ); 
 	materials.RemoveIndex( triId );
 	areas.RemoveIndex( triId );
-	R_FreeStaticTriSurf( tris[triId] ); 
+
 }
 
 void bmVTModel::SetVertexesForTris( srfTriangles_t	*uTri, idDrawVert *verts, int numVerts, int *indexes, int numIndexes ) {

@@ -1717,7 +1717,7 @@ void Select_ToOBJ() {
 		idTriList tris(1024);
 		idMatList mats(1024);
 
-		for (brush_t *b = selected_brushes.next; b != &selected_brushes; b = b->next) {
+		for (brush_t *b = active_brushes.next; b != &active_brushes; b = b->next) {
 
 			if ( b->hiddenBrush ) {
 				continue;
