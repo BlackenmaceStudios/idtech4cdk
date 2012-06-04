@@ -553,7 +553,7 @@ typedef struct interactionTris_s {
 		outModel.materials.Append( ambient->material->GetName() );
 // jmarshall end
 		uTri = ShareMapTriVerts( ambient );
-		if(strstr(ambient->material->GetName(), "caulk") || uvGenHandleType == Editor_NotPartOfVirtualTexture) {
+		if(strstr(ambient->material->GetName(), "textures/common") || uvGenHandleType == Editor_NotPartOfVirtualTexture) {
 			uTri->vt_AreaID = -1;
 		}
 		FreeTriList( ambient );

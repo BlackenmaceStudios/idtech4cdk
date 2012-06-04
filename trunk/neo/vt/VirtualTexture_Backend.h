@@ -23,7 +23,6 @@ struct bmVTTileReadback_t {
 //
 // bmVirtualTextureBackend
 //
-#define VT_MAXTILES_IN_SCENE	9216
 #define VT_MAXCHARTS			260
 class bmVirtualTextureBackend {
 public:

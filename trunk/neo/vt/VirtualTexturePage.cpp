@@ -92,8 +92,7 @@ bmVirtualTexturePageTile_t	*bmVirtualTexturePage::BlitTileToPage( bmVirtualTextu
 	int i;
 #ifndef BSPCOMPILER
 	bmVirtualTexturePageTile_t *freeTile = NULL;
-	int numTiles = vt_page_size.GetInteger() / VIRTUALTEXTURE_TILESIZE;
-
+	
 	if(lastTile != NULL && lastTile->realTileNum == (tileNum) + (pageNum * 1255)) {
 		return lastTile;
 	}

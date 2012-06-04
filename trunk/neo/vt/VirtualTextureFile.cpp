@@ -120,6 +120,7 @@ byte *bmVirtualTextureFile::ReadTile(  __int64 pageNum, __int64 tileNum, __int64
 		bufferpos = sizeof(bmVirtualTextureHeader_t) ;
 	}
 
+
 	switch(mipLevel) {
 		case 0:
 			{

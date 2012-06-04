@@ -709,6 +709,10 @@ void PutPrimitivesInAreas( uEntity_t *e ) {
 			if(uvHandleTypeStr.Length() > 0 ) {
 				uvGenType = (EditorUVGenerateType)toolInterface->GetValueFromManagedEnum( "EditorUVGenerateType", uvHandleTypeStr );
 			}
+			else {
+				uvGenType = Editor_ImportUVs_SinglePage;
+				optimize = EditorModelOptimize;
+			}
 
 			if(uvGenType != Editor_NotPartOfVirtualTexture)
 			{

@@ -374,7 +374,7 @@ static void ParseSurface( const idMapPatch *patch, const idSurface *surface, con
 		tri->v[2] = (*surface)[surface->GetIndexes()[i+0]];
 		tri->v[1] = (*surface)[surface->GetIndexes()[i+2]];
 		tri->v[0] = (*surface)[surface->GetIndexes()[i+1]];
-		tri->material = material;
+		tri->material = declManager->FindMaterial( VT_GetNextMaterial() );
 		tri->next = prim->tris;
 		prim->tris = tri;
 	}
@@ -402,6 +402,7 @@ static void ParsePatch( const idMapPatch *patch, int primitiveNum ) {
 	}
 
 	c_numMapPatches++;
+
 
 	mat = declManager->FindMaterial( VT_GetNextMaterial() );
 
