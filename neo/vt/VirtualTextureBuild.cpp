@@ -179,7 +179,7 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 	common->Printf("...Surface Size %f\n", surfaceSize);
 
 	GenerateVTVerts_r( model, surfaceSize, numVTAreas, false );
-
+/*
 	common->Printf("---- VT_ScaleUVsToFitCell -----\n");
 
 	// After we know everything fits properly scale everything to fit in the proper areas.
@@ -279,6 +279,9 @@ void VirtualTextureBuilder::GenerateVTVerts( bmVTModel *model ) {
 	else {
 		common->Printf( "Virtual Texture UV coordinates generated succesfully. Final blocksize %f\n", surfaceSize);
 	}
+*/
+#endif
+	common->Printf( "Virtual Texture UV coordinates generated succesfully. Final blocksize %f\n", surfaceSize);
 }
 /*
 ====================
@@ -400,6 +403,8 @@ VirtualTextureBuilder:ScaleUVRegionToFitInTri
 ====================
 */
 #define VT_EPSILON			0.000f
+#define VT_CHART_MARGIN		(0.4f / 256.0f)
+#define VT_CHART_MARGIN2	(4.0f / 256.0f)
 
 idList<int> burnIndexes;
 int burnIndexCnt = 0;
@@ -433,8 +438,8 @@ bool VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 		float appendVert = 0;
 
 		const int trisIndexQuadTbl[4] = {2, 1, 3, 0};
-		int trisIndexQuadTblTris[6] = {0, 1, 3, 1, 2, 3};
-
+		// int trisIndexQuadTblTris[6] = {0, 1, 3, 1, 2, 3}; // This is for writing triangles
+		int trisIndexQuadTblTris[6] = {3, 1, 0, 2, 1, 3};
 
 		int trisIndexQuad[4];
 
@@ -487,7 +492,7 @@ bool VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 			for(int g = 0; g < burnIndexes.Num(); g+=4) {
 				numDupIndexes = 0;
 				for(int d = 0; d < 4; d++) {
-					int i = trisIndexQuad[d];
+					int i = trisIndexQuad[trisIndexQuadTbl[d]];
 					int i2 = burnIndexes[g+d];
 					if(i2 == i) {
 						dupIndx[numDupIndexes++] = i;
@@ -520,7 +525,7 @@ bool VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 			}
 
 			for(int d = 0; d < 4; d++) {
-				int i = trisIndexQuad[d];
+				int i = trisIndexQuad[trisIndexQuadTbl[d]];
 				burnIndexes.Append( i );
 			}
 		}
@@ -558,7 +563,10 @@ bool VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 		st.x -= uvRegion[0].x;
 		st.y -= uvRegion[0].y;
 
-		st.x *= chartW;
+		st.x += VT_CHART_MARGIN;
+		st.y += VT_CHART_MARGIN;;
+
+		st.x *= chartH;
 		st.y *= chartH;
 
 		if(st.x < 0) {
@@ -583,6 +591,8 @@ bool VirtualTextureBuilder::ScaleUVRegionToFitInTri( bmVTModel *model, srfTriang
 	}
 
 	// Scale the UV's if they go beyond the 0-1 border.
+	scale.x += VT_CHART_MARGIN2;
+	scale.y += VT_CHART_MARGIN2;
 	for(int i = 0; i < tris->numVerts; i++)
 	{
 		tris->verts[i].st /= scale;
@@ -805,9 +815,10 @@ generatePage:
 
 					int cellId = 0;
 					bool allocNewTris = true;
-					for(int h = 0; h < cellsPerHeight; h++)
+					for(int w = 0; w < cellsPerWidth; w++)	
+					
 					{
-						for(int w = 0; w < cellsPerWidth; w++, cellId++)	
+						for(int h = 0; h < cellsPerHeight; h++, cellId++)	
 						{
 							model->AllocTriangleAtPosition( d + cellId );
 
@@ -840,7 +851,7 @@ generatePage:
 					// Remove the old surface, it isn't needed anymore.
 					model->FreeTri( model->tris.FindIndex( tris ) );
 
-					d += cellId;
+					d += (cellId - 1);
 					
 					// Prepare a new VT page.
 					PrepareNewVTArea(fakePass);
