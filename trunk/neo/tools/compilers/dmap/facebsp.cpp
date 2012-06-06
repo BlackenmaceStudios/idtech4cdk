@@ -183,7 +183,7 @@ void	FreeBspFace( bspface_t *f ) {
 SelectSplitPlaneNum
 ================
 */
-#define	BLOCK_SIZE	1024
+#define	BLOCK_SIZE	4096
 int SelectSplitPlaneNum( node_t *node, bspface_t *list ) {
 	bspface_t	*split;
 	bspface_t	*check;

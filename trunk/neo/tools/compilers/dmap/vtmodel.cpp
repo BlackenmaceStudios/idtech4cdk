@@ -107,7 +107,7 @@ void bmVTModel::WriteToFile( const char *file ) {
 
 			dv = &Vertexes[i];
 
-			objf->WriteFloatString( "v %f %f %f\n", dv->xyz.x * 0.30, dv->xyz.z * 0.30, -dv->xyz.y * 0.30 );
+			objf->WriteFloatString( "v %f %f %f\n", dv->xyz.x * 0.20, dv->xyz.z * 0.20, -dv->xyz.y * 0.20 );
 		}
 
 
@@ -127,6 +127,11 @@ void bmVTModel::WriteToFile( const char *file ) {
 			const idDrawVert *dv;
 
 			dv = &Vertexes[i];
+
+			if(dv->st.x > 1 || dv->st.y > 1) {
+				common->Warning("WriteToObj: st > 1 - ignoring tris\n");
+				break;
+			}
 
 			objf->WriteFloatString( "vt %f %f\n", dv->st.x + tri->vt_AreaID,  dv->st.y);
 		}
@@ -170,9 +175,9 @@ void bmVTModel::WriteToFile( const char *file ) {
 			}
 
 
-			objf->WriteFloatString( "%i", objFaceNum + indicies[i+0] + 1 );
-			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+0] + 1 );
-			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+0] + 1 );
+			objf->WriteFloatString( "%i", objFaceNum + indicies[i+2] + 1 );
+			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+2] + 1 );
+			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+2] + 1 );
 
 			objf->WriteFloatString( " ", objFaceNum  );
 
@@ -182,9 +187,9 @@ void bmVTModel::WriteToFile( const char *file ) {
 
 			objf->WriteFloatString( " ", objFaceNum  );
 
-			objf->WriteFloatString( "%i", objFaceNum + indicies[i+2] + 1 );
-			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+2] + 1 );
-			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+2] + 1 );
+			objf->WriteFloatString( "%i", objFaceNum + indicies[i+0] + 1 );
+			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+0] + 1 );
+			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+0] + 1 );
 			objf->WriteFloatString( "\n" );
 		}
 

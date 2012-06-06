@@ -264,11 +264,12 @@ void  FbxInterface::LoadUVInformation(KFbxMesh* pMesh,  bmFbxMesh *Mesh)
 		for( int lPolyIndex = 0; lPolyIndex < lPolyCount; ++lPolyIndex, vertexId++ )
 		{
 			// build the max index array that we need to pass into MakePoly
-            if(pMesh->GetPolygonSize(lPolyIndex) != 3) {
-				common->Error("Mesh no triangulated");
+            if(pMesh->GetPolygonSize(lPolyIndex) != 4) {
+				common->Error("Mesh is triangulated - needs to be quads");
 			}
 
-			for( int lVertIndex = 0; lVertIndex < 3; ++lVertIndex )
+			int quadIndexes[4];
+			for( int lVertIndex = 0; lVertIndex < 4; ++lVertIndex )
             {
 				
 				//get the index of the current vertex in control points array
@@ -309,9 +310,16 @@ void  FbxInterface::LoadUVInformation(KFbxMesh* pMesh,  bmFbxMesh *Mesh)
 						common->FatalError("FBX mesh has unknown geometry element type!\n");
 						break;
 				}
-
-				indexes.Append( lPolyVertIndex );
+				quadIndexes[lVertIndex] = lPolyVertIndex;
 			}
+
+			indexes.Append( quadIndexes[0] );
+			indexes.Append( quadIndexes[1] );
+			indexes.Append( quadIndexes[3] );
+
+			indexes.Append( quadIndexes[3] );
+			indexes.Append( quadIndexes[1] );
+			indexes.Append( quadIndexes[2] );
 		}
 	}
 /*

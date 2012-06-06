@@ -606,7 +606,7 @@ srfTriangles_t	*CreateModelSurfaceForMapEntity( int startIndex, int numIndexes, 
 	
 	for ( int i = startIndex, d= 0; i < startIndex + numIndexes ; i++, d++ )
 	{
-		uTri->indexes[d] = tris->indexes[d];
+		uTri->indexes[d] = tris->indexes[i];
 
 	}
 

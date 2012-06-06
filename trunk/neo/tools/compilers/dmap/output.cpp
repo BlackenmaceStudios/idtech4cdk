@@ -217,7 +217,6 @@ srfTriangles_t	*ShareMapTriVerts( const mapTri_t *tris ) {
 	numVerts = 0;
 	numIndexes = 0;
 
-	
 
 	for ( step = tris ; step ; step = step->next ) {
 		bool trisIsValid = false;
