@@ -167,29 +167,23 @@ void bmVTModel::WriteToFile( const char *file ) {
 		if(tri->vt_AreaID == -1)
 			continue;
 
-		for ( int i = 0 ; i < tri->numIndexes; i+=3 ) {
+		for ( int i = 0 ; i < tri->numIndexes; i+=6 ) {
 			objf->WriteFloatString( "f " );
 
 			if(indicies[i+0] < 0 || indicies[i+1] < 0 || indicies[i+2] < 0) {
 				common->FatalError("There was a problem with the generated model, check the source art or call a programmer\n");
 			}
 
+			const int trisIndexQuadTbl[4] = {2, 1, 3, 0};
 
-			objf->WriteFloatString( "%i", objFaceNum + indicies[i+2] + 1 );
-			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+2] + 1 );
-			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+2] + 1 );
+			for(int k = 0; k < 4; k++)
+			{
+				objf->WriteFloatString( "%i", objFaceNum + indicies[i+trisIndexQuadTbl[k]] + 1 );
+				objf->WriteFloatString( "/%i", objFaceNum + indicies[i+trisIndexQuadTbl[k]] + 1 );
+				objf->WriteFloatString( "/%i", objFaceNum + indicies[i+trisIndexQuadTbl[k]] + 1 );
 
-			objf->WriteFloatString( " ", objFaceNum  );
-
-			objf->WriteFloatString( "%i", objFaceNum + indicies[i+1] + 1 );
-			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+1] + 1 );
-			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+1] + 1 );
-
-			objf->WriteFloatString( " ", objFaceNum  );
-
-			objf->WriteFloatString( "%i", objFaceNum + indicies[i+0] + 1 );
-			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+0] + 1 );
-			objf->WriteFloatString( "/%i", objFaceNum + indicies[i+0] + 1 );
+				objf->WriteFloatString( " ", objFaceNum  );
+			}
 			objf->WriteFloatString( "\n" );
 		}
 
