@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("WorldSpawn");
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToolBoxDock));
             this.infoTabControl = new System.Windows.Forms.TabControl();
             this.EntitiesPage = new System.Windows.Forms.TabPage();
             this.entityTreeView = new System.Windows.Forms.TreeView();
@@ -37,10 +36,8 @@
             this.newEntityTypeList = new System.Windows.Forms.ListView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.OpenPaintToolsBtn = new System.Windows.Forms.Button();
+            this.OpenWorldToolsBtn = new System.Windows.Forms.Button();
             this.infoTabControl.SuspendLayout();
             this.EntitiesPage.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -49,7 +46,6 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
@@ -144,60 +140,39 @@
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.groupBox1);
-            // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.button3);
-            this.splitContainer2.Panel2.Controls.Add(this.button2);
-            this.splitContainer2.Panel2.Controls.Add(this.button1);
+            this.splitContainer2.Panel2.Controls.Add(this.OpenPaintToolsBtn);
+            this.splitContainer2.Panel2.Controls.Add(this.OpenWorldToolsBtn);
             this.splitContainer2.Size = new System.Drawing.Size(172, 343);
-            this.splitContainer2.SplitterDistance = 283;
+            this.splitContainer2.SplitterDistance = 200;
             this.splitContainer2.TabIndex = 0;
             // 
-            // button3
+            // OpenPaintToolsBtn
             // 
-            this.button3.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.button3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button3.BackgroundImage")));
-            this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button3.Location = new System.Drawing.Point(110, 3);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(48, 45);
-            this.button3.TabIndex = 2;
-            this.button3.UseVisualStyleBackColor = false;
+            this.OpenPaintToolsBtn.BackgroundImage = global::ToolsManaged.Properties.Resources.paintbrush1;
+            this.OpenPaintToolsBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.OpenPaintToolsBtn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.OpenPaintToolsBtn.Location = new System.Drawing.Point(93, 3);
+            this.OpenPaintToolsBtn.Name = "OpenPaintToolsBtn";
+            this.OpenPaintToolsBtn.Size = new System.Drawing.Size(65, 58);
+            this.OpenPaintToolsBtn.TabIndex = 2;
+            this.OpenPaintToolsBtn.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.OpenPaintToolsBtn.UseVisualStyleBackColor = true;
+            this.OpenPaintToolsBtn.Click += new System.EventHandler(this.OpenPaintToolsBtn_Click);
             // 
-            // button2
+            // OpenWorldToolsBtn
             // 
-            this.button2.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.button2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button2.BackgroundImage")));
-            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button2.Location = new System.Drawing.Point(58, 3);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(48, 45);
-            this.button2.TabIndex = 1;
-            this.button2.UseVisualStyleBackColor = false;
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.button1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button1.BackgroundImage")));
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Location = new System.Drawing.Point(4, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(48, 45);
-            this.button1.TabIndex = 0;
-            this.button1.UseVisualStyleBackColor = false;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Location = new System.Drawing.Point(6, 7);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(157, 266);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Map Statistics";
+            this.OpenWorldToolsBtn.BackgroundImage = global::ToolsManaged.Properties.Resources.builder;
+            this.OpenWorldToolsBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.OpenWorldToolsBtn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.OpenWorldToolsBtn.Location = new System.Drawing.Point(4, 3);
+            this.OpenWorldToolsBtn.Name = "OpenWorldToolsBtn";
+            this.OpenWorldToolsBtn.Size = new System.Drawing.Size(64, 58);
+            this.OpenWorldToolsBtn.TabIndex = 1;
+            this.OpenWorldToolsBtn.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.OpenWorldToolsBtn.UseVisualStyleBackColor = true;
+            this.OpenWorldToolsBtn.Click += new System.EventHandler(this.button2_Click_1);
             // 
             // ToolBoxDock
             // 
@@ -219,7 +194,6 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
@@ -235,10 +209,8 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ListView newEntityTypeList;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button OpenWorldToolsBtn;
+        private System.Windows.Forms.Button OpenPaintToolsBtn;
     }
 }

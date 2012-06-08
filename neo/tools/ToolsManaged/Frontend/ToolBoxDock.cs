@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ToolsManaged.Frontend.WindowAPI;
 
 namespace ToolsManaged.Frontend
 {
@@ -143,6 +144,22 @@ namespace ToolsManaged.Frontend
         private void entityTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            FormManager.handle.SetFullsreenModalWindow(null);
+        }
+
+        private void OpenPaintToolsBtn_Click(object sender, EventArgs e)
+        {
+            Form form = FormManager.handle.FindFormFromType( "PaintTool");
+            FormManager.handle.SetFullsreenModalWindow(form);
         }
     }
 }

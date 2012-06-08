@@ -37,6 +37,7 @@ If you have questions concerning this license or the applicable additional terms
 #include "NewTexWnd.h"
 #include "ZWnd.h"
 #include "CamWnd.h"
+#include "PaintWnd.h"
 #include "TextureBar.h"
 
 
@@ -150,6 +151,7 @@ protected:  // control bar embedded members
 	CXYWnd* m_pYZWnd;
 	CXYWnd* m_pXZWnd;
 	CCamWnd* m_pCamWnd;
+	CPaintWnd *m_pPaintWnd;
 	CZWnd* m_pZWnd;
 	CString m_strStatus[15];
 	CXYWnd* m_pActiveXY;

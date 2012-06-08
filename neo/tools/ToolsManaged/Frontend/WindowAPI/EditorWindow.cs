@@ -188,6 +188,12 @@ namespace ToolsManaged.Frontend.WindowAPI
 
         public IntPtr GetSafeHandle()
         {
+            
+            if (_window.Controls["panel1"] == null)
+            {
+                // This is too much of a hack and isn't generic enough.
+                return _window.Controls["tableLayoutPanel1"].Controls["panel1"].Handle;
+            }
             return _window.Controls["panel1"].Handle;
         }
 
