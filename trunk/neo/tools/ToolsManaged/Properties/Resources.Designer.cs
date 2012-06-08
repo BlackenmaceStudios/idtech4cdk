@@ -59,5 +59,33 @@ namespace ToolsManaged.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static System.Drawing.Bitmap builder {
+            get {
+                object obj = ResourceManager.GetObject("builder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap paintbrush {
+            get {
+                object obj = ResourceManager.GetObject("paintbrush", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap paintbrush1 {
+            get {
+                object obj = ResourceManager.GetObject("paintbrush1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap paintbrush2 {
+            get {
+                object obj = ResourceManager.GetObject("paintbrush2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

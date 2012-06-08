@@ -183,7 +183,7 @@ FragmentProgram
 		vec4 outColor;	
 		vec4 inColor = color;
 
-		inColor.r -= 135.0 / 255.0;
+		inColor.r -= 125.0 / 255.0;
 		inColor.g -= 96.0 / 255.0;
 
 		outColor.r = (inColor.r * 1.0) + (inColor.g * -1.0) + (inColor.b * (0.0 * 256.0 / 255.0)) + (inColor.a * 1.0);	

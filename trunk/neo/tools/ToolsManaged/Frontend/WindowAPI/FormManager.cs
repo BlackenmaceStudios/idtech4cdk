@@ -19,6 +19,7 @@ namespace ToolsManaged.Frontend.WindowAPI
         private IWin32Window _parent;
         private float leftSideBorder;
         private Form _fullscreenWindow;
+        private Form _fullscreenModalWindow;
 
         public static FormManager handle;
 
@@ -37,6 +38,55 @@ namespace ToolsManaged.Frontend.WindowAPI
             {
                 f.Invalidate();
             }
+        }
+
+        //
+        // FindFormFromType
+        //
+        public Form FindFormFromType(string type)
+        {
+            Form ret = null;
+            Type t = Type.GetType("ToolsManaged.Frontend." + type);
+
+            foreach (Form f in windows)
+            {
+                if (f.GetType() == t)
+                    ret = f;
+            }
+            return ret;
+        }
+
+        //
+        // SetFullscreenWindow
+        //
+        public void SetFullsreenModalWindow(Form form)
+        {
+            if (form == null && _fullscreenModalWindow != null)
+            {
+                foreach (Form window in windows)
+                {
+                    if (window.GetType().Name == "Viewport")
+                    {
+                        window.Show();
+
+                    }
+
+                    if (window.GetType().Name == "ToolBoxDock")
+                    {
+                     //   window.Show();
+
+                    }
+
+                    if (window.GetType().Name == "DebugConsole")
+                    {
+                        window.Show();
+
+                    }
+                }
+                _fullscreenModalWindow.Visible = false;
+            }
+            _fullscreenModalWindow = form;
+            UpdateDockedWindows();
         }
 
         //
@@ -112,20 +162,46 @@ namespace ToolsManaged.Frontend.WindowAPI
             int viewportWidth = (int)Math.Abs(rect.Left - rect.Right) - (int)leftSideBorder;
             
 
-            int viewportHeight = (int)Math.Abs(rect.Left - rect.Right) - 137;
+            int viewportHeight = (int)Math.Abs(rect.Top - rect.Bottom) - 138;
 
-            if (_fullscreenWindow == null)
+            if (_fullscreenWindow == null && _fullscreenModalWindow == null)
             {
-                viewportHeight /= 4;
+                viewportHeight /= 2;
                 viewportWidth /= 2;
             }
-            else if(((Viewport)_fullscreenWindow).is3DView)
+            else if (_fullscreenModalWindow == null && ((Viewport)_fullscreenWindow).is3DView)
             {
                 viewportHeight = 720;
                 viewportWidth = 1280;
             }
 
-            
+            if (_fullscreenModalWindow != null)
+            {
+                // Ensure all the windows including the sidebar are hidden.
+                foreach (Form window in windows)
+                {
+                    if (window != _fullscreenModalWindow && window.Visible)
+                    {
+                        if (window.GetType().Name != "DebugConsole")
+                        {
+                            window.Visible = false;
+
+                        }
+                        
+                    }
+                }
+
+                if (!_fullscreenModalWindow.Visible)
+                {
+                    _fullscreenModalWindow.Visible = true;
+                }
+
+                _fullscreenModalWindow.DesktopLocation = new Point(rect.Left + 10, rect.Top + 78);
+                _fullscreenModalWindow.Size = new Size(viewportWidth + (int)leftSideBorder - 10, viewportHeight);
+
+                return;
+            }
+
             Point[] viewportLocation = new Point[4];
             
             viewportLocation[0] = new Point(rect.Left + 10 + (int)leftSideBorder, rect.Top + 78);
@@ -140,7 +216,10 @@ namespace ToolsManaged.Frontend.WindowAPI
                 {
                     window.DesktopLocation = new Point(rect.Left + 10, rect.Top + 78);
                     window.Size = new Size(window.Size.Width, height - 137);
-                   
+                    if (window.Visible == false)
+                    {
+                        window.Show();
+                    }
                 }
                 else if (window.GetType().Name == "Viewport")
                 {
@@ -163,6 +242,10 @@ namespace ToolsManaged.Frontend.WindowAPI
                     window.Size = s;
                     ((Viewport)window).window.OnSize();
 
+                }
+                else if (window.GetType().Name == "PaintTool")
+                {
+                    window.Visible = false;
                 }
             }
 

@@ -799,6 +799,7 @@ CMainFrame::CMainFrame() {
 	g_pParentWnd = this;
 	m_pXYWnd = NULL;
 	m_pCamWnd = NULL;
+	m_pPaintWnd = NULL;
 //	m_pZWnd = NULL;
 	m_pYZWnd = NULL;
 	m_pXZWnd = NULL;
@@ -1447,7 +1448,11 @@ void CMainFrame::RoutineProcessing() {
 		if (m_pCamWnd) {
 			m_pCamWnd->Cam_MouseControl(delta);
 		}
-
+// jmarshall
+		if(m_pPaintWnd) {
+			m_pPaintWnd->Cam_MouseControl(delta);
+		}
+// jmarshall end
 		if (g_PrefsDlg.m_bQE4Painting && g_nUpdateBits) {
 			int nBits = g_nUpdateBits;	// this is done to keep this routine from being
 			g_nUpdateBits = 0;			// re-entered due to the paint process.. only
@@ -1565,6 +1570,7 @@ void CMainFrame::OnDestroy() {
 	SaveWindowPlacement(m_pXZWnd->GetSafeHwnd(), "radiant_xzwindow");
 	SaveWindowPlacement(m_pYZWnd->GetSafeHwnd(), "radiant_yzwindow");
 	SaveWindowPlacement(m_pCamWnd->GetSafeHwnd(), "radiant_camerawindow");
+	SaveWindowPlacement(m_pPaintWnd->GetSafeHwnd(), "radiant_vtpaintwindow");
 	//SaveWindowPlacement(m_pZWnd->GetSafeHwnd(), "radiant_zwindow");
 	//SaveWindowState(//g_Inspectors->texWnd.GetSafeHwnd(), "radiant_texwindow");
 
@@ -1602,6 +1608,9 @@ void CMainFrame::OnDestroy() {
 
 	delete m_pCamWnd;
 	m_pCamWnd = NULL;
+
+	delete m_pPaintWnd;
+	m_pPaintWnd = NULL;
 
 	if ( idStr::Icmp(currentmap, "unnamed.map") != 0 ) {
 		g_PrefsDlg.m_strLastMap = currentmap;
@@ -1820,6 +1829,9 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext *pContext) {
 	m_pCamWnd = new CCamWnd();
 	m_pCamWnd->Create("Viewport", "", QE3_CHILDSTYLE, rect, this, 1234);
 
+	m_pPaintWnd = new CPaintWnd();
+	m_pPaintWnd->Create("PaintTool", "", QE3_CHILDSTYLE, rect, this, 1234);
+
 	//m_pZWnd = new CZWnd();
 	//m_pZWnd->Create(Z_WINDOW_CLASS, "", QE3_CHILDSTYLE, rect, this, 1238);
 
@@ -1843,6 +1855,8 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext *pContext) {
 	LoadWindowPlacement(m_pXZWnd->GetSafeHwnd(), "radiant_xzwindow");
 	LoadWindowPlacement(m_pYZWnd->GetSafeHwnd(), "radiant_yzwindow");
 	LoadWindowPlacement(m_pCamWnd->GetSafeHwnd(), "radiant_camerawindow");
+	LoadWindowPlacement(m_pPaintWnd->GetSafeHwnd(), "radiant_vtpaintwindow");
+
 	//LoadWindowPlacement(m_pZWnd->GetSafeHwnd(), "radiant_zwindow");
 
 	if (!g_PrefsDlg.m_bXZVis) {

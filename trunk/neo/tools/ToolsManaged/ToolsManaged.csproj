@@ -69,6 +69,12 @@
     <Compile Include="Frontend\ModelStudio.Designer.cs">
       <DependentUpon>ModelStudio.cs</DependentUpon>
     </Compile>
+    <Compile Include="Frontend\PaintTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend\PaintTool.Designer.cs">
+      <DependentUpon>PaintTool.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frontend\WindowAPI\EditorWindow.cs" />
     <Compile Include="Frontend\WindowAPI\FormManager.cs" />
     <Compile Include="Frontend\ToolBoxDock.cs">
@@ -114,6 +120,9 @@
     <EmbeddedResource Include="Frontend\ModelStudio.resx">
       <DependentUpon>ModelStudio.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Frontend\PaintTool.resx">
+      <DependentUpon>PaintTool.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frontend\ToolBoxDock.resx">
       <DependentUpon>ToolBoxDock.cs</DependentUpon>
     </EmbeddedResource>
@@ -129,6 +138,8 @@
     <None Include="ToolsManaged.SNK" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="images\builder.png" />
+    <Content Include="images\paintbrush.png" />
     <Content Include="images\rotate.png" />
     <Content Include="images\scale.png" />
     <Content Include="images\translate.png" />

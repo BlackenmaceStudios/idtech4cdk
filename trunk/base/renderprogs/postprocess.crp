@@ -112,6 +112,5 @@ FragmentProgram
 	
 		}
 
-		gl_FragColor = cColor;
 	}
 EndFragmentProgram

@@ -925,6 +925,7 @@
     <ClCompile Include="tools\radiant\MRU.CPP" />
     <ClCompile Include="tools\radiant\NewProjDlg.cpp" />
     <ClCompile Include="tools\radiant\NewTexWnd.cpp" />
+    <ClCompile Include="tools\radiant\PaintWnd.cpp" />
     <ClCompile Include="tools\radiant\PARSE.CPP" />
     <ClCompile Include="tools\radiant\PatchDensityDlg.cpp" />
     <ClCompile Include="tools\radiant\PatchDialog.cpp" />
@@ -1136,6 +1137,7 @@
     <ClInclude Include="tools\radiant\MRU.H" />
     <ClInclude Include="tools\radiant\NewProjDlg.h" />
     <ClInclude Include="tools\radiant\NewTexWnd.h" />
+    <ClInclude Include="tools\radiant\PaintWnd.h" />
     <ClInclude Include="tools\radiant\PARSE.H" />
     <ClInclude Include="tools\radiant\PatchDensityDlg.h" />
     <ClInclude Include="tools\radiant\PatchDialog.h" />
