@@ -104,9 +104,11 @@ void idManagedEditorWindow::OpenEntityContextMenu( idDict *entDict ) {
 }
 
 HWND idManagedEditorWindow::GetSafeHwnd( void ) {
-	HWND hwnd = { 0 };
-	((ToolsManaged::IEditorWindow *)window)->GetSafeHandle((__int64 *)&hwnd);
-	return (HWND)hwnd;
+	if(safeHwnd == NULL)
+	{
+		((ToolsManaged::IEditorWindow *)window)->GetSafeHandle((__int64 *)&safeHwnd);
+	}
+	return (HWND)safeHwnd;
 }
 
 void idManagedEditorWindow::GetClientRect( CRect &rect ) {
@@ -143,6 +145,8 @@ BOOL idManagedEditorWindow::RedrawWindow(LPCRECT lpRectUpdate, CRgn* prgnUpdate,
 	if(::IsWindowVisible( win32.hWnd ) ) {
 		return FALSE;
 	}
+
+
 	((ToolsManaged::IEditorWindow *)window)->Redraw();
 	return TRUE;
 }

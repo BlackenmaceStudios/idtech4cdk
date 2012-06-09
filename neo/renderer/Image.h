@@ -256,7 +256,7 @@ public:
 	const char  *Name( void ) { return &imgName[0]; }
 
 // jmarshall
-	byte		*ReadDriverPixels( int x = 0, int y = 0, int width = -1, int height = -1 );
+	virtual byte		*ReadDriverPixels( int x = 0, int y = 0, int width = -1, int height = -1 );
 // jmarshall end
 
 	// data commonly accessed is grouped here

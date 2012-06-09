@@ -6,6 +6,7 @@
 //
 class idManagedEditorWindow {
 public:
+	idManagedEditorWindow() { safeHwnd = NULL; }
 	virtual int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	virtual void OnLButtonDown(UINT nFlags, CPoint point);
 	virtual void OnMButtonDown(UINT nFlags, CPoint point);
@@ -56,6 +57,6 @@ public:
 	idManagedEditorWindow *GetCapture( void );
 	idManagedEditorWindow *GetTopWindow(void);
 private:
-
+	HWND	safeHwnd;
 	void	*window;
 };

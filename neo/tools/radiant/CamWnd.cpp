@@ -204,7 +204,9 @@ void CCamWnd::OnPaint() {
 //	CPaintDC	dc(this);	// device context for painting
 	bool		bPaint = true;
 
-	if (!renderDevice->BindDeviceToWindow( ::GetDC(GetSafeHwnd()) ) ) {
+	HDC hDC = ::GetDC(GetSafeHwnd());
+
+	if (!renderDevice->BindDeviceToWindow( hDC ) ) {
 		common->Printf("ERROR: wglMakeCurrent failed..\n ");
 		common->Printf("Please restart " EDITOR_WINDOWTEXT " if the camera view is not working\n");
 	}
@@ -219,11 +221,12 @@ void CCamWnd::OnPaint() {
 
 		Cam_Draw();
 		QE_CheckOpenGLForErrors();
-		renderDevice->SwapBuffers( ::GetDC(GetSafeHwnd()) );
+		renderDevice->SwapBuffers(hDC);
 	}
 
 	// jmarshall
 	renderDevice->BindDeviceToWindow( NULL );
+	ReleaseDC( GetSafeHwnd(), hDC );
 	// jmarshall end
 }
 

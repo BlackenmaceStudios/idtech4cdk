@@ -35,10 +35,15 @@ namespace ToolsManaged.Private
         //
         // AttachToMemory
         //
-        public void AttachToMemory(Type type, IntPtr pAddress)
+        public void AttachToMemory(Type type, IntPtr pAddress, bool useprivate = false)
         {
 
             FieldInfo[] fields = this.GetType().GetFields();
+
+            if (useprivate)
+            {
+                fields = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            }
 
             IntPtr vTable = GetVirtualTableFromAddress(pAddress);
             PinnedAddress = pAddress;
