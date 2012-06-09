@@ -1479,7 +1479,10 @@ void CXYWnd::SetPointMode(bool b) {
  */
 void CXYWnd::OnPaint() {
 	bool		bPaint = true;
-	if (!renderDevice->BindDeviceToWindow(GetDC())) {
+
+	HDC hDC = ::GetDC(GetSafeHwnd());
+
+	if (!renderDevice->BindDeviceToWindow(hDC)) {
 		common->Printf("ERROR: wglMakeCurrent failed.. Error:%i\n", qglGetError());
 		common->Printf("Please restart Q3Radiant if the Map view is not working\n");
 		bPaint = false;
@@ -1626,10 +1629,12 @@ void CXYWnd::OnPaint() {
 			qglPopMatrix();
 		}
 
-		renderDevice->SwapBuffers(GetDC());
+		renderDevice->SwapBuffers(hDC);
 		renderDevice->BindDeviceToWindow( NULL );
 	//	TRACE("XY Paint\n");
 	}
+
+	::ReleaseDC( GetSafeHwnd(), hDC );
 }
 
 /*

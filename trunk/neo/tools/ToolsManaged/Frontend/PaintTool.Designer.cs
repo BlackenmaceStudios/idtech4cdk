@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.ToolStripMenuItem virtualTexturePaintToolToolStripMenuItem;
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -36,8 +37,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.StampPanel = new System.Windows.Forms.Panel();
+            this.mtrListBox = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -45,13 +45,15 @@
             this.stencilsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.brushesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.virtualTexturePaintToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label3 = new System.Windows.Forms.Label();
             this.exitPaintToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.StampImg = new System.Windows.Forms.PictureBox();
+            virtualTexturePaintToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.StampImg)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -137,10 +139,10 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.StampImg);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Controls.Add(this.StampPanel);
-            this.groupBox3.Controls.Add(this.listBox1);
+            this.groupBox3.Controls.Add(this.mtrListBox);
             this.groupBox3.Location = new System.Drawing.Point(3, 3);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(154, 605);
@@ -148,21 +150,14 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Stencils";
             // 
-            // listBox1
+            // mtrListBox
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(6, 16);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(142, 342);
-            this.listBox1.TabIndex = 0;
-            // 
-            // StampPanel
-            // 
-            this.StampPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.StampPanel.Location = new System.Drawing.Point(3, 438);
-            this.StampPanel.Name = "StampPanel";
-            this.StampPanel.Size = new System.Drawing.Size(148, 164);
-            this.StampPanel.TabIndex = 1;
+            this.mtrListBox.FormattingEnabled = true;
+            this.mtrListBox.Location = new System.Drawing.Point(6, 16);
+            this.mtrListBox.Name = "mtrListBox";
+            this.mtrListBox.Size = new System.Drawing.Size(142, 342);
+            this.mtrListBox.TabIndex = 0;
+            this.mtrListBox.SelectedIndexChanged += new System.EventHandler(this.mtrListBox_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -185,7 +180,7 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.virtualTexturePaintToolToolStripMenuItem,
+            virtualTexturePaintToolToolStripMenuItem,
             this.toolOptionsToolStripMenuItem,
             this.stencilsToolStripMenuItem,
             this.brushesToolStripMenuItem,
@@ -224,12 +219,12 @@
             // 
             // virtualTexturePaintToolToolStripMenuItem
             // 
-            this.virtualTexturePaintToolToolStripMenuItem.Enabled = false;
-            this.virtualTexturePaintToolToolStripMenuItem.Font = new System.Drawing.Font("Bernard MT Condensed", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.virtualTexturePaintToolToolStripMenuItem.Name = "virtualTexturePaintToolToolStripMenuItem";
-            this.virtualTexturePaintToolToolStripMenuItem.Size = new System.Drawing.Size(165, 20);
-            this.virtualTexturePaintToolToolStripMenuItem.Text = "Virtual Texture Paint Tool";
-            this.virtualTexturePaintToolToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            virtualTexturePaintToolToolStripMenuItem.Enabled = false;
+            virtualTexturePaintToolToolStripMenuItem.Font = new System.Drawing.Font("Bernard MT Condensed", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            virtualTexturePaintToolToolStripMenuItem.Name = "virtualTexturePaintToolToolStripMenuItem";
+            virtualTexturePaintToolToolStripMenuItem.Size = new System.Drawing.Size(165, 20);
+            virtualTexturePaintToolToolStripMenuItem.Text = "Virtual Texture Paint Tool";
+            virtualTexturePaintToolToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label3
             // 
@@ -246,6 +241,14 @@
             this.exitPaintToolToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitPaintToolToolStripMenuItem.Text = "Exit Paint Tool";
             this.exitPaintToolToolStripMenuItem.Click += new System.EventHandler(this.exitPaintToolToolStripMenuItem_Click);
+            // 
+            // StampImg
+            // 
+            this.StampImg.Location = new System.Drawing.Point(9, 418);
+            this.StampImg.Name = "StampImg";
+            this.StampImg.Size = new System.Drawing.Size(138, 173);
+            this.StampImg.TabIndex = 4;
+            this.StampImg.TabStop = false;
             // 
             // PaintTool
             // 
@@ -266,6 +269,7 @@
             this.groupBox3.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.StampImg)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -282,16 +286,15 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel StampPanel;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox mtrListBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem virtualTexturePaintToolToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolOptionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stencilsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem brushesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitPaintToolToolStripMenuItem;
+        private System.Windows.Forms.PictureBox StampImg;
     }
 }

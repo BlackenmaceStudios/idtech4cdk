@@ -40,15 +40,19 @@
     <AssemblyOriginatorKeyFile>ToolsManaged.SNK</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Frontend\DebugConsole.cs">
@@ -99,6 +103,7 @@
     <Compile Include="Private\idLib\idLibNativeAPI.cs" />
     <Compile Include="Private\idLib\idString.cs" />
     <Compile Include="Private\idLib\idVec3.cs" />
+    <Compile Include="Private\MegaProject.cs" />
     <Compile Include="Private\NativeAPI.cs" />
     <Compile Include="Private\NativeClass.cs" />
     <Compile Include="Private\ReflectionHelper.cs" />
@@ -144,7 +149,9 @@
     <Content Include="images\scale.png" />
     <Content Include="images\translate.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

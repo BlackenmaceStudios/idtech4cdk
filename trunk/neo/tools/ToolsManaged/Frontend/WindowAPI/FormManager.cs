@@ -19,9 +19,47 @@ namespace ToolsManaged.Frontend.WindowAPI
         private IWin32Window _parent;
         private float leftSideBorder;
         private Form _fullscreenWindow;
-        private Form _fullscreenModalWindow;
+        private static object _nullForm = new object();
+        private static object _fullscreenModalWindowVar = _nullForm;
 
         public static FormManager handle;
+
+        public static bool IsModalWindowActive
+        {
+            get
+            {
+                return _fullscreenModalWindow != _nullForm;
+            }
+        }
+
+        private static Form _fullscreenModalWindow
+        {
+            get
+            {
+                if (_fullscreenModalWindowVar == _nullForm)
+                    return null;
+
+                lock (_fullscreenModalWindowVar)
+                {
+                    return (Form)_fullscreenModalWindowVar;
+                }
+            }
+
+            set
+            {
+                lock (_fullscreenModalWindowVar)
+                {
+                    if (value == null)
+                    {
+                        _fullscreenModalWindowVar = _nullForm;
+                    }
+                    else
+                    {
+                        _fullscreenModalWindowVar = value;
+                    }
+                }
+            }
+        }
 
         //
         // FormManager
@@ -73,7 +111,7 @@ namespace ToolsManaged.Frontend.WindowAPI
 
                     if (window.GetType().Name == "ToolBoxDock")
                     {
-                     //   window.Show();
+                        //   window.Show();
 
                     }
 
@@ -83,7 +121,11 @@ namespace ToolsManaged.Frontend.WindowAPI
 
                     }
                 }
-                _fullscreenModalWindow.Visible = false;
+                _fullscreenModalWindow.Hide();
+            }
+            else if (_fullscreenModalWindow == null)
+            {
+                form.Show();
             }
             _fullscreenModalWindow = form;
             UpdateDockedWindows();
@@ -177,6 +219,11 @@ namespace ToolsManaged.Frontend.WindowAPI
 
             if (_fullscreenModalWindow != null)
             {
+                if (!_fullscreenModalWindow.Visible)
+                {
+                    SetFullsreenModalWindow(null);
+                    return;
+                }
                 // Ensure all the windows including the sidebar are hidden.
                 foreach (Form window in windows)
                 {
@@ -184,16 +231,18 @@ namespace ToolsManaged.Frontend.WindowAPI
                     {
                         if (window.GetType().Name != "DebugConsole")
                         {
-                            window.Visible = false;
+                            window.Hide();
 
                         }
                         
                     }
                 }
 
+
+
                 if (!_fullscreenModalWindow.Visible)
                 {
-                    _fullscreenModalWindow.Visible = true;
+                    _fullscreenModalWindow.Show();
                 }
 
                 _fullscreenModalWindow.DesktopLocation = new Point(rect.Left + 10, rect.Top + 78);
@@ -245,7 +294,10 @@ namespace ToolsManaged.Frontend.WindowAPI
                 }
                 else if (window.GetType().Name == "PaintTool")
                 {
-                    window.Visible = false;
+                    if (window.Visible)
+                    {
+                        window.Hide();
+                    }
                 }
             }
 

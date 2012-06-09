@@ -1453,11 +1453,7 @@ void CMainFrame::RoutineProcessing() {
 			m_pPaintWnd->Cam_MouseControl(delta);
 		}
 // jmarshall end
-		if (g_PrefsDlg.m_bQE4Painting && g_nUpdateBits) {
-			int nBits = g_nUpdateBits;	// this is done to keep this routine from being
-			g_nUpdateBits = 0;			// re-entered due to the paint process.. only
-			UpdateWindows(nBits);		// happens in rare cases but causes a stack overflow
-		}
+		UpdateWindows(0);		// happens in rare cases but causes a stack overflow
 	}
 }
 
@@ -2111,6 +2107,11 @@ void CMainFrame::OnView100() {
  =======================================================================================================================
  */
 void CMainFrame::OnViewCenter() {
+
+	if(m_pPaintWnd) {
+		m_pPaintWnd->Camera().angles[ROLL] = m_pCamWnd->Camera().angles[PITCH] = 0;
+		m_pPaintWnd->Camera().angles[YAW] = 22.5 * floor((m_pCamWnd->Camera().angles[YAW] + 11) / 22.5);
+	}
 	m_pCamWnd->Camera().angles[ROLL] = m_pCamWnd->Camera().angles[PITCH] = 0;
 	m_pCamWnd->Camera().angles[YAW] = 22.5 * floor((m_pCamWnd->Camera().angles[YAW] + 11) / 22.5);
 	Sys_UpdateWindows(W_CAMERA | W_XY_OVERLAY);
@@ -2130,6 +2131,7 @@ void CMainFrame::OnViewConsole() {
  */
 void CMainFrame::OnViewDownfloor() {
 	m_pCamWnd->Cam_ChangeFloor(false);
+	m_pPaintWnd->Cam_ChangeFloor(false);
 }
 
 /*
@@ -2497,6 +2499,7 @@ void CMainFrame::OnViewTexture() {
  */
 void CMainFrame::OnViewUpfloor() {
 	m_pCamWnd->Cam_ChangeFloor(true);
+	m_pPaintWnd->Cam_ChangeFloor(true);
 }
 
 /*
@@ -3746,6 +3749,11 @@ void CMainFrame::OnViewClipper() {
  =======================================================================================================================
  */
 void CMainFrame::OnCameraAngledown() {
+	m_pPaintWnd->Camera().angles[0] -= SPEED_TURN;
+	if (m_pPaintWnd->Camera().angles[0] < -85) {
+		m_pPaintWnd->Camera().angles[0] = -85;
+	}
+
 	m_pCamWnd->Camera().angles[0] -= SPEED_TURN;
 	if (m_pCamWnd->Camera().angles[0] < -85) {
 		m_pCamWnd->Camera().angles[0] = -85;
@@ -3759,6 +3767,11 @@ void CMainFrame::OnCameraAngledown() {
  =======================================================================================================================
  */
 void CMainFrame::OnCameraAngleup() {
+	m_pPaintWnd->Camera().angles[0] += SPEED_TURN;
+	if (m_pPaintWnd->Camera().angles[0] > 85) {
+		m_pPaintWnd->Camera().angles[0] = 85;
+	}
+
 	m_pCamWnd->Camera().angles[0] += SPEED_TURN;
 	if (m_pCamWnd->Camera().angles[0] > 85) {
 		m_pCamWnd->Camera().angles[0] = 85;
@@ -3773,9 +3786,12 @@ void CMainFrame::OnCameraAngleup() {
  */
 void CMainFrame::OnCameraBack() {
 	VectorMA(m_pCamWnd->Camera().origin, -SPEED_MOVE, m_pCamWnd->Camera().forward, m_pCamWnd->Camera().origin);
+	VectorMA(m_pPaintWnd->Camera().origin, -SPEED_MOVE, m_pPaintWnd->Camera().forward, m_pPaintWnd->Camera().origin);
 
 	int nUpdate = (g_PrefsDlg.m_bCamXYUpdate) ? (W_CAMERA | W_XY) : (W_CAMERA);
 	Sys_UpdateWindows(nUpdate);
+
+	
 }
 
 /*
@@ -3784,6 +3800,7 @@ void CMainFrame::OnCameraBack() {
  */
 void CMainFrame::OnCameraDown() {
 	m_pCamWnd->Camera().origin[2] -= SPEED_MOVE;
+	m_pPaintWnd->Camera().origin[2] -= SPEED_MOVE;
 	Sys_UpdateWindows(W_CAMERA | W_XY | W_Z);
 }
 
@@ -3792,6 +3809,8 @@ void CMainFrame::OnCameraDown() {
  =======================================================================================================================
  */
 void CMainFrame::OnCameraForward() {
+	
+	VectorMA(m_pPaintWnd->Camera().origin, SPEED_MOVE, m_pPaintWnd->Camera().forward, m_pPaintWnd->Camera().origin);
 	VectorMA(m_pCamWnd->Camera().origin, SPEED_MOVE, m_pCamWnd->Camera().forward, m_pCamWnd->Camera().origin);
 
 	int nUpdate = (g_PrefsDlg.m_bCamXYUpdate) ? (W_CAMERA | W_XY) : (W_CAMERA);
@@ -3803,6 +3822,7 @@ void CMainFrame::OnCameraForward() {
  =======================================================================================================================
  */
 void CMainFrame::OnCameraLeft() {
+	m_pPaintWnd->Camera().angles[1] += SPEED_TURN;
 	m_pCamWnd->Camera().angles[1] += SPEED_TURN;
 
 	int nUpdate = (g_PrefsDlg.m_bCamXYUpdate) ? (W_CAMERA | W_XY) : (W_CAMERA);
@@ -3814,6 +3834,7 @@ void CMainFrame::OnCameraLeft() {
  =======================================================================================================================
  */
 void CMainFrame::OnCameraRight() {
+	m_pPaintWnd->Camera().angles[1] -= SPEED_TURN;
 	m_pCamWnd->Camera().angles[1] -= SPEED_TURN;
 
 	int nUpdate = (g_PrefsDlg.m_bCamXYUpdate) ? (W_CAMERA | W_XY) : (W_CAMERA);
@@ -4050,7 +4071,7 @@ void CMainFrame::UpdateWindows(int nBits) {
 
 	
 
-	if (nBits & (W_XY | W_XY_OVERLAY)) {
+	//if (nBits & (W_XY | W_XY_OVERLAY)) {
 		if (m_pXYWnd) {
 			m_pXYWnd->RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 		}
@@ -4062,13 +4083,15 @@ void CMainFrame::UpdateWindows(int nBits) {
 		if (m_pYZWnd) {
 			m_pYZWnd->RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 		}
-	}
+	//}
 
-	if (nBits & W_CAMERA || ((nBits & W_CAMERA_IFON) && m_bCamPreview)) {
+	m_pPaintWnd->RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+
+//	if (nBits & W_CAMERA || ((nBits & W_CAMERA_IFON) && m_bCamPreview)) {
 		if (m_pCamWnd) {
 			m_pCamWnd->RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 		}
-	}
+//	}
 
 	//if (nBits & (W_Z | W_Z_OVERLAY)) {
 	//	if (m_pZWnd) {
@@ -4079,6 +4102,7 @@ void CMainFrame::UpdateWindows(int nBits) {
 	if (nBits & W_TEXTURE) {
 		//g_Inspectors->texWnd.RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 	}
+
 }
 
 /*

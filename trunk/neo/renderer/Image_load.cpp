@@ -686,6 +686,7 @@ void idImage::GenerateImage( const byte *pic, int width, int height,
 
 	this->compress = compress;
 
+
 	// if we don't have a rendering context, just return after we
 	// have filled in the parms.  We must have the values set, or
 	// an image match from a shader before OpenGL starts would miss
@@ -693,6 +694,8 @@ void idImage::GenerateImage( const byte *pic, int width, int height,
 	if ( !glConfig.isInitialized ) {
 		return;
 	}
+
+
 
 	// don't let mip mapping smear the texture into the clamped border
 	if ( repeat == TR_CLAMP_TO_ZERO ) {
@@ -725,6 +728,7 @@ void idImage::GenerateImage( const byte *pic, int width, int height,
 		GenerateImageHandle( 1, &texnum );
 	}
 	if ( texnum == TEXTURE_NOT_LOADED ) {
+		GL_CheckErrors();
 		common->FatalError("GenerateImage: Texnum invalid\n");
 	}
 

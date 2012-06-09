@@ -177,7 +177,7 @@ bool bmOpenGLRenderDevice::BindDeviceToWindow( void *windowHandle ) {
 		}
 	}
 	else {
-		qwglMakeCurrent(NULL, NULL);
+		qwglMakeCurrent(win32.hDC, win32.hGLRC);
 	}
 
 	return true;
