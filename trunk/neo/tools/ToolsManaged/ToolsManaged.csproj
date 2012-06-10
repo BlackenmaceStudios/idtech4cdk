@@ -79,6 +79,12 @@
     <Compile Include="Frontend\PaintTool.Designer.cs">
       <DependentUpon>PaintTool.cs</DependentUpon>
     </Compile>
+    <Compile Include="Frontend\ProgressDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend\ProgressDialog.Designer.cs">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frontend\WindowAPI\EditorWindow.cs" />
     <Compile Include="Frontend\WindowAPI\FormManager.cs" />
     <Compile Include="Frontend\ToolBoxDock.cs">
@@ -104,6 +110,8 @@
     <Compile Include="Private\idLib\idString.cs" />
     <Compile Include="Private\idLib\idVec3.cs" />
     <Compile Include="Private\MegaProject.cs" />
+    <Compile Include="Private\MegaProjectChart.cs" />
+    <Compile Include="Private\MegaProjectLayer.cs" />
     <Compile Include="Private\NativeAPI.cs" />
     <Compile Include="Private\NativeClass.cs" />
     <Compile Include="Private\ReflectionHelper.cs" />
@@ -128,6 +136,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Frontend\PaintTool.resx">
       <DependentUpon>PaintTool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend\ProgressDialog.resx">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frontend\ToolBoxDock.resx">
       <DependentUpon>ToolBoxDock.cs</DependentUpon>

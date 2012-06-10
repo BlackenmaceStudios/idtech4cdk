@@ -26,7 +26,9 @@ namespace ToolsManaged.Private
     class MegaProject
     {
         private NativeAPI.File _megaFile;
+        private List<MegaProjectLayer> _layers = new List<MegaProjectLayer>();
 
+        private string _path;
         private const string MegaProjectFolder = "megaprojects";
         private const string MegaProjectExtension = ".megaproject";
 
@@ -34,7 +36,6 @@ namespace ToolsManaged.Private
         {
             public int iden;
             public int version;
-            public int numCharts;
             public int numLayers;
 
             private static int MegaProjectHeaderIden
@@ -59,26 +60,28 @@ namespace ToolsManaged.Private
                 {
                     iden = MegaProjectHeaderIden;
                     version = MegaProjectHeaderVersion;
-                    numCharts = 0;
                     numLayers = 0;
-
-                    f.WriteInt(iden);
-                    f.WriteInt(version);
-                    f.WriteInt(numCharts);
-                    f.WriteInt(numLayers);
-                    f.ForceFlush();
+                    WriteHeader(f);
                     return;
                 }
 
                 iden = 0;
                 version = 0;
-                numCharts = 0;
                 numLayers = 0;
 
                 f.ReadInt(ref iden);
                 f.ReadInt(ref version);
-                f.ReadInt(ref numCharts);
                 f.ReadInt(ref numLayers);
+            }
+
+            public void WriteHeader(NativeAPI.File f)
+            {
+
+                f.WriteInt(iden);
+                f.WriteInt(version);
+
+                f.WriteInt(numLayers);
+                f.ForceFlush();
             }
         }
 
@@ -94,11 +97,13 @@ namespace ToolsManaged.Private
 
             mapname = Regex.Split(mapname, "maps")[1];
 
+            _path = MegaProjectFolder + mapname + MegaProjectExtension;
+
             // Check to see if the megaproject already exists
-            _megaFile = NativeAPI.FileSystem.OpenFileRead(MegaProjectFolder + "/" + mapname + MegaProjectExtension, false, "fs_basepath");
+            _megaFile = NativeAPI.FileSystem.OpenFileRead(_path, false, null);
             if (_megaFile == null)
             {
-                _megaFile = NativeAPI.FileSystem.OpenFileWrite(MegaProjectFolder + "/" + mapname + MegaProjectExtension, "fs_basepath");
+                _megaFile = NativeAPI.FileSystem.OpenFileWrite(_path, "fs_basepath");
                 if (_megaFile == null)
                 {
                     throw new Exception("Failed to open mega project for reading or writing(file in use?)");
@@ -110,6 +115,16 @@ namespace ToolsManaged.Private
 
             // Load the project file.
             LoadProject();
+        }
+
+        //
+        // CreateNewLayer
+        //
+        public void CreateNewLayer(int numCharts)
+        {
+            MegaProjectLayer layer = new MegaProjectLayer(numCharts, 512);
+
+            _layers.Add(layer);
         }
 
         //
@@ -126,13 +141,59 @@ namespace ToolsManaged.Private
         private void LoadProject()
         {
             _projectheader = new MegaProjectHeader(_megaFile, false);
+            for (int i = 0; i < _projectheader.numLayers; i++)
+            {
+                MegaProjectLayer layer = new MegaProjectLayer(_megaFile);
+
+                _layers.Add(layer);
+            }
+            NativeAPI.FileSystem.CloseFile(ref _megaFile);
+
+            
+        }
+
+        public int NumLayers
+        {
+            get
+            {
+                return _layers.Count;
+            }
+        }
+
+        //
+        // Save
+        //
+        public void Save()
+        {
+            _megaFile = NativeAPI.FileSystem.OpenFileWrite(_path, "fs_basepath");
+            if (_megaFile == null)
+            {
+                throw new Exception("Failed to open mega project for writing(file in use?)");
+            }
+
+            _megaFile.Rewind();
+            _projectheader.numLayers = _layers.Count;
+            _projectheader.WriteHeader(_megaFile);
+
+            foreach (MegaProjectLayer layer in _layers)
+            {
+                layer.Write(_megaFile);
+            }
+
+            _megaFile.ForceFlush();
+            NativeAPI.FileSystem.CloseFile(ref _megaFile);
+        }
+
+        public void Close()
+        {
+            
         }
 
         public bool IsLoaded
         {
             get
             {
-                return _megaFile != null;
+                return true;
             }
         }
     }
