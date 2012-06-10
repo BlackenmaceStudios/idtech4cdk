@@ -148,6 +148,7 @@
     <Content Include="images\paintbrush.png" />
     <Content Include="images\rotate.png" />
     <Content Include="images\scale.png" />
+    <None Include="images\testbrush.png" />
     <Content Include="images\translate.png" />
   </ItemGroup>
   <ItemGroup>

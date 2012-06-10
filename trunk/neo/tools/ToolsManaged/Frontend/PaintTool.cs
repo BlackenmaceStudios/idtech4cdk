@@ -124,7 +124,12 @@ namespace ToolsManaged.Frontend
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
+            AddNewLayer();   
+        }
+
+        private void AddNewLayer()
+        {
+            LayersBox.Items.Add("Layer" + (LayersBox.Items.Count + 1));
         }
 
 
@@ -210,7 +215,7 @@ namespace ToolsManaged.Frontend
             int width=0, height=0;
 
             mtrPath = (string)mtrListBox.Items[mtrListBox.SelectedIndex];
-            StampImg.Image = BitmapFromSource( NativeAPI.GetDiffuseImageForMaterial(mtrPath, ref width, ref height) );
+            StampImg.BackgroundImage = BitmapFromSource( NativeAPI.GetDiffuseImageForMaterial(mtrPath, ref width, ref height) );
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)

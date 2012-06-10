@@ -87,5 +87,12 @@ namespace ToolsManaged.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap testbrush {
+            get {
+                object obj = ResourceManager.GetObject("testbrush", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
