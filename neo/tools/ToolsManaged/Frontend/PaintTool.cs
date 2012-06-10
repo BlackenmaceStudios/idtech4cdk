@@ -84,6 +84,8 @@ namespace ToolsManaged.Frontend
                     viewOrigin.x += delta * (float)Math.Cos(radians);
                     viewOrigin.y += delta * (float)Math.Sin(radians);
 
+                    radians = (Math.PI / 180) * viewAxis.y;
+                    viewOrigin.z -= delta * (float)Math.Tan(radians);
                 }
 
                 
@@ -91,7 +93,9 @@ namespace ToolsManaged.Frontend
 
             else if (KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_LBUTTON) && KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_LMENU))
             {
-                viewAxis.x -= (p.X - lastMousePoint.X);
+                viewAxis.x -= (p.X - lastMousePoint.X) * 0.5f;
+                viewAxis.y += (p.Y - lastMousePoint.Y) * 0.5f;
+
                 if (viewAxis.x > 360)
                 {
                     viewAxis.x = -360 + (viewAxis.x - 360);
@@ -100,6 +104,16 @@ namespace ToolsManaged.Frontend
                 if (viewAxis.x < -360)
                 {
                     viewAxis.x = 360 - (-viewAxis.x - 360);
+                }
+
+                if (viewAxis.y > 360)
+                {
+                    viewAxis.y = -360 + (viewAxis.y - 360);
+                }
+
+                if (viewAxis.y < -360)
+                {
+                    viewAxis.y = 360 - (-viewAxis.y - 360);
                 }
             }
             
