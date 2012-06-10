@@ -51,6 +51,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.StampImg = new System.Windows.Forms.PictureBox();
             this.button3 = new System.Windows.Forms.Button();
+            this.saveMegaProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             virtualTexturePaintToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -210,6 +211,7 @@
             // toolOptionsToolStripMenuItem
             // 
             this.toolOptionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveMegaProjectToolStripMenuItem,
             this.exitPaintToolToolStripMenuItem});
             this.toolOptionsToolStripMenuItem.Name = "toolOptionsToolStripMenuItem";
             this.toolOptionsToolStripMenuItem.Size = new System.Drawing.Size(88, 20);
@@ -291,6 +293,13 @@
             this.button3.TabIndex = 0;
             this.button3.UseVisualStyleBackColor = true;
             // 
+            // saveMegaProjectToolStripMenuItem
+            // 
+            this.saveMegaProjectToolStripMenuItem.Name = "saveMegaProjectToolStripMenuItem";
+            this.saveMegaProjectToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.saveMegaProjectToolStripMenuItem.Text = "&Save MegaProject";
+            this.saveMegaProjectToolStripMenuItem.Click += new System.EventHandler(this.saveMegaProjectToolStripMenuItem_Click);
+            // 
             // PaintTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -343,5 +352,6 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.ToolStripMenuItem saveMegaProjectToolStripMenuItem;
     }
 }

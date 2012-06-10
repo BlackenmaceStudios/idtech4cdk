@@ -26,7 +26,6 @@ namespace ToolsManaged.Frontend
         RenderDevice _renderDevice;
         System.Drawing.Point lastMousePoint = new System.Drawing.Point();
 
-        bool _ignoreFirstShow = true;
         Vector3 viewOrigin = new Vector3(), viewAxis = new Vector3();
         bool allowPainting = false;
 
@@ -127,6 +126,15 @@ namespace ToolsManaged.Frontend
             if (_rw == null)
                 return;
 
+            if (_megaProject != null && LayersBox.Items.Count != _megaProject.NumLayers)
+            {
+                LayersBox.Items.Clear();
+                for (int i = 0; i < _megaProject.NumLayers; i++)
+                {
+                    LayersBox.Items.Add("Layer" + (LayersBox.Items.Count + 1));
+                }
+            }
+
             HandleInput();
 
             _renderDevice.BeginRender();
@@ -162,25 +170,21 @@ namespace ToolsManaged.Frontend
         private void AddNewLayer()
         {
             LayersBox.Items.Add("Layer" + (LayersBox.Items.Count + 1));
+            _megaProject.CreateNewLayer(240);
         }
 
 
         private void exitPaintToolToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _megaProject.Save();
+            _megaProject.Close();
+            _megaProject = null;
             FormManager.handle.SetFullsreenModalWindow(null);
         }
 
         protected override void OnVisibleChanged(EventArgs e)
         {
-            base.OnVisibleChanged(e);
-
-            // Windows automatically get shown -- this is just a quick fix so I dont have to fix the layout system that needs a overhaul.
-            if (_ignoreFirstShow)
-            {
-                _ignoreFirstShow = false;
-                return;
-            }
-
+            
             if (this.Visible == false)
                 return;
 
@@ -206,6 +210,8 @@ namespace ToolsManaged.Frontend
                 MessageBox.Show("You must first compile your world before opening the paint tool!");
                 return;
             }
+
+            
 
             NativeAPI.GetEditorViewPosition(ref viewOrigin );
           
@@ -258,6 +264,11 @@ namespace ToolsManaged.Frontend
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void saveMegaProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _megaProject.Save();
         }
 
     }

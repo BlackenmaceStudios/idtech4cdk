@@ -181,8 +181,11 @@ namespace ToolsManaged.Frontend.WindowAPI
 
             if (isVisible)
             {
-                window.Show(_parent);
-                window.BringToFront();
+                if (type.Name != "PaintTool")
+                {
+                    window.Show(_parent);
+                    window.BringToFront();
+                }
             }
 
             windows.Add(window);
@@ -296,7 +299,7 @@ namespace ToolsManaged.Frontend.WindowAPI
                 {
                     if (window.Visible)
                     {
-                        window.Hide();
+                    //    window.Hide();
                     }
                 }
             }

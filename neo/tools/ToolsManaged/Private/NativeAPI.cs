@@ -406,6 +406,13 @@ namespace ToolsManaged.Private
                 return readLen;
             }
 
+            // Read data from the file to the buffer.
+            public unsafe int ReadUnsafe(void *buffer, int len)
+            {
+                int readLen = Read_Internal(GetNativeAddress(), (IntPtr)buffer, len);
+                return readLen;
+            }
+
             // Write data from the buffer to the file.
             public int Write(object buffer, int len)
             {
@@ -419,6 +426,15 @@ namespace ToolsManaged.Private
 
                 return writeLen;
             }
+
+            // Write data from the buffer to the file.
+            public unsafe int WriteUnsafe(void *buffer, int len)
+            {
+                int writeLen = Write_Internal(GetNativeAddress(), (IntPtr)buffer, len);
+
+                return writeLen;
+            }
+
             // Returns the length of the file.
             public int Length()
             {
