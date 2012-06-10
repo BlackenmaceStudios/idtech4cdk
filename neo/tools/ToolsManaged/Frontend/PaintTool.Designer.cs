@@ -30,31 +30,40 @@
         {
             System.Windows.Forms.ToolStripMenuItem virtualTexturePaintToolToolStripMenuItem;
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.LayersBox = new System.Windows.Forms.ListBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.LayersBox = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.mtrListBox = new System.Windows.Forms.ListBox();
+            this.StampImg = new System.Windows.Forms.PictureBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.mtrListBox = new System.Windows.Forms.ListBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitPaintToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stencilsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.brushesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label3 = new System.Windows.Forms.Label();
-            this.exitPaintToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.StampImg = new System.Windows.Forms.PictureBox();
             virtualTexturePaintToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.StampImg)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // virtualTexturePaintToolToolStripMenuItem
+            // 
+            virtualTexturePaintToolToolStripMenuItem.Enabled = false;
+            virtualTexturePaintToolToolStripMenuItem.Font = new System.Drawing.Font("Bernard MT Condensed", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            virtualTexturePaintToolToolStripMenuItem.Name = "virtualTexturePaintToolToolStripMenuItem";
+            virtualTexturePaintToolToolStripMenuItem.Size = new System.Drawing.Size(165, 20);
+            virtualTexturePaintToolToolStripMenuItem.Text = "Virtual Texture Paint Tool";
+            virtualTexturePaintToolToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tableLayoutPanel1
             // 
@@ -62,7 +71,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.17664F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 86.82336F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 205F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 207F));
             this.tableLayoutPanel1.Controls.Add(this.label2, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.groupBox1, 2, 0);
@@ -75,6 +84,15 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1425, 801);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(163, 611);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(76, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Current Stencil";
+            // 
             // panel1
             // 
             this.panel1.AutoSize = true;
@@ -84,7 +102,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(163, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1053, 605);
+            this.panel1.Size = new System.Drawing.Size(1051, 605);
             this.panel1.TabIndex = 3;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -94,20 +112,30 @@
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.LayersBox);
-            this.groupBox1.Location = new System.Drawing.Point(1222, 3);
+            this.groupBox1.Location = new System.Drawing.Point(1220, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(197, 598);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Layers";
             // 
-            // LayersBox
+            // groupBox2
             // 
-            this.LayersBox.FormattingEnabled = true;
-            this.LayersBox.Location = new System.Drawing.Point(9, 16);
-            this.LayersBox.Name = "LayersBox";
-            this.LayersBox.Size = new System.Drawing.Size(177, 238);
-            this.LayersBox.TabIndex = 0;
+            this.groupBox2.Location = new System.Drawing.Point(11, 305);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(171, 287);
+            this.groupBox2.TabIndex = 3;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Layer Attributes";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(99, 260);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(84, 34);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Delete Layer";
+            this.button2.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
@@ -119,23 +147,13 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // LayersBox
             // 
-            this.button2.Location = new System.Drawing.Point(99, 260);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(84, 34);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Delete Layer";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Location = new System.Drawing.Point(11, 305);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(171, 287);
-            this.groupBox2.TabIndex = 3;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Layer Attributes";
+            this.LayersBox.FormattingEnabled = true;
+            this.LayersBox.Location = new System.Drawing.Point(9, 16);
+            this.LayersBox.Name = "LayersBox";
+            this.LayersBox.Size = new System.Drawing.Size(177, 238);
+            this.LayersBox.TabIndex = 0;
             // 
             // groupBox3
             // 
@@ -150,14 +168,22 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Stencils";
             // 
-            // mtrListBox
+            // StampImg
             // 
-            this.mtrListBox.FormattingEnabled = true;
-            this.mtrListBox.Location = new System.Drawing.Point(6, 16);
-            this.mtrListBox.Name = "mtrListBox";
-            this.mtrListBox.Size = new System.Drawing.Size(142, 342);
-            this.mtrListBox.TabIndex = 0;
-            this.mtrListBox.SelectedIndexChanged += new System.EventHandler(this.mtrListBox_SelectedIndexChanged);
+            this.StampImg.Location = new System.Drawing.Point(9, 418);
+            this.StampImg.Name = "StampImg";
+            this.StampImg.Size = new System.Drawing.Size(138, 173);
+            this.StampImg.TabIndex = 4;
+            this.StampImg.TabStop = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 397);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(30, 13);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Size:";
             // 
             // label1
             // 
@@ -168,14 +194,14 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Current Stencil";
             // 
-            // label2
+            // mtrListBox
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(163, 611);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(76, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Current Stencil";
+            this.mtrListBox.FormattingEnabled = true;
+            this.mtrListBox.Location = new System.Drawing.Point(6, 16);
+            this.mtrListBox.Name = "mtrListBox";
+            this.mtrListBox.Size = new System.Drawing.Size(142, 342);
+            this.mtrListBox.TabIndex = 0;
+            this.mtrListBox.SelectedIndexChanged += new System.EventHandler(this.mtrListBox_SelectedIndexChanged);
             // 
             // menuStrip1
             // 
@@ -190,6 +216,7 @@
             this.menuStrip1.Size = new System.Drawing.Size(1425, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // toolOptionsToolStripMenuItem
             // 
@@ -198,6 +225,13 @@
             this.toolOptionsToolStripMenuItem.Name = "toolOptionsToolStripMenuItem";
             this.toolOptionsToolStripMenuItem.Size = new System.Drawing.Size(88, 20);
             this.toolOptionsToolStripMenuItem.Text = "&Tool Options";
+            // 
+            // exitPaintToolToolStripMenuItem
+            // 
+            this.exitPaintToolToolStripMenuItem.Name = "exitPaintToolToolStripMenuItem";
+            this.exitPaintToolToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.exitPaintToolToolStripMenuItem.Text = "Exit Paint Tool";
+            this.exitPaintToolToolStripMenuItem.Click += new System.EventHandler(this.exitPaintToolToolStripMenuItem_Click);
             // 
             // stencilsToolStripMenuItem
             // 
@@ -217,39 +251,6 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             // 
-            // virtualTexturePaintToolToolStripMenuItem
-            // 
-            virtualTexturePaintToolToolStripMenuItem.Enabled = false;
-            virtualTexturePaintToolToolStripMenuItem.Font = new System.Drawing.Font("Bernard MT Condensed", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            virtualTexturePaintToolToolStripMenuItem.Name = "virtualTexturePaintToolToolStripMenuItem";
-            virtualTexturePaintToolToolStripMenuItem.Size = new System.Drawing.Size(165, 20);
-            virtualTexturePaintToolToolStripMenuItem.Text = "Virtual Texture Paint Tool";
-            virtualTexturePaintToolToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 397);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(30, 13);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "Size:";
-            // 
-            // exitPaintToolToolStripMenuItem
-            // 
-            this.exitPaintToolToolStripMenuItem.Name = "exitPaintToolToolStripMenuItem";
-            this.exitPaintToolToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.exitPaintToolToolStripMenuItem.Text = "Exit Paint Tool";
-            this.exitPaintToolToolStripMenuItem.Click += new System.EventHandler(this.exitPaintToolToolStripMenuItem_Click);
-            // 
-            // StampImg
-            // 
-            this.StampImg.Location = new System.Drawing.Point(9, 418);
-            this.StampImg.Name = "StampImg";
-            this.StampImg.Size = new System.Drawing.Size(138, 173);
-            this.StampImg.TabIndex = 4;
-            this.StampImg.TabStop = false;
-            // 
             // PaintTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -267,9 +268,9 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.StampImg)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.StampImg)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

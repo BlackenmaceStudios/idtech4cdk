@@ -129,6 +129,7 @@ public:
 		m_Camera.angles = angles;
 	}
 
+	camera_t m_Camera;
 protected:
 	void Cam_Init();
 	void Cam_BuildMatrix();
@@ -157,8 +158,6 @@ protected:
 	bool	BuildBrushRenderData(brush_t *brush);
 	void	DrawEntityData();
 
-
-	camera_t m_Camera;
 	int	m_nCambuttonstate;
 	CPoint m_ptButton;
 	CPoint m_ptCursor;

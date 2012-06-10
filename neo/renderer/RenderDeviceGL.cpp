@@ -51,6 +51,13 @@ bmOpenGLRenderDevice::RenderSurfaceFromCache
 ====================
 */
 void bmOpenGLRenderDevice::RenderSurfaceFromCache( const srfTriangles_t *tris ) {
+	if(tris->ambientCache == NULL)
+	{
+		if(!R_CreateAmbientCache( (srfTriangles_t *)tris, false )) {
+			common->FatalError("RenderSurfaceFromCache: Failed to create cache for tris\n");
+		}
+	}
+
 	idDrawVert	*ac = (idDrawVert *)vertexCache.Position( tris->ambientCache );
 	qglColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( idDrawVert ), ac->color );
 	qglTexCoordPointer(  2, GL_FLOAT, sizeof( idDrawVert ), ac->st.ToFloatPtr() );

@@ -883,6 +883,7 @@ void R_SetViewMatrix( viewDef_t *viewDef ) {
 	// convert from our coordinate system (looking down X)
 	// to OpenGL's coordinate system (looking down -Z)
 	myGlMultMatrix( viewerMatrix, s_flipMatrix, world->modelViewMatrix );
+	
 }
 
 /*
@@ -965,7 +966,7 @@ Setup that culling frustum planes for the current view
 FIXME: derive from modelview matrix times projection matrix
 =================
 */
-static void R_SetupViewFrustum( void ) {
+void R_SetupViewFrustum( void ) {
 	int		i;
 	float	xs, xc;
 	float	ang;

@@ -2239,3 +2239,90 @@ const idMaterial *R_RemapShaderBySkin( const idMaterial *shader, const idDeclSki
 
 	return skin->RemapShaderBySkin( shader );
 }
+
+/*
+=======================
+GetVisibleVirtualTextureAreas
+=======================
+*/
+int	*idRenderWorldLocal::GetVisibleVirtualTextureAreas( const renderView_t *renderView, int &numVisibleAreas ) {
+	numVisibleAreas = 0;
+
+	// frustum planes
+	idPlane	globalFrustum[6];
+
+	// setup view parms for the initial view
+	//
+	viewDef_t		*parms = (viewDef_t *)R_ClearedFrameAlloc( sizeof( *parms ) );
+	parms->renderView = *renderView;
+
+	if ( tr.takingScreenshot ) {
+		parms->renderView.forceUpdate = true;
+	}
+
+	// set up viewport, adjusted for resolution and OpenGL style 0 at the bottom
+	tr.RenderViewToViewport( &parms->renderView, &parms->viewport );
+
+	// the scissor bounds may be shrunk in subviews even if
+	// the viewport stays the same
+	// this scissor range is local inside the viewport
+	parms->scissor.x1 = 0;
+	parms->scissor.y1 = 0;
+	parms->scissor.x2 = parms->viewport.x2 - parms->viewport.x1;
+	parms->scissor.y2 = parms->viewport.y2 - parms->viewport.y1;
+
+
+	parms->isSubview = false;
+	parms->initialViewAreaOrigin = renderView->vieworg;
+	parms->floatTime = parms->renderView.time * 0.001f;
+	parms->renderWorld = this;
+	parms->renderView.megaProject = renderView->megaProject;
+
+	tr.viewDef = parms;
+
+	R_SetViewMatrix( parms );
+	R_SetupViewFrustum();
+
+	R_AxisToModelMatrix( renderView->viewaxis, renderView->vieworg, parms->worldSpace.modelMatrix );
+
+	for(int i = 0; i < localModels.Num(); i++)
+	{
+		idRenderModel *model = localModels[i];
+
+		for(int s = 0; s < model->NumSurfaces(); s++)
+		{
+			srfTriangles_t	*tri = model->Surface( s )->geometry;
+
+			if(tri->vt_AreaID == -1)
+				continue;
+
+		//	if ( !R_CullLocalBox( tri->bounds, tr.viewDef->worldSpace.modelMatrix, 6, globalFrustum) ){
+				visibleVirtualTextureAreas[numVisibleAreas] =  tri->vt_AreaID;
+				visibleVirtualTextureAreaSurfaces[numVisibleAreas] = tri;
+				numVisibleAreas++;
+		//	}
+		}
+	}
+	qglMatrixMode( GL_MODELVIEW );
+	qglLoadMatrixf( parms->worldSpace.modelViewMatrix );
+
+	vtNumVisibleAreas = numVisibleAreas;
+	return &visibleVirtualTextureAreas[0];
+}
+/*
+=======================
+GetVisibleVirtualTextureAreaSurface
+=======================
+*/
+srfTriangles_t  *idRenderWorldLocal::GetVisibleVirtualTextureAreaSurface( int vtAreaId ) {
+
+	for(int i = 0; i < vtNumVisibleAreas; i++)
+	{
+		if(visibleVirtualTextureAreas[i] == vtAreaId) {
+			return visibleVirtualTextureAreaSurfaces[i];
+		}
+	}
+
+	common->FatalError("R_GetVisibleVirtualTextureAreaSurface: VT Area isn't visible\n");
+	return NULL;
+}

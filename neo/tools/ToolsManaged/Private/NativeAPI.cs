@@ -15,7 +15,7 @@ namespace ToolsManaged.Private
     //
     // NativeAPI
     //
-    public static class NativeAPI
+    public unsafe static class NativeAPI
     {
         [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Brush_Update")]
         public static extern void UpdateBrush();
@@ -37,6 +37,38 @@ namespace ToolsManaged.Private
 
         [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_GetDiffuseImageForMaterial")]
         private static extern IntPtr TOOLAPI_Editor_GetDiffuseImageForMaterial(string mtr, ref int width, ref int height);
+
+        [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_LoadWorld")]
+        private static extern IntPtr TOOLAPI_Editor_LoadWorld(string path);
+
+        [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_GetViewPosition")]
+        private static extern float *TOOLAPI_Editor_GetViewPosition();
+
+        [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_DrawRenderSurf")]
+        private static extern void TOOLAPI_Editor_DrawRenderSurf(IntPtr surf, IntPtr image, float x, float y, float z, float yaw, float pitch, float roll, bool cameraView);
+
+        public static void GetEditorViewPosition(ref Vector3 v)
+        {
+            float* xyz = TOOLAPI_Editor_GetViewPosition();
+
+            v.x = xyz[0];
+            v.y = xyz[1];
+            v.z = xyz[2];
+        }
+
+        public static RenderWorld LoadWorld(string path)
+        {
+            IntPtr ptr;
+
+            ptr = TOOLAPI_Editor_LoadWorld(path);
+
+            if (ptr == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            return new RenderWorld(ptr);
+        }
 
         public unsafe static System.Windows.Media.Imaging.BitmapSource GetDiffuseImageForMaterial(string mtr, ref int width, ref int height)
         {
@@ -133,6 +165,80 @@ namespace ToolsManaged.Private
                 ptr = Internal.FindType((int)type, name, makeDefault);
 
                 return new idLibNativeAPI.idDictNative(ptr);
+            }
+        }
+
+        public class idManagedImage
+        {
+            IntPtr _internalPtr;
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_FindImage")]
+            private static extern IntPtr TOOLAPI_Editor_FindImage(string path);
+
+            public idManagedImage(IntPtr ptr)
+            {
+                _internalPtr = ptr;
+            }
+
+            public IntPtr Handle
+            {
+                get
+                {
+                    return _internalPtr;
+                }
+            }
+
+            //
+            // FindImage
+            //
+            public static idManagedImage FindImage(string path)
+            {
+                IntPtr ptr;
+
+                ptr = TOOLAPI_Editor_FindImage(path);
+
+                if (ptr == IntPtr.Zero)
+                    return null;
+
+                return new idManagedImage(ptr);
+            }
+        }
+
+        //
+        // RenderWorld
+        //
+        public unsafe class RenderWorld
+        {
+            IntPtr internalPtr;
+            int* vtVisibleAreasPool;
+            int numVisibleVirtualTextureAreas;
+
+            //
+            // RenderWorld
+            //
+            public RenderWorld(IntPtr ptr)
+            {
+                internalPtr = ptr;
+                numVisibleVirtualTextureAreas = 0;
+            }
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_RenderWorld_GetVisibleVirtualTextureArea")]
+            private static extern int *TOOLAPI_RenderWorld_GetVisibleVirtualTextureArea( IntPtr world, ref int numSurfaces, float width, float height, float x, float y, float z, float yaw, float pitch, float roll );
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_RenderWorld_GetVisibleVirtualTextureAreaSurface")]
+            private static extern IntPtr TOOLAPI_RenderWorld_GetVisibleVirtualTextureAreaSurface(IntPtr world, int surfId);
+
+            public int FindVisibleVirtualTextureAreas(float width, float height, float x, float y, float z, float yaw, float pitch, float roll)
+            {
+                vtVisibleAreasPool = TOOLAPI_RenderWorld_GetVisibleVirtualTextureArea(internalPtr, ref numVisibleVirtualTextureAreas, width, height, x, y, z, yaw, pitch, roll);
+
+                return numVisibleVirtualTextureAreas;
+            }
+
+            public void RenderVisibleArea(idManagedImage image, int areaId, float x, float y, float z, float yaw, float pitch, float roll)
+            {
+                IntPtr surf = TOOLAPI_RenderWorld_GetVisibleVirtualTextureAreaSurface(internalPtr, vtVisibleAreasPool[areaId]);
+                TOOLAPI_Editor_DrawRenderSurf(surf, image.Handle, x, y, z, yaw, pitch, roll, false); 
             }
         }
 

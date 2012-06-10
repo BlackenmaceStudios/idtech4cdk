@@ -137,12 +137,17 @@ public:
 	virtual void			DrawText( const char *text, const idVec3 &origin, float scale, const idVec4 &color, const idMat3 &viewAxis, const int align = 1, const int lifetime = 0, bool depthTest = false );
 // jmarshall
 	virtual void			ClearVirtualTextureData( void );
+
+	
+	virtual int				*GetVisibleVirtualTextureAreas( const renderView_t *renderView, int &numVisibleAreas );
+	virtual srfTriangles_t  *GetVisibleVirtualTextureAreaSurface( int vtAreaId );
 // jmarshall end
 
 	//-----------------------
 // jmarshall
-	
-
+	int						vtNumVisibleAreas;
+	idList<int>				visibleVirtualTextureAreas;
+	idList<srfTriangles_t *> visibleVirtualTextureAreaSurfaces;
 	class bmVirtualTextureFile	*vt;
 // jmarshall end
 

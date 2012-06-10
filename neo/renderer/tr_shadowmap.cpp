@@ -197,7 +197,7 @@ void R_CalculateShadowsForModelLight( idRenderModel *model, viewEntity_t *vEntit
 
 
 
-				if ( R_CullLocalBox( tri->bounds, tr.viewDef->worldSpace.modelMatrix, 5, globalFrustum) ) {
+				if ( R_CullLocalBox( tri->bounds, tr.viewDef->worldSpace.modelMatrix, 6, globalFrustum) ) {
 					tri->shadowMapVisibleSides[shadowId][side] = false;
 					continue;
 				}

@@ -1200,7 +1200,7 @@ void R_TransposeGLMatrix( const float in[16], float out[16] );
 void R_SetViewMatrix( viewDef_t *viewDef );
 
 void myGlMultMatrix( const float *a, const float *b, float *out );
-
+void R_SetupViewFrustum( void );
 /*
 ============================================================
 

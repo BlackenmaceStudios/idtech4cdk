@@ -49,6 +49,37 @@ const int POINTS_PER_KNOT = 50;
 
 /*
 ================
+DrawRenderSurface
+================
+*/
+void DrawRenderSurface( srfTriangles_t *surf, idImage *image, idVec3 origin, idAngles angle, bool cameraView ) {
+// jmarshall
+	qglPushMatrix();
+
+	// Cache the model tris in a vbo.
+	//renderModelManager->CacheModelTris( model );
+
+	// Move to model to the origin.
+	qglTranslatef(origin.x, origin.y, origin.z );
+
+	// Rotate the model.
+	qglRotatef(angle.yaw, 0, 0, 1);
+	//qglRotatef(angle.pitch, 0, 1, 0);
+	//qglRotatef(angle.roll, 0, 0, 1);
+
+	
+// jmarshall end
+	image->Bind();
+// jmarshall
+
+	renderDevice->RenderSurfaceFromCache( surf );
+
+	// Reset the transform.
+	qglPopMatrix();
+}
+
+/*
+================
 DrawRenderModel
 ================
 */

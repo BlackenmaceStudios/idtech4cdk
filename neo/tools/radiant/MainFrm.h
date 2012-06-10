@@ -139,6 +139,12 @@ public:
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
+public:
+	CXYWnd* m_pXYWnd;
+	CXYWnd* m_pYZWnd;
+	CXYWnd* m_pXZWnd;
+	CCamWnd* m_pCamWnd;
+	CPaintWnd *m_pPaintWnd;
 
 protected:  // control bar embedded members
 	CStatusBar  m_wndStatusBar;
@@ -147,11 +153,7 @@ protected:  // control bar embedded members
 	CSplitterWnd m_wndSplit;
 	CSplitterWnd m_wndSplit2;
 	CSplitterWnd m_wndSplit3;
-	CXYWnd* m_pXYWnd;
-	CXYWnd* m_pYZWnd;
-	CXYWnd* m_pXZWnd;
-	CCamWnd* m_pCamWnd;
-	CPaintWnd *m_pPaintWnd;
+
 	CZWnd* m_pZWnd;
 	CString m_strStatus[15];
 	CXYWnd* m_pActiveXY;
@@ -571,6 +573,8 @@ public:
 
 	DECLARE_MESSAGE_MAP()
 };
+
+
 
 /////////////////////////////////////////////////////////////////////////////
 

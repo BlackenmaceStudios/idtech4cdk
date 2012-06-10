@@ -81,6 +81,11 @@ CPrefsDlg		&g_PrefsDlg = g_Preferences;		// reference used throughout
 int				g_nUpdateBits = 0;					// window update flags
 bool			g_bScreenUpdates = true;			// whether window painting is active, used in a few places
 
+float *GetCurrentViewPos()
+{
+	return &g_pParentWnd->m_pCamWnd->m_Camera.origin[0];
+}
+
 //
 // Sys_OpenFileDialog
 //

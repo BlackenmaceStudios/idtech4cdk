@@ -374,6 +374,14 @@ public:
 	// Removes all decals and overlays from the given entity def.
 	virtual void			RemoveDecals( qhandle_t entityHandle ) = 0;
 
+	//-------------- Virtual Texture Stuff -----------------
+// jmarshall
+	// Gets all the virtual texture areas that are visible from a origin.
+	virtual int				*GetVisibleVirtualTextureAreas( const renderView_t *renderView, int &numVisibleAreas ) = 0;
+
+	// After the call to GetVisibleVirtualTextureAreas those tris are stored in a pool for faster lookup, this gets a specfic tris for a vtareaid.
+	virtual srfTriangles_t  *GetVisibleVirtualTextureAreaSurface( int vtAreaId ) = 0;
+// jmarshall end
 	//-------------- Scene Rendering -----------------
 
 	// some calls to material functions use the current renderview time when servicing cinematics.  this function
