@@ -138,8 +138,10 @@ extern "C" __declspec(dllexport) HDC TOOLAPI_Device_BeginRender( HWND hwnd, int 
 	}
 
 	qglMatrixMode( GL_PROJECTION );
+	qglPushMatrix();
 	qglLoadIdentity();
 	qglMatrixMode( GL_MODELVIEW );
+	qglPushMatrix();
 	qglLoadIdentity();
 
 
@@ -163,11 +165,7 @@ extern "C" __declspec(dllexport) HDC TOOLAPI_Device_BeginRender( HWND hwnd, int 
 	SetProjectionMatrix(width, height);
 
 	qglMatrixMode(GL_MODELVIEW);
-	qglEnable(GL_TEXTURE_2D);
 
-	qglEnableClientState(GL_VERTEX_ARRAY);
-	qglEnableClientState(GL_COLOR_ARRAY);
-	qglEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	
 	// render it
 	//renderSystem->BeginFrame( width , height );
@@ -177,6 +175,12 @@ extern "C" __declspec(dllexport) HDC TOOLAPI_Device_BeginRender( HWND hwnd, int 
 
 extern "C" __declspec(dllexport) void TOOLAPI_Device_EndRender( HWND hwnd, HDC hDC )
 {
+	qglMatrixMode( GL_PROJECTION );
+	qglPopMatrix();
+
+	qglMatrixMode( GL_MODELVIEW );
+	qglPopMatrix();
+	
 	//renderSystem->EndFrame( NULL, NULL );
 	renderDevice->SwapBuffers(hDC);
 	renderDevice->BindDeviceToWindow( NULL );
@@ -207,6 +211,10 @@ extern "C" __declspec(dllexport) byte *TOOLAPI_Editor_GetDiffuseImageForMaterial
 	const idMaterial *mat = declManager->FindMaterial( mtr );
 
 	idImage *editorImage = mat->GetEditorImage();
+	if(editorImage->defaulted)
+	{
+		editorImage = renderSystem->FindImage("textures/editor/missingimage");
+	}
 
 	width = editorImage->uploadWidth;
 	height = editorImage->uploadHeight;

@@ -70,8 +70,14 @@ namespace ToolsManaged.Frontend.WindowAPI
 
         public void Redraw()
         {
+            // Don't re-draw the window if it isn't visible.
+            if (_window.Visible == false)
+                return;
+
             if (_window.GetType().Name != "PaintTool")
             {
+                
+
                 _nativeWindow.OnPaint(_nativeWindow.GetNativeAddress(), IntPtr.Zero);
                 return;
             }
