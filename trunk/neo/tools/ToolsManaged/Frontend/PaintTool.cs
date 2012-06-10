@@ -66,23 +66,41 @@ namespace ToolsManaged.Frontend
 
             if (KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_MBUTTON) && KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_LMENU))
             {
+                float deltaX = p.X - lastMousePoint.X;
                 viewOrigin.z += p.Y - lastMousePoint.Y;
+
+                double radians = (Math.PI / 180) * (viewAxis.x + 90.0f);
+                viewOrigin.x += deltaX * (float)Math.Cos(radians);
+                viewOrigin.y += deltaX * (float)Math.Sin(radians);
             }
 
             else if (KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_RBUTTON) && KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_LMENU))
             {
                 float delta = p.Y - lastMousePoint.Y;
-          
+        
+                if (delta != 0)
+                {
+                    double radians = (Math.PI / 180) * viewAxis.x;
+                    viewOrigin.x += delta * (float)Math.Cos(radians);
+                    viewOrigin.y += delta * (float)Math.Sin(radians);
 
-                viewOrigin.x -= delta  *  (float)Math.Sin(viewAxis.x);
-                viewOrigin.y -= delta * (float)Math.Cos(viewAxis.x);
+                }
 
+                
             }
 
             else if (KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_LBUTTON) && KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_LMENU))
             {
                 viewAxis.x -= (p.X - lastMousePoint.X);
+                if (viewAxis.x > 360)
+                {
+                    viewAxis.x = -360 + (viewAxis.x - 360);
+                }
 
+                if (viewAxis.x < -360)
+                {
+                    viewAxis.x = 360 - (-viewAxis.x - 360);
+                }
             }
             
 
