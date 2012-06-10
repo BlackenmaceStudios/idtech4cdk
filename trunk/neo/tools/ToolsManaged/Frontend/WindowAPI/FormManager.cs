@@ -16,13 +16,15 @@ namespace ToolsManaged.Frontend.WindowAPI
     {
         private List<Form> windows = new List<Form>();
         public List<IEditorWindow> editors = new List<IEditorWindow>();
-        private IWin32Window _parent;
+        private static IWin32Window _parent;
         private float leftSideBorder;
         private Form _fullscreenWindow;
         private static object _nullForm = new object();
         private static object _fullscreenModalWindowVar = _nullForm;
 
         public static FormManager handle;
+
+        
 
         public static bool IsModalWindowActive
         {
@@ -105,7 +107,7 @@ namespace ToolsManaged.Frontend.WindowAPI
                 {
                     if (window.GetType().Name == "Viewport")
                     {
-                        window.Show();
+                        window.Show(_parent);
 
                     }
 
@@ -125,7 +127,7 @@ namespace ToolsManaged.Frontend.WindowAPI
             }
             else if (_fullscreenModalWindow == null)
             {
-                form.Show();
+                form.Show(_parent);
             }
             _fullscreenModalWindow = form;
             UpdateDockedWindows();
@@ -175,17 +177,17 @@ namespace ToolsManaged.Frontend.WindowAPI
             
             window = (Form)Activator.CreateInstance(type);
 
-
             window.Dock = dockStyle;
 
 
             if (isVisible)
             {
+                
                 if (type.Name != "PaintTool")
                 {
                     window.Show(_parent);
-                    window.BringToFront();
                 }
+                window.BringToFront();
             }
 
             windows.Add(window);
@@ -245,7 +247,7 @@ namespace ToolsManaged.Frontend.WindowAPI
 
                 if (!_fullscreenModalWindow.Visible)
                 {
-                    _fullscreenModalWindow.Show();
+                    _fullscreenModalWindow.Show(_parent);
                 }
 
                 _fullscreenModalWindow.DesktopLocation = new Point(rect.Left + 10, rect.Top + 78);
@@ -270,7 +272,7 @@ namespace ToolsManaged.Frontend.WindowAPI
                     window.Size = new Size(window.Size.Width, height - 137);
                     if (window.Visible == false)
                     {
-                        window.Show();
+                        window.Show(_parent);
                     }
                 }
                 else if (window.GetType().Name == "Viewport")
@@ -283,7 +285,7 @@ namespace ToolsManaged.Frontend.WindowAPI
 
                     if (!window.Visible)
                     {
-                        window.Show();
+                        window.Show(_parent);
                         window.Invalidate();
                     }
 
