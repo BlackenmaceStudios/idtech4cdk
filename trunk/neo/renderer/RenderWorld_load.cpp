@@ -154,26 +154,16 @@ idRenderModel *idRenderWorldLocal::ParseModel( idLexer *src ) {
 // jmarshall
 
 		// Legacy file or doesn't have a virtual texture.
-		if(vt != NULL)
-		{
-			tri->vt_AreaID = src->ParseInt();
+		tri->vt_AreaID = src->ParseInt();
 
-			if(tri->vt_AreaID == -1) {
-				surf.shader = declManager->FindMaterial( src->ReadToken() );
-			}
-			else
-			{
-				surf.shader = declManager->FindMaterial( "worlddefault" );
-			}
+		if(tri->vt_AreaID == -1) {
+			surf.shader = declManager->FindMaterial( src->ReadToken() );
 		}
-		else {
-			src->ParseInt();
-			tri->vt_AreaID = -1;
-			
-			const char *shader = src->ReadToken();
-
-		
-			surf.shader = declManager->FindMaterial( shader );
+		else
+		{
+			surf.shader = declManager->FindMaterial( "worlddefault" );
+			visibleVirtualTextureAreas.Append( 0 );
+			visibleVirtualTextureAreaSurfaces.Append( NULL );
 		}
 
 		((idMaterial*)surf.shader)->AddReference();
@@ -569,6 +559,9 @@ bool idRenderWorldLocal::InitFromMap( const char *name ) {
 // jmarshall
 	filename = filename.StripPath();
 	filename = filename.StripFileExtension();
+
+	visibleVirtualTextureAreas.Clear();
+	visibleVirtualTextureAreaSurfaces.Clear();
 
 	virtualTextureManager->ResetPages();
 	vt = virtualTextureManager->LoadVirtualTextureFile( filename );

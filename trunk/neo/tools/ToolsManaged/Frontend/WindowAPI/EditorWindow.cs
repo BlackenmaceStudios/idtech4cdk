@@ -70,7 +70,12 @@ namespace ToolsManaged.Frontend.WindowAPI
 
         public void Redraw()
         {
-            _nativeWindow.OnPaint(_nativeWindow.GetNativeAddress(), IntPtr.Zero);
+            if (_window.GetType().Name != "PaintTool")
+            {
+                _nativeWindow.OnPaint(_nativeWindow.GetNativeAddress(), IntPtr.Zero);
+                return;
+            }
+            _window.Invalidate();
         }
 
         public void OnKeyDown(Keys key)
