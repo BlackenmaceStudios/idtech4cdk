@@ -268,9 +268,9 @@ void RB_Deferred_DrawNoLitTransparent( drawSurf_t **drawSurfs, int numDrawSurfs 
 	
 	RB_BeginDrawingView();
 	
-	qglClearColor(0,0,0, 0);
-	qglClear( GL_COLOR_BUFFER_BIT );
-	qglClearColor(0,0,0, 0);
+	//qglClearColor(0,0,0, 0);
+	//qglClear( GL_COLOR_BUFFER_BIT );
+	//qglClearColor(0,0,0, 0);
 
 	// Bind the program.
 	progs[PROG_UNLITTRANSPARANCY].programHandle->Bind();

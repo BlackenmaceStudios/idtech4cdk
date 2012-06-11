@@ -36,6 +36,23 @@ float *GetCurrentViewPos();
 
 void DrawRenderSurface( srfTriangles_t *surf, idImage *image, idVec3 origin, idAngles angle, bool cameraView );
 
+extern "C" __declspec(dllexport) idUserInterface *TOOLAPI_UserInterface_LoadGui( const char *mapName )
+{
+	return uiManager->FindGui( mapName, true, false, true );
+}
+
+extern "C" __declspec(dllexport) cmHandle_t TOOLAPI_CM_LoadMap( const char *mapName )
+{
+	// Disconnect from a game if a game is currently running.
+	cmdSystem->BufferCommandText( CMD_EXEC_NOW, "disconnect" );
+
+	// Free any current maps that are open.
+	collisionModelManager->FreeMap();
+
+	// Load the collision model file.
+	return collisionModelManager->LoadModel( mapName, false );
+}
+
 extern "C" __declspec(dllexport) void TOOLAPI_Editor_DrawRenderSurf( srfTriangles_t *surf, idImage *image, float x, float y, float z, float yaw, float pitch, float roll, bool cameraView )
 {
 	DrawRenderSurface( surf, image, idVec3(x,y,z), idAngles(pitch, yaw, roll ), cameraView );
@@ -168,7 +185,7 @@ extern "C" __declspec(dllexport) HDC TOOLAPI_Device_BeginRender( HWND hwnd, int 
 
 	
 	// render it
-	//renderSystem->BeginFrame( width , height );
+	renderSystem->BeginFrame( width , height );
 
 	return hDC;
 }
@@ -181,7 +198,9 @@ extern "C" __declspec(dllexport) void TOOLAPI_Device_EndRender( HWND hwnd, HDC h
 	qglMatrixMode( GL_MODELVIEW );
 	qglPopMatrix();
 	
-	//renderSystem->EndFrame( NULL, NULL );
+	qglPushMatrix();
+	renderSystem->EndFrame( NULL, NULL, false );
+	qglPopMatrix();
 	renderDevice->SwapBuffers(hDC);
 	renderDevice->BindDeviceToWindow( NULL );
 	::ReleaseDC( hwnd, hDC );

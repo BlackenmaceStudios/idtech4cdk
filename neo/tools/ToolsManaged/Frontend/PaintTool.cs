@@ -22,6 +22,7 @@ namespace ToolsManaged.Frontend
         MegaProject _megaProject;
         NativeAPI.RenderWorld _rw;
         NativeAPI.idManagedImage _defaultImage;
+        UserInterface _debugGui;
         
         RenderDevice _renderDevice;
         System.Drawing.Point lastMousePoint = new System.Drawing.Point();
@@ -39,7 +40,9 @@ namespace ToolsManaged.Frontend
             this.Paint += new PaintEventHandler(PaintTool_Paint);
             panel1.MouseEnter += new EventHandler(panel1_MouseEnter);
             panel1.MouseLeave += new EventHandler(panel1_MouseLeave);
-         
+
+            _debugGui = UserInterfaceManager.LoadGUI("guis/editors/vtpaintdebug.gui");
+            
         }
 
 
@@ -119,12 +122,16 @@ namespace ToolsManaged.Frontend
 
             lastMousePoint = p;
         }
-
+        private int tics = 0;
         void PaintTool_Paint(object sender, PaintEventArgs e)
         {
+            DateTime _startFrameTime, _endFrameTime;
             int numVisibleVtAreas;
             if (_rw == null)
                 return;
+
+            _startFrameTime = DateTime.Now;
+            
 
             if (_megaProject != null && LayersBox.Items.Count != _megaProject.NumLayers)
             {
@@ -134,6 +141,9 @@ namespace ToolsManaged.Frontend
                     LayersBox.Items.Add("Layer" + (LayersBox.Items.Count + 1));
                 }
             }
+
+            
+
 
             HandleInput();
 
@@ -148,7 +158,16 @@ namespace ToolsManaged.Frontend
                 _rw.RenderVisibleArea(_defaultImage, i, 0,0,0,0,0,0);
             }
 
+            _debugGui.Redraw(_debugGui.GetNativeAddress(), (int)tics);
+
             _renderDevice.EndRender();
+
+            _endFrameTime = DateTime.Now;
+
+            float fps2 = (_endFrameTime.Ticks - _startFrameTime.Ticks) * 0.001f;
+            
+            _debugGui.SetStateString(_debugGui.GetNativeAddress(), "currentFPS", "" + (int)fps2 + "fps");
+            tics++;
         }
 
         void PaintTool_Load(object sender, EventArgs e)
@@ -214,7 +233,9 @@ namespace ToolsManaged.Frontend
             
 
             NativeAPI.GetEditorViewPosition(ref viewOrigin );
-          
+
+            // Load the collision model f
+            CollisionModelManager.LoadMap(mapname);
 
             if (mtrListBox.Items.Count != NativeAPI.GetNumMaterials())
             {
@@ -222,7 +243,12 @@ namespace ToolsManaged.Frontend
 
                 for (int i = 0; i < NativeAPI.GetNumMaterials(); i++)
                 {
-                    mtrListBox.Items.Add(NativeAPI.GetMaterialNameByIndex(i));
+                    string mtrName = NativeAPI.GetMaterialNameByIndex(i);
+
+                    if (!mtrName.Contains("textures/megagen"))
+                        continue;
+
+                    mtrListBox.Items.Add(mtrName);
                 }
             }
 
@@ -230,6 +256,8 @@ namespace ToolsManaged.Frontend
             {
                 Visible = false;
             }
+
+            _debugGui.Activate(_debugGui.GetNativeAddress(), true, 0);
         }
 
         private System.Drawing.Bitmap BitmapFromSource(BitmapSource bitmapsource)
