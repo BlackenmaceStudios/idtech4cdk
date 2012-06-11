@@ -477,7 +477,7 @@ static void	RB_SetBuffer( const void *data ) {
 		} else {
 			qglClearColor( 0.4f, 0.0f, 0.25f, 1.0f );
 		}
-		qglClear( GL_COLOR_BUFFER_BIT );
+	//	qglClear( GL_COLOR_BUFFER_BIT );
 	}
 }
 

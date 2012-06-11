@@ -882,7 +882,7 @@ void R_ReadTiledPixels( int width, int height, byte *buffer, renderView_t *ref =
 			if ( ref ) {
 				tr.BeginFrame( oldWidth, oldHeight );
 				tr.primaryWorld->RenderScene( ref );
-				tr.EndFrame( NULL, NULL );
+				tr.EndFrame( NULL, NULL, true );
 			} else {
 				session->UpdateScreen();
 			}

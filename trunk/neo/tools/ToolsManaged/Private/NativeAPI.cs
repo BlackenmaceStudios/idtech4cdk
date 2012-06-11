@@ -168,6 +168,8 @@ namespace ToolsManaged.Private
             }
         }
 
+       
+
         public class idManagedImage
         {
             IntPtr _internalPtr;

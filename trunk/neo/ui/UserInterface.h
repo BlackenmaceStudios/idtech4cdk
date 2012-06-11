@@ -86,6 +86,9 @@ public:
 								// Removes a gui state variable
 	virtual void				DeleteStateVar( const char *varName ) = 0;
 
+									// Activated the gui.
+	virtual const char *		Activate( bool activate, int time ) = 0;
+
 								// Sets a gui state variable.
 	virtual void				SetStateString( const char *varName, const char *value ) = 0;
 	virtual void				SetStateBool( const char *varName, const bool value ) = 0;
@@ -100,9 +103,6 @@ public:
 
 								// The state has changed and the gui needs to update from the state idDict.
 	virtual void				StateChanged( int time, bool redraw = false ) = 0;
-
-								// Activated the gui.
-	virtual const char *		Activate( bool activate, int time ) = 0;
 
 								// Triggers the gui and runs the onTrigger scripts.
 	virtual void				Trigger( int time ) = 0;

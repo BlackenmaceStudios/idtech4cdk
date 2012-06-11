@@ -1,0 +1,32 @@
+windowDef Desktop
+{
+	rect	0,0,1280,720
+	backcolor	0 ,0 ,0 ,0
+	visible	1
+	nocursor	1
+	windowDef fpsLbl
+	{
+		rect	1136,0,142,27
+		visible	1
+		forecolor	1,1,1,1
+		text	"gui::currentFPS"
+		textscale	0.40000001
+		textalign	2
+	}
+	windowDef fpsLbl1
+	{
+		rect	1,0,262,27
+		visible	1
+		forecolor	1,1,1,1
+		text	"Highlighted Entity:"
+		textscale	0.40000001
+	}
+	windowDef fpsLbl11
+	{
+		rect	1,24,262,27
+		visible	1
+		forecolor	1,1,1,1
+		text	"VT Paint Area ID:"
+		textscale	0.40000001
+	}
+}
