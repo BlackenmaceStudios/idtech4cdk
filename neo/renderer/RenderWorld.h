@@ -293,6 +293,12 @@ typedef struct {
 	int					guiId;			// id of gui ( 0, 1, or 2 ) that the trace happened against
 } guiPoint_t;
 
+// vtPoint_t is returned by idRenderWorld::VTTrace()
+// jmarshall
+typedef struct {
+	float				x, y;			// 0.0 to 1.0 range if trace hit a gui, otherwise -1
+} vtPoint_t;
+// jmarshall end
 
 // modelTrace_t is for tracing vs. visual geometry
 typedef struct modelTrace_s {
@@ -438,6 +444,9 @@ public:
 	// This doesn't do any occlusion testing, simply ignoring non-gui surfaces.
 	// start / end are in global world coordinates.
 	virtual guiPoint_t		GuiTrace( qhandle_t entityHandle, const idVec3 start, const idVec3 end ) const = 0;
+
+	// Same as GuiTrace but doesn't require the surface to have a GUI.
+	virtual vtPoint_t		VTTrace( int vtAreaId, const idVec3 start, const idVec3 end ) const = 0;
 
 	// Traces vs the render model, possibly instantiating a dynamic version, and returns true if something was hit
 	virtual bool			ModelTrace( modelTrace_t &trace, qhandle_t entityHandle, const idVec3 &start, const idVec3 &end, const float radius ) const = 0;

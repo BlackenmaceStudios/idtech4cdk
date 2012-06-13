@@ -1059,6 +1059,73 @@ int idRenderWorldLocal::BoundsInAreas( const idBounds &bounds, int *areas, int m
 
 /*
 ================
+VTTrace
+================
+*/
+vtPoint_t idRenderWorldLocal::VTTrace( int vtAreaId, const idVec3 start, const idVec3 end ) const {
+	srfTriangles_t	*tri;
+	vtPoint_t pt;
+	localTrace_t	local;
+	const modelSurface_t *vtsurf = NULL;
+
+	memset( &pt, 0, sizeof(vtPoint_t));
+
+	if(vtAreaId == -1) {
+		common->Warning("VTTrace: Can't trace against non vt areas.\n");
+		return pt;
+	}
+
+	for(int i = 0; i < localModels.Num(); i++)
+	{
+		idRenderModel *model = localModels[i];
+
+		//common->Printf("Generating Collision for %s - %d collision models\n", model->Name(), model->NumSurfaces() );
+		for(int s = 0; s < model->NumSurfaces(); s++)
+		{
+			const modelSurface_t *surf = model->Surface( s );
+
+			if(surf->geometry->vt_AreaID == vtAreaId) {
+				vtsurf = surf;
+				break;
+			}
+		}
+
+
+		if(vtsurf != NULL)
+			break;
+	}
+
+	if(vtsurf == NULL) {
+		common->Warning("VTTrace: VTArea %d is invalid!\n", vtAreaId);
+		return pt;
+	}
+
+	tri = vtsurf->geometry;
+
+	local = R_LocalTrace( start, end, 0.0f, tri );
+	if ( local.fraction < 1.0 ) {
+		idVec3				origin, axis[3];
+		idVec3				cursor;
+		float				axisLen[2];
+
+		R_SurfaceToTextureAxis( tri, origin, axis );
+		cursor = local.point - origin;
+
+		axisLen[0] = axis[0].Length();
+		axisLen[1] = axis[1].Length();
+
+		pt.x = ( cursor * axis[0] ) / ( axisLen[0] * axisLen[0] );
+		pt.y = ( cursor * axis[1] ) / ( axisLen[1] * axisLen[1] );
+
+		return pt;
+	}
+
+	common->Warning("VTTrace Failed.\n");
+	return pt;
+}
+
+/*
+================
 GuiTrace
 
 checks a ray trace against any gui surfaces in an entity, returning the

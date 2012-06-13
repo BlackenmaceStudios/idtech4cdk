@@ -271,11 +271,19 @@ namespace ToolsManaged.Private
             [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_RenderWorld_GetVisibleVirtualTextureAreaSurface")]
             private static extern IntPtr TOOLAPI_RenderWorld_GetVisibleVirtualTextureAreaSurface(IntPtr world, int surfId);
 
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_RenderWorld_VTTrace")]
+            private static extern bool TOOLAPI_RenderWorld_VTTrace(IntPtr world, ref float x, ref float y, int vtAreaId, float startX, float startY, float startZ, float endPosX, float endPosY, float endPosZ, float dist);
+
             public int FindVisibleVirtualTextureAreas(float width, float height, float x, float y, float z, float yaw, float pitch, float roll)
             {
                 vtVisibleAreasPool = TOOLAPI_RenderWorld_GetVisibleVirtualTextureArea(internalPtr, ref numVisibleVirtualTextureAreas, width, height, x, y, z, yaw, pitch, roll);
 
                 return numVisibleVirtualTextureAreas;
+            }
+
+            public void VTTrace(ref float x, ref float y, int vtAreaId, float startX, float startY, float startZ, float endPosX, float endPosY, float endPosZ, float dist)
+            {
+                TOOLAPI_RenderWorld_VTTrace(internalPtr, ref x, ref y, vtAreaId, startX, startY, startZ, endPosX, endPosY, endPosZ, dist);
             }
 
             public void RenderVisibleArea(idManagedImage image, int areaId, float x, float y, float z, float yaw, float pitch, float roll)

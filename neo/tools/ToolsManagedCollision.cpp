@@ -49,12 +49,37 @@ extern "C" __declspec(dllexport) bool TOOLAPI_CM_TraceProjectedRay( ToolsManaged
 	traceManaged.endposx = trace.endpos.x;
 	traceManaged.endposy = trace.endpos.y;
 	traceManaged.endposz = trace.endpos.z;
-	traceManaged.entNum = trace.c.id;
+	traceManaged.entNum = trace.c.id-1;
 	traceManaged.fraction = trace.fraction;
 
 	traceManaged.normalx = trace.c.normal.x;
 	traceManaged.normaly = trace.c.normal.y;
 	traceManaged.normalz = trace.c.normal.z;
+
+	return true;
+}
+
+extern "C" __declspec(dllexport) bool TOOLAPI_RenderWorld_VTTrace( idRenderWorld *world, float &x, float &y, int vtAreaId, float startX, float startY, float startZ, float endPosX, float endPosY, float endPosZ, float dist )
+{
+	idVec3 startPos, endPos;
+	trace_t trace;
+
+	startPos.x = startX;
+	startPos.y = startY;
+	startPos.z = startZ;
+
+	endPos.x = endPosX;
+	endPos.y = endPosY;
+	endPos.z = endPosZ;
+
+	idVec3 diff = endPos - startPos;
+
+	endPos = endPos + diff.ToAngles().Normalize180().ToForward() * dist;
+
+	vtPoint_t pt = world->VTTrace( vtAreaId, startPos, endPos );
+
+	x = pt.x;
+	y = pt.y;
 
 	return true;
 }
