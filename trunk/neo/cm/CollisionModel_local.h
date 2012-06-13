@@ -294,6 +294,10 @@ class idCollisionModelManagerLocal : public idCollisionModelManager {
 public:
 	// load collision models from a map file
 	void			LoadMap( const idMapFile *mapFile );
+
+	// load collision from a proc file
+	void			LoadFromWorld( idRenderWorld *world );
+
 	// frees all the collision models
 	void			FreeMap( void );
 
@@ -305,6 +309,9 @@ public:
 	bool			TrmFromModel( const char *modelName, idTraceModel &trm );
 
 	void			GenerateCollisionMapForModel( const char *fileName );
+// jmarshall
+	int				GetNumLoadedModels( void ) { return numModels; }
+// jmarshall end
 
 	// name of the model
 	const char *	GetModelName( cmHandle_t model ) const;
@@ -404,6 +411,10 @@ private:			// CollisionMap_trace.cpp
 private:			// CollisionMap_load.cpp
 	void			Clear( void );
 	void			FreeTrmModelStructure( void );
+
+// jmarshall
+	cm_model_t		*CreateCollisionModelFromRenderSurface( idStr name, const idMaterial *mtr, const srfTriangles_t *surf );
+// jmarshall end
 					// model deallocation
 	void			RemovePolygonReferences_r( cm_node_t *node, cm_polygon_t *p );
 	void			RemoveBrushReferences_r( cm_node_t *node, cm_brush_t *b );

@@ -32,7 +32,7 @@ namespace ToolsManaged.Private
     public class CollisionModelManager
     {
         [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_CM_LoadMap")]
-        private static extern int TOOLAPI_CM_LoadMap(string mapName);
+        private static extern int TOOLAPI_CM_LoadMap(IntPtr rw);
 
         [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_CM_TraceProjectedRay")]
         private static extern bool TOOLAPI_CM_TraceProjectedRay(ref traceManaged_t trace, float startX, float startY, float startZ, float yaw, float pitch, float roll, float dist);
@@ -53,9 +53,9 @@ namespace ToolsManaged.Private
             return TOOLAPI_CM_TraceProjectedRay(ref trace, startX, startY, startZ, endPosX, endPosY, endPosZ, dist);
         }
 
-        public static CollisionModel LoadMap(string mapName)
+        public static CollisionModel LoadMap(NativeAPI.RenderWorld rw)
         {
-            int handle = TOOLAPI_CM_LoadMap("maps" + mapName + ".entities");
+            int handle = TOOLAPI_CM_LoadMap(rw.NativeHandle);
 
             return new CollisionModel(handle);
         }

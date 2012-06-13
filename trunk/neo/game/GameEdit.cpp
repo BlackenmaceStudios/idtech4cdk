@@ -1149,7 +1149,7 @@ idGameEdit::LoadMapCollision
 ================
 */
 // Loads a map but with collision detection only.
-bool idGameEdit::LoadMapCollision( const char *map ) {
+bool idGameEdit::LoadMapCollision( idRenderWorld *world ) {
 	int numEntities = 0;
 	idDict args;
 	idMapEntity *mapEnt;
@@ -1162,7 +1162,7 @@ bool idGameEdit::LoadMapCollision( const char *map ) {
 	}
 
 	gameLocal.numEditEntities = 0;
-
+#if 0
 	// Load in the map.
 	gameLocal.LoadMap( map, 0 );
 
@@ -1194,6 +1194,34 @@ bool idGameEdit::LoadMapCollision( const char *map ) {
 				ent->clipModel->Link( gameLocal.clip );
 				
 			}
+		}
+
+		gameLocal.editGameEntities[gameLocal.numEditEntities++] = ent;
+	}
+#endif
+
+	// Generate collision from the world.
+	collisionModelManager->LoadFromWorld( world );
+
+	// Init the game clipmap helper.
+	gameLocal.clip.Init();
+
+	for(int i = 0; i < collisionModelManager->GetNumLoadedModels(); i++)
+	{
+		idGameEditEntity *ent = new idGameEditEntity;
+		const char *temp = collisionModelManager->GetModelName( i );
+
+		ent->mapEntity = NULL;
+		ent->clipModel = NULL;
+
+		if ( idClipModel::CheckModel( temp ) ) {
+			//common->Printf("Creating ClipModel for %s\n", temp);
+			ent->clipModel = new idClipModel( temp );
+			ent->clipModel->SetPosition( idVec3(0,0,0), idAngles(0,0,0).ToMat3() );
+			ent->clipModel->SetContents( CONTENTS_SOLID );
+			ent->clipModel->Enable();
+			ent->clipModel->SetId(gameLocal.numEditEntities);
+			ent->clipModel->Link( gameLocal.clip );
 		}
 
 		gameLocal.editGameEntities[gameLocal.numEditEntities++] = ent;
