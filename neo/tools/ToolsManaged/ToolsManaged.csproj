@@ -108,6 +108,7 @@
     <Compile Include="Private\Editor\Input\KeyHandler.cs" />
     <Compile Include="Private\idLib\idDictCollectionPropertyDescriptor.cs" />
     <Compile Include="Private\idLib\idLibNativeAPI.cs" />
+    <Compile Include="Private\idLib\idMath.cs" />
     <Compile Include="Private\idLib\idString.cs" />
     <Compile Include="Private\idLib\idVec3.cs" />
     <Compile Include="Private\MegaProject.cs" />

@@ -1140,3 +1140,74 @@ void idGameEdit::MapEntityTranslate( const char *name, const idVec3 &v ) const {
 		}
 	}
 }
+
+// jmarshall
+
+/*
+================
+idGameEdit::LoadMapCollision
+================
+*/
+// Loads a map but with collision detection only.
+bool idGameEdit::LoadMapCollision( const char *map ) {
+	int numEntities = 0;
+	idDict args;
+	idMapEntity *mapEnt;
+	const char *temp;
+
+	for(int i = 0; i < gameLocal.numEditEntities; i++)
+	{
+		delete gameLocal.editGameEntities[i];
+		gameLocal.editGameEntities[i] = NULL;
+	}
+
+	gameLocal.numEditEntities = 0;
+
+	// Load in the map.
+	gameLocal.LoadMap( map, 0 );
+
+	numEntities = gameLocal.GetMapFile()->GetNumEntities();
+
+	for ( int i = 1 ; i < numEntities ; i++ ) {
+		idGameEditEntity *ent = new idGameEditEntity;
+		idVec3 origin;
+		idAngles angle;
+
+		mapEnt = gameLocal.GetMapFile()->GetEntity( i );
+		args = mapEnt->epairs;
+
+		ent->mapEntity = mapEnt;
+		ent->clipModel = NULL;
+
+		if ( args.GetString( "clipmodel", "", &temp ) ) {
+			if ( idClipModel::CheckModel( temp ) ) {
+				common->Printf("Creating ClipModel for %s\n", temp);
+				ent->clipModel = new idClipModel( temp );
+
+
+				origin = args.GetVector( "origin", "0 0 0" );
+				angle = args.GetAngles( "angles", "0 0 0" );
+				ent->clipModel->SetPosition( args.GetVector( "origin" ), angle.ToMat3() );
+				ent->clipModel->SetContents( CONTENTS_SOLID );
+				ent->clipModel->Enable();
+				ent->clipModel->SetId(gameLocal.numEditEntities);
+				ent->clipModel->Link( gameLocal.clip );
+				
+			}
+		}
+
+		gameLocal.editGameEntities[gameLocal.numEditEntities++] = ent;
+	}
+
+	return true;
+}
+
+bool idGameEdit::Trace( trace_t &trace, int contentMask, const idVec3 &startPos, const idVec3 &endPos ) {
+	gameLocal.clip.TracePoint( trace, startPos, endPos, CONTENTS_SOLID, NULL );
+	if ( trace.fraction < 1.0f ) {
+		return false;
+	}
+
+	return true;
+}
+// jmarshall end

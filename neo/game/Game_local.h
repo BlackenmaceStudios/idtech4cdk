@@ -251,6 +251,9 @@ public:
 	idEntity *				entities[MAX_GENTITIES];// index to entities
 // jmarshall
 	bmClientEntity	*		clientEntities[MAX_GENTITIES]; // client entities pool.
+	idGameEditEntity *	    editGameEntities[MAX_GENTITIES];
+
+	int						numEditEntities;
 // jmarshall end
 	int						spawnIds[MAX_GENTITIES];// for use in idEntityPtr
 	int						firstFreeIndex;			// first free index in the entities array
@@ -479,6 +482,8 @@ public:
 	int						GetFrameNum() const { return framenum; };
 	int						GetTime() const { return time; };
 	int						GetMSec() const { return msec; };
+
+	idMapFile				*GetMapFile( void ) { return mapFile; }
 
 	int						GetNextClientNum( int current ) const;
 	idPlayer *				GetClientByNum( int current ) const;

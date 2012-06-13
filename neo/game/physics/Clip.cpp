@@ -544,9 +544,9 @@ idClipModel::Link
 */
 void idClipModel::Link( idClip &clp ) {
 
-	assert( idClipModel::entity );
+	//assert( idClipModel::entity );
 	if ( !idClipModel::entity ) {
-		return;
+	//	return;
 	}
 
 	if ( clipLinks ) {
@@ -1106,7 +1106,12 @@ bool idClip::Translation( trace_t &results, const idVec3 &start, const idVec3 &e
 
 		if ( trace.fraction < results.fraction ) {
 			results = trace;
-			results.c.entityNum = touch->entity->entityNumber;
+// jmarshall
+			if(touch->entity)
+			{
+				results.c.entityNum = touch->entity->entityNumber;
+			}
+// jmarshall end
 			results.c.id = touch->id;
 			if ( results.fraction == 0.0f ) {
 				break;

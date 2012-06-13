@@ -37,29 +37,32 @@
             this.AddNewLayerBtn = new System.Windows.Forms.Button();
             this.LayersBox = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.StampImg = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.mtrListBox = new System.Windows.Forms.ListBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveMegaProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitPaintToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stencilsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.brushesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.StampImg = new System.Windows.Forms.PictureBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.saveMegaProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label2 = new System.Windows.Forms.Label();
+            this.brushTrackBar = new System.Windows.Forms.TrackBar();
             virtualTexturePaintToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.StampImg)).BeginInit();
+            this.groupBox5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.brushTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // virtualTexturePaintToolToolStripMenuItem
@@ -77,7 +80,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.17664F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 86.82336F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 211F));
             this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.groupBox1, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.groupBox3, 0, 0);
@@ -88,7 +91,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 76.32552F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23.67448F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1426, 801);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1426, 803);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // panel1
@@ -100,7 +103,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(163, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1049, 605);
+            this.panel1.Size = new System.Drawing.Size(1048, 606);
             this.panel1.TabIndex = 3;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -110,7 +113,7 @@
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.AddNewLayerBtn);
             this.groupBox1.Controls.Add(this.LayersBox);
-            this.groupBox1.Location = new System.Drawing.Point(1218, 3);
+            this.groupBox1.Location = new System.Drawing.Point(1217, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(197, 598);
             this.groupBox1.TabIndex = 4;
@@ -166,6 +169,15 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Stencils";
             // 
+            // StampImg
+            // 
+            this.StampImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.StampImg.Location = new System.Drawing.Point(9, 418);
+            this.StampImg.Name = "StampImg";
+            this.StampImg.Size = new System.Drawing.Size(138, 173);
+            this.StampImg.TabIndex = 4;
+            this.StampImg.TabStop = false;
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -193,6 +205,50 @@
             this.mtrListBox.TabIndex = 0;
             this.mtrListBox.SelectedIndexChanged += new System.EventHandler(this.mtrListBox_SelectedIndexChanged);
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.textBox1);
+            this.groupBox5.Location = new System.Drawing.Point(1217, 615);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(205, 170);
+            this.groupBox5.TabIndex = 7;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Controls";
+            // 
+            // textBox1
+            // 
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Location = new System.Drawing.Point(8, 20);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(189, 140);
+            this.textBox1.TabIndex = 0;
+            this.textBox1.Text = "Zoom: Left+Alt and Right Mouse\r\nPan: Left+Alt and Middle Mouse\r\nRotate: Left+Alt " +
+    "and Left Mouse\r\n\r\n";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.brushTrackBar);
+            this.groupBox4.Controls.Add(this.label2);
+            this.groupBox4.Controls.Add(this.button3);
+            this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox4.Location = new System.Drawing.Point(163, 615);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(1048, 185);
+            this.groupBox4.TabIndex = 6;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Brushes";
+            // 
+            // button3
+            // 
+            this.button3.BackgroundImage = global::ToolsManaged.Properties.Resources.testbrush;
+            this.button3.Location = new System.Drawing.Point(38, 95);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(69, 63);
+            this.button3.TabIndex = 0;
+            this.button3.UseVisualStyleBackColor = true;
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -217,10 +273,17 @@
             this.toolOptionsToolStripMenuItem.Size = new System.Drawing.Size(88, 20);
             this.toolOptionsToolStripMenuItem.Text = "&Tool Options";
             // 
+            // saveMegaProjectToolStripMenuItem
+            // 
+            this.saveMegaProjectToolStripMenuItem.Name = "saveMegaProjectToolStripMenuItem";
+            this.saveMegaProjectToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.saveMegaProjectToolStripMenuItem.Text = "&Save MegaProject";
+            this.saveMegaProjectToolStripMenuItem.Click += new System.EventHandler(this.saveMegaProjectToolStripMenuItem_Click);
+            // 
             // exitPaintToolToolStripMenuItem
             // 
             this.exitPaintToolToolStripMenuItem.Name = "exitPaintToolToolStripMenuItem";
-            this.exitPaintToolToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.exitPaintToolToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.exitPaintToolToolStripMenuItem.Text = "Exit Paint Tool";
             this.exitPaintToolToolStripMenuItem.Click += new System.EventHandler(this.exitPaintToolToolStripMenuItem_Click);
             // 
@@ -242,63 +305,25 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             // 
-            // groupBox4
+            // label2
             // 
-            this.groupBox4.Controls.Add(this.button3);
-            this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox4.Location = new System.Drawing.Point(163, 614);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(1049, 184);
-            this.groupBox4.TabIndex = 6;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Brushes";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(10, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(57, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Brush Size";
             // 
-            // groupBox5
+            // brushTrackBar
             // 
-            this.groupBox5.Controls.Add(this.textBox1);
-            this.groupBox5.Location = new System.Drawing.Point(1218, 614);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(205, 170);
-            this.groupBox5.TabIndex = 7;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Controls";
-            // 
-            // textBox1
-            // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Location = new System.Drawing.Point(8, 20);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(189, 140);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "Zoom: Left+Alt and Right Mouse\r\nPan: Left+Alt and Middle Mouse\r\nRotate: Left+Alt " +
-    "and Left Mouse\r\n\r\n";
-            // 
-            // StampImg
-            // 
-            this.StampImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.StampImg.Location = new System.Drawing.Point(9, 418);
-            this.StampImg.Name = "StampImg";
-            this.StampImg.Size = new System.Drawing.Size(138, 173);
-            this.StampImg.TabIndex = 4;
-            this.StampImg.TabStop = false;
-            // 
-            // button3
-            // 
-            this.button3.BackgroundImage = global::ToolsManaged.Properties.Resources.testbrush;
-            this.button3.Location = new System.Drawing.Point(38, 50);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(69, 63);
-            this.button3.TabIndex = 0;
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // saveMegaProjectToolStripMenuItem
-            // 
-            this.saveMegaProjectToolStripMenuItem.Name = "saveMegaProjectToolStripMenuItem";
-            this.saveMegaProjectToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.saveMegaProjectToolStripMenuItem.Text = "&Save MegaProject";
-            this.saveMegaProjectToolStripMenuItem.Click += new System.EventHandler(this.saveMegaProjectToolStripMenuItem_Click);
+            this.brushTrackBar.Location = new System.Drawing.Point(8, 43);
+            this.brushTrackBar.Maximum = 3000;
+            this.brushTrackBar.Minimum = 1;
+            this.brushTrackBar.Name = "brushTrackBar";
+            this.brushTrackBar.Size = new System.Drawing.Size(164, 45);
+            this.brushTrackBar.TabIndex = 2;
+            this.brushTrackBar.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.brushTrackBar.Value = 1500;
             // 
             // PaintTool
             // 
@@ -317,12 +342,14 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.StampImg)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.StampImg)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.brushTrackBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -353,5 +380,7 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ToolStripMenuItem saveMegaProjectToolStripMenuItem;
+        private System.Windows.Forms.TrackBar brushTrackBar;
+        private System.Windows.Forms.Label label2;
     }
 }

@@ -258,11 +258,44 @@ enum {
 
 class idEntity;
 class idMD5Anim;
+class idClipModel;
+
+//
+// idGameEditEntity
+//
+struct idGameEditEntity {
+	idMapEntity		*mapEntity;
+	idClipModel		*clipModel;
+
+	idGameEditEntity::idGameEditEntity() {
+		mapEntity = NULL;
+		clipModel = NULL;
+	}
+
+	idGameEditEntity::~idGameEditEntity() {
+		if(mapEntity != NULL) {
+			delete mapEntity;
+			mapEntity = NULL;
+		}
+
+		if(clipModel != NULL) {
+			delete clipModel;
+			clipModel = NULL;
+		}
+	}
+};
 
 // FIXME: this interface needs to be reworked but it properly separates code for the time being
 class idGameEdit {
 public:
 	virtual						~idGameEdit( void ) {}
+
+// jmarshall
+	// Loads a map but with collision detection only.
+	virtual bool				LoadMapCollision( const char *map );
+	virtual bool				Trace( trace_t &trace, int contentMask, const idVec3 &startPos, const idVec3 &endPos );
+// jmarshall end
+
 
 	// These are the canonical idDict to parameter parsing routines used by both the game and tools.
 	virtual void				ParseSpawnArgsToRenderLight( const idDict *args, renderLight_t *renderLight );
@@ -336,7 +369,6 @@ public:
 	virtual int					MapGetEntitiesMatchingClassWithString( const char *classname, const char *match, const char *list[], const int max ) const;
 	virtual void				MapRemoveEntity( const char *name ) const;
 	virtual void				MapEntityTranslate( const char *name, const idVec3 &v ) const;
-
 };
 
 extern idGameEdit *				gameEdit;

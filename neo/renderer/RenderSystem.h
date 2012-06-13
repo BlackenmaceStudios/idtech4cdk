@@ -273,6 +273,9 @@ public:
 
 	// Clears the frame buffer data.
 	virtual void			ClearFrameBuffer( void ) = 0;
+
+	// Projects the mouse 2d xy coordinate to a 3d world position(context safe).
+	virtual void			ProjectMouseToWorldCoord( idVec2 mouseXY, idVec3 &worldPos ) = 0;
 // jmarshall end
 };
 

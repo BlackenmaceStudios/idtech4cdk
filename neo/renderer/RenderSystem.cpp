@@ -1020,6 +1020,31 @@ void idRenderSystemLocal::PrintMemInfo( MemInfo_t *mi ) {
 	// compute render totals
 
 }
+/*
+===============
+idRenderSystemLocal::ProjectMouseToWorldCoord
+
+http://nehe.gamedev.net/article/using_gluunproject/16013/
+===============
+*/
+void idRenderSystemLocal::ProjectMouseToWorldCoord( idVec2 mouseXY, idVec3 &worldPos ) {
+	GLint viewport[4];                  // Where The Viewport Values Will Be Stored
+	GLfloat modelview[16];                 // Where The 16 Doubles Of The Modelview Matrix Are To Be Stored
+	GLfloat projection[16]; 
+	GLfloat winX, winY, winZ;
+
+	qglGetIntegerv(GL_VIEWPORT, viewport);           // Retrieves The Viewport Values (X, Y, Width, height).
+	qglGetFloatv(GL_MODELVIEW_MATRIX, modelview);       // Retrieve The Modelview Matrix
+	qglGetFloatv(GL_PROJECTION_MATRIX, projection);       // Retrieve The Modelview Matrix
+
+
+	winX = (float)mouseXY.x;
+    winY = (float)viewport[3] - (float)mouseXY.y;
+
+    qglReadPixels( mouseXY.x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
+
+    myUnProjectf( winX, winY, winZ, modelview, projection, viewport, &worldPos.x);
+}
 
 /*
 ===============
