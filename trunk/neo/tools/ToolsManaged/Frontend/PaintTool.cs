@@ -23,6 +23,7 @@ namespace ToolsManaged.Frontend
         NativeAPI.RenderWorld _rw;
         NativeAPI.idManagedImage _defaultImage;
         UserInterface _debugGui;
+        NativeAPI.idManagedImage _currentBrushImage;
         
         RenderDevice _renderDevice;
         System.Drawing.Point lastMousePoint = new System.Drawing.Point();
@@ -122,6 +123,57 @@ namespace ToolsManaged.Frontend
 
             lastMousePoint = p;
         }
+
+        void DrawBrush(traceManaged_t trace)
+        {
+            float brushSize = brushTrackBar.Value;
+
+            if (_currentBrushImage == null)
+                return;
+
+
+            NativeAPI.DrawPlane(brushSize, _currentBrushImage, trace.endposx, trace.endposy, trace.endposz, viewAxis.x + 90.0f, viewAxis.y, viewAxis.z);
+
+        }
+
+        void UpdateHighlightArea()
+        {
+            float x = 0, y = 0, z = 0;
+
+            // If the mouse isn't within the view control don't do anything.
+            if (!allowPainting)
+            {
+                _debugGui.SetStateString(_debugGui.GetNativeAddress(), "highlightedEntity", "");
+                _debugGui.SetStateString(_debugGui.GetNativeAddress(), "vtPaintID", "");
+                return;
+            }
+
+            _renderDevice.UnprojectMouseCoord(ref x, ref y, ref z);
+
+          
+            // Get the vector pointing from the view position to were the unprojection got put.
+            Vector3 v = viewOrigin - new Vector3(x, y, z);
+            Vector3 angle = new Vector3();
+
+            v.Normalize180();
+         
+            angle.x = v.ToYaw();
+            angle.y = v.ToPitch();
+
+
+            traceManaged_t trace = new traceManaged_t();
+            if (CollisionModelManager.TraceProjectedRay(ref trace, viewOrigin.x, viewOrigin.y, viewOrigin.z, x, y, z, 40000))
+            {
+                _debugGui.SetStateString(_debugGui.GetNativeAddress(), "highlightedEntity", "PaintEntity: " + trace.entNum);
+
+                DrawBrush(trace);
+            }
+            else
+            {
+                _debugGui.SetStateString(_debugGui.GetNativeAddress(), "highlightedEntity", "No Entity");
+            }
+        }
+
         private int tics = 0;
         void PaintTool_Paint(object sender, PaintEventArgs e)
         {
@@ -149,14 +201,20 @@ namespace ToolsManaged.Frontend
 
             _renderDevice.BeginRender();
 
+            
+
             // Get the current virtual texture areas that are in the current view.
-            numVisibleVtAreas = _rw.FindVisibleVirtualTextureAreas(panel1.Size.Width, panel1.Size.Height, viewOrigin.x, viewOrigin.y, viewOrigin.z, viewAxis.x, viewAxis.y, viewAxis.z); 
+            numVisibleVtAreas = _rw.FindVisibleVirtualTextureAreas(panel1.Size.Width, panel1.Size.Height, viewOrigin.x, viewOrigin.y, viewOrigin.z, viewAxis.x, viewAxis.y, viewAxis.z);
+
+            
 
             // Render the virtualtexture areas
             for (int i = 0; i < numVisibleVtAreas; i++)
             {
                 _rw.RenderVisibleArea(_defaultImage, i, 0,0,0,0,0,0);
             }
+
+            UpdateHighlightArea();
 
             _debugGui.Redraw(_debugGui.GetNativeAddress(), (int)tics);
 
@@ -281,6 +339,8 @@ namespace ToolsManaged.Frontend
             int width=0, height=0;
 
             mtrPath = (string)mtrListBox.Items[mtrListBox.SelectedIndex];
+
+            _currentBrushImage = NativeAPI.idManagedImage.GetDiffuseImageHandleForMaterial(mtrPath);
             StampImg.BackgroundImage = BitmapFromSource( NativeAPI.GetDiffuseImageForMaterial(mtrPath, ref width, ref height) );
         }
 

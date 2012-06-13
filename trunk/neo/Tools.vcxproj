@@ -958,6 +958,7 @@
     <ClCompile Include="tools\sound\DialogSound.cpp" />
     <ClCompile Include="tools\sound\DialogSoundGroup.cpp" />
     <ClCompile Include="tools\Tools.cpp" />
+    <ClCompile Include="tools\ToolsManagedCollision.cpp" />
     <ClCompile Include="tools\ToolsManagedManager.cpp" />
     <ClCompile Include="ui\Winvar.cpp" />
     <ClCompile Include="vt\dxt\dxt.cpp" />

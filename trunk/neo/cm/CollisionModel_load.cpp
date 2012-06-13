@@ -3535,16 +3535,6 @@ cmHandle_t idCollisionModelManagerLocal::LoadModel( const char *modelName, const
 		return 0;
 	}
 
-// jmarshall
-	if(models == NULL)
-	{
-		// models
-		maxModels = MAX_SUBMODELS;
-		numModels = 0;
-		models = (cm_model_t **) Mem_ClearedAlloc( (maxModels+1) * sizeof(cm_model_t *) );
-	}
-// jmarshall end
-
 	// try to load a .ASE or .LWO model and convert it to a collision model
 	models[numModels] = LoadRenderModel( modelName );
 	if ( models[numModels] != NULL ) {

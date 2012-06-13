@@ -759,6 +759,8 @@ public:
 	virtual void			FreeLightDefDerivedData(class idRenderLightLocal *light);
 
 	virtual void			ClearFrameBuffer( void );
+
+	virtual void			ProjectMouseToWorldCoord( idVec2 mouseXY, idVec3 &worldPos );
 // jmarshall end
 public:
 	// internal functions
@@ -1841,5 +1843,7 @@ draw_diffuseonly
 void RB_Draw_DiffuseOnly( drawSurf_t **drawSurfs, int numDrawSurfs );
 void GL_SelectTextureNoClient( int unit );
 void RB_Draw_MegaProject( drawSurf_t **drawSurfs, int numDrawSurfs, bmMegaProjectFile *megaProject );
+
+int myUnProjectf(float winx, float winy, float winz, float *modelview, float *projection, int *viewport, float *objectCoordinate);
 
 #endif /* !__TR_LOCAL_H__ */

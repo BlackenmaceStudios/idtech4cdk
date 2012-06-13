@@ -47,6 +47,14 @@ namespace ToolsManaged.Private
         [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_DrawRenderSurf")]
         private static extern void TOOLAPI_Editor_DrawRenderSurf(IntPtr surf, IntPtr image, float x, float y, float z, float yaw, float pitch, float roll, bool cameraView);
 
+        [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_RendererSystem_DrawPlane")]
+        private static extern void TOOLAPI_RendererSystem_DrawPlane(float size, IntPtr image, float x, float y, float z, float yaw, float pitch, float roll);
+
+        public static void DrawPlane(float size, idManagedImage image, float x, float y, float z, float yaw, float pitch, float roll)
+        {
+            TOOLAPI_RendererSystem_DrawPlane( size, image.Handle, x,y,z,yaw,pitch,roll);
+        }
+
         public static void GetEditorViewPosition(ref Vector3 v)
         {
             float* xyz = TOOLAPI_Editor_GetViewPosition();
@@ -177,6 +185,9 @@ namespace ToolsManaged.Private
             [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_FindImage")]
             private static extern IntPtr TOOLAPI_Editor_FindImage(string path);
 
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_GetDiffuseImageHandleForMaterial")]
+            private static extern IntPtr TOOLAPI_Editor_GetDiffuseImageHandleForMaterial( string mtr );
+
             public idManagedImage(IntPtr ptr)
             {
                 _internalPtr = ptr;
@@ -198,6 +209,21 @@ namespace ToolsManaged.Private
                 IntPtr ptr;
 
                 ptr = TOOLAPI_Editor_FindImage(path);
+
+                if (ptr == IntPtr.Zero)
+                    return null;
+
+                return new idManagedImage(ptr);
+            }
+
+            //
+            // FindImage
+            //
+            public static idManagedImage GetDiffuseImageHandleForMaterial(string path)
+            {
+                IntPtr ptr;
+
+                ptr = TOOLAPI_Editor_GetDiffuseImageHandleForMaterial(path);
 
                 if (ptr == IntPtr.Zero)
                     return null;

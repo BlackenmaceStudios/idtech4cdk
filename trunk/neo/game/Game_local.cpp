@@ -866,7 +866,10 @@ void idGameLocal::LoadMap( const char *mapName, int randseed ) {
 	bool sameMap = (mapFile && idStr::Icmp(mapFileName, mapName) == 0);
 
 	// clear the sound system
-	gameSoundWorld->ClearAllSoundEmitters();
+	if(gameSoundWorld)
+	{
+		gameSoundWorld->ClearAllSoundEmitters();
+	}
 
 	InitAsyncNetwork();
 
@@ -948,6 +951,10 @@ void idGameLocal::LoadMap( const char *mapName, int randseed ) {
 	cinematicMaxSkipTime = 0;
 
 	clip.Init();
+	if(gameRenderWorld == NULL) {
+		return;
+	}
+
 	pvs.Init();
 	playerPVS.i = -1;
 	playerConnectedAreas.i = -1;

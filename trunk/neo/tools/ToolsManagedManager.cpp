@@ -33,29 +33,73 @@ TOOLS_EXPORTFUNC_NOOBJ_RETTYPE( idDict, int, GetNumKeyVals, (idDict *obj), () )
 TOOLS_EXPORTFUNC_NOOBJ_RETTYPE( idDict, idKeyValueInstance, GetKeyValInstance, (idDict *obj, int index), (index) )
 
 float *GetCurrentViewPos();
+renderView_t view;
+idAngles viewAngle;
 
 void DrawRenderSurface( srfTriangles_t *surf, idImage *image, idVec3 origin, idAngles angle, bool cameraView );
+
+extern "C" __declspec(dllexport) void TOOLAPI_RendererSystem_DrawPlane( float size, idImage *image, float x, float y, float z, float yaw, float pitch, float roll )
+{
+	idVec3 origin = idVec3(x,y,z);
+	idMat3 axis = idAngles(pitch, yaw, roll).ToMat3();
+//	qglPushMatrix();
+	qglDisable(GL_DEPTH_TEST);
+	
+// jmarshall end
+	image->Bind();
+// jmarshall
+
+	qglBegin( GL_QUADS );
+		idVec3 v[4];
+
+		v[0] = idVec3(-1.0f * size, 1.0f, 1.0f * size) * axis + origin;
+		v[1] = idVec3(1.0f * size, 1.0f, 1.0f * size) * axis + origin;
+		v[2] = idVec3(1.0f * size, 1.0f,-1.0f * size) * axis + origin;
+		v[3] = idVec3(-1.0f * size, 1.0f,-1.0f * size) * axis + origin;
+
+		qglTexCoord2f(1.0f,1.0f); qglVertex3f(v[0].x, v[0].y, v[0].z);
+		qglTexCoord2f(1.0f,0.0f); qglVertex3f(v[1].x, v[1].y, v[1].z);
+		qglTexCoord2f(0.0f,0.0f); qglVertex3f(v[2].x, v[2].y, v[2].z);
+		qglTexCoord2f(0.0f,1.0f); qglVertex3f(v[3].x, v[3].y, v[3].z);
+
+	qglEnd();
+	qglEnable(GL_DEPTH_TEST);
+
+	globalImages->BindNull();
+
+	// Reset the transform.
+	//qglPopMatrix();
+
+}
+extern "C" __declspec(dllexport) void TOOLAPI_RendererSystem_UnProject( HWND wndHandle, float &x, float &y, float &z )
+{
+	POINT mouse;                        // Stores The X And Y Coords For The Current Mouse Position
+
+	GetCursorPos(&mouse);                   // Gets The Current Cursor Coordinates (Mouse Coordinates)
+	ScreenToClient(wndHandle, &mouse);
+
+	idVec3 worldxyz;
+	idVec2 m_xy;
+
+	m_xy.x = mouse.x;
+	m_xy.y = mouse.y;
+
+	renderSystem->ProjectMouseToWorldCoord( m_xy, worldxyz );
+
+	x = worldxyz.x;
+	y = worldxyz.y;
+	z = worldxyz.z;
+}
 
 extern "C" __declspec(dllexport) idUserInterface *TOOLAPI_UserInterface_LoadGui( const char *mapName )
 {
 	return uiManager->FindGui( mapName, true, false, true );
 }
 
-extern "C" __declspec(dllexport) cmHandle_t TOOLAPI_CM_LoadMap( const char *mapName )
-{
-	// Disconnect from a game if a game is currently running.
-	cmdSystem->BufferCommandText( CMD_EXEC_NOW, "disconnect" );
-
-	// Free any current maps that are open.
-	collisionModelManager->FreeMap();
-
-	// Load the collision model file.
-	return collisionModelManager->LoadModel( mapName, false );
-}
 
 extern "C" __declspec(dllexport) void TOOLAPI_Editor_DrawRenderSurf( srfTriangles_t *surf, idImage *image, float x, float y, float z, float yaw, float pitch, float roll, bool cameraView )
 {
-	DrawRenderSurface( surf, image, idVec3(x,y,z), idAngles(pitch, yaw, roll ), cameraView );
+	DrawRenderSurface( surf, image, idVec3(x,y,z), idAngles(yaw, pitch, roll ), cameraView );
 }
 
 extern "C" __declspec(dllexport) idImage *TOOLAPI_Editor_FindImage(const char *path)
@@ -84,6 +128,7 @@ void SetProjectionMatrix(float width2, float height2) {
 	float	xmin, xmax, ymin, ymax;
 	float	width, height;
 	float	zNear;
+	float   zFar = 300000;
 	float	projectionMatrix[16];
 
 	//
@@ -99,6 +144,7 @@ void SetProjectionMatrix(float width2, float height2) {
 
 	width = xmax - xmin;
 	height = ymax - ymin;
+	float depth = zFar - zNear;
 
 	projectionMatrix[0] = 2 * zNear / width;
 	projectionMatrix[4] = 0;
@@ -110,11 +156,10 @@ void SetProjectionMatrix(float width2, float height2) {
 	projectionMatrix[9] = ( ymax + ymin ) / height;	// normally 0
 	projectionMatrix[13] = 0;
 
-	// this is the far-plane-at-infinity formulation
 	projectionMatrix[2] = 0;
 	projectionMatrix[6] = 0;
-	projectionMatrix[10] = -1;
-	projectionMatrix[14] = -2 * zNear;
+	projectionMatrix[10] = -( zFar + zNear ) / depth;
+	projectionMatrix[14] = -2 * zFar * zNear / depth;
 
 	projectionMatrix[3] = 0;
 	projectionMatrix[7] = 0;
@@ -127,8 +172,7 @@ void SetProjectionMatrix(float width2, float height2) {
 
 extern "C" __declspec(dllexport) int *TOOLAPI_RenderWorld_GetVisibleVirtualTextureArea( idRenderWorld *world, int &numSurfaces, float width, float height, float x, float y, float z, float yaw, float pitch, float roll )
 {
-	renderView_t view;
-	idAngles viewAngle;
+
 
 	viewAngle.yaw = yaw;
 	viewAngle.pitch = pitch;
@@ -169,7 +213,7 @@ extern "C" __declspec(dllexport) HDC TOOLAPI_Device_BeginRender( HWND hwnd, int 
 	qglClear( GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT );
 
 	qglCullFace(GL_FRONT);
-	qglEnable(GL_CULL_FACE);
+	qglDisable(GL_CULL_FACE);
 	qglShadeModel(GL_FLAT);
 	qglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	qglDisable(GL_BLEND);
@@ -192,6 +236,7 @@ extern "C" __declspec(dllexport) HDC TOOLAPI_Device_BeginRender( HWND hwnd, int 
 
 extern "C" __declspec(dllexport) void TOOLAPI_Device_EndRender( HWND hwnd, HDC hDC )
 {
+	//qglEnable(GL_CULL_FACE);
 	qglMatrixMode( GL_PROJECTION );
 	qglPopMatrix();
 
@@ -223,6 +268,13 @@ extern "C" __declspec(dllexport) idRenderWorld *TOOLAPI_Editor_LoadWorld( const 
 	}
 
 	return world;
+}
+
+extern "C" __declspec(dllexport) idImage *TOOLAPI_Editor_GetDiffuseImageHandleForMaterial( const char *mtr )
+{
+	const idMaterial *mat = declManager->FindMaterial( mtr );
+
+	return mat->GetEditorImage();
 }
 
 extern "C" __declspec(dllexport) byte *TOOLAPI_Editor_GetDiffuseImageForMaterial( const char *mtr, int &width, int &height )
