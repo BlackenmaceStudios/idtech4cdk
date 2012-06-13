@@ -257,6 +257,14 @@ namespace ToolsManaged.Private
                 numVisibleVirtualTextureAreas = 0;
             }
 
+            public IntPtr NativeHandle
+            {
+                get
+                {
+                    return internalPtr;
+                }
+            }
+
             [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_RenderWorld_GetVisibleVirtualTextureArea")]
             private static extern int *TOOLAPI_RenderWorld_GetVisibleVirtualTextureArea( IntPtr world, ref int numSurfaces, float width, float height, float x, float y, float z, float yaw, float pitch, float roll );
 

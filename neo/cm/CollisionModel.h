@@ -90,7 +90,11 @@ public:
 
 	// Loads collision models from a map file.
 	virtual void			LoadMap( const idMapFile *mapFile ) = 0;
-
+	
+	// Loads collision from a proc file.
+// jmarshall
+	virtual void			LoadFromWorld( idRenderWorld *world ) = 0;
+// jmarshall end
 	// Loads in a mesh and generates collision for it.
 	virtual void			GenerateCollisionMapForModel( const char *fileName ) = 0;
 
@@ -103,6 +107,10 @@ public:
 	virtual cmHandle_t		SetupTrmModel( const idTraceModel &trm, const idMaterial *material ) = 0;
 	// Creates a trace model from a collision model, returns true if succesfull.
 	virtual bool			TrmFromModel( const char *modelName, idTraceModel &trm ) = 0;
+
+// jmarshall
+	virtual int				GetNumLoadedModels( void ) = 0;
+// jmarshall end
 
 	// Gets the name of a model.
 	virtual const char *	GetModelName( cmHandle_t model ) const = 0;

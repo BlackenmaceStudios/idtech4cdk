@@ -180,7 +180,7 @@ namespace ToolsManaged.Frontend
             traceManaged_t trace = new traceManaged_t();
             if (CollisionModelManager.TraceProjectedRay(ref trace, viewOrigin.x, viewOrigin.y, viewOrigin.z, x, y, z, 40000))
             {
-                _debugGui.SetStateString(_debugGui.GetNativeAddress(), "highlightedEntity", "PaintEntity: " + trace.entNum);
+                _debugGui.SetStateString(_debugGui.GetNativeAddress(), "highlightedEntity", "VT Paint Chart: " + trace.entNum);
 
                 DrawBrush(trace);
             }
@@ -309,7 +309,7 @@ namespace ToolsManaged.Frontend
             NativeAPI.GetEditorViewPosition(ref viewOrigin );
 
             // Load the collision model f
-            CollisionModelManager.LoadMap(mapname);
+            CollisionModelManager.LoadMap(_rw);
 
             if (mtrListBox.Items.Count != NativeAPI.GetNumMaterials())
             {

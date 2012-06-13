@@ -12,7 +12,7 @@
 
 
 
-extern "C" __declspec(dllexport) cmHandle_t TOOLAPI_CM_LoadMap( const char *mapName )
+extern "C" __declspec(dllexport) cmHandle_t TOOLAPI_CM_LoadMap( idRenderWorld *world )
 {
 	// Disconnect from a game if a game is currently running.
 	cmdSystem->BufferCommandText( CMD_EXEC_NOW, "disconnect" );
@@ -20,7 +20,7 @@ extern "C" __declspec(dllexport) cmHandle_t TOOLAPI_CM_LoadMap( const char *mapN
 	// Free any current maps that are open.
 	collisionModelManager->FreeMap();
 
-	gameEdit->LoadMapCollision( mapName );
+	gameEdit->LoadMapCollision( world );
 	return 1;
 }
 extern renderView_t view;

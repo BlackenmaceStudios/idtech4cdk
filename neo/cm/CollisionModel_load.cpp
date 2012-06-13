@@ -50,6 +50,10 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "CollisionModel_local.h"
 
+// jmarshall
+#include "../renderer/tr_local.h"
+// jmarshall end
+
 
 idCollisionModelManagerLocal	collisionModelManagerLocal;
 idCollisionModelManager *		collisionModelManager = &collisionModelManagerLocal;
@@ -101,6 +105,142 @@ void idCollisionModelManagerLocal::ParseProcNodes( idLexer *src ) {
 
 	src->ExpectTokenString( "}" );
 }
+
+/*
+================
+idCollisionModelManagerLocal::CreateCollisionModelFromRenderSurface
+================
+*/
+
+// jmarshall
+cm_model_t* idCollisionModelManagerLocal::CreateCollisionModelFromRenderSurface( idStr name, const idMaterial *mtr, const srfTriangles_t *surf ) {
+	int j;
+
+	idFixedWinding w;
+	cm_node_t *node;
+	cm_model_t *model;
+	idPlane plane;
+	idBounds bounds;
+	bool collisionSurface;
+	idStr extension;
+
+	model = AllocModel();
+	model->name = name;
+	node = AllocNode( model, NODE_BLOCK_SIZE_SMALL );
+	node->planeType = -1;
+	model->node = node;
+
+	model->maxVertices = 0;
+	model->numVertices = 0;
+	model->maxEdges = 0;
+	model->numEdges = 0;
+
+	bounds.Clear();
+	for(int i = 0; i < surf->numVerts; i++)
+	{
+		bounds.AddPoint( surf->verts[i].xyz );
+	}
+
+	collisionSurface = false;
+
+	// get max verts and edges
+	model->maxVertices += surf->numVerts;
+	model->maxEdges += surf->numIndexes;
+
+	model->vertices = (cm_vertex_t *) Mem_ClearedAlloc( model->maxVertices * sizeof(cm_vertex_t) );
+	model->edges = (cm_edge_t *) Mem_ClearedAlloc( model->maxEdges * sizeof(cm_edge_t) );
+
+	// setup hash to speed up finding shared vertices and edges
+	SetupHash();
+
+	cm_vertexHash->ResizeIndex( model->maxVertices );
+	cm_edgeHash->ResizeIndex( model->maxEdges );
+
+	ClearHash( bounds );
+
+	for ( j = 0; j < surf->numIndexes; j += 3 ) {
+		w.Clear();
+		w += surf->verts[ surf->indexes[ j + 2 ] ].xyz;
+		w += surf->verts[ surf->indexes[ j + 1 ] ].xyz;
+		w += surf->verts[ surf->indexes[ j + 0 ] ].xyz;
+		w.GetPlane( plane );
+		plane = -plane;
+		PolygonFromWinding( model, &w, plane, mtr, 1 );
+	}
+	
+	// create a BSP tree for the model
+	model->node = CreateAxialBSPTree( model, model->node );
+
+	model->isConvex = false;
+
+	FinishModel( model );
+
+	// shutdown the hash
+	ShutdownHash();
+
+	common->Printf( "loaded collision model %s\n", model->name.c_str() );
+
+	return model;
+}
+// jmarshall end
+
+/*
+================
+idCollisionModelManagerLocal::LoadFromWorld
+
+================
+*/
+
+// jmarshall - this is needed for the VT Paint tool.
+void idCollisionModelManagerLocal::LoadFromWorld( idRenderWorld *world ) {
+	idRenderWorldLocal *rw = (idRenderWorldLocal *)world;
+
+	// check whether we can keep the current collision map based on the mapName and mapFileTime
+	if ( loaded ) {
+		common->Warning("LoadFromWorld: Clearing old data\n");
+		FreeMap();
+	}
+
+	// clear the collision map
+	Clear();
+
+	// models
+	maxModels = MAX_SUBMODELS;
+	numModels = 0;
+	models = (cm_model_t **) Mem_ClearedAlloc( (maxModels+1) * sizeof(cm_model_t *) );
+
+	// setup hash to speed up finding shared vertices and edges
+	SetupHash();
+
+	// setup trace model structure
+	SetupTrmModelStructure();
+
+	// Load the collision from the world.
+	LoadCollisionModelFile(rw->mapName, 0);
+
+	for(int i = 0; i < rw->localModels.Num(); i++)
+	{
+		idRenderModel *model = rw->localModels[i];
+
+		//common->Printf("Generating Collision for %s - %d collision models\n", model->Name(), model->NumSurfaces() );
+		for(int s = 0; s < model->NumSurfaces(); s++)
+		{
+			const modelSurface_t *surf = model->Surface( s );
+			idStr name = va("vt_area%d", surf->geometry->vt_AreaID);
+
+			models[numModels++] = CreateCollisionModelFromRenderSurface( name, surf->shader, surf->geometry );
+		}
+	}
+
+	// save name and time stamp
+	mapName = "WorldMemory";
+	mapFileTime = 2332;
+	loaded = true;
+
+	// shutdown the hash
+	ShutdownHash();
+}
+// jmarshall end
 
 /*
 ================

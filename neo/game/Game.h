@@ -292,7 +292,7 @@ public:
 
 // jmarshall
 	// Loads a map but with collision detection only.
-	virtual bool				LoadMapCollision( const char *map );
+	virtual bool				LoadMapCollision( idRenderWorld *world );
 	virtual bool				Trace( trace_t &trace, int contentMask, const idVec3 &startPos, const idVec3 &endPos );
 // jmarshall end
 
