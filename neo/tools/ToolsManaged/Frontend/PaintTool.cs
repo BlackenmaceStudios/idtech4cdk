@@ -23,7 +23,8 @@ namespace ToolsManaged.Frontend
         NativeAPI.RenderWorld _rw;
         NativeAPI.idManagedImage _defaultImage;
         UserInterface _debugGui;
-        NativeAPI.idManagedImage _currentBrushImage;
+        NativeAPI.idManagedImage _currentStencilImage, _currentBrushImage;
+        RenderProgram _brushPaintProgram;
         
         RenderDevice _renderDevice;
         System.Drawing.Point lastMousePoint = new System.Drawing.Point();
@@ -43,7 +44,7 @@ namespace ToolsManaged.Frontend
             panel1.MouseLeave += new EventHandler(panel1_MouseLeave);
 
             _debugGui = UserInterfaceManager.LoadGUI("guis/editors/vtpaintdebug.gui");
-            
+            _brushPaintProgram = RenderProgram.LoadRenderProgram("editors/vt_paint_editorbrush.crp", 1);
         }
 
 
@@ -128,12 +129,27 @@ namespace ToolsManaged.Frontend
         {
             float brushSize = brushTrackBar.Value;
 
-            if (_currentBrushImage == null)
+            if (_currentStencilImage == null)
                 return;
+            _brushPaintProgram.SetCurrentPass(_brushPaintProgram.GetNativeAddress(), 0);
 
+            _brushPaintProgram.Bind(_brushPaintProgram.GetNativeAddress());
 
-            NativeAPI.DrawPlane(brushSize, _currentBrushImage, trace.endposx, trace.endposy, trace.endposz, viewAxis.x + 90.0f, 0, viewAxis.y);
+                // Bind the stencil image.
+                _renderDevice.BindImageToTextureUnit(_currentStencilImage, 0);
+                _brushPaintProgram.BindTextureVar(_brushPaintProgram.GetNativeAddress(), (uint)RenderProgram.renderProgramParameter.PP_COLOR_DIFFUSE);
 
+                // Bind the brush image.
+                _renderDevice.BindImageToTextureUnit(_currentBrushImage, 1);
+                _brushPaintProgram.BindTextureVar(_brushPaintProgram.GetNativeAddress(), (uint)RenderProgram.renderProgramParameter.PP_COLOR_MODULATE);
+
+            
+                NativeAPI.DrawPlane( brushSize, null, trace.endposx, trace.endposy, trace.endposz, viewAxis.x + 90.0f, 0, viewAxis.y);
+            _brushPaintProgram.UnBind(_brushPaintProgram.GetNativeAddress() );
+
+            // UnBind everything.
+             _renderDevice.UnBindTextureUnit( 1 );
+            _renderDevice.UnBindTextureUnit( 0 );
         }
 
         void UpdateHighlightArea()
@@ -288,7 +304,7 @@ namespace ToolsManaged.Frontend
                 return;
             }
 
-            
+            brushSizeTxt.Text = "" + brushTrackBar.Value;
 
             NativeAPI.GetEditorViewPosition(ref viewOrigin );
 
@@ -297,7 +313,10 @@ namespace ToolsManaged.Frontend
 
             if (mtrListBox.Items.Count != NativeAPI.GetNumMaterials())
             {
+                int defaultBrushListItem = 0;
+
                 mtrListBox.Items.Clear();
+                brushList.Items.Clear();
 
                 for (int i = 0; i < NativeAPI.GetNumMaterials(); i++)
                 {
@@ -308,6 +327,23 @@ namespace ToolsManaged.Frontend
 
                     mtrListBox.Items.Add(mtrName);
                 }
+
+                for (int i = 0; i < NativeAPI.GetNumMaterials(); i++)
+                {
+                    string mtrName = NativeAPI.GetMaterialNameByIndex(i);
+
+                    if (!mtrName.Contains("textures/megabrushes"))
+                        continue;
+
+                    if (mtrName.Contains("defaultbrush"))
+                    {
+                        defaultBrushListItem = brushList.Items.Count;
+                    }
+
+                    brushList.Items.Add(mtrName);
+                }
+
+                brushList.SetSelected(defaultBrushListItem, true);
             }
 
             if (!_megaProject.IsLoaded)
@@ -340,7 +376,7 @@ namespace ToolsManaged.Frontend
 
             mtrPath = (string)mtrListBox.Items[mtrListBox.SelectedIndex];
 
-            _currentBrushImage = NativeAPI.idManagedImage.GetDiffuseImageHandleForMaterial(mtrPath);
+            _currentStencilImage = NativeAPI.idManagedImage.GetDiffuseImageHandleForMaterial(mtrPath);
             StampImg.BackgroundImage = BitmapFromSource( NativeAPI.GetDiffuseImageForMaterial(mtrPath, ref width, ref height) );
         }
 
@@ -357,6 +393,41 @@ namespace ToolsManaged.Frontend
         private void saveMegaProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _megaProject.Save();
+        }
+
+        private void brushList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string mtrPath;
+            int width = 0, height = 0;
+
+            mtrPath = (string)brushList.Items[brushList.SelectedIndex];
+
+            _currentBrushImage = NativeAPI.idManagedImage.GetDiffuseImageHandleForMaterial(mtrPath);
+            brushImage.BackgroundImage = BitmapFromSource(NativeAPI.GetDiffuseImageForMaterial(mtrPath, ref width, ref height));
+        }
+
+        private void brushTrackBar_Scroll(object sender, EventArgs e)
+        {
+            if(Int32.Parse(brushSizeTxt.Text) != brushTrackBar.Value)
+            {
+                brushSizeTxt.Text = "" + brushTrackBar.Value;
+            }
+        }
+
+        private void brushSizeTxt_TextChanged(object sender, EventArgs e)
+        {
+            if (Int32.Parse(brushSizeTxt.Text) != brushTrackBar.Value)
+            {
+                if (Int32.Parse(brushSizeTxt.Text) <= 0)
+                {
+                    brushSizeTxt.Text = "1";
+                }
+                if (Int32.Parse(brushSizeTxt.Text) >= brushTrackBar.Maximum)
+                {
+                    brushSizeTxt.Text = "" + brushTrackBar.Maximum;
+                }
+                brushTrackBar.Value = Int32.Parse(brushSizeTxt.Text);
+            }
         }
 
     }

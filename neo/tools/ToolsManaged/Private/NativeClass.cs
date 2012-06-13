@@ -42,7 +42,7 @@ namespace ToolsManaged.Private
 
             if (useprivate)
             {
-                fields = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                fields = this.GetType().GetFields(BindingFlags.NonPublic |  BindingFlags.Instance | BindingFlags.DeclaredOnly);
             }
 
             IntPtr vTable = GetVirtualTableFromAddress(pAddress);

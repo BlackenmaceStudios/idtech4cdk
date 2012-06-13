@@ -38,6 +38,22 @@ idAngles viewAngle;
 
 void DrawRenderSurface( srfTriangles_t *surf, idImage *image, idVec3 origin, idAngles angle, bool cameraView );
 
+extern "C" __declspec(dllexport) void TOOLAPI_RendererDevice_BindImageToUnit( idImage *image, int unit )
+{
+	renderDevice->SelectTextureNoClient( unit );
+	if(image == NULL) {
+		globalImages->BindNull();
+		return;
+	}
+
+	image->Bind();
+}
+
+extern "C" __declspec(dllexport) bmRenderProgram *TOOLAPI_RendererDevice_LoadRenderProgram( const char *path, int numPasses )
+{
+	return renderDevice->LoadRenderProgram( path, numPasses );
+}
+
 extern "C" __declspec(dllexport) void TOOLAPI_RendererSystem_DrawPlane( float size, idImage *image, float x, float y, float z, float yaw, float pitch, float roll )
 {
 	idVec3 origin = idVec3(x,y,z);
@@ -46,7 +62,10 @@ extern "C" __declspec(dllexport) void TOOLAPI_RendererSystem_DrawPlane( float si
 	qglDisable(GL_DEPTH_TEST);
 	
 // jmarshall end
-	image->Bind();
+	if(image != NULL)
+	{
+		image->Bind();
+	}
 // jmarshall
 
 	qglBegin( GL_QUADS );
@@ -216,7 +235,7 @@ extern "C" __declspec(dllexport) HDC TOOLAPI_Device_BeginRender( HWND hwnd, int 
 	qglDisable(GL_CULL_FACE);
 	qglShadeModel(GL_FLAT);
 	qglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	qglDisable(GL_BLEND);
+	qglEnable(GL_BLEND);
 	qglEnable(GL_DEPTH_TEST);
 	qglDepthFunc(GL_LEQUAL);
 
