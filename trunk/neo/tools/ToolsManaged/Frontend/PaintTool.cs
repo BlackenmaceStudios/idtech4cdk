@@ -132,7 +132,7 @@ namespace ToolsManaged.Frontend
                 return;
 
 
-            NativeAPI.DrawPlane(brushSize, _currentBrushImage, trace.endposx, trace.endposy, trace.endposz, viewAxis.x + 90.0f, viewAxis.y, viewAxis.z);
+            NativeAPI.DrawPlane(brushSize, _currentBrushImage, trace.endposx, trace.endposy, trace.endposz, viewAxis.x + 90.0f, 0, viewAxis.y);
 
         }
 
