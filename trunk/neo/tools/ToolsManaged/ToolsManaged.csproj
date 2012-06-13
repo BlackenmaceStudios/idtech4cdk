@@ -111,6 +111,7 @@
     <Compile Include="Private\idLib\idMath.cs" />
     <Compile Include="Private\idLib\idString.cs" />
     <Compile Include="Private\idLib\idVec3.cs" />
+    <Compile Include="Private\RenderProgram.cs" />
     <Compile Include="Private\MegaProject.cs" />
     <Compile Include="Private\MegaProjectChart.cs" />
     <Compile Include="Private\MegaProjectLayer.cs" />

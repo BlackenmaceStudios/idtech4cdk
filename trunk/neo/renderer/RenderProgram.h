@@ -55,19 +55,19 @@ private:
 class bmRenderProgram {
 public:
 						bmRenderProgram( const char *path, int numPasses );
-	void				Bind( void );
-	void				UnBind( void );
+	virtual void				Bind( void );
+	virtual void				UnBind( void );
 	void				Reload( const char *path, int numPasses );
-	void				BindTextureVar( unsigned int progVarHandle );
 	void				BindVar( unsigned int progVarHandle, const char *varName );
 	void				BindVar( unsigned int progVarHandle, int attrId, const char *varName );
-	void				SetVar4fv( unsigned int progVarHandle, int count, const float *ptr );
-	void				SetVar3fv( unsigned int progVarHandle, int count, const float *ptr );
-	void				SetVar1fi( unsigned int progVarHandle, int var );
-	void				SetVar4fv( unsigned int progVarHandle, const float *ptr );
-	void				SetAttrVar4fv( unsigned int progVarHandle, const float *ptr );
-	void				SetVarMatrix4fv( unsigned int progVarHandle, int count, const float *ptr );
-	void				SetCurrentPass( int pass ) { currentPass = pass; }
+	virtual void				BindTextureVar( unsigned int progVarHandle );
+	virtual void				SetVar4fv( unsigned int progVarHandle, int count, const float *ptr );
+	virtual void				SetVar3fv( unsigned int progVarHandle, int count, const float *ptr );
+	virtual void				SetVar1fi( unsigned int progVarHandle, int var );
+	virtual void				SetVar4fv( unsigned int progVarHandle, const float *ptr );
+	virtual void				SetAttrVar4fv( unsigned int progVarHandle, const float *ptr );
+	virtual void				SetVarMatrix4fv( unsigned int progVarHandle, int count, const float *ptr );
+	virtual void				SetCurrentPass( int pass ) { currentPass = pass; }
 
 	bmRenderProgramConstantBuffer *BindConstantBuffer( const char *varName, void *buffer, int bufferSize );
 private:

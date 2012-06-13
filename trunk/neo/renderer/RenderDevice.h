@@ -1,6 +1,8 @@
 //RenderDevice.h
 //
 
+class bmRenderProgram;
+
 //
 // bmRenderDevice
 //
@@ -20,6 +22,8 @@ public:
 	virtual void			DrawImage(float x, float y, float w, float h, float s1, float t1, float s2, float t2, class idImage *image) = 0;
 	virtual void			RestoreViewMatrix( void ) = 0;
 	virtual void			RenderSurfaceFromCache( const struct srfTriangles_s *tris ) = 0;
+	virtual void			SelectTextureNoClient( int unit ) = 0;
+	virtual bmRenderProgram *LoadRenderProgram( const char *path, int numPasses ) = 0;
 };
 
 extern bmRenderDevice		*renderDevice;

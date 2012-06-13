@@ -1,0 +1,6 @@
+textures/megagen/desert/dirt_01_d
+{
+	qer_editorimage textures/megagen/desert/dirt_01_editor.tga
+	diffusemap textures/megagen/desert/dirt_01_d.tga
+	bumpmap textures/megagen/desert/dirt_01_local.tga
+}

@@ -1,0 +1,15 @@
+textures/megabrushes/defaultbrush.tga
+{
+	qer_editorimage textures/megabrushes/defaultbrush.tga
+	{
+		map textures/megabrushes/defaultbrush.tga
+	}
+}
+
+textures/megabrushes/rectbrush.tga
+{
+	qer_editorimage textures/megabrushes/rectbrush.tga
+	{
+		map textures/megabrushes/rectbrush.tga
+	}
+}

@@ -52,7 +52,14 @@ namespace ToolsManaged.Private
 
         public static void DrawPlane(float size, idManagedImage image, float x, float y, float z, float yaw, float pitch, float roll)
         {
-            TOOLAPI_RendererSystem_DrawPlane( size, image.Handle, x,y,z,yaw,pitch,roll);
+            if (image != null)
+            {
+                TOOLAPI_RendererSystem_DrawPlane(size, image.Handle, x, y, z, yaw, pitch, roll);
+            }
+            else
+            {
+                TOOLAPI_RendererSystem_DrawPlane(size, IntPtr.Zero, x, y, z, yaw, pitch, roll);
+            }
         }
 
         public static void GetEditorViewPosition(ref Vector3 v)

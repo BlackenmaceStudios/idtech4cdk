@@ -18,7 +18,7 @@ windowDef Desktop
 		rect	1,0,262,27
 		visible	1
 		forecolor	1,1,1,1
-		text	"Highlighted Entity:"
+		text	"gui::highlightedEntity"
 		textscale	0.40000001
 	}
 	windowDef fpsLbl11
@@ -26,7 +26,7 @@ windowDef Desktop
 		rect	1,24,262,27
 		visible	1
 		forecolor	1,1,1,1
-		text	"VT Paint Area ID:"
+		text	"gui::vtPaintID"
 		textscale	0.40000001
 	}
 }

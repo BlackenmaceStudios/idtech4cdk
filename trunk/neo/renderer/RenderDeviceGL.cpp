@@ -25,6 +25,8 @@ public:
 	virtual void			DrawImage(float x, float y, float w, float h, float s1, float t1, float s2, float t2, idImage *image);
 	virtual void			RestoreViewMatrix( void );
 	virtual void			RenderSurfaceFromCache( const srfTriangles_t *tris );
+	virtual bmRenderProgram			*LoadRenderProgram( const char *path, int numPasses );
+	virtual void			SelectTextureNoClient( int unit ) { GL_SelectTextureNoClient( unit ); };
 private:
 	GLsync sync;
 };
@@ -35,6 +37,16 @@ bmOpenGLRenderDevice glRenderDeviceLocal;
 bmRenderDevice		*renderDevice = &glRenderDeviceLocal;
 
 void R_ToggleSmpFrame( void );
+
+/*
+====================
+bmOpenGLRenderDevice::LoadRenderProgram
+====================
+*/
+bmRenderProgram	* bmOpenGLRenderDevice::LoadRenderProgram( const char *path, int numPasses ) {
+	bmRenderProgram	*program = new bmRenderProgram( path, numPasses );
+	return program;
+}
 
 /*
 ====================

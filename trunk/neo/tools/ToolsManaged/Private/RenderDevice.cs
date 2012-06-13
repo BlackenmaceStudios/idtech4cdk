@@ -25,6 +25,19 @@ namespace ToolsManaged.Private
         [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_RendererSystem_UnProject")]
         private static extern void TOOLAPI_RendererSystem_UnProject(IntPtr wndHandle, ref float x, ref float y, ref float z);
 
+        [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_RendererDevice_BindImageToUnit")]
+        private static extern void TOOLAPI_RendererDevice_BindImageToUnit(IntPtr image, int unit);
+
+        public void BindImageToTextureUnit(NativeAPI.idManagedImage image, int unit)
+        {
+            TOOLAPI_RendererDevice_BindImageToUnit(image.Handle, unit);
+        }
+
+        public void UnBindTextureUnit(int unit)
+        {
+            TOOLAPI_RendererDevice_BindImageToUnit(IntPtr.Zero, unit);
+        }
+
         public void BeginRender()
         {
             _currentDC = TOOLAPI_Device_BeginRender(_renderControl.Handle, _renderControl.Size.Width, _renderControl.Size.Height);
