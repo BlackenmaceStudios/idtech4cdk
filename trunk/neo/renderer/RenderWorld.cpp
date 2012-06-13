@@ -2307,6 +2307,9 @@ int	*idRenderWorldLocal::GetVisibleVirtualTextureAreas( const renderView_t *rend
 	qglLoadMatrixf( parms->worldSpace.modelViewMatrix );
 
 	vtNumVisibleAreas = numVisibleAreas;
+
+	tr.viewDef = NULL;
+
 	return &visibleVirtualTextureAreas[0];
 }
 /*
