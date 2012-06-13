@@ -27,6 +27,6 @@ windowDef Desktop
 		visible	1
 		forecolor	1,1,1,1
 		text	"gui::vtPaintID"
-		textscale	0.40000001
+		textscale	0.30000001
 	}
 }

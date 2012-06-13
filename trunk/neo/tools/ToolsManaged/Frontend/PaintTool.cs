@@ -32,6 +32,9 @@ namespace ToolsManaged.Frontend
         Vector3 viewOrigin = new Vector3(), viewAxis = new Vector3();
         bool allowPainting = false;
 
+        float _paintU = 0;
+        float _paintV = 0;
+
 
         public PaintTool()
         {
@@ -180,13 +183,15 @@ namespace ToolsManaged.Frontend
             traceManaged_t trace = new traceManaged_t();
             if (CollisionModelManager.TraceProjectedRay(ref trace, viewOrigin.x, viewOrigin.y, viewOrigin.z, x, y, z, 40000))
             {
+                _rw.VTTrace(ref _paintU, ref _paintV, trace.entNum, viewOrigin.x, viewOrigin.y, viewOrigin.z, x, y, z, 40000);
                 _debugGui.SetStateString(_debugGui.GetNativeAddress(), "highlightedEntity", "VT Paint Chart: " + trace.entNum);
-
+                _debugGui.SetStateString(_debugGui.GetNativeAddress(), "vtPaintID", "U: " + _paintU + " V: " + _paintV);
                 DrawBrush(trace);
             }
             else
             {
                 _debugGui.SetStateString(_debugGui.GetNativeAddress(), "highlightedEntity", "No Entity");
+                _debugGui.SetStateString(_debugGui.GetNativeAddress(), "vtPaintID", "No Paint Area");
             }
         }
 
