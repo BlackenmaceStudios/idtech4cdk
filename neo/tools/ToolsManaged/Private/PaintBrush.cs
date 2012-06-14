@@ -17,7 +17,7 @@ namespace ToolsManaged.Private
         {
             IntPtr rawBrushImageData = brushImage.ReadDriverPixels(false);
 
-            brushTexData = NativeAPI.idManagedImage.ResampleTextureBuffer(rawBrushImageData, brushImage.Width, brushImage.Height, 32, 32);
+            brushTexData = NativeAPI.idManagedImage.ResampleTextureBuffer(rawBrushImageData, brushImage.Width, brushImage.Height, 64, 64);
         }
 
         /*
@@ -50,7 +50,7 @@ namespace ToolsManaged.Private
 
             chart.materialName = stencilName;
 
-            chart.Blit(brushTexData, 32, 32, u, v, 0, 0, 0);
+            chart.Blit(brushTexData, 64, 64, u, v, 0, 0, 0);
 
             // Save the current data presets.
             _currentBrushImage = brushImage;

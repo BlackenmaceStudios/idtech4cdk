@@ -38,7 +38,7 @@ FragmentProgram
 
 
 	void main( void ) {    
-		vec4 diffuse = texture2D( u_diffuseTexture, var_TexDiffuse );
+		vec4 diffuse = texture2D( u_diffuseTexture, var_TexDiffuse * 15 );
 		vec4 mask = texture2D( u_colorModulate, var_TexDiffuse );
 		
 		gl_FragColor = diffuse * mask.r;

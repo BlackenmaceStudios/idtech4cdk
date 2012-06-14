@@ -49,29 +49,25 @@ Calculates two axis for the surface sutch that a point dotted against
 the axis will give a 0.0 to 1.0 range in S and T when inside the gui surface
 ================
 */
-void R_SurfaceToTextureAxis( const srfTriangles_t *tri, idVec3 &origin, idVec3 axis[3] ) {
+// jmarshall: added hitindexes
+void R_SurfaceToTextureAxis( const srfTriangles_t *tri, idVec3 &origin, idVec3 axis[3], int *hitIndexes, idPlane *hitplane ) {
 	float		area, inva;
 	float		d0[5], d1[5];
 	idDrawVert	*a, *b, *c;
-	float		bounds[2][2];
+	idBounds    bounds;
 	float		boundsOrg[2];
 	int			i, j;
-	float		v;
+	idVec2		v;
 	
 	// find the bounds of the texture
-	bounds[0][0] = bounds[0][1] = 999999;
-	bounds[1][0] = bounds[1][1] = -999999;
+
+// jmarshall: cleaned this up.
+	bounds.Clear();
 	for ( i = 0 ; i < tri->numVerts ; i++ ) {
-		for ( j = 0 ; j < 2 ; j++ ) {
-			v = tri->verts[i].st[j];
-			if ( v < bounds[0][j] ) {
-				bounds[0][j] = v;
-			}
-			if ( v > bounds[1][j] ) {
-				bounds[1][j] = v;
-			}
-		}
+		v = tri->verts[i].st;
+		bounds.AddPoint( idVec3(v[0], v[1], 0) );
 	}
+// jmarshall end
 
 	// use the floor of the midpoint as the origin of the
 	// surface, which will prevent a slight misalignment
@@ -81,10 +77,21 @@ void R_SurfaceToTextureAxis( const srfTriangles_t *tri, idVec3 &origin, idVec3 a
 
 
 	// determine the world S and T vectors from the first drawSurf triangle
-	a = tri->verts + tri->indexes[0];
-	b = tri->verts + tri->indexes[1];
-	c = tri->verts + tri->indexes[2];
+// jmarshall
+	if(hitIndexes == NULL)
+	{
+		a = tri->verts + tri->indexes[0];
+		b = tri->verts + tri->indexes[1];
+		c = tri->verts + tri->indexes[2];
+	}
+	else
+	{
+		a = tri->verts + hitIndexes[0];
+		b = tri->verts + hitIndexes[1];
+		c = tri->verts + hitIndexes[2];
 
+	}
+// jmarshall end
 	VectorSubtract( b->xyz, a->xyz, d0 );
 	d0[3] = b->st[0] - a->st[0];
 	d0[4] = b->st[1] - a->st[1];
@@ -110,7 +117,14 @@ void R_SurfaceToTextureAxis( const srfTriangles_t *tri, idVec3 &origin, idVec3 a
     axis[1][2] = (d0[3] * d1[2] - d0[2] * d1[3]) * inva;
 
 	idPlane plane;
-	plane.FromPoints( a->xyz, b->xyz, c->xyz );
+	if(hitplane != NULL)
+	{
+		plane = *hitplane;
+	}
+	else
+	{
+		plane.FromPoints( a->xyz, b->xyz, c->xyz );
+	}
 	axis[2][0] = plane[0];
 	axis[2][1] = plane[1];
 	axis[2][2] = plane[2];
@@ -119,7 +133,7 @@ void R_SurfaceToTextureAxis( const srfTriangles_t *tri, idVec3 &origin, idVec3 a
 	VectorMA( a->xyz, boundsOrg[0] - a->st[0], axis[0], origin );
 	VectorMA( origin, boundsOrg[1] - a->st[1], axis[1], origin );
 }
-
+// jmarshall end
 /*
 =================
 R_RenderGuiSurf
