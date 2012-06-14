@@ -1108,15 +1108,33 @@ vtPoint_t idRenderWorldLocal::VTTrace( int vtAreaId, const idVec3 start, const i
 		idVec3				cursor;
 		float				axisLen[2];
 
-		R_SurfaceToTextureAxis( tri, origin, axis );
+		R_SurfaceToTextureAxis( tri, origin, axis, &local.indexes[0], &local.plane );
 		cursor = local.point - origin;
 
+		
+
+		int closestIndex = 0;
+		if(local.d[0] > local.d[1] && local.d[0] > local.d[2])
+		{
+			closestIndex = local.indexes[0];
+		}
+		else if(local.d[1] > local.d[0] && local.d[1] > local.d[2])
+		{
+			closestIndex = local.indexes[1];
+		}
+		else if(local.d[2] > local.d[1] && local.d[2] > local.d[0])
+		{
+			closestIndex = local.indexes[2];
+		}
+
+		cursor = local.point - tri->verts[closestIndex].xyz;
 		axisLen[0] = axis[0].Length();
 		axisLen[1] = axis[1].Length();
 
 		pt.x = ( cursor * axis[0] ) / ( axisLen[0] * axisLen[0] );
 		pt.y = ( cursor * axis[1] ) / ( axisLen[1] * axisLen[1] );
-
+		pt.x += tri->verts[closestIndex].st.x;
+		pt.y += tri->verts[closestIndex].st.y;
 		return pt;
 	}
 

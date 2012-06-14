@@ -1734,7 +1734,9 @@ TR_GUISURF
 =============================================================
 */
 
-void R_SurfaceToTextureAxis( const srfTriangles_t *tri, idVec3 &origin, idVec3 axis[3] );
+// jmarshall
+void R_SurfaceToTextureAxis( const srfTriangles_t *tri, idVec3 &origin, idVec3 axis[3], int *hitIndexes = NULL, idPlane *hitplane = NULL);
+// jmarshall end
 void R_RenderGuiSurf( idUserInterface *gui, drawSurf_t *drawSurf );
 
 /*
@@ -1771,6 +1773,10 @@ typedef struct {
 	idVec3		point;
 	idVec3		normal;
 	int			indexes[3];
+// jmarshall
+	idPlane		plane;
+	float		d[3];
+// jmarshall end
 } localTrace_t;
 
 localTrace_t R_LocalTrace( const idVec3 &start, const idVec3 &end, const float radius, const srfTriangles_t *tri );
