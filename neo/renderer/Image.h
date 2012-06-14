@@ -211,7 +211,7 @@ public:
 	void		CreatePBO( void );
 	
 	void		CopyBufferIntoRegion( void *buffer, int mipLevel, int x, int y, int width, int height );
-
+	virtual void		CopyUncompressedBufferIntoRegion( void *buffer, int mipLevel, int x, int y, int width, int height );
 	int			GetStorageType( imageStorageType_t type ); 
 // jmarshall
 	void		GenerateImageHandle( int numImages, unsigned int *texnum );
@@ -553,6 +553,7 @@ R_FillImageBufferRegion
 =================
 */
 void R_FillImageBufferRegion( byte *Dest, idVec4 color,  int DestX, int DestY, unsigned int Width, unsigned int Height, int DiemWidth );
+
 
 /*
 =================

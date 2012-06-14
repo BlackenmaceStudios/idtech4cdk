@@ -32,10 +32,13 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.brushList = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.AddNewLayerBtn = new System.Windows.Forms.Button();
-            this.LayersBox = new System.Windows.Forms.ListBox();
+            this.brushSizeTxt = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.brushImage = new System.Windows.Forms.PictureBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.brushTrackBar = new System.Windows.Forms.TrackBar();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.StampImg = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -44,6 +47,9 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.LayersBox = new System.Windows.Forms.ListBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.AddNewLayerBtn = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveMegaProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,23 +57,17 @@
             this.stencilsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.brushesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label2 = new System.Windows.Forms.Label();
-            this.brushTrackBar = new System.Windows.Forms.TrackBar();
-            this.brushList = new System.Windows.Forms.ListBox();
-            this.brushImage = new System.Windows.Forms.PictureBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.brushSizeTxt = new System.Windows.Forms.TextBox();
             virtualTexturePaintToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.brushImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.brushTrackBar)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.StampImg)).BeginInit();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.brushTrackBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.brushImage)).BeginInit();
             this.SuspendLayout();
             // 
             // virtualTexturePaintToolToolStripMenuItem
@@ -85,7 +85,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.17664F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 86.82336F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 211F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 212F));
             this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.groupBox1, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.groupBox3, 0, 0);
@@ -96,7 +96,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 76.32552F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23.67448F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1426, 803);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1426, 807);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // panel1
@@ -106,9 +106,9 @@
             this.panel1.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(163, 3);
+            this.panel1.Location = new System.Drawing.Point(162, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1048, 606);
+            this.panel1.Size = new System.Drawing.Size(1048, 609);
             this.panel1.TabIndex = 3;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -116,12 +116,21 @@
             // 
             this.groupBox1.Controls.Add(this.brushList);
             this.groupBox1.Controls.Add(this.groupBox2);
-            this.groupBox1.Location = new System.Drawing.Point(1217, 3);
+            this.groupBox1.Location = new System.Drawing.Point(1216, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(197, 598);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Brushes";
+            // 
+            // brushList
+            // 
+            this.brushList.FormattingEnabled = true;
+            this.brushList.Location = new System.Drawing.Point(11, 19);
+            this.brushList.Name = "brushList";
+            this.brushList.Size = new System.Drawing.Size(171, 199);
+            this.brushList.TabIndex = 4;
+            this.brushList.SelectedIndexChanged += new System.EventHandler(this.brushList_SelectedIndexChanged);
             // 
             // groupBox2
             // 
@@ -137,32 +146,52 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "PaintBrush Attributes";
             // 
-            // button2
+            // brushSizeTxt
             // 
-            this.button2.Location = new System.Drawing.Point(117, 129);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(84, 34);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Delete Layer";
-            this.button2.UseVisualStyleBackColor = true;
+            this.brushSizeTxt.Location = new System.Drawing.Point(128, 207);
+            this.brushSizeTxt.Name = "brushSizeTxt";
+            this.brushSizeTxt.Size = new System.Drawing.Size(46, 20);
+            this.brushSizeTxt.TabIndex = 7;
+            this.brushSizeTxt.TextChanged += new System.EventHandler(this.brushSizeTxt_TextChanged);
             // 
-            // AddNewLayerBtn
+            // label4
             // 
-            this.AddNewLayerBtn.Location = new System.Drawing.Point(17, 130);
-            this.AddNewLayerBtn.Name = "AddNewLayerBtn";
-            this.AddNewLayerBtn.Size = new System.Drawing.Size(94, 34);
-            this.AddNewLayerBtn.TabIndex = 1;
-            this.AddNewLayerBtn.Text = "Add Layer";
-            this.AddNewLayerBtn.UseVisualStyleBackColor = true;
-            this.AddNewLayerBtn.Click += new System.EventHandler(this.button1_Click);
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 28);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(71, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Current Brush";
             // 
-            // LayersBox
+            // brushImage
             // 
-            this.LayersBox.FormattingEnabled = true;
-            this.LayersBox.Location = new System.Drawing.Point(17, 17);
-            this.LayersBox.Name = "LayersBox";
-            this.LayersBox.Size = new System.Drawing.Size(184, 108);
-            this.LayersBox.TabIndex = 0;
+            this.brushImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.brushImage.Location = new System.Drawing.Point(9, 44);
+            this.brushImage.Name = "brushImage";
+            this.brushImage.Size = new System.Drawing.Size(138, 135);
+            this.brushImage.TabIndex = 5;
+            this.brushImage.TabStop = false;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 193);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(57, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Brush Size";
+            // 
+            // brushTrackBar
+            // 
+            this.brushTrackBar.Location = new System.Drawing.Point(3, 209);
+            this.brushTrackBar.Maximum = 3000;
+            this.brushTrackBar.Minimum = 1;
+            this.brushTrackBar.Name = "brushTrackBar";
+            this.brushTrackBar.Size = new System.Drawing.Size(129, 45);
+            this.brushTrackBar.TabIndex = 2;
+            this.brushTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.brushTrackBar.Value = 500;
+            this.brushTrackBar.Scroll += new System.EventHandler(this.brushTrackBar_Scroll);
             // 
             // groupBox3
             // 
@@ -172,7 +201,7 @@
             this.groupBox3.Controls.Add(this.mtrListBox);
             this.groupBox3.Location = new System.Drawing.Point(3, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(154, 605);
+            this.groupBox3.Size = new System.Drawing.Size(153, 605);
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Stencils";
@@ -216,7 +245,7 @@
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.textBox1);
-            this.groupBox5.Location = new System.Drawing.Point(1217, 615);
+            this.groupBox5.Location = new System.Drawing.Point(1216, 618);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(205, 170);
             this.groupBox5.TabIndex = 7;
@@ -241,12 +270,40 @@
             this.groupBox4.Controls.Add(this.button2);
             this.groupBox4.Controls.Add(this.AddNewLayerBtn);
             this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox4.Location = new System.Drawing.Point(163, 615);
+            this.groupBox4.Location = new System.Drawing.Point(162, 618);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(1048, 185);
+            this.groupBox4.Size = new System.Drawing.Size(1048, 186);
             this.groupBox4.TabIndex = 6;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Layers";
+            // 
+            // LayersBox
+            // 
+            this.LayersBox.FormattingEnabled = true;
+            this.LayersBox.Location = new System.Drawing.Point(17, 17);
+            this.LayersBox.Name = "LayersBox";
+            this.LayersBox.Size = new System.Drawing.Size(184, 108);
+            this.LayersBox.TabIndex = 0;
+            this.LayersBox.SelectedIndexChanged += new System.EventHandler(this.LayersBox_SelectedIndexChanged);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(117, 129);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(84, 34);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Delete Layer";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // AddNewLayerBtn
+            // 
+            this.AddNewLayerBtn.Location = new System.Drawing.Point(17, 130);
+            this.AddNewLayerBtn.Name = "AddNewLayerBtn";
+            this.AddNewLayerBtn.Size = new System.Drawing.Size(94, 34);
+            this.AddNewLayerBtn.TabIndex = 1;
+            this.AddNewLayerBtn.Text = "Add Layer";
+            this.AddNewLayerBtn.UseVisualStyleBackColor = true;
+            this.AddNewLayerBtn.Click += new System.EventHandler(this.button1_Click);
             // 
             // menuStrip1
             // 
@@ -304,62 +361,6 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 193);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(57, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Brush Size";
-            // 
-            // brushTrackBar
-            // 
-            this.brushTrackBar.Location = new System.Drawing.Point(3, 209);
-            this.brushTrackBar.Maximum = 3000;
-            this.brushTrackBar.Minimum = 1;
-            this.brushTrackBar.Name = "brushTrackBar";
-            this.brushTrackBar.Size = new System.Drawing.Size(129, 45);
-            this.brushTrackBar.TabIndex = 2;
-            this.brushTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.brushTrackBar.Value = 500;
-            this.brushTrackBar.Scroll += new System.EventHandler(this.brushTrackBar_Scroll);
-            // 
-            // brushList
-            // 
-            this.brushList.FormattingEnabled = true;
-            this.brushList.Location = new System.Drawing.Point(11, 19);
-            this.brushList.Name = "brushList";
-            this.brushList.Size = new System.Drawing.Size(171, 199);
-            this.brushList.TabIndex = 4;
-            this.brushList.SelectedIndexChanged += new System.EventHandler(this.brushList_SelectedIndexChanged);
-            // 
-            // brushImage
-            // 
-            this.brushImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.brushImage.Location = new System.Drawing.Point(9, 44);
-            this.brushImage.Name = "brushImage";
-            this.brushImage.Size = new System.Drawing.Size(138, 135);
-            this.brushImage.TabIndex = 5;
-            this.brushImage.TabStop = false;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 28);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(71, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Current Brush";
-            // 
-            // brushSizeTxt
-            // 
-            this.brushSizeTxt.Location = new System.Drawing.Point(128, 207);
-            this.brushSizeTxt.Name = "brushSizeTxt";
-            this.brushSizeTxt.Size = new System.Drawing.Size(46, 20);
-            this.brushSizeTxt.TabIndex = 7;
-            this.brushSizeTxt.TextChanged += new System.EventHandler(this.brushSizeTxt_TextChanged);
-            // 
             // PaintTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -377,6 +378,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.brushImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.brushTrackBar)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.StampImg)).EndInit();
@@ -385,8 +388,6 @@
             this.groupBox4.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.brushTrackBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.brushImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

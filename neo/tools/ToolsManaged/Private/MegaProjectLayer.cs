@@ -11,6 +11,14 @@ namespace ToolsManaged.Private
     {
         private List<MegaProjectChart> _charts = new List<MegaProjectChart>();
 
+        public MegaProjectChart this[int index]
+        {
+            get
+            {
+                return _charts[index];
+            }
+        }
+
         //
         // MegaProjectLayer
         //

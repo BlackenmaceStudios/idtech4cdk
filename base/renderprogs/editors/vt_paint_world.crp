@@ -1,0 +1,47 @@
+// vt_paint_editorbrush.crp
+//
+
+
+#include "renderprogs/common.crp"
+
+
+
+
+VertexProgram 
+	in vec4          	attr_TexCoord;   
+	  
+	smooth out vec2            	var_TexDiffuse; 
+	smooth out float			dist;
+
+	//
+	// Main - Entry Point
+	//
+	void main() {
+		gl_Position = ftransform( );
+
+		dist = gl_Position.w;
+
+
+		// diffuse map texgen     
+		var_TexDiffuse.xy = ( attr_TexCoord ).st; 
+
+
+	}
+EndVertexProgram
+
+FragmentProgram
+	uniform sampler2D   	u_diffuseTexture;    
+	uniform sampler2D		u_colorModulate;
+
+	smooth in vec2            	var_TexDiffuse; 
+
+
+
+	void main( void ) {    
+		vec4 diffuse = texture2D( u_diffuseTexture, var_TexDiffuse );
+		vec4 mask = texture2D( u_colorModulate, var_TexDiffuse );
+		
+		gl_FragColor = diffuse * mask.r;
+		gl_FragColor.a = 1;
+	}
+EndFragmentProgram

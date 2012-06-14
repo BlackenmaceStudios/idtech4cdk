@@ -69,10 +69,18 @@ void DrawRenderSurface( srfTriangles_t *surf, idImage *image, idVec3 origin, idA
 
 	
 // jmarshall end
-	image->Bind();
+	if(image != NULL)
+	{
+		image->Bind();
+	}
 // jmarshall
 
 	renderDevice->RenderSurfaceFromCache( surf );
+
+	if(image != NULL)
+	{
+		globalImages->BindNull();
+	}
 
 	// Reset the transform.
 	qglPopMatrix();
