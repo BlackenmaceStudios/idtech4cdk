@@ -32,6 +32,11 @@ namespace ToolsManaged.Private
         private const string MegaProjectFolder = "megaprojects";
         private const string MegaProjectExtension = ".megaproject";
 
+        public MegaProjectLayer GetLayerByIndex(int i)
+        {
+            return _layers[i];
+        }
+
         private struct MegaProjectHeader
         {
             public int iden;

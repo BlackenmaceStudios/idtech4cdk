@@ -205,6 +205,7 @@ bmVirtualTexturePage::Upload
 ====================
 */
 void bmVirtualTexturePage::Upload( int mipLevel ) {
+#ifndef BSPCOMPILER
 	if(!isPageDirty) {
 		return;
 	}
@@ -242,6 +243,7 @@ void bmVirtualTexturePage::Upload( int mipLevel ) {
 		//image->pbo->WriteToPBO(0, tiles[i].buffer, tiles[i].x, tiles[i].y, VIRTUALTEXTURE_TILESIZE, VIRTUALTEXTURE_TILESIZE );
 	}
 	//image->pbo->Unbind();
+#endif
 }
 
 /*

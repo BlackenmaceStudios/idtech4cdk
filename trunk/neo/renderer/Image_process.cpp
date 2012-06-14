@@ -46,8 +46,7 @@ after resampling to the next lower power of two.
 ================
 */
 #define	MAX_DIMENSION	4096
-byte *R_ResampleTexture( const byte *in, int inwidth, int inheight,  
-							int outwidth, int outheight ) {
+byte *R_ResampleTexture( const byte *in, int inwidth, int inheight, int outwidth, int outheight ) {
 	int		i, j;
 	const byte	*inrow, *inrow2;
 	unsigned int	frac, fracstep;
@@ -154,18 +153,6 @@ byte *R_Dropsample( const byte *in, int inwidth, int inheight,
 	}
 
 	return out;
-}
-/*
-===============
-CopyBufferIntoRegion
-
-Modified from DevIL image library
-===============
-*/
-void idImage::CopyBufferIntoRegion( void *buffer, int mipLevel, int DestX, int DestY, int Width, int Height ) {
-#ifndef BSPCOMPILER
-	qglCompressedTexSubImage2DARB( GL_TEXTURE_2D, mipLevel, DestX, DestY, Width, Height, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, Width * Height, buffer );
-#endif
 }
 
 /*

@@ -20,11 +20,14 @@ namespace ToolsManaged.Frontend
     {
 
         MegaProject _megaProject;
+        MegaProjectLayer _currentPaintLayer;
         NativeAPI.RenderWorld _rw;
         NativeAPI.idManagedImage _defaultImage;
         UserInterface _debugGui;
         NativeAPI.idManagedImage _currentStencilImage, _currentBrushImage;
-        RenderProgram _brushPaintProgram;
+        RenderProgram _brushPaintProgram, _livePaintProgram;
+        PaintBrush _brush;
+        NativeAPI.idManagedImage _chartImage;
         
         RenderDevice _renderDevice;
         System.Drawing.Point lastMousePoint = new System.Drawing.Point();
@@ -34,6 +37,7 @@ namespace ToolsManaged.Frontend
 
         float _paintU = 0;
         float _paintV = 0;
+        int _paintChart = -1;
 
 
         public PaintTool()
@@ -48,6 +52,9 @@ namespace ToolsManaged.Frontend
 
             _debugGui = UserInterfaceManager.LoadGUI("guis/editors/vtpaintdebug.gui");
             _brushPaintProgram = RenderProgram.LoadRenderProgram("editors/vt_paint_editorbrush.crp", 1);
+            _livePaintProgram = RenderProgram.LoadRenderProgram("editors/vt_paint_world.crp", 1);
+            _chartImage = NativeAPI.idManagedImage.FindImage("textures/megagen/defaultchart.tga");
+            _brush = new PaintBrush();
         }
 
 
@@ -123,6 +130,18 @@ namespace ToolsManaged.Frontend
                     viewAxis.y = 360 - (-viewAxis.y - 360);
                 }
             }
+            else if (KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_LBUTTON) && _paintChart != -1)
+            {
+                if(_currentPaintLayer == null)
+                {
+                    MessageBox.Show("You must select a layer to paint on before you can begin painting.");
+                }
+                else
+                {
+                    _brush.Paint(_currentBrushImage, (string)mtrListBox.Items[mtrListBox.SelectedIndex], _currentStencilImage, _currentPaintLayer[_paintChart], _paintU, _paintV, BrushSize);
+                }
+            }
+
             
 
             lastMousePoint = p;
@@ -155,6 +174,37 @@ namespace ToolsManaged.Frontend
             _renderDevice.UnBindTextureUnit( 0 );
         }
 
+        void DrawArea(MegaProjectChart chart, int areaId)
+        {
+            float brushSize = brushTrackBar.Value;
+
+            if (_currentStencilImage == null)
+                return;
+
+            chart.UpdateToImage(_chartImage);
+            
+
+            _livePaintProgram.SetCurrentPass(_livePaintProgram.GetNativeAddress(), 0);
+
+            _livePaintProgram.Bind(_livePaintProgram.GetNativeAddress());
+
+            // Bind the stencil image.
+            _renderDevice.BindImageToTextureUnit(_currentStencilImage, 0);
+            _livePaintProgram.BindTextureVar(_livePaintProgram.GetNativeAddress(), (uint)RenderProgram.renderProgramParameter.PP_COLOR_DIFFUSE);
+
+            // Bind the brush image.
+            _renderDevice.BindImageToTextureUnit(_chartImage, 1);
+            _livePaintProgram.BindTextureVar(_livePaintProgram.GetNativeAddress(), (uint)RenderProgram.renderProgramParameter.PP_COLOR_MODULATE);
+
+
+            _rw.RenderVisibleArea(null, areaId, 0, 0, 0, 0, 0, 0);
+            _livePaintProgram.UnBind(_livePaintProgram.GetNativeAddress());
+
+            // UnBind everything.
+            _renderDevice.UnBindTextureUnit(1);
+            _renderDevice.UnBindTextureUnit(0);
+        }
+
         void UpdateHighlightArea()
         {
             float x = 0, y = 0, z = 0;
@@ -183,6 +233,7 @@ namespace ToolsManaged.Frontend
             traceManaged_t trace = new traceManaged_t();
             if (CollisionModelManager.TraceProjectedRay(ref trace, viewOrigin.x, viewOrigin.y, viewOrigin.z, x, y, z, 40000))
             {
+                _paintChart = trace.entNum;
                 _rw.VTTrace(ref _paintU, ref _paintV, trace.entNum, viewOrigin.x, viewOrigin.y, viewOrigin.z, x, y, z, 40000);
                 _debugGui.SetStateString(_debugGui.GetNativeAddress(), "highlightedEntity", "VT Paint Chart: " + trace.entNum);
                 _debugGui.SetStateString(_debugGui.GetNativeAddress(), "vtPaintID", "U: " + _paintU + " V: " + _paintV);
@@ -190,8 +241,36 @@ namespace ToolsManaged.Frontend
             }
             else
             {
+                _paintChart = -1;
                 _debugGui.SetStateString(_debugGui.GetNativeAddress(), "highlightedEntity", "No Entity");
                 _debugGui.SetStateString(_debugGui.GetNativeAddress(), "vtPaintID", "No Paint Area");
+            }
+        }
+
+        private void RenderVTAreas()
+        {
+            int numVisibleVtAreas;
+
+            // Get the current virtual texture areas that are in the current view.
+            numVisibleVtAreas = _rw.FindVisibleVirtualTextureAreas(panel1.Size.Width, panel1.Size.Height, viewOrigin.x, viewOrigin.y, viewOrigin.z, viewAxis.x, viewAxis.y, viewAxis.z);
+
+            for (int LayerId = 0; LayerId < _megaProject.NumLayers; LayerId++)
+            {
+                MegaProjectLayer _layer = _megaProject.GetLayerByIndex(LayerId);
+
+                // Render the virtualtexture areas
+                for (int i = 0; i < numVisibleVtAreas; i++)
+                {
+                    if (!_layer[i].HasMaterial && LayerId == 0)
+                    {
+                        _rw.RenderVisibleArea(_defaultImage, i, 0, 0, 0, 0, 0, 0);
+                    }
+                    else
+                    {
+                        DrawArea(_layer[i], i);
+                       
+                    }
+                }
             }
         }
 
@@ -199,7 +278,7 @@ namespace ToolsManaged.Frontend
         void PaintTool_Paint(object sender, PaintEventArgs e)
         {
             DateTime _startFrameTime, _endFrameTime;
-            int numVisibleVtAreas;
+            
             if (_rw == null)
                 return;
 
@@ -215,28 +294,33 @@ namespace ToolsManaged.Frontend
                 }
             }
 
-            
+            if (_megaProject.NumLayers <= 0)
+            {
+                _renderDevice.BeginRender();
 
+                _debugGui.SetStateString(_debugGui.GetNativeAddress(), "highlightedEntity", "No Layers");
+                _debugGui.SetStateString(_debugGui.GetNativeAddress(), "vtPaintID", "No Layers");
+                _debugGui.SetStateString(_debugGui.GetNativeAddress(), "currentFPS", "No Layers");
+
+                // Redraw the debug gui.
+                _debugGui.Redraw(_debugGui.GetNativeAddress(), (int)tics);
+
+                _renderDevice.EndRender();
+                tics++;
+                return;
+            }
 
             HandleInput();
 
             _renderDevice.BeginRender();
 
+            // Render VT Areas.
+            RenderVTAreas();
             
-
-            // Get the current virtual texture areas that are in the current view.
-            numVisibleVtAreas = _rw.FindVisibleVirtualTextureAreas(panel1.Size.Width, panel1.Size.Height, viewOrigin.x, viewOrigin.y, viewOrigin.z, viewAxis.x, viewAxis.y, viewAxis.z);
-
-            
-
-            // Render the virtualtexture areas
-            for (int i = 0; i < numVisibleVtAreas; i++)
-            {
-                _rw.RenderVisibleArea(_defaultImage, i, 0,0,0,0,0,0);
-            }
-
+            // Update what the cursor has selected.
             UpdateHighlightArea();
 
+            // Redraw the debug gui.
             _debugGui.Redraw(_debugGui.GetNativeAddress(), (int)tics);
 
             _renderDevice.EndRender();
@@ -411,6 +495,14 @@ namespace ToolsManaged.Frontend
             brushImage.BackgroundImage = BitmapFromSource(NativeAPI.GetDiffuseImageForMaterial(mtrPath, ref width, ref height));
         }
 
+        private int BrushSize
+        {
+            get
+            {
+                return brushTrackBar.Value;
+            }
+        }
+
         private void brushTrackBar_Scroll(object sender, EventArgs e)
         {
             if(Int32.Parse(brushSizeTxt.Text) != brushTrackBar.Value)
@@ -433,6 +525,11 @@ namespace ToolsManaged.Frontend
                 }
                 brushTrackBar.Value = Int32.Parse(brushSizeTxt.Text);
             }
+        }
+
+        private void LayersBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _currentPaintLayer = _megaProject.GetLayerByIndex(LayersBox.SelectedIndex);
         }
 
     }

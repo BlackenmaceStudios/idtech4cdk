@@ -38,6 +38,84 @@ idAngles viewAngle;
 
 void DrawRenderSurface( srfTriangles_t *surf, idImage *image, idVec3 origin, idAngles angle, bool cameraView );
 
+extern "C" __declspec(dllexport) void TOOLAPI_Image_CopyImageToImageBufferRegion(  byte *Dest, byte *color,  int DestX, int DestY, int Width, int Height, int DiemWidth )
+{
+unsigned int  		x, y, z, ConvBps, ConvSizePlane;
+	byte 	*Converted;
+	int Depth = 1;
+	unsigned int 		c;
+	unsigned int 		StartX, StartY, StartZ;
+	byte 	*SrcTemp;
+	float 	Back;
+	int DestZ = 0;
+
+	
+	ConvBps 	  = 4 * Width;
+	ConvSizePlane = ConvBps   * Height;
+	
+	//@NEXT in next version this would have to be removed since Dest* will be unsigned
+	StartX = DestX >= 0 ? 0 : -DestX;
+	StartY = DestY >= 0 ? 0 : -DestY;
+	
+	// Limit the copy of data inside of the destination image
+	if (Width  + DestX > DiemWidth)  Width  = DiemWidth  - DestX;
+	if (Height + DestY > DiemWidth) Height = DiemWidth - DestY;
+	if (Depth  + DestZ > DiemWidth)  Depth  = 1;
+	
+	const unsigned int  bpp_without_alpha = 4 - 1;
+		for (z = 0; z < Depth; z++) {
+			for (y = 0; y < Height; y++) {
+				for (x = 0; x < Width; x++) {
+					const unsigned int   SrcIndex  = (z+0)*ConvSizePlane + (y+0)*ConvBps + (x+0)*4;
+					const unsigned int   DestIndex = (z+DestZ)*(DiemWidth * DiemWidth) + (y+DestY)*(DiemWidth * 4) + (x+DestX)*4;
+					
+					float Front = 0;
+					int r,g,b,a;
+
+					r = Dest[DestIndex + 0] + (byte)color[SrcIndex + 0];
+					g = Dest[DestIndex + 1] + (byte)color[SrcIndex + 1];
+					b = Dest[DestIndex + 2] + (byte)color[SrcIndex + 2];
+					a = Dest[DestIndex + 3] + (byte)color[SrcIndex + 3];
+
+					if(r > 255)
+						r = 255;
+					if(g > 255)
+						g = 255;
+
+					if(b > 255)
+						b = 255;
+					if(a > 255)
+						a = 255;
+
+					Dest[DestIndex + 0] = (byte)r;
+					Dest[DestIndex + 1] = (byte)g;
+					Dest[DestIndex + 2] = (byte)b;
+					Dest[DestIndex + 3] = (byte)a;
+				}
+			}
+		}
+}
+
+extern "C" __declspec(dllexport) byte *TOOLAPI_Image_ReadDriverPixels( idImage *image ) 
+{
+	return image->ReadDriverPixels( 0, 0 );
+}
+
+extern "C" __declspec(dllexport) void TOOLAPI_Image_CopyUncompressedBufferIntoRegion( idImage *image,  void *buffer, int mipLevel, int x, int y, int width, int height ) {
+	image->Bind();
+	image->CopyUncompressedBufferIntoRegion( buffer, mipLevel, x, y, width, height );
+}
+
+extern "C" __declspec(dllexport) byte *TOOLAPI_Image_ResampleTextureBuffer( const byte *in, int inwidth, int inheight, int outwidth, int outheight ) {
+	return R_ResampleTexture( in, inwidth, inheight, outwidth, outheight );
+}
+
+extern "C" __declspec(dllexport) void TOOLAPI_Image_GetWidthHeight( idImage *image, int &width, int &height )
+{
+	width = image->uploadWidth;
+	height = image->uploadHeight;
+}
+
 extern "C" __declspec(dllexport) void TOOLAPI_RendererDevice_BindImageToUnit( idImage *image, int unit )
 {
 	renderDevice->SelectTextureNoClient( unit );

@@ -2796,6 +2796,7 @@
   <ItemGroup>
     <None Include="..\base\renderprogs\common.crp" />
     <None Include="..\base\renderprogs\editors\vt_paint_editorbrush.crp" />
+    <None Include="..\base\renderprogs\editors\vt_paint_world.crp" />
     <None Include="..\base\renderprogs\layers.crp" />
     <None Include="..\base\renderprogs\postprocess.crp" />
     <None Include="..\base\renderprogs\pre-interaction.crp" />

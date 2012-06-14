@@ -2240,6 +2240,32 @@ void idImage::CopyDepthbuffer( int x, int y, int imageWidth, int imageHeight ) {
 }
 
 /*
+===============
+CopyUncompressedBufferIntoRegion
+
+===============
+*/
+void idImage::CopyUncompressedBufferIntoRegion( void *buffer, int mipLevel, int x, int y, int width, int height ) {
+#ifndef BSPCOMPILER
+	qglTexSubImage2D( GL_TEXTURE_2D, 0, x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer );
+#endif
+}
+
+/*
+===============
+CopyBufferIntoRegion
+
+Modified from DevIL image library
+===============
+*/
+void idImage::CopyBufferIntoRegion( void *buffer, int mipLevel, int DestX, int DestY, int Width, int Height ) {
+#ifndef BSPCOMPILER
+	qglCompressedTexSubImage2DARB( GL_TEXTURE_2D, mipLevel, DestX, DestY, Width, Height, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, Width * Height, buffer );
+#endif
+}
+
+
+/*
 =============
 RB_UploadScratchImage
 

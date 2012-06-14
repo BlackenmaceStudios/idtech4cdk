@@ -188,6 +188,8 @@ namespace ToolsManaged.Private
         public class idManagedImage
         {
             IntPtr _internalPtr;
+            int _width, _height;
+            IntPtr _driverPixels;
 
             [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_FindImage")]
             private static extern IntPtr TOOLAPI_Editor_FindImage(string path);
@@ -195,9 +197,70 @@ namespace ToolsManaged.Private
             [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_GetDiffuseImageHandleForMaterial")]
             private static extern IntPtr TOOLAPI_Editor_GetDiffuseImageHandleForMaterial( string mtr );
 
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Image_GetWidthHeight")]
+            private static extern void TOOLAPI_Image_GetWidthHeight(IntPtr imgHandle, ref int width, ref int height);
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Image_ResampleTextureBuffer")]
+            private static extern IntPtr TOOLAPI_Image_ResampleTextureBuffer( IntPtr inBuffer, int inwidth, int inheight, int outwidth, int outheight );
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Image_CopyUncompressedBufferIntoRegion")]
+            private static extern void TOOLAPI_Image_CopyUncompressedBufferIntoRegion(IntPtr image, IntPtr buffer, int mipLevel, int x, int y, int width, int height);
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Image_ReadDriverPixels")]
+            private static extern IntPtr TOOLAPI_Image_ReadDriverPixels(IntPtr image);
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Image_CopyImageToImageBufferRegion")]
+            private static extern void TOOLAPI_Image_CopyImageToImageBufferRegion(  IntPtr Dest, IntPtr color,  int DestX, int DestY, int Width, int Height, int DiemWidth );
+
+            public static void CopyImageToImageBufferRegion(IntPtr Dest, IntPtr color, int DestX, int DestY, int Width, int Height, int DiemWidth)
+            {
+                TOOLAPI_Image_CopyImageToImageBufferRegion(Dest, color, DestX, DestY, Width, Height, DiemWidth);
+            }
+
+            public static IntPtr ResampleTextureBuffer(IntPtr inBuffer, int inwidth, int inheight, int outwidth, int outheight)
+            {
+                return TOOLAPI_Image_ResampleTextureBuffer(inBuffer, inwidth, inheight, outwidth, outheight);
+            }
+
+            public IntPtr ReadDriverPixels(bool forceUpdate)
+            {
+                if (!forceUpdate && _driverPixels != IntPtr.Zero)
+                {
+                    return _driverPixels;
+                }
+
+                _driverPixels = TOOLAPI_Image_ReadDriverPixels(_internalPtr);
+                return _driverPixels;
+            }
+
             public idManagedImage(IntPtr ptr)
             {
                 _internalPtr = ptr;
+                _width = 0;
+                _driverPixels = IntPtr.Zero;
+                _height = 0;
+                TOOLAPI_Image_GetWidthHeight(ptr, ref _width, ref _height);
+            }
+
+            public void CopyUncompressedBufferIntoRegion(IntPtr buffer, int mipLevel, int x, int y, int width, int height)
+            {
+                TOOLAPI_Image_CopyUncompressedBufferIntoRegion( _internalPtr, buffer, mipLevel, x, y, width, height );
+            }
+
+            public int Width
+            {
+                get
+                {
+                    return _width; 
+                }
+            }
+
+            public int Height
+            {
+                get
+                {
+                    return _height;
+                }
             }
 
             public IntPtr Handle
@@ -289,7 +352,15 @@ namespace ToolsManaged.Private
             public void RenderVisibleArea(idManagedImage image, int areaId, float x, float y, float z, float yaw, float pitch, float roll)
             {
                 IntPtr surf = TOOLAPI_RenderWorld_GetVisibleVirtualTextureAreaSurface(internalPtr, vtVisibleAreasPool[areaId]);
-                TOOLAPI_Editor_DrawRenderSurf(surf, image.Handle, x, y, z, yaw, pitch, roll, false); 
+
+                if (image != null)
+                {
+                    TOOLAPI_Editor_DrawRenderSurf(surf, image.Handle, x, y, z, yaw, pitch, roll, false);
+                }
+                else
+                {
+                    TOOLAPI_Editor_DrawRenderSurf(surf, IntPtr.Zero, x, y, z, yaw, pitch, roll, false);
+                }
             }
         }
 
@@ -572,7 +643,20 @@ namespace ToolsManaged.Private
             }
             public int ReadString(ref String str)
             {
-                return ReadString_Internal(GetNativeAddress(), ref str);
+                int len = 0;
+
+                ReadInt(ref len);
+                
+                IntPtr tempBufferBlockPtr;
+
+                tempBufferBlockPtr = Marshal.AllocHGlobal( len );
+                int readLen = Read_Internal(GetNativeAddress(), tempBufferBlockPtr, len);
+
+                str = Marshal.PtrToStringAnsi( tempBufferBlockPtr );
+                Marshal.FreeHGlobal(tempBufferBlockPtr);
+
+                return len;
+
             }
             public int ReadVec2(ref IntPtr vec)
             {
@@ -630,7 +714,16 @@ namespace ToolsManaged.Private
             }
             public int WriteString(string str)
             {
-                return WriteString_Internal(GetNativeAddress(), str);
+                WriteInt(str.Length);
+
+                IntPtr tempBufferBlockPtr;
+
+                tempBufferBlockPtr = Marshal.StringToHGlobalAnsi(str);
+
+                int writeLen = Write_Internal(GetNativeAddress(), tempBufferBlockPtr, str.Length);
+                Marshal.FreeHGlobal(tempBufferBlockPtr);
+
+                return writeLen;
             }
             public int WriteVec2(IntPtr vec)
             {
