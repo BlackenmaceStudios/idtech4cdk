@@ -57,18 +57,19 @@ public:
 						bmRenderProgram( const char *path, int numPasses );
 	virtual void				Bind( void );
 	virtual void				UnBind( void );
-	void				Reload( const char *path, int numPasses );
-	void				BindVar( unsigned int progVarHandle, const char *varName );
-	void				BindVar( unsigned int progVarHandle, int attrId, const char *varName );
+	virtual void				SetVar1fi( unsigned int progVarHandle, int var );
 	virtual void				BindTextureVar( unsigned int progVarHandle );
 	virtual void				SetVar4fv( unsigned int progVarHandle, int count, const float *ptr );
 	virtual void				SetVar3fv( unsigned int progVarHandle, int count, const float *ptr );
-	virtual void				SetVar1fi( unsigned int progVarHandle, int var );
 	virtual void				SetVar4fv( unsigned int progVarHandle, const float *ptr );
 	virtual void				SetAttrVar4fv( unsigned int progVarHandle, const float *ptr );
 	virtual void				SetVarMatrix4fv( unsigned int progVarHandle, int count, const float *ptr );
 	virtual void				SetCurrentPass( int pass ) { currentPass = pass; }
 
+
+		void				Reload( const char *path, int numPasses );
+	void				BindVar( unsigned int progVarHandle, const char *varName );
+	void				BindVar( unsigned int progVarHandle, int attrId, const char *varName );
 	bmRenderProgramConstantBuffer *BindConstantBuffer( const char *varName, void *buffer, int bufferSize );
 private:
 	idStr				FormatShaderError( const char *buffer, const char *errorBuffer );

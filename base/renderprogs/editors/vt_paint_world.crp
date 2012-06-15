@@ -34,14 +34,25 @@ FragmentProgram
 	uniform sampler2D		u_colorModulate;
 
 	smooth in vec2            	var_TexDiffuse; 
-
-
+	uniform int					u_colorAdd; // 1 if alpha always one, 2 if alpha based on mask.
+	 
 
 	void main( void ) {    
-		vec4 diffuse = texture2D( u_diffuseTexture, var_TexDiffuse * 15 );
+		vec4 diffuse = texture2D( u_diffuseTexture, var_TexDiffuse * 4 );
 		vec4 mask = texture2D( u_colorModulate, var_TexDiffuse );
 		
 		gl_FragColor = diffuse * mask.r;
 		gl_FragColor.a = 1;
+		if(u_colorAdd == 1)
+		{
+			gl_FragColor.a = 1;
+		}
+		else if(u_colorAdd == 2)
+		{
+			if(mask.r == 0)
+				discard;
+
+			gl_FragColor.a = mask.r;
+		}
 	}
 EndFragmentProgram

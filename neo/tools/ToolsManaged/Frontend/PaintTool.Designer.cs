@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.ToolStripMenuItem virtualTexturePaintToolToolStripMenuItem;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PaintTool));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -261,8 +262,7 @@
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(189, 140);
             this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "Zoom: Left+Alt and Right Mouse\r\nPan: Left+Alt and Middle Mouse\r\nRotate: Left+Alt " +
-    "and Left Mouse\r\n\r\n";
+            this.textBox1.Text = resources.GetString("textBox1.Text");
             // 
             // groupBox4
             // 

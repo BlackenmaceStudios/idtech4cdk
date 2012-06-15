@@ -28,6 +28,7 @@ namespace ToolsManaged.Private
         int _chartDimen;
         MegaProjectChartPixel* _pixels;
         public string materialName;
+        public NativeAPI.idManagedImage _stencilImage;
 
         public MegaProjectChart(int chartDimen)
         {
@@ -43,6 +44,11 @@ namespace ToolsManaged.Private
             materialName = "";
             f.ReadString(ref materialName);
             f.ReadUnsafe(_pixels, _chartDimen * _chartDimen * 4);
+
+            if (materialName.Length > 0)
+            {
+                _stencilImage = NativeAPI.idManagedImage.GetDiffuseImageHandleForMaterial(materialName);
+            }
         }
 
         public bool HasMaterial

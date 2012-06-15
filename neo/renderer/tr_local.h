@@ -754,7 +754,7 @@ public:
 	virtual bool			UploadImage( const char *imageName, const byte *data, int width, int height );
 	virtual void			RenderLightFrustum( const struct renderLight_t &renderLight, idPlane lightFrustum[6] );
 // jmarshall
-	virtual idImage			*FindImage( const char *path );
+	virtual idImage			*FindImage( const char *path, bool clampToEdge = false );
 	virtual void			DeriveLightData(class idRenderLightLocal *light);
 	virtual void			FreeLightDefDerivedData(class idRenderLightLocal *light);
 

@@ -91,10 +91,10 @@ namespace ToolsManaged.Private
 
         public Bind_t Bind;
         public UnBind_t UnBind;
+        public SetVar1fi_t SetVar1fi;
         public BindTextureVar_t BindTextureVar;
         public SetVar4fvEx_t SetVar4fvEx;
         public SetVar3fv_t SetVar3fv;
-        public SetVar1fi_t SetVar1fi;
         public SetVar4fv_t SetVar4fv;
         public SetAttrVar4fv_t SetAttrVar4fv;
         public SetVarMatrix4fv_t SetVarMatrix4fv;

@@ -266,7 +266,7 @@ public:
 	virtual void			RenderLightFrustum( const struct renderLight_t &renderLight, idPlane lightFrustum[6] ) = 0;
 
 	// Loads in a image file.
-	virtual idImage			*FindImage( const char *path ) = 0;
+	virtual idImage			*FindImage( const char *path, bool clampToEdge = false ) = 0;
 
 	virtual void			DeriveLightData(class idRenderLightLocal *light) = 0;
 	virtual void			FreeLightDefDerivedData(class idRenderLightLocal *light) = 0;

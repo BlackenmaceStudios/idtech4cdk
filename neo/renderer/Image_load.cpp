@@ -2247,7 +2247,9 @@ CopyUncompressedBufferIntoRegion
 */
 void idImage::CopyUncompressedBufferIntoRegion( void *buffer, int mipLevel, int x, int y, int width, int height ) {
 #ifndef BSPCOMPILER
+
 	qglTexSubImage2D( GL_TEXTURE_2D, 0, x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer );
+
 #endif
 }
 

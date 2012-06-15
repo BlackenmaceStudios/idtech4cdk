@@ -667,7 +667,11 @@ void R_CreateLightRefs( idRenderLightLocal *light ) {
 idRenderSystemLocal::FindImage
 =======================
 */
-idImage * idRenderSystemLocal::FindImage( const char *path ) {
+idImage * idRenderSystemLocal::FindImage( const char *path, bool clampToEdge ) {
+	if(clampToEdge)
+	{
+		return globalImages->ImageFromFile( path, TF_DEFAULT, false, TR_CLAMP, TD_DEFAULT ); 
+	}
 	return globalImages->ImageFromFile( path, TF_DEFAULT, false, TR_REPEAT, TD_DEFAULT ); 
 }
 

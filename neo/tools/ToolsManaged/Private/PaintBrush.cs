@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+using ToolsManaged.Private.Editor.Input;
 namespace ToolsManaged.Private
 {
     class PaintBrush
@@ -13,11 +13,11 @@ namespace ToolsManaged.Private
         float _currentBrushSize = 0;
         IntPtr brushTexData;
 
-        private void CreateBrushImageData(NativeAPI.idManagedImage brushImage, MegaProjectChart chart, int brushSize)
+        private void CreateBrushImageData(NativeAPI.idManagedImage brushImage, MegaProjectChart chart, int brushSize, int scaledSize)
         {
             IntPtr rawBrushImageData = brushImage.ReadDriverPixels(false);
 
-            brushTexData = NativeAPI.idManagedImage.ResampleTextureBuffer(rawBrushImageData, brushImage.Width, brushImage.Height, 64, 64);
+            brushTexData = NativeAPI.idManagedImage.ResampleTextureBuffer(rawBrushImageData, brushImage.Width, brushImage.Height, scaledSize, scaledSize);
         }
 
         /*
@@ -38,19 +38,43 @@ namespace ToolsManaged.Private
             {
                 if (chart.materialName != stencilName)
                 {
-                    MessageBox.Show("This chart already has a texture on it, if you would like to paint on this area add a new layer");
-                    return;
+                    if (KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_LSHIFT))
+                    {
+                        DialogResult r = MessageBox.Show("Are you sure you want to replace the current texture on this chart?", "Replace Texture", MessageBoxButtons.OKCancel);
+
+                        if (r == DialogResult.Cancel)
+                            return;
+                    }
+                    else
+                    {
+                        MessageBox.Show("This chart already has a texture on it, if you would like to paint on this area add a new layer");
+                        return;
+                    }
                 }
             }
 
+            float scaledSize = brushSize / 3000.0f;
+            scaledSize = (scaledSize * 512);
+
             if (brushTexData == null || _currentBrushImage != brushImage || _currentBrushSize != brushSize)
             {
-                CreateBrushImageData(brushImage, chart, brushSize);
+                CreateBrushImageData(brushImage, chart, brushSize, (int)scaledSize);
             }
 
             chart.materialName = stencilName;
+            chart._stencilImage = stencilImage;
 
-            chart.Blit(brushTexData, 64, 64, u, v, 0, 0, 0);
+            if (u > 0.96)
+                u = 1;
+
+            if (v > 0.96)
+                v = 1;
+
+            if (u < 0.04)
+                u = 0;
+            if (v < 0.04)
+                v = 0;
+            chart.Blit(brushTexData, (int)scaledSize, (int)scaledSize, u, v, 0, 0, 0);
 
             // Save the current data presets.
             _currentBrushImage = brushImage;

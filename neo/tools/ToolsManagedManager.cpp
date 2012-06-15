@@ -58,9 +58,12 @@ unsigned int  		x, y, z, ConvBps, ConvSizePlane;
 	StartY = DestY >= 0 ? 0 : -DestY;
 	
 	// Limit the copy of data inside of the destination image
-	if (Width  + DestX > DiemWidth)  Width  = DiemWidth  - DestX;
-	if (Height + DestY > DiemWidth) Height = DiemWidth - DestY;
-	if (Depth  + DestZ > DiemWidth)  Depth  = 1;
+	if (Width  + DestX > DiemWidth)  
+		Width  = DiemWidth  - DestX;
+	if (Height + DestY > DiemWidth) 
+		Height = DiemWidth - DestY;
+	if (Depth  + DestZ > DiemWidth) 
+		Depth  = 1;
 	
 	const unsigned int  bpp_without_alpha = 4 - 1;
 		for (z = 0; z < Depth; z++) {
@@ -104,6 +107,7 @@ extern "C" __declspec(dllexport) byte *TOOLAPI_Image_ReadDriverPixels( idImage *
 extern "C" __declspec(dllexport) void TOOLAPI_Image_CopyUncompressedBufferIntoRegion( idImage *image,  void *buffer, int mipLevel, int x, int y, int width, int height ) {
 	image->Bind();
 	image->CopyUncompressedBufferIntoRegion( buffer, mipLevel, x, y, width, height );
+	globalImages->BindNull();
 }
 
 extern "C" __declspec(dllexport) byte *TOOLAPI_Image_ResampleTextureBuffer( const byte *in, int inwidth, int inheight, int outwidth, int outheight ) {
@@ -120,7 +124,12 @@ extern "C" __declspec(dllexport) void TOOLAPI_RendererDevice_BindImageToUnit( id
 {
 	renderDevice->SelectTextureNoClient( unit );
 	if(image == NULL) {
-		globalImages->BindNull();
+		if(unit != 0)
+		{
+			globalImages->BindNull();
+		}
+
+		
 		return;
 	}
 
@@ -199,9 +208,9 @@ extern "C" __declspec(dllexport) void TOOLAPI_Editor_DrawRenderSurf( srfTriangle
 	DrawRenderSurface( surf, image, idVec3(x,y,z), idAngles(yaw, pitch, roll ), cameraView );
 }
 
-extern "C" __declspec(dllexport) idImage *TOOLAPI_Editor_FindImage(const char *path)
+extern "C" __declspec(dllexport) idImage *TOOLAPI_Editor_FindImage(const char *path, bool clampToEdge)
 {
-	return renderSystem->FindImage( path );
+	return renderSystem->FindImage( path, clampToEdge );
 }
 
 extern "C" __declspec(dllexport) float *TOOLAPI_Editor_GetViewPosition()
@@ -225,7 +234,7 @@ void SetProjectionMatrix(float width2, float height2) {
 	float	xmin, xmax, ymin, ymax;
 	float	width, height;
 	float	zNear;
-	float   zFar = 300000;
+	float   zFar = 3000000;
 	float	projectionMatrix[16];
 
 	//
@@ -311,9 +320,11 @@ extern "C" __declspec(dllexport) HDC TOOLAPI_Device_BeginRender( HWND hwnd, int 
 
 	qglCullFace(GL_FRONT);
 	qglDisable(GL_CULL_FACE);
-	qglShadeModel(GL_FLAT);
+	qglShadeModel(GL_SMOOTH);
 	qglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	qglEnable(GL_BLEND);
+	qglDisable(GL_COLOR_MATERIAL);
+
 	qglEnable(GL_DEPTH_TEST);
 	qglDepthFunc(GL_LEQUAL);
 

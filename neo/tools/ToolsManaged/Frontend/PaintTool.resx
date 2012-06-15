@@ -120,6 +120,17 @@
   <metadata name="virtualTexturePaintToolToolStripMenuItem.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
+  <data name="textBox1.Text" xml:space="preserve">
+    <value>Camera Controls:
+Zoom: Left+Alt and Right Mouse
+Pan: Left+Alt and Middle Mouse
+Rotate: Left+Alt and Left Mouse
+
+Brush Controls:
+Left Mouse - Paint
+Left Mouse + Shift - Replace texture on chart
+</value>
+  </data>
   <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
