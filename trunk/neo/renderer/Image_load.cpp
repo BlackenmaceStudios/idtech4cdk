@@ -670,7 +670,7 @@ There is no way to specify explicit mip map levels
 */
 void idImage::GenerateImage( const byte *pic, int width, int height, 
 					   textureFilter_t filterParm, bool allowDownSizeParm, 
-					   textureRepeat_t repeatParm, textureDepth_t depthParm, int anisotropy, imageCompression_t compress ) {
+					   textureRepeat_t repeatParm, textureDepth_t depthParm, int anisotropy, imageCompression_t compress, bool noMipMaps ) {
 	bool	preserveBorder;
 	bool	forceDefault = defaulted;
 	byte		*scaledBuffer;
@@ -909,7 +909,7 @@ void idImage::GenerateImage( const byte *pic, int width, int height,
 		}
 		else if ( internalFormat == GL_COLOR_INDEX8_EXT ) {
 			UploadCompressedNormalMap( scaled_width, scaled_height, scaledBuffer, miplevel );
-		} else {
+		} else if(!noMipMaps) {
 			qglTexImage2D( GL_TEXTURE_2D, miplevel, internalFormat, scaled_width, scaled_height, 
 				0, GL_RGBA, GL_UNSIGNED_BYTE, scaledBuffer );
 		}
@@ -919,8 +919,15 @@ void idImage::GenerateImage( const byte *pic, int width, int height,
 		R_StaticFree( scaledBuffer );
 	}
 	
-
-	SetImageFilterAndRepeat();
+	if(!noMipMaps)
+	{
+		SetImageFilterAndRepeat();
+	}
+	else
+	{
+		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	}
 
 	// see if we messed anything up
 	GL_CheckErrors();
@@ -2247,7 +2254,8 @@ CopyUncompressedBufferIntoRegion
 */
 void idImage::CopyUncompressedBufferIntoRegion( void *buffer, int mipLevel, int x, int y, int width, int height ) {
 #ifndef BSPCOMPILER
-
+//	qglTexImage2D(  GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer );
+	Bind();
 	qglTexSubImage2D( GL_TEXTURE_2D, 0, x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer );
 
 #endif

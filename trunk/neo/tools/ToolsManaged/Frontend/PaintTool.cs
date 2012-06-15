@@ -53,7 +53,7 @@ namespace ToolsManaged.Frontend
             _debugGui = UserInterfaceManager.LoadGUI("guis/editors/vtpaintdebug.gui");
             _brushPaintProgram = RenderProgram.LoadRenderProgram("editors/vt_paint_editorbrush.crp", 1);
             _livePaintProgram = RenderProgram.LoadRenderProgram("editors/vt_paint_world.crp", 1);
-            _chartImage = NativeAPI.idManagedImage.FindImage("textures/megagen/defaultchart.tga", true);
+            _chartImage = NativeAPI.idManagedImage.FindImage("_defaultVTEditChart", true);
             _brush = new PaintBrush();
         }
 
@@ -155,6 +155,8 @@ namespace ToolsManaged.Frontend
                 return;
             _brushPaintProgram.SetCurrentPass(_brushPaintProgram.GetNativeAddress(), 0);
 
+            
+
             _brushPaintProgram.Bind(_brushPaintProgram.GetNativeAddress());
 
                 // Bind the stencil image.
@@ -178,8 +180,9 @@ namespace ToolsManaged.Frontend
         {
             float brushSize = brushTrackBar.Value;
 
-            _livePaintProgram.SetCurrentPass(_livePaintProgram.GetNativeAddress(), 0);
+            chart.UpdateToImage(_chartImage);
 
+            _livePaintProgram.SetCurrentPass(_livePaintProgram.GetNativeAddress(), 0);
             _livePaintProgram.Bind(_livePaintProgram.GetNativeAddress());
 
             if (firstPass)
@@ -197,7 +200,6 @@ namespace ToolsManaged.Frontend
 
             // Bind the brush image.
             _renderDevice.BindImageToTextureUnit(_chartImage, 1);
-            chart.UpdateToImage(_chartImage);
             _livePaintProgram.BindTextureVar(_livePaintProgram.GetNativeAddress(), (uint)RenderProgram.renderProgramParameter.PP_COLOR_MODULATE);
 
 
@@ -232,6 +234,8 @@ namespace ToolsManaged.Frontend
          
             angle.x = v.ToYaw();
             angle.y = v.ToPitch();
+
+
 
 
             traceManaged_t trace = new traceManaged_t();

@@ -401,6 +401,18 @@ static void R_RGBA8Image( idImage *image ) {
 		TF_DEFAULT, false, TR_REPEAT, TD_HIGH_QUALITY );
 }
 
+static void R_RGBA8Image512( idImage *image ) {
+	byte	data[512][512][4];
+
+	memset( data, 0, sizeof( data ) );
+	data[0][0][0] = 0;
+	data[0][0][1] = 0;
+	data[0][0][2] = 0;
+	data[0][0][3] = 255;
+
+	image->GenerateImage( (byte *)data, 512, 512, 
+		TF_DEFAULT, false, TR_CLAMP, TD_HIGH_QUALITY, 0, IMAGE_COMPRESS_NONE, true );
+}
 
 
 static void R_FrameBufferImage( idImage *image ) {
@@ -1961,6 +1973,7 @@ void idImageManager::BindNull() {
 	} else if ( tmu->textureType == TT_3D ) {
 		qglDisable( GL_TEXTURE_3D );
 	} else if ( tmu->textureType == TT_2D ) {
+	//	qglBindTexture( GL_TEXTURE_2D, 0 );
 		qglDisable( GL_TEXTURE_2D );
 	}else if ( tmu->textureType == TT_RECT ) {
 		qglBindTexture( GL_TEXTURE_RECTANGLE_ARB, 0 );
@@ -2099,6 +2112,7 @@ void idImageManager::Init() {
 	scratchImage = ImageFromFunction("_scratch", R_RGBA8Image );
 	scratchImage2 = ImageFromFunction("_scratch2", R_RGBA8Image );
 	accumImage = ImageFromFunction("_accum", R_RGBA8Image );
+	accumImage = ImageFromFunction("_defaultVTEditChart", R_RGBA8Image512 );
 //	scratchCubeMapImage = ImageFromFunction("_scratchCubeMap", makeNormalizeVectorCubeMap );
 
 // jmarshall

@@ -25,6 +25,7 @@ public:
 	virtual void			DrawImage(float x, float y, float w, float h, float s1, float t1, float s2, float t2, idImage *image);
 	virtual void			RestoreViewMatrix( void );
 	virtual void			RenderSurfaceFromCache( const srfTriangles_t *tris );
+	virtual void			RenderSurfaceFromVertexCache( const srfTriangles_t *tris );
 	virtual bmRenderProgram			*LoadRenderProgram( const char *path, int numPasses );
 	virtual void			SelectTextureNoClient( int unit ) { GL_SelectTextureNoClient( unit ); };
 private:
@@ -62,6 +63,7 @@ void bmOpenGLRenderDevice::Init( void ) {
 bmOpenGLRenderDevice::RenderSurfaceFromCache
 ====================
 */
+extern bmRenderProgram *activeRenderProgram;
 void bmOpenGLRenderDevice::RenderSurfaceFromCache( const srfTriangles_t *tris ) {
 	if(tris->ambientCache == NULL)
 	{
@@ -73,6 +75,27 @@ void bmOpenGLRenderDevice::RenderSurfaceFromCache( const srfTriangles_t *tris ) 
 	idDrawVert	*ac = (idDrawVert *)vertexCache.Position( tris->ambientCache );
 	qglColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( idDrawVert ), ac->color );
 	qglTexCoordPointer(  2, GL_FLOAT, sizeof( idDrawVert ), ac->st.ToFloatPtr() );
+	qglVertexPointer( 3, GL_FLOAT, sizeof( idDrawVert ), ac->xyz.ToFloatPtr() );
+
+	RB_DrawElementsWithCounters( tris );
+}
+
+/*
+====================
+bmOpenGLRenderDevice::RenderSurfaceFromCache
+====================
+*/
+void bmOpenGLRenderDevice::RenderSurfaceFromVertexCache( const srfTriangles_t *tris ) {
+	if(tris->ambientCache == NULL)
+	{
+		if(!R_CreateAmbientCache( (srfTriangles_t *)tris, false )) {
+			common->FatalError("RenderSurfaceFromCache: Failed to create cache for tris\n");
+		}
+	}
+
+	idDrawVert	*ac = (idDrawVert *)vertexCache.Position( tris->ambientCache );
+	qglColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( idDrawVert ), ac->color );
+	qglVertexAttribPointerARB( 8, 2, GL_FLOAT, false, sizeof( idDrawVert ), ac->st.ToFloatPtr() );
 	qglVertexPointer( 3, GL_FLOAT, sizeof( idDrawVert ), ac->xyz.ToFloatPtr() );
 
 	RB_DrawElementsWithCounters( tris );

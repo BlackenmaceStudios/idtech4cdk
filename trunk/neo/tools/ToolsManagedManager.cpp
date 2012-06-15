@@ -36,7 +36,7 @@ float *GetCurrentViewPos();
 renderView_t view;
 idAngles viewAngle;
 
-void DrawRenderSurface( srfTriangles_t *surf, idImage *image, idVec3 origin, idAngles angle, bool cameraView );
+void DrawRenderSurface( srfTriangles_t *surf, idImage *image, idVec3 origin, idAngles angle, bool cameraView, bool usingVertexCache );
 
 extern "C" __declspec(dllexport) void TOOLAPI_Image_CopyImageToImageBufferRegion(  byte *Dest, byte *color,  int DestX, int DestY, int Width, int Height, int DiemWidth )
 {
@@ -105,9 +105,8 @@ extern "C" __declspec(dllexport) byte *TOOLAPI_Image_ReadDriverPixels( idImage *
 }
 
 extern "C" __declspec(dllexport) void TOOLAPI_Image_CopyUncompressedBufferIntoRegion( idImage *image,  void *buffer, int mipLevel, int x, int y, int width, int height ) {
-	image->Bind();
+	//image->Bind();
 	image->CopyUncompressedBufferIntoRegion( buffer, mipLevel, x, y, width, height );
-	globalImages->BindNull();
 }
 
 extern "C" __declspec(dllexport) byte *TOOLAPI_Image_ResampleTextureBuffer( const byte *in, int inwidth, int inheight, int outwidth, int outheight ) {
@@ -124,10 +123,7 @@ extern "C" __declspec(dllexport) void TOOLAPI_RendererDevice_BindImageToUnit( id
 {
 	renderDevice->SelectTextureNoClient( unit );
 	if(image == NULL) {
-		if(unit != 0)
-		{
-			globalImages->BindNull();
-		}
+		globalImages->BindNull();
 
 		
 		return;
@@ -205,7 +201,7 @@ extern "C" __declspec(dllexport) idUserInterface *TOOLAPI_UserInterface_LoadGui(
 
 extern "C" __declspec(dllexport) void TOOLAPI_Editor_DrawRenderSurf( srfTriangles_t *surf, idImage *image, float x, float y, float z, float yaw, float pitch, float roll, bool cameraView )
 {
-	DrawRenderSurface( surf, image, idVec3(x,y,z), idAngles(yaw, pitch, roll ), cameraView );
+	DrawRenderSurface( surf, image, idVec3(x,y,z), idAngles(yaw, pitch, roll ), cameraView, false );
 }
 
 extern "C" __declspec(dllexport) idImage *TOOLAPI_Editor_FindImage(const char *path, bool clampToEdge)

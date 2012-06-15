@@ -52,7 +52,7 @@ const int POINTS_PER_KNOT = 50;
 DrawRenderSurface
 ================
 */
-void DrawRenderSurface( srfTriangles_t *surf, idImage *image, idVec3 origin, idAngles angle, bool cameraView ) {
+void DrawRenderSurface( srfTriangles_t *surf, idImage *image, idVec3 origin, idAngles angle, bool cameraView, bool usingVertexCache ) {
 // jmarshall
 	qglPushMatrix();
 
@@ -71,15 +71,25 @@ void DrawRenderSurface( srfTriangles_t *surf, idImage *image, idVec3 origin, idA
 // jmarshall end
 	if(image != NULL)
 	{
-		image->Bind();
+		qglPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+		globalImages->BindNull();
+		//image->Bind();
 	}
 // jmarshall
 
-	renderDevice->RenderSurfaceFromCache( surf );
+	if(!usingVertexCache)
+	{
+		renderDevice->RenderSurfaceFromCache( surf );
+	}
+	else
+	{
+		renderDevice->RenderSurfaceFromVertexCache( surf );
+	}
 
 	if(image != NULL)
 	{
-		globalImages->BindNull();
+		qglPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+		//globalImages->BindNull();
 	}
 
 	// Reset the transform.

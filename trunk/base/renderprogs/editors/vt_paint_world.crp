@@ -23,7 +23,7 @@ VertexProgram
 
 
 		// diffuse map texgen     
-		var_TexDiffuse.xy = ( attr_TexCoord ).st; 
+		var_TexDiffuse.xy = ( gl_MultiTexCoord0 ).st; 
 
 
 	}
