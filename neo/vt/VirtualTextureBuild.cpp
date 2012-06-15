@@ -5,7 +5,7 @@
 #include "VirtualTexture.h"
 #include "VirtualTextureBuild.h"
 
-
+#include "../tools/tools_managed.h"
 #include "../tools/compilers/dmap/vtmodel.h"
 #include "../tools/compilers/dmap/dmap.h"
 //#define USE_CORRECT_UV_GENERATION				// Works now...frickin sweat...
@@ -25,6 +25,7 @@ idCVar vt_compile_size( "vt_compile_size", "32768", CVAR_RENDERER | CVAR_INTEGER
 idCVar vt_compile_bsize( "vt_compile_bsize", "128", CVAR_RENDERER | CVAR_INTEGER | CVAR_CHEAT , "Size of the virtual texture to build." );
 
 idCVar vt_debug_tiles( "vt_debug_tiles", "0", CVAR_RENDERER | CVAR_BOOL , "Write out each tile as a dds texture." );
+idCVar vt_build_megaproject( "vt_build_megaproject", "1", CVAR_RENDERER | CVAR_BOOL , "1 = Build VT from megaproject 0 = Build from external TGA's" );
 
 byte *compressedBuffer = NULL;
 #define VT_Size vt_compile_bsize.GetInteger()
@@ -906,7 +907,20 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 
 	imglist.Clear();
 	
+	bool useMegaProject = vt_build_megaproject.GetBool();
 
+	ToolsManaged::IMegaProject *mega = NULL;
+
+
+	if(useMegaProject)
+	{
+	
+		CoCreateInstance( __uuidof(ToolsManaged::MegaProject), NULL, CLSCTX_INPROC_SERVER, __uuidof(ToolsManaged::IMegaProject), (void **)&mega);
+		common->Printf("Loading MegaProject...\n");
+		mega->LoadMegaProject(  _com_util::ConvertStringToBSTR(dmapGlobals.mapFileBase) );
+
+		
+	}
 	
 	byte *buffer;
 	int imgWidth = 0;
@@ -917,13 +931,37 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 	buffer = (byte *)R_StaticAlloc( VIRTUALTEXTURE_PAGESIZE * VIRTUALTEXTURE_PAGESIZE * 4 );
 	byte *mippedLevel = (byte *)R_StaticAlloc( 2048 * 2048 * 4 );
 	byte *mippedLevel2 = (byte *)R_StaticAlloc( 1024 * 1024 * 4 );
+	bool lastAreaUnpainted = false;
 	for(int i = 0; i < numAreas; i++)
 	{
 		idStr targaPath = path + idStr(va( "_u%d_v1", i + 1));
 		targaPath.SetFileExtension( ".tga" );
 
 		//R_LoadImage( targaPath.c_str(), &buffer, &imgWidth, &imgHeight, &timeStamp, true );
-		LoadTGA(targaPath.c_str(), &buffer, &imgWidth, &imgHeight, &timeStamp, false );
+		if(!useMegaProject)
+		{
+			LoadTGA(targaPath.c_str(), &buffer, &imgWidth, &imgHeight, &timeStamp, false );
+		}
+		else
+		{
+			imgWidth = 4096;
+			imgHeight = 4096;
+			bool unPaintedArea = false;
+			mega->RenderChart( i, (__int64)buffer, (VARIANT_BOOL *)&unPaintedArea );
+			if(!unPaintedArea) {
+				common->Warning("Unpainted area detected, defaulting.\n");
+
+				if(lastAreaUnpainted)
+				{
+					memset(buffer, 0, VIRTUALTEXTURE_PAGESIZE * VIRTUALTEXTURE_PAGESIZE * 4 );
+					lastAreaUnpainted = true;
+				}
+			}
+			else
+			{
+				lastAreaUnpainted = false;
+			}
+		}
 
 		// Check the image stats.
 		if(imgWidth != VIRTUALTEXTURE_PAGESIZE || imgHeight != VIRTUALTEXTURE_PAGESIZE) {

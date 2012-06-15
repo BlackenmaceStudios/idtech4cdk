@@ -255,7 +255,7 @@ namespace ToolsManaged.Frontend
             }
         }
 
-        private void RenderVTAreas()
+        private unsafe void RenderVTAreas()
         {
             int numVisibleVtAreas;
 
@@ -267,8 +267,12 @@ namespace ToolsManaged.Frontend
                 MegaProjectLayer _layer = _megaProject.GetLayerByIndex(LayerId);
 
                 // Render the virtualtexture areas
-                for (int i = 0; i < numVisibleVtAreas; i++)
-                {
+               
+              //  for (int i = 0; i < numVisibleVtAreas; i++)
+               // {
+                for (int ind = 0; ind < numVisibleVtAreas; ind++)
+                { 
+                    int i = _rw.visibleVTAreas[ind];
                     if (!_layer[i].HasMaterial)
                     {
                         if (LayerId == 0)
@@ -287,6 +291,7 @@ namespace ToolsManaged.Frontend
                        
                     }
                 }
+                
             }
         }
 

@@ -38,7 +38,77 @@ idAngles viewAngle;
 
 void DrawRenderSurface( srfTriangles_t *surf, idImage *image, idVec3 origin, idAngles angle, bool cameraView, bool usingVertexCache );
 
-extern "C" __declspec(dllexport) void TOOLAPI_Image_CopyImageToImageBufferRegion(  byte *Dest, byte *color,  int DestX, int DestY, int Width, int Height, int DiemWidth )
+extern "C" __declspec(dllexport) void TOOLAPI_Image_CopyImageToImageBufferRegion(  byte *Dest, byte *color,  int DestX, int DestY, int Width, int Height, int DiemWidth, bool replace )
+{
+unsigned int  		x, y, z, ConvBps, ConvSizePlane;
+	byte 	*Converted;
+	int Depth = 1;
+	unsigned int 		c;
+	unsigned int 		StartX, StartY, StartZ;
+	byte 	*SrcTemp;
+	float 	Back;
+	int DestZ = 0;
+
+	
+	ConvBps 	  = 4 * Width;
+	ConvSizePlane = ConvBps   * Height;
+	
+	//@NEXT in next version this would have to be removed since Dest* will be unsigned
+	StartX = DestX >= 0 ? 0 : -DestX;
+	StartY = DestY >= 0 ? 0 : -DestY;
+	
+	// Limit the copy of data inside of the destination image
+	if (Width  + DestX > DiemWidth)  
+		Width  = DiemWidth  - DestX;
+	if (Height + DestY > DiemWidth) 
+		Height = DiemWidth - DestY;
+	if (Depth  + DestZ > DiemWidth) 
+		Depth  = 1;
+	#define CLAMPTOBYTE(color) if((color) & (~255)) {color = (BYTE)((-(color)) >> 31);}else{color = (BYTE)(color);}
+	const unsigned int  bpp_without_alpha = 4 - 1;
+		for (z = 0; z < Depth; z++) {
+			for (y = 0; y < Height; y++) {
+				for (x = 0; x < Width; x++) {
+					const unsigned int   SrcIndex  = (z+0)*ConvSizePlane + (y+0)*ConvBps + (x+0)*4;
+					const unsigned int   DestIndex = (z+DestZ)*(DiemWidth * DiemWidth) + (y+DestY)*(DiemWidth * 4) + (x+DestX)*4;
+					
+					float Front = 0;
+					int r,g,b,a;
+					if(replace)
+					{
+						r = (byte)color[SrcIndex + 0];
+						g = (byte)color[SrcIndex + 1];
+						b = (byte)color[SrcIndex + 2];
+						a = (byte)color[SrcIndex + 3];
+					}
+					else
+					{
+						a = (byte)color[SrcIndex + 3]; 
+						r = (color[SrcIndex + 0] * a + Dest[DestIndex + 0] * (255 - a)) / 255; 
+						g = (color[SrcIndex + 0] * a + Dest[DestIndex + 1] * (255 - a)) / 255; 
+						b = (color[SrcIndex + 0] * a + Dest[DestIndex + 2] * (255 - a)) / 255; 
+						CLAMPTOBYTE(r); 
+						CLAMPTOBYTE(g); 
+						CLAMPTOBYTE(b); 
+		
+
+						//r = Dest[DestIndex + 0] + (byte)color[SrcIndex + 0];
+						//g = Dest[DestIndex + 1] + (byte)color[SrcIndex + 1];
+						//b = Dest[DestIndex + 2] + (byte)color[SrcIndex + 2];
+						//a = Dest[DestIndex + 3] + (byte)color[SrcIndex + 3];
+					}
+
+	
+					Dest[DestIndex + 0] = (byte)r;
+					Dest[DestIndex + 1] = (byte)g;
+					Dest[DestIndex + 2] = (byte)b;
+					Dest[DestIndex + 3] = (byte)a;
+				}
+			}
+		}
+}
+
+extern "C" __declspec(dllexport) void TOOLAPI_Image_CopyImageToImageBufferRegionWithAlpha(  byte *Dest, byte *color, byte *alpha, int DestX, int DestY, int Width, int Height, int DiemWidth )
 {
 unsigned int  		x, y, z, ConvBps, ConvSizePlane;
 	byte 	*Converted;
@@ -73,12 +143,18 @@ unsigned int  		x, y, z, ConvBps, ConvSizePlane;
 					const unsigned int   DestIndex = (z+DestZ)*(DiemWidth * DiemWidth) + (y+DestY)*(DiemWidth * 4) + (x+DestX)*4;
 					
 					float Front = 0;
-					int r,g,b,a;
+					float r,g,b,a;
 
-					r = Dest[DestIndex + 0] + (byte)color[SrcIndex + 0];
-					g = Dest[DestIndex + 1] + (byte)color[SrcIndex + 1];
-					b = Dest[DestIndex + 2] + (byte)color[SrcIndex + 2];
-					a = Dest[DestIndex + 3] + (byte)color[SrcIndex + 3];
+					a = alpha[DestIndex + 0] / 255.0f;
+
+
+					r = color[SrcIndex + 0]  / 255.0f ;
+					g = color[SrcIndex + 1]  / 255.0f;
+					b = color[SrcIndex + 2]  / 255.0f;
+				
+					r = (r * a) * 255.0f;
+					g = (b * a) * 255.0f;
+					b = (b * a) * 255.0f;
 
 					if(r > 255)
 						r = 255;

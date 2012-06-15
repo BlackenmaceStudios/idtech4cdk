@@ -12,7 +12,7 @@ namespace ToolsManaged.Private
     // MegaProjectChartPixel
     //
     [StructLayout(LayoutKind.Sequential)]
-    struct MegaProjectChartPixel
+    public struct MegaProjectChartPixel
     {
         public byte tileTransX;
         public byte tileTransY;
@@ -23,12 +23,20 @@ namespace ToolsManaged.Private
     //
     // MegaProjectChart
     //
-    unsafe class MegaProjectChart
+    public unsafe class MegaProjectChart
     {
         int _chartDimen;
         MegaProjectChartPixel* _pixels;
         public string materialName;
         public NativeAPI.idManagedImage _stencilImage;
+
+        public MegaProjectChartPixel* pixels
+        {
+            get
+            {
+                return _pixels;
+            }
+        }
 
         public MegaProjectChart(int chartDimen)
         {

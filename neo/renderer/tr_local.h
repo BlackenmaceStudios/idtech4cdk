@@ -1178,7 +1178,9 @@ void R_RenderView( viewDef_t *parms );
 bool R_CullLocalBox( const idBounds &bounds, const float modelMatrix[16], int numPlanes, const idPlane *planes );
 bool R_RadiusCullLocalBox( const idBounds &bounds, const float modelMatrix[16], int numPlanes, const idPlane *planes );
 bool R_CornerCullLocalBox( const idBounds &bounds, const float modelMatrix[16], int numPlanes, const idPlane *planes );
-
+// jmarshall
+void R_CalculateFrustum(idPlane	globalFrustum[6], float viewMatrix[16], idVec3 origin);
+// jmarshall end
 void R_AxisToModelMatrix( const idMat3 &axis, const idVec3 &origin, float modelMatrix[16] );
 
 // note that many of these assume a normalized matrix, and will not work with scaled axis
