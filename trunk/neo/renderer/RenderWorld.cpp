@@ -1114,15 +1114,15 @@ vtPoint_t idRenderWorldLocal::VTTrace( int vtAreaId, const idVec3 start, const i
 		
 
 		int closestIndex = 0;
-		if(local.d[0] > local.d[1] && local.d[0] > local.d[2])
+		if(local.d[0] < local.d[1] && local.d[0] < local.d[2])
 		{
 			closestIndex = local.indexes[0];
 		}
-		else if(local.d[1] > local.d[0] && local.d[1] > local.d[2])
+		else if(local.d[1] < local.d[0] && local.d[1] < local.d[2])
 		{
 			closestIndex = local.indexes[1];
 		}
-		else if(local.d[2] > local.d[1] && local.d[2] > local.d[0])
+		else if(local.d[2] < local.d[1] && local.d[2] < local.d[0])
 		{
 			closestIndex = local.indexes[2];
 		}
@@ -1135,6 +1135,8 @@ vtPoint_t idRenderWorldLocal::VTTrace( int vtAreaId, const idVec3 start, const i
 		pt.y = ( cursor * axis[1] ) / ( axisLen[1] * axisLen[1] );
 		pt.x += tri->verts[closestIndex].st.x;
 		pt.y += tri->verts[closestIndex].st.y;
+		pt.x -= 0.001f;
+		pt.y -= 0.001f;
 		return pt;
 	}
 

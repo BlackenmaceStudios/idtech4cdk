@@ -407,8 +407,8 @@ VirtualTextureBuilder:ScaleUVRegionToFitInTri
 ====================
 */
 #define VT_EPSILON			0.000f
-#define VT_CHART_MARGIN		(0.4f / 256.0f)
-#define VT_CHART_MARGIN2	(4.0f / 256.0f)
+#define VT_CHART_MARGIN		(0)
+#define VT_CHART_MARGIN2	(0)
 
 idList<int> burnIndexes;
 int burnIndexCnt = 0;

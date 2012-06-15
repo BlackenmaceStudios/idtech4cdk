@@ -53,7 +53,7 @@ namespace ToolsManaged.Frontend
             _debugGui = UserInterfaceManager.LoadGUI("guis/editors/vtpaintdebug.gui");
             _brushPaintProgram = RenderProgram.LoadRenderProgram("editors/vt_paint_editorbrush.crp", 1);
             _livePaintProgram = RenderProgram.LoadRenderProgram("editors/vt_paint_world.crp", 1);
-            _chartImage = NativeAPI.idManagedImage.FindImage("textures/megagen/defaultchart.tga");
+            _chartImage = NativeAPI.idManagedImage.FindImage("textures/megagen/defaultchart.tga", true);
             _brush = new PaintBrush();
         }
 
@@ -159,7 +159,7 @@ namespace ToolsManaged.Frontend
 
                 // Bind the stencil image.
                 _renderDevice.BindImageToTextureUnit(_currentStencilImage, 0);
-                _brushPaintProgram.BindTextureVar(_brushPaintProgram.GetNativeAddress(), (uint)RenderProgram.renderProgramParameter.PP_COLOR_DIFFUSE);
+                _brushPaintProgram.BindTextureVar(_brushPaintProgram.GetNativeAddress(), (uint)RenderProgram.renderProgramParameter.PP_TEX_DIFFUSE);
 
                 // Bind the brush image.
                 _renderDevice.BindImageToTextureUnit(_currentBrushImage, 1);
@@ -174,26 +174,30 @@ namespace ToolsManaged.Frontend
             _renderDevice.UnBindTextureUnit( 0 );
         }
 
-        void DrawArea(MegaProjectChart chart, int areaId)
+        void DrawArea(MegaProjectChart chart, int areaId, bool firstPass)
         {
             float brushSize = brushTrackBar.Value;
-
-            if (_currentStencilImage == null)
-                return;
-
-            chart.UpdateToImage(_chartImage);
-            
 
             _livePaintProgram.SetCurrentPass(_livePaintProgram.GetNativeAddress(), 0);
 
             _livePaintProgram.Bind(_livePaintProgram.GetNativeAddress());
 
+            if (firstPass)
+            {
+                _livePaintProgram.SetVar1fi(_livePaintProgram.GetNativeAddress(), (uint)RenderProgram.renderProgramParameter.PP_COLOR_ADD, 1);
+            }
+            else
+            {
+                _livePaintProgram.SetVar1fi(_livePaintProgram.GetNativeAddress(), (uint)RenderProgram.renderProgramParameter.PP_COLOR_ADD, 2);
+            }
+
             // Bind the stencil image.
-            _renderDevice.BindImageToTextureUnit(_currentStencilImage, 0);
-            _livePaintProgram.BindTextureVar(_livePaintProgram.GetNativeAddress(), (uint)RenderProgram.renderProgramParameter.PP_COLOR_DIFFUSE);
+            _renderDevice.BindImageToTextureUnit(chart._stencilImage, 0);
+            _livePaintProgram.BindTextureVar(_livePaintProgram.GetNativeAddress(), (uint)RenderProgram.renderProgramParameter.PP_TEX_DIFFUSE);
 
             // Bind the brush image.
             _renderDevice.BindImageToTextureUnit(_chartImage, 1);
+            chart.UpdateToImage(_chartImage);
             _livePaintProgram.BindTextureVar(_livePaintProgram.GetNativeAddress(), (uint)RenderProgram.renderProgramParameter.PP_COLOR_MODULATE);
 
 
@@ -234,7 +238,7 @@ namespace ToolsManaged.Frontend
             if (CollisionModelManager.TraceProjectedRay(ref trace, viewOrigin.x, viewOrigin.y, viewOrigin.z, x, y, z, 40000))
             {
                 _paintChart = trace.entNum;
-                _rw.VTTrace(ref _paintU, ref _paintV, trace.entNum, viewOrigin.x, viewOrigin.y, viewOrigin.z, trace.endposx, trace.endposy, trace.endposz, 40000);
+                _rw.VTTrace(ref _paintU, ref _paintV, trace.entNum, viewOrigin.x, viewOrigin.y, viewOrigin.z, x, y, z, 40000);
                 _debugGui.SetStateString(_debugGui.GetNativeAddress(), "highlightedEntity", "VT Paint Chart: " + trace.entNum);
                 _debugGui.SetStateString(_debugGui.GetNativeAddress(), "vtPaintID", "U: " + _paintU + " V: " + _paintV);
                 DrawBrush(trace);
@@ -253,7 +257,7 @@ namespace ToolsManaged.Frontend
 
             // Get the current virtual texture areas that are in the current view.
             numVisibleVtAreas = _rw.FindVisibleVirtualTextureAreas(panel1.Size.Width, panel1.Size.Height, viewOrigin.x, viewOrigin.y, viewOrigin.z, viewAxis.x, viewAxis.y, viewAxis.z);
-
+            bool _forceOneInView = false;
             for (int LayerId = 0; LayerId < _megaProject.NumLayers; LayerId++)
             {
                 MegaProjectLayer _layer = _megaProject.GetLayerByIndex(LayerId);
@@ -261,13 +265,21 @@ namespace ToolsManaged.Frontend
                 // Render the virtualtexture areas
                 for (int i = 0; i < numVisibleVtAreas; i++)
                 {
-                    if (!_layer[i].HasMaterial && LayerId == 0)
+                    if (!_layer[i].HasMaterial)
                     {
-                        _rw.RenderVisibleArea(_defaultImage, i, 0, 0, 0, 0, 0, 0);
+                        if (LayerId == 0)
+                        {
+                            _rw.RenderVisibleArea(_defaultImage, i, 0, 0, 0, 0, 0, 0);
+                        }
                     }
                     else
                     {
-                        DrawArea(_layer[i], i);
+                        if (_forceOneInView)
+                        {
+                            continue;
+                        }
+                        DrawArea(_layer[i], i, LayerId == 0);
+                        //_forceOneInView = true;
                        
                     }
                 }
@@ -397,8 +409,19 @@ namespace ToolsManaged.Frontend
 
             NativeAPI.GetEditorViewPosition(ref viewOrigin );
 
+            ProgressDialog progress = new ProgressDialog();
+
+            progress.Show();
+
+            progress.SetUpdateMsg("Loading Collision");
+         
+            progress.SetProgress(99);
+
             // Load the collision model f
             CollisionModelManager.LoadMap(_rw);
+
+            progress.Hide();
+            progress.Dispose();
 
             if (mtrListBox.Items.Count != NativeAPI.GetNumMaterials())
             {

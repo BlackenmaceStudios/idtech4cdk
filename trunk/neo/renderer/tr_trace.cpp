@@ -164,7 +164,7 @@ localTrace_t R_LocalTrace( const idVec3 &start, const idVec3 &end, const float r
 
 		cross = dir[0].Cross( dir[1] );
 		d = plane->Normal() * cross;
-		hit.d[0] = d;
+		hit.d[0] = abs(d);
 		if ( d > 0.0f ) {
 			if ( radiusSqr <= 0.0f ) {
 				continue;
@@ -198,7 +198,7 @@ localTrace_t R_LocalTrace( const idVec3 &start, const idVec3 &end, const float r
 
 		cross = dir[1].Cross( dir[2] );
 		d = plane->Normal() * cross;
-		hit.d[1] = d;
+		hit.d[1] = abs(d);
 		if ( d > 0.0f ) {
 			if ( radiusSqr <= 0.0f ) {
 				continue;
@@ -230,7 +230,7 @@ localTrace_t R_LocalTrace( const idVec3 &start, const idVec3 &end, const float r
 
 		cross = dir[2].Cross( dir[0] );
 		d = plane->Normal() * cross;
-		hit.d[2] = d;
+		hit.d[2] = abs(d);
 		if ( d > 0.0f ) {
 			if ( radiusSqr <= 0.0f ) {
 				continue;

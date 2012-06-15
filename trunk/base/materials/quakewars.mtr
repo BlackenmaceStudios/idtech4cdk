@@ -4,3 +4,10 @@ textures/megagen/desert/dirt_01_d
 	diffusemap textures/megagen/desert/dirt_01_d.tga
 	bumpmap textures/megagen/desert/dirt_01_local.tga
 }
+
+textures/megagen/desert/rock_03_d
+{
+	qer_editorimage textures/megagen/desert/rock_03_d.tga
+	diffusemap textures/megagen/desert/rock_03_d.tga
+	bumpmap textures/megagen/desert/rock_03_local.tga
+}

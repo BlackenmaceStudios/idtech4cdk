@@ -192,7 +192,7 @@ namespace ToolsManaged.Private
             IntPtr _driverPixels;
 
             [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_FindImage")]
-            private static extern IntPtr TOOLAPI_Editor_FindImage(string path);
+            private static extern IntPtr TOOLAPI_Editor_FindImage(string path, bool clampToEdge);
 
             [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_GetDiffuseImageHandleForMaterial")]
             private static extern IntPtr TOOLAPI_Editor_GetDiffuseImageHandleForMaterial( string mtr );
@@ -274,11 +274,11 @@ namespace ToolsManaged.Private
             //
             // FindImage
             //
-            public static idManagedImage FindImage(string path)
+            public static idManagedImage FindImage(string path, bool clampToEdge = false)
             {
                 IntPtr ptr;
 
-                ptr = TOOLAPI_Editor_FindImage(path);
+                ptr = TOOLAPI_Editor_FindImage(path, clampToEdge);
 
                 if (ptr == IntPtr.Zero)
                     return null;
@@ -646,11 +646,17 @@ namespace ToolsManaged.Private
                 int len = 0;
 
                 ReadInt(ref len);
+                if (len <= 0)
+                {
+                    str = "";
+                    return 0;
+                }
                 
                 IntPtr tempBufferBlockPtr;
 
-                tempBufferBlockPtr = Marshal.AllocHGlobal( len );
+                tempBufferBlockPtr = Marshal.AllocHGlobal( len + 1 );
                 int readLen = Read_Internal(GetNativeAddress(), tempBufferBlockPtr, len);
+                ((byte*)tempBufferBlockPtr)[len] = 0;
 
                 str = Marshal.PtrToStringAnsi( tempBufferBlockPtr );
                 Marshal.FreeHGlobal(tempBufferBlockPtr);
@@ -715,6 +721,8 @@ namespace ToolsManaged.Private
             public int WriteString(string str)
             {
                 WriteInt(str.Length);
+                if(str.Length <= 0)
+                    return 0;
 
                 IntPtr tempBufferBlockPtr;
 
