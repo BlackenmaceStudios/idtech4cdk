@@ -116,6 +116,7 @@ namespace ToolsManaged.Private
             return bitmap;
         }
 
+
         public static int GetNumMaterials()
         {
             return TOOLAPI_Editor_GetNumMaterials();
@@ -210,11 +211,19 @@ namespace ToolsManaged.Private
             private static extern IntPtr TOOLAPI_Image_ReadDriverPixels(IntPtr image);
 
             [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Image_CopyImageToImageBufferRegion")]
-            private static extern void TOOLAPI_Image_CopyImageToImageBufferRegion(  IntPtr Dest, IntPtr color,  int DestX, int DestY, int Width, int Height, int DiemWidth );
+            private static extern void TOOLAPI_Image_CopyImageToImageBufferRegion(IntPtr Dest, IntPtr color, int DestX, int DestY, int Width, int Height, int DiemWidth, bool replace);
 
-            public static void CopyImageToImageBufferRegion(IntPtr Dest, IntPtr color, int DestX, int DestY, int Width, int Height, int DiemWidth)
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Image_CopyImageToImageBufferRegionWithAlpha")]
+            private static extern void TOOLAPI_Image_CopyImageToImageBufferRegionWithAlpha(IntPtr Dest, IntPtr color, IntPtr alpha, int DestX, int DestY, int Width, int Height, int DiemWidth);
+
+            public static void CopyImageToImageBufferRegionWithAlpha(IntPtr Dest, IntPtr color, IntPtr alpha, int DestX, int DestY, int Width, int Height, int DiemWidth)
             {
-                TOOLAPI_Image_CopyImageToImageBufferRegion(Dest, color, DestX, DestY, Width, Height, DiemWidth);
+                TOOLAPI_Image_CopyImageToImageBufferRegionWithAlpha(Dest, color, alpha, DestX, DestY, Width, Height, DiemWidth);
+            }
+
+            public static void CopyImageToImageBufferRegion(IntPtr Dest, IntPtr color, int DestX, int DestY, int Width, int Height, int DiemWidth, bool replace = false)
+            {
+                TOOLAPI_Image_CopyImageToImageBufferRegion(Dest, color, DestX, DestY, Width, Height, DiemWidth, replace);
             }
 
             public static IntPtr ResampleTextureBuffer(IntPtr inBuffer, int inwidth, int inheight, int outwidth, int outheight)
@@ -311,6 +320,14 @@ namespace ToolsManaged.Private
             int* vtVisibleAreasPool;
             int numVisibleVirtualTextureAreas;
 
+            public int* visibleVTAreas
+            {
+                get
+                {
+                    return vtVisibleAreasPool;
+                }
+            }
+
             //
             // RenderWorld
             //
@@ -351,7 +368,7 @@ namespace ToolsManaged.Private
 
             public void RenderVisibleArea(idManagedImage image, int areaId, float x, float y, float z, float yaw, float pitch, float roll)
             {
-                IntPtr surf = TOOLAPI_RenderWorld_GetVisibleVirtualTextureAreaSurface(internalPtr, vtVisibleAreasPool[areaId]);
+                IntPtr surf = TOOLAPI_RenderWorld_GetVisibleVirtualTextureAreaSurface(internalPtr, areaId);
 
                 if (image != null)
                 {

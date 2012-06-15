@@ -613,6 +613,47 @@ bool R_RadiusCullLocalBox( const idBounds &bounds, const float modelMatrix[16], 
 	return false;		// no culled
 }
 
+void R_CalculateFrustum(idPlane	globalFrustum[6], float viewMatrix[16], idVec3 origin)
+{
+	// near clip
+	globalFrustum[0][0] = -viewMatrix[0];
+	globalFrustum[0][1] = -viewMatrix[4];
+	globalFrustum[0][2] = -viewMatrix[8];
+	globalFrustum[0][3] = -(origin[0] * globalFrustum[0][0] + origin[1] * globalFrustum[0][1] + origin[2] * globalFrustum[0][2]);
+
+	// far clip
+	globalFrustum[1][0] = viewMatrix[0];
+	globalFrustum[1][1] = viewMatrix[4];
+	globalFrustum[1][2] = viewMatrix[8];
+	globalFrustum[1][3] = -globalFrustum[0][3];
+
+	// side clips
+	globalFrustum[2][0] = -viewMatrix[0] + viewMatrix[1];
+	globalFrustum[2][1] = -viewMatrix[4] + viewMatrix[5];
+	globalFrustum[2][2] = -viewMatrix[8] + viewMatrix[9];
+
+	globalFrustum[3][0] = -viewMatrix[0] - viewMatrix[1];
+	globalFrustum[3][1] = -viewMatrix[4] - viewMatrix[5];
+	globalFrustum[3][2] = -viewMatrix[8] - viewMatrix[9];
+
+	globalFrustum[4][0] = -viewMatrix[0] + viewMatrix[2];
+	globalFrustum[4][1] = -viewMatrix[4] + viewMatrix[6];
+	globalFrustum[4][2] = -viewMatrix[8] + viewMatrix[10];
+
+	globalFrustum[5][0] = -viewMatrix[0] - viewMatrix[2];
+	globalFrustum[5][1] = -viewMatrix[4] - viewMatrix[6];
+	globalFrustum[5][2] = -viewMatrix[8] - viewMatrix[10];
+
+	// is this nromalization necessary?
+	for ( int i = 0 ; i < 6 ; i++ ) {
+		globalFrustum[i].ToVec4().ToVec3().Normalize();
+	}
+
+	for ( int i = 2 ; i < 6 ; i++ ) {
+		globalFrustum[i][3] = - (origin * globalFrustum[i].ToVec4().ToVec3() );
+	}
+}
+
 /*
 =================
 R_CornerCullLocalBox

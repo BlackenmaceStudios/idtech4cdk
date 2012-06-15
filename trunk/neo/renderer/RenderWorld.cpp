@@ -2335,8 +2335,6 @@ GetVisibleVirtualTextureAreas
 int	*idRenderWorldLocal::GetVisibleVirtualTextureAreas( const renderView_t *renderView, int &numVisibleAreas ) {
 	numVisibleAreas = 0;
 
-	// frustum planes
-	idPlane	globalFrustum[6];
 
 	// setup view parms for the initial view
 	//
@@ -2372,6 +2370,7 @@ int	*idRenderWorldLocal::GetVisibleVirtualTextureAreas( const renderView_t *rend
 
 	R_AxisToModelMatrix( renderView->viewaxis, renderView->vieworg, parms->worldSpace.modelMatrix );
 
+
 	for(int i = 0; i < localModels.Num(); i++)
 	{
 		idRenderModel *model = localModels[i];
@@ -2383,11 +2382,12 @@ int	*idRenderWorldLocal::GetVisibleVirtualTextureAreas( const renderView_t *rend
 			if(tri->vt_AreaID == -1)
 				continue;
 
-		//	if ( !R_CullLocalBox( tri->bounds, tr.viewDef->worldSpace.modelMatrix, 6, globalFrustum) ){
+			//if ( !R_CullLocalBox( tri->bounds, tr.viewDef->worldSpace.modelMatrix, 6, tr.viewDef->frustum) ){
+			if(!tr.viewDef->viewFrustum.CullBounds( tri->bounds ) ) {
 				visibleVirtualTextureAreas[numVisibleAreas] =  tri->vt_AreaID;
 				visibleVirtualTextureAreaSurfaces[numVisibleAreas] = tri;
 				numVisibleAreas++;
-		//	}
+			}
 		}
 	}
 	qglMatrixMode( GL_MODELVIEW );

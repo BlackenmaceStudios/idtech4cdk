@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using ToolsManaged.Private;
 using ToolsManaged.Private.idLib;
 using ToolsManaged.Frontend.WindowAPI;
+using System.Runtime.InteropServices;
 
 /*
  * bmMegaProject 
@@ -18,12 +19,12 @@ using ToolsManaged.Frontend.WindowAPI;
  * MegaProject is the project file that contains all the information for developing a virtual texture.
  * 
 */
-namespace ToolsManaged.Private
+namespace ToolsManaged
 {
     //
     // MegaProject
     //
-    class MegaProject
+    public class MegaProject : IMegaProject
     {
         private NativeAPI.File _megaFile;
         private List<MegaProjectLayer> _layers = new List<MegaProjectLayer>();
@@ -92,7 +93,17 @@ namespace ToolsManaged.Private
 
         MegaProjectHeader _projectheader;
 
-        public MegaProject( string mapname )
+        public MegaProject()
+        {
+
+        }
+
+        public MegaProject(string mapname)
+        {
+            LoadMegaProject(mapname);
+        }
+
+        public void LoadMegaProject( string mapname )
         {
             if (mapname.Contains("unnamed"))
             {
@@ -155,6 +166,41 @@ namespace ToolsManaged.Private
             NativeAPI.FileSystem.CloseFile(ref _megaFile);
 
             
+        }
+
+        static IntPtr _chartTemp = IntPtr.Zero;
+        public bool RenderChart(int chartId, IntPtr _chart)
+        {
+            int layerNum = 0;
+
+            if (_chartTemp == IntPtr.Zero)
+            {
+                _chartTemp = Marshal.AllocHGlobal(4096 * 4096 * 4);
+            }
+
+            foreach (MegaProjectLayer layer in _layers)
+            {
+                // Render the layer.
+                if (!layer.RenderLayer(chartId, _chartTemp))
+                    continue;
+
+                if (layerNum == 0)
+                {
+                    NativeAPI.idManagedImage.CopyImageToImageBufferRegion(_chart, _chartTemp, 0, 0, 4096, 4096, 4096, true);
+                    layerNum++;
+                    continue;
+                }
+
+                NativeAPI.idManagedImage.CopyImageToImageBufferRegion(_chart, _chartTemp, 0, 0, 4096, 4096, 4096 );
+                layerNum++;
+            }
+
+            if (layerNum == 0)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public int NumLayers

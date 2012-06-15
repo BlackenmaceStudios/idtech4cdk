@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.InteropServices;
 
 using ToolsManaged.Frontend;
 
 namespace ToolsManaged.Private
 {
-    class MegaProjectLayer
+    public class MegaProjectLayer 
     {
         private List<MegaProjectChart> _charts = new List<MegaProjectChart>();
 
@@ -74,6 +75,36 @@ namespace ToolsManaged.Private
             {
                 _charts[i].Write(_megaFile);
             }
+        }
+
+        //
+        // RenderChart
+        //
+        public unsafe bool RenderLayer(int chartId, IntPtr LayerData)
+        {
+            if (!_charts[chartId].HasMaterial)
+            {
+                return false;
+            }
+
+            NativeAPI.idManagedImage _stencilImage = _charts[chartId]._stencilImage;
+            IntPtr _stencilData = _stencilImage.ReadDriverPixels( false );
+
+            // Resize the chart data to 4096x4096
+            byte* resizedMaskPtr = (byte *)NativeAPI.idManagedImage.ResampleTextureBuffer((IntPtr)_charts[chartId].pixels, 512, 512, 4096, 4096);
+
+            float numStridesWidth = 4096.0f / _stencilImage.Width;
+            float numStridesHeight = 4096.0f / _stencilImage.Height;
+
+            for(int w = 0; w < numStridesWidth; w++)
+            {
+                for(int h = 0; h < numStridesHeight; h++)
+                {
+                    NativeAPI.idManagedImage.CopyImageToImageBufferRegionWithAlpha( LayerData, _stencilData, (IntPtr)resizedMaskPtr, (int)(w * numStridesWidth), (int)(h * numStridesHeight), _stencilImage.Width, _stencilImage.Height, 4096 );
+                }
+            }
+
+            return true;
         }
     }
 }
