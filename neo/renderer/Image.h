@@ -187,7 +187,7 @@ public:
 	// FIXME: should we implement cinematics this way, instead of with explicit calls?
 	virtual void		GenerateImage( const byte *pic, int width, int height, 
 					   textureFilter_t filter, bool allowDownSize, 
-					   textureRepeat_t repeat, textureDepth_t depth, int anisotrophy = 0, imageCompression_t compress = IMAGE_COMPRESS_NONE  ); // jmarshall added anistrophy filtering/compression
+					   textureRepeat_t repeat, textureDepth_t depth, int anisotrophy = 0, imageCompression_t compress = IMAGE_COMPRESS_NONE, bool noMipMaps = false  ); // jmarshall added anistrophy filtering/compression
 
 	virtual void		Generate3DImage( const byte *pic, int width, int height, int depth,
 						textureFilter_t filter, bool allowDownSize, 

@@ -24,6 +24,7 @@ public:
 	virtual void			RenderSurfaceFromCache( const struct srfTriangles_s *tris ) = 0;
 	virtual void			SelectTextureNoClient( int unit ) = 0;
 	virtual bmRenderProgram *LoadRenderProgram( const char *path, int numPasses ) = 0;
+	virtual void			RenderSurfaceFromVertexCache( const srfTriangles_s *tris ) = 0;
 };
 
 extern bmRenderDevice		*renderDevice;
