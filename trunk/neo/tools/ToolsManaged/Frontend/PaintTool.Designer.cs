@@ -58,6 +58,10 @@
             this.stencilsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.brushesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.renderChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.updateStencilsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateBrushesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             virtualTexturePaintToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -86,7 +90,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.17664F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 86.82336F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 212F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 213F));
             this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.groupBox1, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.groupBox3, 0, 0);
@@ -97,7 +101,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 76.32552F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23.67448F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1426, 807);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1427, 815);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // panel1
@@ -109,7 +113,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(162, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1048, 609);
+            this.panel1.Size = new System.Drawing.Size(1048, 616);
             this.panel1.TabIndex = 3;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -200,9 +204,10 @@
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.mtrListBox);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(3, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(153, 605);
+            this.groupBox3.Size = new System.Drawing.Size(153, 616);
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Stencils";
@@ -246,7 +251,7 @@
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.textBox1);
-            this.groupBox5.Location = new System.Drawing.Point(1216, 618);
+            this.groupBox5.Location = new System.Drawing.Point(1216, 625);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(205, 170);
             this.groupBox5.TabIndex = 7;
@@ -270,9 +275,9 @@
             this.groupBox4.Controls.Add(this.button2);
             this.groupBox4.Controls.Add(this.AddNewLayerBtn);
             this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox4.Location = new System.Drawing.Point(162, 618);
+            this.groupBox4.Location = new System.Drawing.Point(162, 625);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(1048, 186);
+            this.groupBox4.Size = new System.Drawing.Size(1048, 187);
             this.groupBox4.TabIndex = 6;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Layers";
@@ -323,6 +328,9 @@
             // toolOptionsToolStripMenuItem
             // 
             this.toolOptionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.updateStencilsToolStripMenuItem,
+            this.updateBrushesToolStripMenuItem,
+            this.toolStripSeparator1,
             this.saveMegaProjectToolStripMenuItem,
             this.exitPaintToolToolStripMenuItem});
             this.toolOptionsToolStripMenuItem.Name = "toolOptionsToolStripMenuItem";
@@ -345,9 +353,11 @@
             // 
             // stencilsToolStripMenuItem
             // 
+            this.stencilsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.renderChartToolStripMenuItem});
             this.stencilsToolStripMenuItem.Name = "stencilsToolStripMenuItem";
-            this.stencilsToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
-            this.stencilsToolStripMenuItem.Text = "Stencils";
+            this.stencilsToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.stencilsToolStripMenuItem.Text = "&Debug";
             // 
             // brushesToolStripMenuItem
             // 
@@ -360,6 +370,32 @@
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // renderChartToolStripMenuItem
+            // 
+            this.renderChartToolStripMenuItem.Name = "renderChartToolStripMenuItem";
+            this.renderChartToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.renderChartToolStripMenuItem.Text = "Render &Chart";
+            this.renderChartToolStripMenuItem.Click += new System.EventHandler(this.renderChartToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(165, 6);
+            // 
+            // updateStencilsToolStripMenuItem
+            // 
+            this.updateStencilsToolStripMenuItem.Name = "updateStencilsToolStripMenuItem";
+            this.updateStencilsToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.updateStencilsToolStripMenuItem.Text = "&Update Stencils";
+            this.updateStencilsToolStripMenuItem.Click += new System.EventHandler(this.updateStencilsToolStripMenuItem_Click);
+            // 
+            // updateBrushesToolStripMenuItem
+            // 
+            this.updateBrushesToolStripMenuItem.Name = "updateBrushesToolStripMenuItem";
+            this.updateBrushesToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.updateBrushesToolStripMenuItem.Text = "&Update Brushes";
+            this.updateBrushesToolStripMenuItem.Click += new System.EventHandler(this.updateBrushesToolStripMenuItem_Click);
             // 
             // PaintTool
             // 
@@ -423,5 +459,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox brushImage;
         private System.Windows.Forms.TextBox brushSizeTxt;
+        private System.Windows.Forms.ToolStripMenuItem renderChartToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateStencilsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateBrushesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }

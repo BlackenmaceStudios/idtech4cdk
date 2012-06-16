@@ -1060,3 +1060,11 @@ bool idRenderSystemLocal::UploadImage( const char *imageName, const byte *data, 
 	image->SetImageFilterAndRepeat();
 	return true;
 }
+/*
+===============
+idRenderSystemLocal::WriteTGA
+===============
+*/
+void idRenderSystemLocal::WriteTGA( const char *filename, const byte *data, int width, int height, bool flipVertical ) {
+	R_WriteTGA( filename, data, width, height, flipVertical );
+}

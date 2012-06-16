@@ -9,6 +9,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using System.Runtime.InteropServices;
 
 using ToolsManaged.Private;
 using ToolsManaged.Private.idLib;
@@ -385,6 +386,42 @@ namespace ToolsManaged.Frontend
             FormManager.handle.SetFullsreenModalWindow(null);
         }
 
+        private void UpdateStencilList()
+        {
+            mtrListBox.Items.Clear();
+            for (int i = 0; i < NativeAPI.GetNumMaterials(); i++)
+            {
+                string mtrName = NativeAPI.GetMaterialNameByIndex(i);
+
+                if (!mtrName.Contains("textures/megagen"))
+                    continue;
+
+                mtrListBox.Items.Add(mtrName);
+            }
+        }
+
+        private void UpdateBrushList()
+        {
+            int defaultBrushListItem = 0;
+            brushList.Items.Clear();
+            for (int i = 0; i < NativeAPI.GetNumMaterials(); i++)
+            {
+                string mtrName = NativeAPI.GetMaterialNameByIndex(i);
+
+                if (!mtrName.Contains("textures/megabrushes"))
+                    continue;
+
+                if (mtrName.Contains("defaultbrush"))
+                {
+                    defaultBrushListItem = brushList.Items.Count;
+                }
+
+                brushList.Items.Add(mtrName);
+            }
+
+            brushList.SetSelected(defaultBrushListItem, true);
+        }
+
         protected override void OnVisibleChanged(EventArgs e)
         {
             
@@ -434,37 +471,9 @@ namespace ToolsManaged.Frontend
 
             if (mtrListBox.Items.Count != NativeAPI.GetNumMaterials())
             {
-                int defaultBrushListItem = 0;
+                UpdateStencilList();
 
-                mtrListBox.Items.Clear();
-                brushList.Items.Clear();
-
-                for (int i = 0; i < NativeAPI.GetNumMaterials(); i++)
-                {
-                    string mtrName = NativeAPI.GetMaterialNameByIndex(i);
-
-                    if (!mtrName.Contains("textures/megagen"))
-                        continue;
-
-                    mtrListBox.Items.Add(mtrName);
-                }
-
-                for (int i = 0; i < NativeAPI.GetNumMaterials(); i++)
-                {
-                    string mtrName = NativeAPI.GetMaterialNameByIndex(i);
-
-                    if (!mtrName.Contains("textures/megabrushes"))
-                        continue;
-
-                    if (mtrName.Contains("defaultbrush"))
-                    {
-                        defaultBrushListItem = brushList.Items.Count;
-                    }
-
-                    brushList.Items.Add(mtrName);
-                }
-
-                brushList.SetSelected(defaultBrushListItem, true);
+                UpdateBrushList();
             }
 
             if (!_megaProject.IsLoaded)
@@ -562,6 +571,47 @@ namespace ToolsManaged.Frontend
         private void LayersBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             _currentPaintLayer = _megaProject.GetLayerByIndex(LayersBox.SelectedIndex);
+        }
+
+        private void renderChartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            IntPtr _temp = Marshal.AllocHGlobal( 4096 * 4096 * 4 );
+            _megaProject.RenderChart(163, _temp);
+
+            NativeAPI.WriteTGA("vt/debug/163.tga", _temp, 4096, 4096, false);
+
+            Marshal.FreeHGlobal(_temp);
+        }
+
+        private void updateStencilsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            ProgressDialog progress = new ProgressDialog();
+
+            progress.Show();
+            progress.SetUpdateMsg("Updating Stencils...");
+            progress.SetProgress(99);
+
+            NativeAPI.ExecuteCmd("reloaddecls");
+            UpdateStencilList();
+
+            progress.Hide();
+            progress.Dispose();
+        }
+
+        private void updateBrushesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProgressDialog progress = new ProgressDialog();
+
+            progress.Show();
+            progress.SetUpdateMsg("Updating Brushes...");
+            progress.SetProgress(99);
+
+            NativeAPI.ExecuteCmd("reloaddecls");
+            UpdateBrushList();
+
+            progress.Hide();
+            progress.Dispose();
         }
 
     }

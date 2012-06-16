@@ -761,6 +761,7 @@ public:
 	virtual void			ClearFrameBuffer( void );
 
 	virtual void			ProjectMouseToWorldCoord( idVec2 mouseXY, idVec3 &worldPos );
+	virtual void			WriteTGA( const char *filename, const byte *data, int width, int height, bool flipVertical );
 // jmarshall end
 public:
 	// internal functions
