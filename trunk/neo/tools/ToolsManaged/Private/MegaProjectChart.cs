@@ -78,7 +78,7 @@ namespace ToolsManaged.Private
             image.CopyUncompressedBufferIntoRegion((System.IntPtr)_pixels, 0, 0, 0, _chartDimen, _chartDimen);
         }
 
-        public void Blit(IntPtr brushData, int brushWidth, int brushHeight, float u, float v, byte transX, byte transY, byte scale)
+        public void Blit(IntPtr brushData, int brushWidth, int brushHeight, float u, float v, byte transX, byte transY, byte scale, bool remove)
         {
             u = u * _chartDimen;
             v = v * _chartDimen;
@@ -93,8 +93,14 @@ namespace ToolsManaged.Private
                 v = _chartDimen;
 
             // The blit functions blit starting from (0,0) we have to offset .5
-
-            NativeAPI.idManagedImage.CopyImageToImageBufferRegion((System.IntPtr)_pixels, brushData, (int)u, (int)v, brushWidth, brushHeight, _chartDimen, false, true);
+            if (remove)
+            {
+                NativeAPI.idManagedImage.RemoveImageToImageBufferRegion((System.IntPtr)_pixels, brushData, (int)u, (int)v, brushWidth, brushHeight, _chartDimen, false, true);
+            }
+            else
+            {
+                NativeAPI.idManagedImage.CopyImageToImageBufferRegion((System.IntPtr)_pixels, brushData, (int)u, (int)v, brushWidth, brushHeight, _chartDimen, false, true);
+            }
         }
     }
 }

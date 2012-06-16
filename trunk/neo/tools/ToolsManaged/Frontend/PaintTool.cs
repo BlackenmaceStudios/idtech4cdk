@@ -29,6 +29,7 @@ namespace ToolsManaged.Frontend
         RenderProgram _brushPaintProgram, _livePaintProgram;
         PaintBrush _brush;
         NativeAPI.idManagedImage _chartImage;
+        string _currentMaterialName;
         
         RenderDevice _renderDevice;
         System.Drawing.Point lastMousePoint = new System.Drawing.Point();
@@ -139,7 +140,18 @@ namespace ToolsManaged.Frontend
                 }
                 else
                 {
-                    _brush.Paint(_currentBrushImage, (string)mtrListBox.Items[mtrListBox.SelectedIndex], _currentStencilImage, _currentPaintLayer[_paintChart], _paintU, _paintV, BrushSize);
+                    _brush.Paint(_currentBrushImage, (string)mtrListBox.Items[mtrListBox.SelectedIndex], _currentStencilImage, _currentPaintLayer[_paintChart], _paintU, _paintV, BrushSize, false);
+                }
+            }
+            else if (KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_RBUTTON) && _paintChart != -1)
+            {
+                if (_currentPaintLayer == null)
+                {
+                    MessageBox.Show("You must select a layer to paint on before you can begin erasing.");
+                }
+                else
+                {
+                    _brush.Paint(_currentBrushImage, (string)mtrListBox.Items[mtrListBox.SelectedIndex], _currentStencilImage, _currentPaintLayer[_paintChart], _paintU, _paintV, BrushSize, true);
                 }
             }
 
@@ -246,6 +258,17 @@ namespace ToolsManaged.Frontend
                 _rw.VTTrace(ref _paintU, ref _paintV, trace.entNum, viewOrigin.x, viewOrigin.y, viewOrigin.z, x, y, z, 40000);
                 _debugGui.SetStateString(_debugGui.GetNativeAddress(), "highlightedEntity", "VT Paint Chart: " + trace.entNum);
                 _debugGui.SetStateString(_debugGui.GetNativeAddress(), "vtPaintID", "U: " + _paintU + " V: " + _paintV);
+
+                if (_currentPaintLayer != null && _paintChart != -1)
+                {
+                    int width = 0, height = 0;
+                    if (_currentMaterialName != _currentPaintLayer[_paintChart].materialName)
+                    {
+                        chartLayerImg.BackgroundImage = BitmapFromSource(NativeAPI.GetDiffuseImageForMaterial(_currentPaintLayer[_paintChart].materialName, ref width, ref height));
+                    }
+                    _currentMaterialName = _currentPaintLayer[_paintChart].materialName;
+                }
+
                 DrawBrush(trace);
             }
             else
@@ -612,6 +635,11 @@ namespace ToolsManaged.Frontend
 
             progress.Hide();
             progress.Dispose();
+        }
+
+        private void groupBox4_Enter(object sender, EventArgs e)
+        {
+
         }
 
     }

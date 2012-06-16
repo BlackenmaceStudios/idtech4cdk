@@ -103,7 +103,7 @@ namespace ToolsManaged.Private
                     NativeAPI.idManagedImage.CopyImageToImageBufferRegionWithAlpha(LayerData, _stencilData, (IntPtr)resizedMaskPtr, (int)(w * _stencilImage.Width), (int)(h * _stencilImage.Height), _stencilImage.Width, _stencilImage.Height, 4096);
                 }
             }
-
+            NativeAPI.idManagedImage.FreeTextureBuffer((IntPtr)resizedMaskPtr);
             return true;
         }
     }
