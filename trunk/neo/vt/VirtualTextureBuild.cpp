@@ -946,7 +946,7 @@ bool bmVirtualTextureFile::InitNewVirtualTextureFile( const char *path, int numA
 		{
 			imgWidth = 4096;
 			imgHeight = 4096;
-			bool unPaintedArea = false;
+			VARIANT_BOOL unPaintedArea = 0;
 			mega->RenderChart( i, (__int64)buffer, (VARIANT_BOOL *)&unPaintedArea );
 			if(!unPaintedArea) {
 				common->Warning("Unpainted area detected, defaulting.\n");

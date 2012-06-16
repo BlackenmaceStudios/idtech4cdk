@@ -183,8 +183,8 @@ FragmentProgram
 		vec4 outColor;	
 		vec4 inColor = color;
 
-		inColor.r -= 125.0 / 255.0;
-		inColor.g -= 96.0 / 255.0;
+		//inColor.r -= 128.0 / 255.0;
+		//inColor.g -= 96.0 / 255.0;
 
 		outColor.r = (inColor.r * 1.0) + (inColor.g * -1.0) + (inColor.b * (0.0 * 256.0 / 255.0)) + (inColor.a * 1.0);	
 		outColor.g = (inColor.r * 0.0) + (inColor.g * 1.0) + (inColor.b * (-0.5 * 256.0 / 255.0)) + (inColor.a * 1.0);	
@@ -324,9 +324,9 @@ FragmentProgram
 		}
 		else
 		{
-			gl_FragData[0] = diffuse * 0.82 ;
+			gl_FragData[0] = diffuse ;
 			gl_FragData[0].a = 1;
-			gl_FragData[1].xyz = GenerateNormalMap( st, 4096, 0.4, textureST.st )  * TangentBinormalNormalMatrix(var_TexDiffuse.st);// * var_TangentToWorldMatrix;//normalize((vec3(0.45, 0.45, 1) * 2.0 - vec3(1.0,1.0,1.0)) * var_TangentToWorldMatrix);
+			gl_FragData[1].xyz = GenerateNormalMap( st, 4096, 0.0001, textureST.st )  * TangentBinormalNormalMatrix(var_TexDiffuse.st);// * var_TangentToWorldMatrix;//normalize((vec3(0.45, 0.45, 1) * 2.0 - vec3(1.0,1.0,1.0)) * var_TangentToWorldMatrix);
 			gl_FragData[1].a = 1;
 		}
 		gl_FragData[2] = PixelVertex(var_TexDiffuse.st);

@@ -83,19 +83,18 @@ namespace ToolsManaged.Private
             u = u * _chartDimen;
             v = v * _chartDimen;
 
-            if (u < 0)
-                u = 0;
-
+   
+            u -= (float)brushWidth / 2.0f;
+            v -= (float)brushHeight / 2.0f;
             if (u > _chartDimen)
                 u = _chartDimen;
-
-            if (v < 0)
-                v = 0;
 
             if (v > _chartDimen)
                 v = _chartDimen;
 
-            NativeAPI.idManagedImage.CopyImageToImageBufferRegion((System.IntPtr)_pixels, brushData, (int)u, (int)v, brushWidth, brushHeight, _chartDimen);
+            // The blit functions blit starting from (0,0) we have to offset .5
+
+            NativeAPI.idManagedImage.CopyImageToImageBufferRegion((System.IntPtr)_pixels, brushData, (int)u, (int)v, brushWidth, brushHeight, _chartDimen, false, true);
         }
     }
 }

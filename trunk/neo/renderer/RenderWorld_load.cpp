@@ -34,6 +34,8 @@ If you have questions concerning this license or the applicable additional terms
 #include "../vt/VirtualTexture.h"
 // jmarshall end
 
+static bool worldInvertTexCoords = false;
+
 /*
 ================
 idRenderWorldLocal::FreeWorld
@@ -179,7 +181,16 @@ idRenderModel *idRenderWorldLocal::ParseModel( idLexer *src ) {
 			tri->verts[j].xyz[1] = vec[1];
 			tri->verts[j].xyz[2] = vec[2];
 			tri->verts[j].st[0] = vec[3];
-			tri->verts[j].st[1] = vec[4];
+// jmarshall - so I don't have to flip the vt chart pages(vt paint tools builds charts upside down :/).
+			if(worldInvertTexCoords)
+			{
+				tri->verts[j].st[1] = 1.0f - vec[4];
+			}
+			else
+			{
+				tri->verts[j].st[1] = vec[4];
+			}
+// jmarshall end
 			tri->verts[j].normal[0] = vec[5];
 			tri->verts[j].normal[1] = vec[6];
 			tri->verts[j].normal[2] = vec[7];
@@ -509,7 +520,7 @@ A NULL or empty name will make a world without a map model, which
 is still useful for displaying a bare model
 =================
 */
-bool idRenderWorldLocal::InitFromMap( const char *name ) {
+bool idRenderWorldLocal::InitFromMap( const char *name, bool loadVirtualTexture ) {
 	idLexer *		src;
 	idToken			token;
 	idStr			filename;
@@ -523,6 +534,7 @@ bool idRenderWorldLocal::InitFromMap( const char *name ) {
 		return true;
 	}
 
+	worldInvertTexCoords = loadVirtualTexture;
 
 	// load it
 	filename = name;
@@ -564,7 +576,14 @@ bool idRenderWorldLocal::InitFromMap( const char *name ) {
 	visibleVirtualTextureAreaSurfaces.Clear();
 
 	virtualTextureManager->ResetPages();
-	vt = virtualTextureManager->LoadVirtualTextureFile( filename );
+	if(loadVirtualTexture)
+	{
+		vt = virtualTextureManager->LoadVirtualTextureFile( filename );
+	}
+	else
+	{
+		vt = NULL;
+	}
 
 	filename = name;
 // jmarshall end

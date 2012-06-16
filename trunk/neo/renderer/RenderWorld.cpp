@@ -1137,6 +1137,8 @@ vtPoint_t idRenderWorldLocal::VTTrace( int vtAreaId, const idVec3 start, const i
 		pt.y += tri->verts[closestIndex].st.y;
 		pt.x -= 0.001f;
 		pt.y -= 0.001f;
+
+
 		return pt;
 	}
 

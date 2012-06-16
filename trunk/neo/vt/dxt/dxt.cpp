@@ -123,8 +123,8 @@ void RGBAtoYCoCg(const byte *inBuf, byte *outBuf, int width, int height)
     int Cg = G-t;
     int Y = t + (Cg/2);
 
-    Co += 128;
-    Cg += 96;
+ //   Co += 128;
+ //   Cg += 96;
 
 //     if (Co < 0 || Co > 255)
 //       fprintf(stderr, "Co: %d\n", Co);

@@ -203,7 +203,7 @@ public:
 	void					TouchWorldModels( void );
 	void					AddWorldModelEntities();
 	void					ClearPortalStates();
-	virtual	bool			InitFromMap( const char *mapName );
+	virtual	bool			InitFromMap( const char *mapName, bool loadVirtualTexture );
 
 	//--------------------------
 	// RenderWorld_portals.cpp
