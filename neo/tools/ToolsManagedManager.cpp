@@ -48,7 +48,7 @@ extern "C" __declspec(dllexport) void TOOLAPI_RenderSystem_WriteTGA( const char 
 	renderSystem->WriteTGA( filename, data, width, height, flipVertical );
 }
 
-extern "C" __declspec(dllexport) void TOOLAPI_Image_CopyImageToImageBufferRegion(  byte *Dest, byte *color,  int DestX, int DestY, int Width, int Height, int DiemWidth, bool replace )
+extern "C" __declspec(dllexport) void TOOLAPI_Image_CopyImageToImageBufferRegion(  byte *Dest, byte *color,  int DestX, int DestY, int Width, int Height, int DiemWidth, bool replace, bool oldReplace)
 {
 unsigned int  		x, y, z, ConvBps, ConvSizePlane;
 	byte 	*Converted;
@@ -68,18 +68,54 @@ unsigned int  		x, y, z, ConvBps, ConvSizePlane;
 	StartY = DestY >= 0 ? 0 : -DestY;
 	
 	// Limit the copy of data inside of the destination image
-	if (Width  + DestX > DiemWidth)  
-		Width  = DiemWidth  - DestX;
+	bool forceSolidAlpha = false;
+
+	int srcX = 0, srcY = 0;
+
+	if(DestX < 0)
+	{
+		srcX = -DestX;
+		Width = Width - srcX;
+		DestX = 0;
+	}
+
+	if(DestY < 0)
+	{
+		srcY = -DestY;
+		Height = Height - srcY;
+		DestY = 0;
+	}
+
+	// Limit the copy of data inside of the destination image
+	if (Width  + DestX > DiemWidth) 
+	{
+		float newWidth = (Width + DestX);
+		newWidth -= DiemWidth;
+
+		Width = Width - newWidth;
+		srcY = newWidth;
+	}
 	if (Height + DestY > DiemWidth) 
-		Height = DiemWidth - DestY;
+	{
+		float newHeight = (Height + DestY);
+		newHeight -= DiemWidth;
+
+		Height = Height - newHeight;
+		srcY = newHeight;
+	}
+
+
+
 	if (Depth  + DestZ > DiemWidth) 
 		Depth  = 1;
+
+
 	#define CLAMPTOBYTE(color) if((color) & (~255)) {color = (BYTE)((-(color)) >> 31);}else{color = (BYTE)(color);}
 	const unsigned int  bpp_without_alpha = 4 - 1;
 		for (z = 0; z < Depth; z++) {
 			for (y = 0; y < Height; y++) {
 				for (x = 0; x < Width; x++) {
-					const unsigned int   SrcIndex  = (z+0)*ConvSizePlane + (y+0)*ConvBps + (x+0)*4;
+					const unsigned int   SrcIndex  = (z+0)*ConvSizePlane + (y+srcY)*ConvBps + (x+srcX)*4;
 					const unsigned int   DestIndex = (z+DestZ)*(DiemWidth * DiemWidth) + (y+DestY)*(DiemWidth * 4) + (x+DestX)*4;
 					
 					float Front = 0;
@@ -90,6 +126,25 @@ unsigned int  		x, y, z, ConvBps, ConvSizePlane;
 						g = (byte)color[SrcIndex + 1];
 						b = (byte)color[SrcIndex + 2];
 						a = (byte)color[SrcIndex + 3];
+					}
+					else if(oldReplace)
+					{
+						r = Dest[DestIndex + 0] + (byte)color[SrcIndex + 0];
+						g = Dest[DestIndex + 1] + (byte)color[SrcIndex + 1];
+						b = Dest[DestIndex + 2] + (byte)color[SrcIndex + 2];
+						a = Dest[DestIndex + 3] + (byte)color[SrcIndex + 3];
+
+						if(r > 255)
+							r = 255;
+
+						if(g > 255)
+							g = 255;
+
+						if(b > 255)
+							b = 255;
+
+						if(a > 255)
+							a = 255;
 					}
 					else
 					{
@@ -102,12 +157,11 @@ unsigned int  		x, y, z, ConvBps, ConvSizePlane;
 						CLAMPTOBYTE(b); 
 		
 
-						//r = Dest[DestIndex + 0] + (byte)color[SrcIndex + 0];
-						//g = Dest[DestIndex + 1] + (byte)color[SrcIndex + 1];
-						//b = Dest[DestIndex + 2] + (byte)color[SrcIndex + 2];
-						//a = Dest[DestIndex + 3] + (byte)color[SrcIndex + 3];
+						
 					}
 
+					if(forceSolidAlpha)
+						a = 255.0f;
 	
 					Dest[DestIndex + 0] = (byte)r;
 					Dest[DestIndex + 1] = (byte)g;
@@ -136,12 +190,20 @@ unsigned int  		x, y, z, ConvBps, ConvSizePlane;
 	//@NEXT in next version this would have to be removed since Dest* will be unsigned
 	StartX = DestX >= 0 ? 0 : -DestX;
 	StartY = DestY >= 0 ? 0 : -DestY;
+
+	bool forceSolidAlpha = false;
 	
 	// Limit the copy of data inside of the destination image
-	if (Width  + DestX > DiemWidth)  
+	if (Width  + DestX > DiemWidth) 
+	{
+		forceSolidAlpha = true;
 		Width  = DiemWidth  - DestX;
+	}
 	if (Height + DestY > DiemWidth) 
+	{
+		forceSolidAlpha = true;
 		Height = DiemWidth - DestY;
+	}
 	if (Depth  + DestZ > DiemWidth) 
 		Depth  = 1;
 	
@@ -155,7 +217,14 @@ unsigned int  		x, y, z, ConvBps, ConvSizePlane;
 					float Front = 0;
 					float r,g,b,a;
 
-					a = alpha[DestIndex + 0] / 255.0f;
+					if(forceSolidAlpha)
+					{
+						a = 1.0f;
+					}
+					else
+					{
+						a = alpha[DestIndex + 0] / 255.0f;
+					}
 
 
 					r = color[SrcIndex + 0]  / 255.0f ;
@@ -194,6 +263,10 @@ extern "C" __declspec(dllexport) byte *TOOLAPI_Image_ReadDriverPixels( idImage *
 extern "C" __declspec(dllexport) void TOOLAPI_Image_CopyUncompressedBufferIntoRegion( idImage *image,  void *buffer, int mipLevel, int x, int y, int width, int height ) {
 	//image->Bind();
 	image->CopyUncompressedBufferIntoRegion( buffer, mipLevel, x, y, width, height );
+}
+
+extern "C" __declspec(dllexport) void TOOLAPI_Image_FreeTextureBuffer( void *in ) {
+	allocator->Free( in );
 }
 
 extern "C" __declspec(dllexport) byte *TOOLAPI_Image_ResampleTextureBuffer( const byte *in, int inwidth, int inheight, int outwidth, int outheight ) {
@@ -452,7 +525,7 @@ extern "C" __declspec(dllexport) idRenderWorld *TOOLAPI_Editor_LoadWorld( const 
 	}
 	world = renderSystem->AllocRenderWorld();
 
-	if(!world->InitFromMap( va("generated/maps%s", name) )) {
+	if(!world->InitFromMap( va("generated/maps%s", name), false )) {
 		renderSystem->FreeRenderWorld( world );
 		world = NULL;
 		return NULL;

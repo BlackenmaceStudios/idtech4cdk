@@ -11,11 +11,14 @@ namespace ToolsManaged.Private
         NativeAPI.idManagedImage _currentStencilImage;
         NativeAPI.idManagedImage _currentBrushImage;
         float _currentBrushSize = 0;
-        IntPtr brushTexData;
+        IntPtr brushTexData = IntPtr.Zero;
 
         private void CreateBrushImageData(NativeAPI.idManagedImage brushImage, MegaProjectChart chart, int brushSize, int scaledSize)
         {
             IntPtr rawBrushImageData = brushImage.ReadDriverPixels(false);
+
+            if (brushTexData != IntPtr.Zero)
+                NativeAPI.idManagedImage.FreeTextureBuffer(brushTexData);
 
             brushTexData = NativeAPI.idManagedImage.ResampleTextureBuffer(rawBrushImageData, brushImage.Width, brushImage.Height, scaledSize, scaledSize);
         }
@@ -64,15 +67,15 @@ namespace ToolsManaged.Private
             chart.materialName = stencilName;
             chart._stencilImage = stencilImage;
 
-            if (u > 0.96)
+            if (u > 1)
                 u = 1;
 
-            if (v > 0.96)
+            if (v > 1)
                 v = 1;
 
-            if (u < 0.04)
+            if (u < 0)
                 u = 0;
-            if (v < 0.04)
+            if (v < 0)
                 v = 0;
             chart.Blit(brushTexData, (int)scaledSize, (int)scaledSize, u, v, 0, 0, 0);
 

@@ -217,19 +217,22 @@ namespace ToolsManaged.Private
             private static extern IntPtr TOOLAPI_Image_ReadDriverPixels(IntPtr image);
 
             [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Image_CopyImageToImageBufferRegion")]
-            private static extern void TOOLAPI_Image_CopyImageToImageBufferRegion(IntPtr Dest, IntPtr color, int DestX, int DestY, int Width, int Height, int DiemWidth, bool replace);
+            private static extern void TOOLAPI_Image_CopyImageToImageBufferRegion(IntPtr Dest, IntPtr color, int DestX, int DestY, int Width, int Height, int DiemWidth, bool replace, bool oldReplace);
 
             [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Image_CopyImageToImageBufferRegionWithAlpha")]
             private static extern void TOOLAPI_Image_CopyImageToImageBufferRegionWithAlpha(IntPtr Dest, IntPtr color, IntPtr alpha, int DestX, int DestY, int Width, int Height, int DiemWidth);
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Image_FreeTextureBuffer")]
+            public static extern void FreeTextureBuffer(IntPtr ptr);
 
             public static void CopyImageToImageBufferRegionWithAlpha(IntPtr Dest, IntPtr color, IntPtr alpha, int DestX, int DestY, int Width, int Height, int DiemWidth)
             {
                 TOOLAPI_Image_CopyImageToImageBufferRegionWithAlpha(Dest, color, alpha, DestX, DestY, Width, Height, DiemWidth);
             }
 
-            public static void CopyImageToImageBufferRegion(IntPtr Dest, IntPtr color, int DestX, int DestY, int Width, int Height, int DiemWidth, bool replace = false)
+            public static void CopyImageToImageBufferRegion(IntPtr Dest, IntPtr color, int DestX, int DestY, int Width, int Height, int DiemWidth, bool replace = false, bool oldReplace = false)
             {
-                TOOLAPI_Image_CopyImageToImageBufferRegion(Dest, color, DestX, DestY, Width, Height, DiemWidth, replace);
+                TOOLAPI_Image_CopyImageToImageBufferRegion(Dest, color, DestX, DestY, Width, Height, DiemWidth, replace, oldReplace);
             }
 
             public static IntPtr ResampleTextureBuffer(IntPtr inBuffer, int inwidth, int inheight, int outwidth, int outheight)
