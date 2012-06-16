@@ -219,6 +219,9 @@ namespace ToolsManaged.Private
             [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Image_CopyImageToImageBufferRegion")]
             private static extern void TOOLAPI_Image_CopyImageToImageBufferRegion(IntPtr Dest, IntPtr color, int DestX, int DestY, int Width, int Height, int DiemWidth, bool replace, bool oldReplace);
 
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Image_RemoveImageToImageBufferRegion")]
+            public static extern void RemoveImageToImageBufferRegion(IntPtr Dest, IntPtr color, int DestX, int DestY, int Width, int Height, int DiemWidth, bool replace, bool oldReplace);
+
             [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Image_CopyImageToImageBufferRegionWithAlpha")]
             private static extern void TOOLAPI_Image_CopyImageToImageBufferRegionWithAlpha(IntPtr Dest, IntPtr color, IntPtr alpha, int DestX, int DestY, int Width, int Height, int DiemWidth);
 

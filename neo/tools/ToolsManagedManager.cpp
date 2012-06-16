@@ -48,6 +48,142 @@ extern "C" __declspec(dllexport) void TOOLAPI_RenderSystem_WriteTGA( const char 
 	renderSystem->WriteTGA( filename, data, width, height, flipVertical );
 }
 
+extern "C" __declspec(dllexport) void TOOLAPI_Image_RemoveImageToImageBufferRegion(  byte *Dest, byte *color,  int DestX, int DestY, int Width, int Height, int DiemWidth, bool replace, bool oldReplace)
+{
+unsigned int  		x, y, z, ConvBps, ConvSizePlane;
+	byte 	*Converted;
+	int Depth = 1;
+	unsigned int 		c;
+	unsigned int 		StartX, StartY, StartZ;
+	byte 	*SrcTemp;
+	float 	Back;
+	int DestZ = 0;
+
+	
+	ConvBps 	  = 4 * Width;
+	ConvSizePlane = ConvBps   * Height;
+	
+	//@NEXT in next version this would have to be removed since Dest* will be unsigned
+	StartX = DestX >= 0 ? 0 : -DestX;
+	StartY = DestY >= 0 ? 0 : -DestY;
+	
+	// Limit the copy of data inside of the destination image
+	bool forceSolidAlpha = false;
+
+	int srcX = 0, srcY = 0;
+
+	if(DestX < 0)
+	{
+		srcX = -DestX;
+		Width = Width - srcX;
+		DestX = 0;
+	}
+
+	if(DestY < 0)
+	{
+		srcY = -DestY;
+		Height = Height - srcY;
+		DestY = 0;
+	}
+
+	// Limit the copy of data inside of the destination image
+	if (Width  + DestX > DiemWidth) 
+	{
+		float newWidth = (Width + DestX);
+		newWidth -= DiemWidth;
+
+		Width = Width - newWidth;
+		srcY = newWidth;
+	}
+	if (Height + DestY > DiemWidth) 
+	{
+		float newHeight = (Height + DestY);
+		newHeight -= DiemWidth;
+
+		Height = Height - newHeight;
+		srcY = newHeight;
+	}
+
+
+
+	if (Depth  + DestZ > DiemWidth) 
+		Depth  = 1;
+
+
+	#define CLAMPTOBYTE(color) if((color) & (~255)) {color = (BYTE)((-(color)) >> 31);}else{color = (BYTE)(color);}
+	const unsigned int  bpp_without_alpha = 4 - 1;
+		for (z = 0; z < Depth; z++) {
+			for (y = 0; y < Height; y++) {
+				for (x = 0; x < Width; x++) {
+					const unsigned int   SrcIndex  = (z+0)*ConvSizePlane + (y+srcY)*ConvBps + (x+srcX)*4;
+					const unsigned int   DestIndex = (z+DestZ)*(DiemWidth * DiemWidth) + (y+DestY)*(DiemWidth * 4) + (x+DestX)*4;
+					
+					float Front = 0;
+					int r,g,b,a;
+					if(replace)
+					{
+						r = (byte)color[SrcIndex + 0];
+						g = (byte)color[SrcIndex + 1];
+						b = (byte)color[SrcIndex + 2];
+						a = (byte)color[SrcIndex + 3];
+					}
+					else if(oldReplace)
+					{
+						r = (byte)color[SrcIndex + 0] - Dest[DestIndex + 0];
+						g = (byte)color[SrcIndex + 1] - Dest[DestIndex + 1];
+						b = (byte)color[SrcIndex + 2] - Dest[DestIndex + 2];
+						a = (byte)color[SrcIndex + 3] - Dest[DestIndex + 3];
+
+						if(r > 255)
+							r = 255;
+
+						if(g > 255)
+							g = 255;
+
+						if(b > 255)
+							b = 255;
+
+						if(a > 255)
+							a = 255;
+					}
+					else
+					{
+						a = (byte)color[SrcIndex + 3]; 
+						r = (color[SrcIndex + 0] * a - Dest[DestIndex + 0] * (255 - a)) / 255; 
+						g = (color[SrcIndex + 1] * a - Dest[DestIndex + 1] * (255 - a)) / 255; 
+						b = (color[SrcIndex + 2] * a - Dest[DestIndex + 2] * (255 - a)) / 255; 
+						CLAMPTOBYTE(r); 
+						CLAMPTOBYTE(g); 
+						CLAMPTOBYTE(b); 
+		
+
+						
+					}
+
+					if(forceSolidAlpha)
+						a = 255.0f;
+
+					//if(r < 0)
+						r = 0;
+
+					//if(g < 0)
+						g = 0;
+
+					//if(b < 0)
+						b = 0;
+
+					//if(a < 0)
+						a = 0;
+	
+					Dest[DestIndex + 0] = (byte)r;
+					Dest[DestIndex + 1] = (byte)g;
+					Dest[DestIndex + 2] = (byte)b;
+					Dest[DestIndex + 3] = (byte)a;
+				}
+			}
+		}
+}
+
 extern "C" __declspec(dllexport) void TOOLAPI_Image_CopyImageToImageBufferRegion(  byte *Dest, byte *color,  int DestX, int DestY, int Width, int Height, int DiemWidth, bool replace, bool oldReplace)
 {
 unsigned int  		x, y, z, ConvBps, ConvSizePlane;

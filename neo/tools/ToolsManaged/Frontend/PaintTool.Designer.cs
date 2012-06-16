@@ -62,6 +62,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.updateStencilsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateBrushesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chartLayerImg = new System.Windows.Forms.PictureBox();
+            this.label5 = new System.Windows.Forms.Label();
             virtualTexturePaintToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -73,6 +75,7 @@
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chartLayerImg)).BeginInit();
             this.SuspendLayout();
             // 
             // virtualTexturePaintToolToolStripMenuItem
@@ -271,6 +274,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label5);
+            this.groupBox4.Controls.Add(this.chartLayerImg);
             this.groupBox4.Controls.Add(this.LayersBox);
             this.groupBox4.Controls.Add(this.button2);
             this.groupBox4.Controls.Add(this.AddNewLayerBtn);
@@ -281,6 +286,7 @@
             this.groupBox4.TabIndex = 6;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Layers";
+            this.groupBox4.Enter += new System.EventHandler(this.groupBox4_Enter);
             // 
             // LayersBox
             // 
@@ -397,6 +403,24 @@
             this.updateBrushesToolStripMenuItem.Text = "&Update Brushes";
             this.updateBrushesToolStripMenuItem.Click += new System.EventHandler(this.updateBrushesToolStripMenuItem_Click);
             // 
+            // chartLayerImg
+            // 
+            this.chartLayerImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.chartLayerImg.Location = new System.Drawing.Point(213, 30);
+            this.chartLayerImg.Name = "chartLayerImg";
+            this.chartLayerImg.Size = new System.Drawing.Size(147, 95);
+            this.chartLayerImg.TabIndex = 3;
+            this.chartLayerImg.TabStop = false;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(210, 16);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(93, 13);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Chart Layer Image";
+            // 
             // PaintTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -422,8 +446,10 @@
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chartLayerImg)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -463,5 +489,7 @@
         private System.Windows.Forms.ToolStripMenuItem updateStencilsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateBrushesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.PictureBox chartLayerImg;
     }
 }

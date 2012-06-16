@@ -35,11 +35,11 @@ namespace ToolsManaged.Private
          * brushSize <-- size of brush.
          * ===============================
         */
-        public void Paint(NativeAPI.idManagedImage brushImage, string stencilName, NativeAPI.idManagedImage stencilImage, MegaProjectChart chart, float u, float v, int brushSize)
+        public void Paint(NativeAPI.idManagedImage brushImage, string stencilName, NativeAPI.idManagedImage stencilImage, MegaProjectChart chart, float u, float v, int brushSize, bool remove)
         {
             if (chart.HasMaterial)
             {
-                if (chart.materialName != stencilName)
+                if (chart.materialName != stencilName && remove == false)
                 {
                     if (KeyHandler.IsKeyDown(KeyHandler.VirtualKeyStates.VK_LSHIFT))
                     {
@@ -64,8 +64,11 @@ namespace ToolsManaged.Private
                 CreateBrushImageData(brushImage, chart, brushSize, (int)scaledSize);
             }
 
-            chart.materialName = stencilName;
-            chart._stencilImage = stencilImage;
+            if (remove == false)
+            {
+                chart.materialName = stencilName;
+                chart._stencilImage = stencilImage;
+            }
 
             if (u > 1)
                 u = 1;
@@ -77,7 +80,7 @@ namespace ToolsManaged.Private
                 u = 0;
             if (v < 0)
                 v = 0;
-            chart.Blit(brushTexData, (int)scaledSize, (int)scaledSize, u, v, 0, 0, 0);
+            chart.Blit(brushTexData, (int)scaledSize, (int)scaledSize, u, v, 0, 0, 0, remove);
 
             // Save the current data presets.
             _currentBrushImage = brushImage;
