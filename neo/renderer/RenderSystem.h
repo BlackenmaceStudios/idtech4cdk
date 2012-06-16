@@ -276,6 +276,9 @@ public:
 
 	// Projects the mouse 2d xy coordinate to a 3d world position(context safe).
 	virtual void			ProjectMouseToWorldCoord( idVec2 mouseXY, idVec3 &worldPos ) = 0;
+
+	// Writes a tga out to the fileSystem
+	virtual void			WriteTGA( const char *filename, const byte *data, int width, int height, bool flipVertical ) = 0;
 // jmarshall end
 };
 

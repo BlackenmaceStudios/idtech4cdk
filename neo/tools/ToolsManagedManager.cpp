@@ -38,6 +38,16 @@ idAngles viewAngle;
 
 void DrawRenderSurface( srfTriangles_t *surf, idImage *image, idVec3 origin, idAngles angle, bool cameraView, bool usingVertexCache );
 
+extern "C" __declspec(dllexport) void TOOLAPI_Editor_ExecuteCmd( const char *cmd ) 
+{
+	cmdSystem->BufferCommandText( CMD_EXEC_NOW, cmd );
+}
+
+extern "C" __declspec(dllexport) void TOOLAPI_RenderSystem_WriteTGA( const char *filename, const byte *data, int width, int height, bool flipVertical ) 
+{
+	renderSystem->WriteTGA( filename, data, width, height, flipVertical );
+}
+
 extern "C" __declspec(dllexport) void TOOLAPI_Image_CopyImageToImageBufferRegion(  byte *Dest, byte *color,  int DestX, int DestY, int Width, int Height, int DiemWidth, bool replace )
 {
 unsigned int  		x, y, z, ConvBps, ConvSizePlane;
@@ -85,8 +95,8 @@ unsigned int  		x, y, z, ConvBps, ConvSizePlane;
 					{
 						a = (byte)color[SrcIndex + 3]; 
 						r = (color[SrcIndex + 0] * a + Dest[DestIndex + 0] * (255 - a)) / 255; 
-						g = (color[SrcIndex + 0] * a + Dest[DestIndex + 1] * (255 - a)) / 255; 
-						b = (color[SrcIndex + 0] * a + Dest[DestIndex + 2] * (255 - a)) / 255; 
+						g = (color[SrcIndex + 1] * a + Dest[DestIndex + 1] * (255 - a)) / 255; 
+						b = (color[SrcIndex + 2] * a + Dest[DestIndex + 2] * (255 - a)) / 255; 
 						CLAMPTOBYTE(r); 
 						CLAMPTOBYTE(g); 
 						CLAMPTOBYTE(b); 
@@ -155,6 +165,7 @@ unsigned int  		x, y, z, ConvBps, ConvSizePlane;
 					r = (r * a) * 255.0f;
 					g = (b * a) * 255.0f;
 					b = (b * a) * 255.0f;
+					a = a * 255.0f;
 
 					if(r > 255)
 						r = 255;

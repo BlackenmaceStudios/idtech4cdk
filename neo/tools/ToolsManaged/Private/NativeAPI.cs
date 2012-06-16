@@ -50,6 +50,12 @@ namespace ToolsManaged.Private
         [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_RendererSystem_DrawPlane")]
         private static extern void TOOLAPI_RendererSystem_DrawPlane(float size, IntPtr image, float x, float y, float z, float yaw, float pitch, float roll);
 
+        [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_RenderSystem_WriteTGA")]
+        public static extern void WriteTGA( string filename, IntPtr data, int width, int height, bool flipVertical );
+
+        [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_ExecuteCmd")]
+        public static extern void ExecuteCmd(string cmd);
+
         public static void DrawPlane(float size, idManagedImage image, float x, float y, float z, float yaw, float pitch, float roll)
         {
             if (image != null)

@@ -100,7 +100,7 @@ namespace ToolsManaged.Private
             {
                 for(int h = 0; h < numStridesHeight; h++)
                 {
-                    NativeAPI.idManagedImage.CopyImageToImageBufferRegionWithAlpha( LayerData, _stencilData, (IntPtr)resizedMaskPtr, (int)(w * numStridesWidth), (int)(h * numStridesHeight), _stencilImage.Width, _stencilImage.Height, 4096 );
+                    NativeAPI.idManagedImage.CopyImageToImageBufferRegionWithAlpha(LayerData, _stencilData, (IntPtr)resizedMaskPtr, (int)(w * _stencilImage.Width), (int)(h * _stencilImage.Height), _stencilImage.Width, _stencilImage.Height, 4096);
                 }
             }
 
