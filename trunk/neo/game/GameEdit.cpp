@@ -1230,6 +1230,8 @@ bool idGameEdit::LoadMapCollision( idRenderWorld *world ) {
 	return true;
 }
 
+
+
 bool idGameEdit::Trace( trace_t &trace, int contentMask, const idVec3 &startPos, const idVec3 &endPos ) {
 	gameLocal.clip.TracePoint( trace, startPos, endPos, CONTENTS_SOLID, NULL );
 	if ( trace.fraction < 1.0f ) {

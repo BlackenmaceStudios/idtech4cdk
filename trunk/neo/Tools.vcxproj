@@ -922,6 +922,7 @@
     <ClCompile Include="tools\radiant\MainFrm.cpp" />
     <ClCompile Include="tools\radiant\MapInfo.cpp" />
     <ClCompile Include="tools\radiant\MediaPreviewDlg.cpp" />
+    <ClCompile Include="tools\radiant\MoCapStudioWnd.cpp" />
     <ClCompile Include="tools\radiant\MRU.CPP" />
     <ClCompile Include="tools\radiant\NewProjDlg.cpp" />
     <ClCompile Include="tools\radiant\NewTexWnd.cpp" />
@@ -1135,6 +1136,7 @@
     <ClInclude Include="tools\radiant\MainFrm.h" />
     <ClInclude Include="tools\radiant\MapInfo.h" />
     <ClInclude Include="tools\radiant\MediaPreviewDlg.h" />
+    <ClInclude Include="tools\radiant\MoCapStudioWnd.h" />
     <ClInclude Include="tools\radiant\MRU.H" />
     <ClInclude Include="tools\radiant\NewProjDlg.h" />
     <ClInclude Include="tools\radiant\NewTexWnd.h" />

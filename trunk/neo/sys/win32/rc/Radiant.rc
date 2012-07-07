@@ -686,7 +686,10 @@ BEGIN
     POPUP "&Tools"
     BEGIN
         MENUITEM "&Gui Editor",                 ID_TOOLS_GUIEDITOR
+        MENUITEM SEPARATOR
+        MENUITEM "M&oCap Studio",               ID_TOOLS_MOCAPSTUDIO
         MENUITEM "&ModelStudio",                ID_TOOLS_MODELSTUDIO
+        MENUITEM SEPARATOR
         MENUITEM "&Script Editor",              ID_TOOLS_SCRIPTEDITOR
         MENUITEM "S&ound Editor",               ID_TOOLS_SOUNDEDITOR
         MENUITEM "&Decl Editor",                ID_TOOLS_DECLEDITOR
@@ -2560,8 +2563,7 @@ END
 //
 // Generated from the TEXTINCLUDE 3 resource.
 //
-
-
+
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 

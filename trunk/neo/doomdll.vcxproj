@@ -332,7 +332,7 @@
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug with inlines|Win32'">$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug with inlines|x64'">$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">./kinect/sdk/inc;$(IncludePath)</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug with inlines|Win32'">$(LibraryPath)</LibraryPath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug with inlines|x64'">$(LibraryPath)</LibraryPath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">$(LibraryPath)</LibraryPath>
@@ -411,9 +411,9 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">
     <Link>
-      <AdditionalLibraryDirectories>./renderer/gpuworker/cl/lib/x64/;./mayaimport/maya2013/lib/;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64;openal\lib;sys\win32\dongle;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>./kinect/sdk/lib/amd64;./renderer/gpuworker/cl/lib/x64/;./mayaimport/maya2013/lib/;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64;openal\lib;sys\win32\dongle;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalDependencies>OpenCL.lib;libcmtd.lib;Wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Kinect10.lib;OpenCL.lib;libcmtd.lib;Wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <EntryPointSymbol>
       </EntryPointSymbol>
@@ -529,6 +529,8 @@
     <ClInclude Include="framework\async\NetworkSystem.h" />
     <ClInclude Include="framework\async\ServerScan.h" />
     <ClInclude Include="idlib\precompiled.h" />
+    <ClInclude Include="kinect\kinect.h" />
+    <ClInclude Include="kinect\kinect_local.h" />
     <ClInclude Include="renderer\Cinematic.h" />
     <ClInclude Include="renderer\glext.h" />
     <ClInclude Include="renderer\gpuworker\cl\cl.h" />
@@ -2100,6 +2102,9 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|Win32'">precompiled.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug x64 with inlines|x64'">precompiled.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="kinect\Kinect_Main.cpp" />
+    <ClCompile Include="kinect\Kinect_SkeletalTrack.cpp" />
+    <ClCompile Include="kinect\Kinect_Stream.cpp" />
     <ClCompile Include="renderer\Cinematic.cpp" />
     <ClCompile Include="renderer\draw_arb2.cpp" />
     <ClCompile Include="renderer\draw_common.cpp" />

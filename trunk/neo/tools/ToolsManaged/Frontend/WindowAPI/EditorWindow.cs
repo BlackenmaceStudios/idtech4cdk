@@ -74,7 +74,7 @@ namespace ToolsManaged.Frontend.WindowAPI
             if (_window.Visible == false)
                 return;
 
-            if (_window.GetType().Name != "PaintTool")
+            if (_window.GetType().Name != "PaintTool" && _window.GetType().Name != "MoCapStudio")
             {
                 
 

@@ -167,6 +167,11 @@ const int MAX_EXPRESSION_REGISTERS = 4096;
 #include "../tools/compilers/aas/AASFile.h"
 #include "../tools/compilers/aas/AASFileManager.h"
 
+// Kinect 
+// jmarshall
+#include "../kinect/kinect.h"
+// jmarshall end
+
 // game
 #include "../game/Game.h"
 

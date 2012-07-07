@@ -384,6 +384,14 @@ public:
 	bool			InverseFastSelf( void );	// returns false if determinant is zero
 	idMat3			TransposeMultiply( const idMat3 &b ) const;
 
+// jmarshall
+	idMat3			ToLeftHandedMatrix( void );
+
+	static idMat3   CreateRotationX( float radians );
+	static idMat3   CreateRotationY( float radians );
+	static idMat3   CreateRotationZ( float radians );
+// jmarshall end
+
 	idMat3			InertiaTranslate( const float mass, const idVec3 &centerOfMass, const idVec3 &translation ) const;
 	idMat3 &		InertiaTranslateSelf( const float mass, const idVec3 &centerOfMass, const idVec3 &translation );
 	idMat3			InertiaRotate( const idMat3 &rotation ) const;
@@ -401,6 +409,10 @@ public:
 	float *			ToFloatPtr( void );
 	const char *	ToString( int precision = 2 ) const;
 
+// jmarshall
+	idMat3			Scale( float x, float y, float z );
+// jmarshall end
+
 	friend void		TransposeMultiply( const idMat3 &inv, const idMat3 &b, idMat3 &dst );
 	friend idMat3	SkewSymmetric( idVec3 const &src );
 
@@ -415,6 +427,61 @@ extern idMat3 mat3_identity;
 ID_INLINE idMat3::idMat3( void ) {
 }
 
+idMat3 idMat3::CreateRotationX( float radians ) {
+	idMat3 matrix;
+    float num2 = (float) idMath::Cos((double) radians);
+    float num = (float) idMath::Sin((double) radians);
+    matrix[0][0] = 1.0f;
+    matrix[0][1]= 0.0f;
+    matrix[0][2] = 0.0f;
+    matrix[1][0] = 0.0f;
+    matrix[1][1] = num2;
+    matrix[1][2] = num;
+    matrix[2][0] = 0.0f;
+    matrix[2][1] = -num;
+    matrix[2][2] = num2;
+    return matrix;
+
+}
+
+idMat3 idMat3::CreateRotationY( float radians ) {
+	idMat3 matrix;
+    float num2 = (float) idMath::Cos((double) radians);
+    float num = (float) idMath::Sin((double) radians);
+    matrix[0][0] = num2;
+    matrix[0][1] = 0.0f;
+    matrix[0][2] = -num;
+    matrix[1][0] = 0.0f;
+    matrix[1][1] = 1.0f;
+    matrix[1][2] = 0.0f;
+    matrix[2][0] = num;
+    matrix[2][1] = 0.0f;
+    matrix[2][2] = num2;
+
+    return matrix;
+}
+
+idMat3 idMat3::CreateRotationZ( float radians ) {
+	idMat3 matrix;
+    float num2 = (float) idMath::Cos((double) radians);
+    float num = (float) idMath::Sin((double) radians);
+    matrix[0][0] = num2;
+    matrix[0][1] = num;
+    matrix[0][2] = 0.0f;
+    
+    matrix[1][0] = -num;
+    matrix[1][1] = num2;
+    matrix[1][2] = 0.0f;
+    
+    matrix[2][0] = 0.0f;
+    matrix[2][1] = 0.0f;
+    matrix[2][2] = 1.0f;
+ 
+
+
+    return matrix;
+}
+
 ID_INLINE idMat3::idMat3( const idVec3 &x, const idVec3 &y, const idVec3 &z ) {
 	mat[ 0 ].x = x.x; mat[ 0 ].y = x.y; mat[ 0 ].z = x.z;
 	mat[ 1 ].x = y.x; mat[ 1 ].y = y.y; mat[ 1 ].z = y.z;
@@ -425,6 +492,12 @@ ID_INLINE idMat3::idMat3( const float xx, const float xy, const float xz, const 
 	mat[ 0 ].x = xx; mat[ 0 ].y = xy; mat[ 0 ].z = xz;
 	mat[ 1 ].x = yx; mat[ 1 ].y = yy; mat[ 1 ].z = yz;
 	mat[ 2 ].x = zx; mat[ 2 ].y = zy; mat[ 2 ].z = zz;
+}
+
+idMat3 idMat3::Scale( float x, float y, float z ) {
+	return idMat3(mat[0][0] * x, mat[0][1], mat[0][2],
+				  mat[1][0], mat[1][1] * y, mat[1][2],
+				  mat[2][0], mat[2][1], mat[2][2] * z );
 }
 
 ID_INLINE idMat3::idMat3( const float src[ 3 ][ 3 ] ) {
@@ -574,6 +647,12 @@ ID_INLINE bool idMat3::Compare( const idMat3 &a, const float epsilon ) const {
 		return true;
 	}
 	return false;
+}
+
+ID_INLINE idMat3 idMat3::ToLeftHandedMatrix( void ) {
+	return idMat3( mat[0].x, mat[0].z,mat[0].y,
+				   mat[2].x, mat[2].z, mat[2].y,
+				   mat[1].x, mat[1].z, mat[1].y ).Scale(1, 1, -1);
 }
 
 ID_INLINE bool idMat3::operator==( const idMat3 &a ) const {

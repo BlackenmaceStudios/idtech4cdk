@@ -387,6 +387,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_SIZE()
 // jmarshall
 	ON_COMMAND(ID_TOOLS_MODELSTUDIO, OnOpenModelStudio)
+	ON_COMMAND(ID_TOOLS_MOCAPSTUDIO, OnOpenMocapStudio)
 	
 	ON_COMMAND(ID_TOOLS_GUIEDITOR, OnOpenGUIEditor)
 	ON_COMMAND(ID_TOOLS_SCRIPTEDITOR, OnOpenScriptEditor)
@@ -805,6 +806,7 @@ CMainFrame::CMainFrame() {
 	m_pXYWnd = NULL;
 	m_pCamWnd = NULL;
 	m_pPaintWnd = NULL;
+	m_pMoCapWnd = NULL;
 //	m_pZWnd = NULL;
 	m_pYZWnd = NULL;
 	m_pXZWnd = NULL;
@@ -1572,6 +1574,7 @@ void CMainFrame::OnDestroy() {
 	SaveWindowPlacement(m_pYZWnd->GetSafeHwnd(), "radiant_yzwindow");
 	SaveWindowPlacement(m_pCamWnd->GetSafeHwnd(), "radiant_camerawindow");
 	SaveWindowPlacement(m_pPaintWnd->GetSafeHwnd(), "radiant_vtpaintwindow");
+	SaveWindowPlacement(m_pMoCapWnd->GetSafeHwnd(), "radiant_mocapwindow");
 	//SaveWindowPlacement(m_pZWnd->GetSafeHwnd(), "radiant_zwindow");
 	//SaveWindowState(//g_Inspectors->texWnd.GetSafeHwnd(), "radiant_texwindow");
 
@@ -1612,6 +1615,9 @@ void CMainFrame::OnDestroy() {
 
 	delete m_pPaintWnd;
 	m_pPaintWnd = NULL;
+
+	delete m_pMoCapWnd;
+	m_pMoCapWnd = NULL;
 
 	if ( idStr::Icmp(currentmap, "unnamed.map") != 0 ) {
 		g_PrefsDlg.m_strLastMap = currentmap;
@@ -1833,6 +1839,9 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext *pContext) {
 	m_pPaintWnd = new CPaintWnd();
 	m_pPaintWnd->Create("PaintTool", "", QE3_CHILDSTYLE, rect, this, 1234);
 
+	m_pMoCapWnd = new CMoCapStudioWnd();
+	m_pMoCapWnd->Create("MoCapStudio", "", QE3_CHILDSTYLE, rect, this, 1234);
+
 	//m_pZWnd = new CZWnd();
 	//m_pZWnd->Create(Z_WINDOW_CLASS, "", QE3_CHILDSTYLE, rect, this, 1238);
 
@@ -1857,7 +1866,7 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext *pContext) {
 	LoadWindowPlacement(m_pYZWnd->GetSafeHwnd(), "radiant_yzwindow");
 	LoadWindowPlacement(m_pCamWnd->GetSafeHwnd(), "radiant_camerawindow");
 	LoadWindowPlacement(m_pPaintWnd->GetSafeHwnd(), "radiant_vtpaintwindow");
-
+	LoadWindowPlacement(m_pMoCapWnd->GetSafeHwnd(), "radiant_mocapwindow");
 	//LoadWindowPlacement(m_pZWnd->GetSafeHwnd(), "radiant_zwindow");
 
 	if (!g_PrefsDlg.m_bXZVis) {
@@ -4070,6 +4079,8 @@ void CMainFrame::SetStatusText(int nPane, const char *pText) {
  */
 void CMainFrame::UpdateWindows(int nBits) {
 
+	m_pMoCapWnd->RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+
 	if (!g_bScreenUpdates) {
 		return;
 	}
@@ -4091,6 +4102,8 @@ void CMainFrame::UpdateWindows(int nBits) {
 	//}
 
 	m_pPaintWnd->RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+
+	
 
 //	if (nBits & W_CAMERA || ((nBits & W_CAMERA_IFON) && m_bCamPreview)) {
 		if (m_pCamWnd) {
@@ -7108,6 +7121,11 @@ void CMainFrame::OnOpenModelStudio() {
 		return;
 	}
 	ModelStudioEditorInit(NULL);
+}
+
+void CMainFrame::OnOpenMocapStudio() {
+	m_pMoCapWnd->ShowWindow( SW_SHOW );
+	m_pMoCapWnd->SetFocus();
 }
 	
 void CMainFrame::OnOpenParticleEditor() {

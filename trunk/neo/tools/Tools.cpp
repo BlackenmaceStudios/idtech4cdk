@@ -33,11 +33,97 @@ Win32Vars_t					win32;
 idRenderTriSurfaceManager * renderTriSurfaceManager;
 idAASFileManager			* AASFileManager;
 idCVar						 r_znear( "r_znear", "3", CVAR_RENDERER | CVAR_FLOAT, "near Z clip plane distance", 0.001f, 200.0f );
-
+bmKinectDevice					*kinectDevice;
 int			*com_editors_ptr;
 HINSTANCE   dllHinstance;
+const char *testModelPath;
 // Stub functions
 void idKeyInput::ClearStates( void ) { common->KeyClearStates(); }
+
+#include "radiant/QE3.H"
+extern "C" __declspec(dllexport) void *TOOLAPI_renderSystem_AllocRenderWorld( ) 
+{
+	return g_qeglobals.testRenderWorld;
+}
+
+extern "C" __declspec(dllexport) void TOOLAPI_Editor_SetTestModelIdle( const char *modelPath ) 
+{
+	if(!modelPath) {
+		//memcpy( &g_qeglobals.testModel.joints[0], &g_qeglobals.testModel.bindPoseJoints[0], sizeof(idJointMat) * g_qeglobals.testModel.numJoints );
+		gameEdit->ANIM_CreateIdleAnimForModel( testModelPath, g_qeglobals.testModel );
+		return;
+	}
+	gameEdit->ANIM_CreateIdleAnimForModel( modelPath, g_qeglobals.testModel );
+}
+//-20 -100 88
+#define KINECT_ANGLES(x) x
+extern "C" __declspec(dllexport) void TOOLAPI_Editor_SetTestModelJointRotation( int jointHandle, idQuat quat ) 
+{
+	idAngles angle, temp = quat.ToAngles();
+
+	// roll = yaw
+
+	// Kinect = +X left, +Y up, +Z forward in body coordinate system
+    // Avatar = +Z Up, +X forward, +Y left
+	gameEdit->ANIM_SetJointRoationForModel( jointHandle, idQuat( quat.x, quat.y, quat.z, quat.w), g_qeglobals.testModel );
+	g_qeglobals.testRenderWorld->UpdateEntityDef( g_qeglobals.testModelWorldHandle, &g_qeglobals.testModel );
+}
+
+extern "C" __declspec(dllexport) int TOOLAPI_Editor_GetNumJointsForTestModel() 
+{
+	if(g_qeglobals.testModel.hModel == NULL)
+		return 0;
+
+	return g_qeglobals.testModel.hModel->NumJoints();
+}
+
+extern "C" __declspec(dllexport) const char * TOOLAPI_Editor_GetJointNameForTestModel(int jointId) 
+{
+	if(g_qeglobals.testModel.hModel == NULL)
+		return NULL;
+
+	return  g_qeglobals.testModel.hModel->GetJointName((jointHandle_t)jointId);
+}
+
+extern "C" __declspec(dllexport) void TOOLAPI_RenderWorld_DrawEditorWorld(float x, float y, float z, float pitch, float yaw, float roll) 
+{
+	renderView_t	refdef;
+	memset( &refdef, 0, sizeof( refdef ) );
+	refdef.vieworg = idVec3( x, y, z );
+	refdef.megaProject = &g_qeglobals.megaproject;
+
+
+
+	// the editor uses opposite pitch convention
+	refdef.viewaxis = idAngles( pitch, yaw, roll ).ToMat3();
+	
+	refdef.width = SCREEN_WIDTH;
+	refdef.height = SCREEN_HEIGHT;
+	refdef.fov_x = 90;
+	refdef.fov_y = 2 * atan((float)SCREEN_HEIGHT / SCREEN_WIDTH) * idMath::M_RAD2DEG;
+	
+	//refdef.forceUpdate = true;
+
+	// only set in animation mode to give a consistent look 
+	//refdef.time = eventLoop->Milliseconds();
+
+	g_qeglobals.testRenderWorld->RenderScene( &refdef );
+	
+	//game->DrawDefferedPass( SCREEN_WIDTH, SCREEN_HEIGHT );
+}
+
+extern "C" __declspec(dllexport) idRenderEntity *TOOLAPI_RenderWorld_AddModelAtPosition( idRenderWorld *world, const char *modelPath, float x, float y, float z ) 
+{
+	g_qeglobals.testModel.hModel = gameEdit->ANIM_GetModelFromName( modelPath );
+	g_qeglobals.testModel.forceUpdate = true;
+	gameEdit->ANIM_CreateIdleAnimForModel( modelPath, g_qeglobals.testModel );
+	testModelPath = modelPath;
+	
+	//g_qeglobals.testModel.referenceBounds = g_qeglobals.testModel.bounds;
+	g_qeglobals.testRenderWorld->UpdateEntityDef( g_qeglobals.testModelWorldHandle, &g_qeglobals.testModel );
+
+	return (idRenderEntity *)&g_qeglobals.testModel;
+}
 
 void	RadiantShutdown( void ) {
 

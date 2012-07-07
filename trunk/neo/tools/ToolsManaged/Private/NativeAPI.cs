@@ -56,6 +56,23 @@ namespace ToolsManaged.Private
         [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_ExecuteCmd")]
         public static extern void ExecuteCmd(string cmd);
 
+        [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_GetJointNameForTestModel")]
+        private static extern IntPtr TOOLAPI_GetJointNameForTestModel(int jointId);
+
+        [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_GetNumJointsForTestModel")]
+        public static extern int GetNumJointsForTestModel();
+
+        [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_SetTestModelJointRotation")]
+        public static extern void SetTestModelJointRotation(int jointHandle, Quat quat);
+
+        [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Editor_SetTestModelIdle")]
+        public static extern void SetTestModelIdle(string modelPath);
+
+        public static string GetJointNameForTestModel(int jointId)
+        {
+            return Marshal.PtrToStringAnsi(TOOLAPI_GetJointNameForTestModel(jointId));
+        }
+
         public static void DrawPlane(float size, idManagedImage image, float x, float y, float z, float yaw, float pitch, float roll)
         {
             if (image != null)
@@ -91,13 +108,25 @@ namespace ToolsManaged.Private
             return new RenderWorld(ptr);
         }
 
-        public unsafe static System.Windows.Media.Imaging.BitmapSource GetDiffuseImageForMaterial(string mtr, ref int width, ref int height)
+        public static System.Drawing.Bitmap BitmapFromSource(BitmapSource bitmapsource)
         {
-            byte *imgPtr;
+            System.Drawing.Bitmap bitmap;
+            using (MemoryStream outStream = new MemoryStream())
+            {
+                BitmapEncoder enc = new BmpBitmapEncoder();
+                enc.Frames.Add(BitmapFrame.Create(bitmapsource));
+                enc.Save(outStream);
+                bitmap = new System.Drawing.Bitmap(outStream);
+            }
+            return bitmap;
+        } 
+
+        public unsafe static System.Windows.Media.Imaging.BitmapSource ImageBufferToBitmapSource( byte *imgPtr, int width, int height )
+        {
+            
             byte[] imgData;
 
-            imgPtr = (byte *)TOOLAPI_Editor_GetDiffuseImageForMaterial(mtr, ref width, ref height);
-
+           
             imgData = new byte[width * height * 3];
 
             for (int i = 0, d = 0; i < width * height * 4; i += 4, d += 3)
@@ -117,11 +146,84 @@ namespace ToolsManaged.Private
 
 
             System.Windows.Media.Imaging.BitmapSource bitmap = WriteableBitmap.Create(width, height, 96, 96, System.Windows.Media.PixelFormats.Rgb24, myPalette, imgData, width * 3);
-            
-
             return bitmap;
         }
 
+        public unsafe static System.Windows.Media.Imaging.BitmapSource GetDiffuseImageForMaterial(string mtr, ref int width, ref int height)
+        {
+            byte *imgPtr;
+
+            imgPtr = (byte *)TOOLAPI_Editor_GetDiffuseImageForMaterial(mtr, ref width, ref height);
+
+            return ImageBufferToBitmapSource(imgPtr, width, height);
+        }
+
+        public class Model
+        {
+            private IntPtr _nativeHandle;
+            private string _path;
+
+            public Model(string path, IntPtr handle)
+            {
+                _path = path;
+                _nativeHandle = handle;
+            }
+
+            public string Name
+            {
+                get
+                {
+                    return _path;
+                }
+            }
+        }
+
+        public unsafe static class ModelManager
+        {
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_ModelManager_ListSkeletalMeshes")]
+            private static extern IntPtr TOOLAPI_ModelManager_ListSkeletalMeshes(ref int num);
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_renderModelManager_FindModel")]
+            private static extern IntPtr TOOLAPI_ModelManager_FindModel(string path);
+
+            private static List<Model> models = new List<Model>();
+
+            public static Model FindModel(string path)
+            {
+                for (int i = 0; i < models.Count; i++)
+                {
+                    if (models[i].Name == path)
+                        return models[i];
+                }
+
+                IntPtr handle = TOOLAPI_ModelManager_FindModel(path);
+
+                if (handle == IntPtr.Zero)
+                    return null;
+
+                models.Add(new Model(path, handle));
+
+                return models[models.Count - 1];
+            }
+
+            public static string[] ListSkeletalMeshes()
+            {
+                IntPtr *ptr;
+                int numMeshes = 0;
+                string[] pool;
+
+                ptr = (IntPtr*)TOOLAPI_ModelManager_ListSkeletalMeshes(ref numMeshes);
+
+                pool = new string[numMeshes];
+
+                for (int i = 0; i < numMeshes; i++)
+                {
+                    pool[i] = Marshal.PtrToStringAnsi((IntPtr)ptr[i]);
+                }
+
+                return pool;
+            }
+        }
 
         public static int GetNumMaterials()
         {
@@ -156,6 +258,77 @@ namespace ToolsManaged.Private
             return dict;
         }
 
+        public  class Decl
+        {
+            private Dictionary<string, string> dict;
+            private IntPtr _nativePtr;
+            private string _declType;
+            private string _declName;
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Decl_Save")]
+            private static extern void TOOLAPI_Decl_Save(IntPtr decl);
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Decl_GetText")]
+            private static extern IntPtr TOOLAPI_Decl_GetText(IntPtr decl);
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_Decl_SetText")]
+            private static extern void TOOLAPI_Decl_SetText(IntPtr decl, string text);
+
+            public Decl(IntPtr nativePtr)
+            {
+                _nativePtr = nativePtr;
+
+                string buffer = Marshal.PtrToStringAnsi(TOOLAPI_Decl_GetText(_nativePtr));
+
+                 dict = new Dictionary<string, string>();
+                 string[] pool = buffer.Split( ' ', '"');
+
+                 _declType = pool[0];
+                 _declName = pool[2];
+
+                 for (int i = 4; i < pool.Length; i+=5)
+                 {
+                     if (pool[i].Contains("}"))
+                         break;
+                     dict[pool[i].Trim('"', '\n', '\\', '\r', '{')] = pool[i + 3].Trim('"', '\n', '\\', '\r', '{');
+                 } 
+
+            }
+
+            public void Save()
+            {
+                string[] keypool = new string[dict.Keys.Count];
+                string buffer = _declType + "  " + _declName + " {\n\r";
+
+                dict.Keys.CopyTo(keypool, 0);
+                for(int i = 0; i < dict.Keys.Count; i++)
+                {
+                    string KeyVal = "";
+                    dict.TryGetValue(keypool[i], out KeyVal);
+                    
+                    buffer += "\"" + keypool[i] + "\"" + " " + "\"" + KeyVal.Replace(' ', '_') + "\"\n\r";
+                }
+                buffer += "}\n\r";
+
+                TOOLAPI_Decl_SetText(_nativePtr, buffer);
+                TOOLAPI_Decl_Save(_nativePtr);
+            }
+
+            public string this[string indx]
+            {
+                get 
+                {
+                    return dict[indx];
+                }
+                set
+                {
+                    dict[indx] = value;
+                }
+            }
+
+            
+        }
+
         public static class DeclManager
         {
             public enum idDeclType_t
@@ -171,7 +344,9 @@ namespace ToolsManaged.Private
                 DECL_AF,
                 DECL_MODELEXPORT,
                 DECL_MAPDEF,
-                DECL_OBJECTIVE
+                DECL_OBJECTIVE,
+
+                DECL_MOTIONREMAP
             }
 
             private static class Internal
@@ -180,13 +355,16 @@ namespace ToolsManaged.Private
                 public static extern IntPtr FindType(int type, string name, bool makeDefault);
             }
 
-            public static idLibNativeAPI.idDictNative FindType(idDeclType_t type, string name, bool makeDefault)
+            public static Decl FindType(idDeclType_t type, string name, bool makeDefault)
             {
                 IntPtr ptr;
 
                 ptr = Internal.FindType((int)type, name, makeDefault);
 
-                return new idLibNativeAPI.idDictNative(ptr);
+                if (ptr == IntPtr.Zero)
+                    return null;
+
+                return new Decl(ptr);
             }
         }
 
@@ -323,6 +501,11 @@ namespace ToolsManaged.Private
             }
         }
 
+        public unsafe class RenderEntity
+        {
+
+        }
+
         //
         // RenderWorld
         //
@@ -365,6 +548,35 @@ namespace ToolsManaged.Private
 
             [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_RenderWorld_VTTrace")]
             private static extern bool TOOLAPI_RenderWorld_VTTrace(IntPtr world, ref float x, ref float y, int vtAreaId, float startX, float startY, float startZ, float endPosX, float endPosY, float endPosZ, float dist);
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_renderSystem_AllocRenderWorld")]
+            private static extern IntPtr TOOLAPI_AllocRenderWorld();
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_RenderWorld_AddModelAtPosition")]
+            private static extern IntPtr TOOLAPI_AddModelAtPosition(IntPtr world, string modelPath, float x, float y, float z);
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_RenderWorld_FreeEntity")]
+            private static extern void TOOLAPI_RenderWorld_FreeEntity( IntPtr world, IntPtr entity );
+
+            [DllImport(@"Toolsx64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "TOOLAPI_RenderWorld_DrawEditorWorld")]
+            public static extern void DrawEditorWorld(float x, float y, float z, float pitch, float yaw, float roll);
+
+            public void FreeEntity( IntPtr entity )
+            {
+                TOOLAPI_RenderWorld_FreeEntity( internalPtr, entity );
+            }
+
+            public IntPtr AddModelAtPosition(string modelPath, float x, float y, float z)
+            {
+                return TOOLAPI_AddModelAtPosition(internalPtr, modelPath, x, y, z);
+            }
+
+            
+
+            public static RenderWorld AllocWorld()
+            {
+                return new RenderWorld(TOOLAPI_AllocRenderWorld());
+            }
 
             public int FindVisibleVirtualTextureAreas(float width, float height, float x, float y, float z, float yaw, float pitch, float roll)
             {
@@ -635,7 +847,7 @@ namespace ToolsManaged.Private
             // Like fprintf but with argument pointer
             public int VPrintf(string format, IntPtr va_args) { return 0; }
             // Write a string with high precision floating point numbers to the file.
-            public int WriteFloatString(string format, IntPtr Args) { return 0; }
+            public int WriteFloatString(string format) { return WriteFloatString_Internal(GetNativeAddress(), format, IntPtr.Zero); }
 
             // Endian portable alternatives to Read(...)
             public int ReadInt(ref int value)

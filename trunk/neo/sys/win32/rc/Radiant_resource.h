@@ -868,19 +868,18 @@
 #define ID_TOOLS_DECLEDITOR             30424
 #define ID_TOOLS_SOUNDINGAMEEDITOR      30425
 #define ID_TOOLS_MODELSTUDIO            30426
+#define ID_TOOLS_MOCAPSTUDIO            30427
 #define ID_ENTITY_START                 40000
 #define ID_ENTITY_END                   45000
 
 // Next default values for new objects
 // 
-
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        10084
-#define _APS_NEXT_COMMAND_VALUE         30427
+#define _APS_NEXT_COMMAND_VALUE         30428
 #define _APS_NEXT_CONTROL_VALUE         10555
 #define _APS_NEXT_SYMED_VALUE           10083
-#
 #endif
 #endif

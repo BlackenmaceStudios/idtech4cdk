@@ -990,12 +990,19 @@ void idDeclManagerLocal::RegisterDeclFolder( const char *folder, const char *ext
 	for ( i = 0; i < fileList->GetNumFiles(); i++ ) {
 		fileName = declFolder->folder + "/" + fileList->GetFile( i );
 
+		bool isLoaded = false;
+
 		// check whether this file has already been loaded
 		for ( j = 0; j < loadedFiles.Num(); j++ ) {
 			if ( fileName.Icmp( loadedFiles[j]->fileName ) == 0 ) {
+				isLoaded = true;
 				break;
 			}
 		}
+
+		if(isLoaded)
+			continue;
+
 		if ( j < loadedFiles.Num() ) {
 			df = loadedFiles[j];
 		} else {
@@ -1622,7 +1629,12 @@ void idDeclManagerLocal::ReloadDecls_f( const idCmdArgs &args ) {
 	}
 
 	soundSystem->SetMute( true );
-
+// jmarshall -- check for new files
+	for(int i = 0; i < declManagerLocal.declFolders.Num(); i++)
+	{
+		declManagerLocal.RegisterDeclFolder(declManagerLocal.declFolders[i]->folder, declManagerLocal.declFolders[i]->extension, declManagerLocal.declFolders[i]->defaultType);
+	}
+// jmarshall end
 	declManagerLocal.Reload( force );
 
 	soundSystem->SetMute( false );
@@ -1971,7 +1983,7 @@ bool idDeclLocal::ReplaceSourceFileText( void ) {
 	memcpy( buffer + sourceTextOffset, declText, textLength );
 
 	// write out new file
-	file = fileSystem->OpenFileWrite( GetFileName(), "fs_devpath" );
+	file = fileSystem->OpenFileWrite( GetFileName(), "fs_basepath" );
 	if ( !file ) {
 		Mem_Free( buffer );
 		common->Warning( "Couldn't open %s for writing.", GetFileName() );

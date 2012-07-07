@@ -104,7 +104,7 @@ void RadiantInitTestWindow( void ) {
 		}
 		else if(!strcmp(ent->epairs.GetString( "classname" ), "editor_testmodel" )) {
 
-
+			ent->epairs.Set( "angle", "180" );
 			ent->epairs.Set( "model", "models/mapobjects/testbox/testbox.md5staticmesh" );
 			gameEdit->ParseSpawnArgsToRenderEntity( &ent->epairs, &g_qeglobals.testModel );
 			g_qeglobals.testModelWorldHandle = g_qeglobals.testRenderWorld->AddEntityDef( &g_qeglobals.testModel );

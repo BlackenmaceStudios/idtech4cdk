@@ -820,7 +820,11 @@ const char *idFileSystemLocal::BuildOSPath( const char *base, const char *game, 
 	bool useGamePath = true;
 
 // jmarshall
-	if(strstr( base, gameFolder ) || strstr( base, game ) || strstr( base, BASE_GAMEDIR )) {
+	if(base == NULL) {
+		game = gameFolder;
+		base = ".";
+	}
+	if((strstr( base, gameFolder ) || strstr( base, game ) || strstr( base, BASE_GAMEDIR ))) {
 		useGamePath = false;
 		common->Warning("Base Path contains mod folder, ignoring game cvar\n");
 	}

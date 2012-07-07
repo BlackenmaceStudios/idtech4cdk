@@ -1913,9 +1913,9 @@ void	RB_STD_DrawView( void ) {
 	int	processed = 0;
 
 	if(backEnd.viewDef->renderView.megaProject != NULL) {
-		globalImages->currentRenderImageTargets->BindFBO();
+		//globalImages->currentRenderImageTargets->BindFBO();
 		RB_Draw_MegaProject( drawSurfs, numDrawSurfs, backEnd.viewDef->renderView.megaProject);
-		globalImages->currentRenderImageTargets->UnBindFBO();
+		//globalImages->currentRenderImageTargets->UnBindFBO();
 	}
 	else if(backEnd.viewDef->renderWorld != NULL)
 	{
