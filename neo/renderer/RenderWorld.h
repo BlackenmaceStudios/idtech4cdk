@@ -142,6 +142,12 @@ typedef struct renderEntity_s {
 	int						numJoints;
 	idJointMat *			joints;					// array of joints that will modify vertices.
 													// NULL if non-deformable model.  NOT freed by renderer
+// jmarshall
+	idJointMat *			bindPoseJoints;					// array of joints that will modify vertices.
+													// NULL if non-deformable model.  NOT freed by renderer
+
+	const class idDeclModelDef	*modelDecl;
+// jmarshall end
 
 	float					modelDepthHack;			// squash depth range so particle effects don't clip into walls
 

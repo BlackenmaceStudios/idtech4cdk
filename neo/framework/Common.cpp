@@ -2832,6 +2832,9 @@ void idCommonLocal::Init( int argc, const char **argv, const char *cmdline ) {
 		// init commands
 		InitCommands();
 
+		// init the kinect device.
+		kinectDevice->Init();
+
 #ifdef ID_WRITE_VERSION
 		config_compressor = idCompressor::AllocArithmetic();
 #endif

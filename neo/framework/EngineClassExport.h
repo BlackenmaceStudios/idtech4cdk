@@ -46,6 +46,7 @@ private:
 	idSession *					session;
 	idConsole *					console;
 	idEventLoop *				eventLoop;
+	bmKinectDevice				*kinectDevice;
 
 	int *						com_editors;
 	class idImageManager *		globalImages;
@@ -60,6 +61,7 @@ ID_INLINE bmEngineClassExport::bmEngineClassExport() {
 	this->version = ENGINE_EXPORT_VERSION;
 	this->sys = ::sys;
 	this->globalImages = ::globalImages;
+	this->kinectDevice = ::kinectDevice;
 	this->common = ::common;
 	this->cmdSystem = ::cmdSystem;
 	this->cvarSystem = ::cvarSystem;
@@ -98,6 +100,7 @@ ID_INLINE void bmEngineClassExport::SetEngineClassPointers( const char *moduleNa
 	if(this->version != ENGINE_EXPORT_VERSION) {
 		common->FatalError( "%s import api version invalid api version %d expected %d\n", this->version, ENGINE_EXPORT_VERSION );
 	}
+	::kinectDevice = this->kinectDevice;
 	::common = this->common;
 	::session = this->session;
 	::renderDevice = this->renderDevice;

@@ -75,7 +75,13 @@ typedef enum {
 	DECL_MODELEXPORT,
 	DECL_MAPDEF,
 	DECL_OBJECTIVE,
+
+	// Tool Decls
+	DECL_MOTIONREMAP,
+
 	// new decl types can be added here
+
+
 
 	DECL_MAX_TYPES			= 32
 } declType_t;

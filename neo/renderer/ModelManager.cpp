@@ -55,6 +55,7 @@ public:
 
 	virtual	void			PrintMemInfo( MemInfo_t *mi );
 	virtual bool			CacheModelTris( idRenderModel *model );
+	virtual void				FindSkeletalMeshes( idList<idStr> &skeletalMeshes );
 private:
 	idList<idRenderModel*>	models;
 	idHashIndex				hash;
@@ -579,6 +580,34 @@ void idRenderModelManagerLocal::EndLevelLoad() {
 		common->Printf( "%5i new models loaded in %5.1f seconds\n", loadCount, (end-start) * 0.001 );
 	}
 	common->Printf( "---------------------------------------------------\n" );
+}
+/*
+=================
+idRenderModelManagerLocal::FindSkeletalMeshes
+=================
+*/
+void idRenderModelManagerLocal::FindSkeletalMeshes( idList<idStr> &skeletalMeshes ) {
+	const idDecl *decl;
+
+	skeletalMeshes.Clear();
+
+	for(int i = 0; i < declManager->GetNumDecls( DECL_MODELDEF ); i++)
+	{
+		decl = declManager->DeclByIndex( DECL_MODELDEF, i, false );
+
+		// This probley isn't the best way to do this, just check to see if the decl def has the skeletal model extension.
+		char *text = (char *)_alloca( decl->GetTextLength() + 1 );
+		decl->GetText( text );
+		if(!strstr(text, ".md5mesh"))
+		{
+			_resetstkoflw();
+			continue;
+		}
+
+		_resetstkoflw();
+
+		skeletalMeshes.Append( decl->GetName() );
+	}
 }
 
 /*

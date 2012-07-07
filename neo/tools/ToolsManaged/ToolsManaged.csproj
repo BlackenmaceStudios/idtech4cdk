@@ -67,6 +67,12 @@
     <Compile Include="Frontend\EntityProperties.Designer.cs">
       <DependentUpon>EntityProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="Frontend\MoCapStudio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend\MoCapStudio.Designer.cs">
+      <DependentUpon>MoCapStudio.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frontend\ModelStudio.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,7 +118,10 @@
     <Compile Include="Private\idLib\idString.cs" />
     <Compile Include="Private\idLib\idVec3.cs" />
     <Compile Include="Private\IMegaProject.cs" />
+    <Compile Include="Private\Kinect.cs" />
+    <Compile Include="Private\MotionCapRemap.cs" />
     <Compile Include="Private\PaintBrush.cs" />
+    <Compile Include="Private\Quat.cs" />
     <Compile Include="Private\RenderProgram.cs" />
     <Compile Include="Private\MegaProject.cs" />
     <Compile Include="Private\MegaProjectChart.cs" />
@@ -136,6 +145,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Frontend\EntityProperties.resx">
       <DependentUpon>EntityProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend\MoCapStudio.resx">
+      <DependentUpon>MoCapStudio.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frontend\ModelStudio.resx">
       <DependentUpon>ModelStudio.cs</DependentUpon>

@@ -50,9 +50,6 @@ namespace ToolsManaged.Private
 
             for(int i = 0; i < fields.Length; i++, vTable+=IntPtr.Size)
             {
-
-
-
                // if (i >= 2)
                 {
                     MapNativeFunctionToField(type, fields[i], vTable);

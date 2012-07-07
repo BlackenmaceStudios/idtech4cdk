@@ -142,7 +142,7 @@ namespace ToolsManaged
             Type windowType = Assembly.GetExecutingAssembly().GetType("ToolsManaged.Frontend." + WindowClassName);
             IEditorWindow window;
 
-            Form form = _formManager.CreateWindow(windowType, true);
+            Form form = _formManager.CreateWindow(windowType, WindowClassName == "Viewport");
 
             window = new EditorWindow(form, address);
            

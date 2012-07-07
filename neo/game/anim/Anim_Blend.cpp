@@ -4883,7 +4883,7 @@ int idGameEdit::ANIM_GetNumFrames( const idMD5Anim *anim ) {
 idGameEdit::ANIM_CreateAnimFrame
 =====================
 */
-void idGameEdit::ANIM_CreateAnimFrame( const idRenderModel *model, const idMD5Anim *anim, int numJoints, idJointMat *joints, int time, const idVec3 &offset, bool remove_origin_offset ) {
+void idGameEdit::ANIM_CreateAnimFrame( const idRenderModel *model, const idMD5Anim *anim, int numJoints, idJointMat *joints, int time, const idVec3 &offset, bool remove_origin_offset, idJointMat *bindJoints ) {
 	int					i;
 	frameBlend_t		frame;
 	const idMD5Joint	*md5joints;
@@ -4934,6 +4934,12 @@ void idGameEdit::ANIM_CreateAnimFrame( const idRenderModel *model, const idMD5An
 		joints[0].SetTranslation( offset );
 	} else {
 		joints[0].SetTranslation( joints[0].ToVec3() + offset );
+	}
+
+	if(bindJoints != NULL) {
+		for( i = 0; i < numJoints; i++ ) {
+			bindJoints[i] = joints[i];
+		}
 	}
 
 	// transform the children
@@ -5019,4 +5025,120 @@ idRenderModel *idGameEdit::ANIM_CreateMeshForAnim( idRenderModel *model, const c
 	ent.joints = NULL;
 
 	return newmodel;
+}
+
+void idGameEdit::ANIM_SetJointRoationForModel( int jointHandle, idQuat rotation, renderEntity_t &ent ) {
+	const idMD5Joint *md5joints;
+	md5joints = ent.hModel->GetJoints();
+
+	if(rotation[3] == 0)
+		return;
+
+	// pointer to joint info
+	const int *jointParent = ent.modelDecl->JointParents();
+
+	if(jointHandle == -1) {
+		// transform any joints preceding the joint modifier
+		// transform the children
+		md5joints = ent.hModel->GetJoints();
+		for( int i = 1; i < ent.numJoints; i++ ) {
+			//joints[i] *= ent.joints[ md5joints[i].parent - md5joints ];
+		}
+		return;
+	}
+
+	// Set the new rotation
+	int parentNum = jointParent[jointHandle];
+	idVec3 p = ent.bindPoseJoints[jointHandle].ToJointQuat().t;
+	idQuat q = ent.joints[jointHandle].ToJointQuat().q;
+	idQuat qp = ent.joints[parentNum].ToJointQuat().q;
+	idQuat qo = ent.joints[0].ToJointQuat().q;
+
+	
+
+	// jointMods[i].jointBodyAxis.Transpose() * ( bodyAxis * renderAxis.Transpose() );
+	idAngles t = q.ToAngles();
+	
+	// transform any joints preceding the joint modifier
+	//SIMDProcessor->TransformJoints( ent.joints, jointParent, 1, ent.numJoints - 1 );
+
+
+	// axis of bone trace model
+	idMat3 parentAxis =ent.joints[ parentNum ].ToMat3();
+	idMat3 rm =  ( rotation.ToMat3() * q.ToMat3() ) * parentAxis.Transpose();
+	idMat3 r = rm;//( (ent.joints[0].ToMat3().Transpose()) * ent.bindPoseJoints[jointHandle].ToMat3().Transpose() ).Transpose() * ( rm * (ent.joints[0].ToMat3().Transpose()) );
+		
+	
+	idVec3 localt = ( ent.joints[jointHandle].ToVec3() - ent.joints[ parentNum ].ToVec3() ) * parentAxis.Transpose();
+
+
+	ent.joints[jointHandle].SetRotation( r ) ;
+	//ent.joints[jointHandle].SetTranslation( ent.joints[ parentNum ].ToVec3() + localt * ent.joints[ parentNum ].ToMat3() );
+
+	t = ent.joints[jointHandle].ToMat3().ToAngles();
+
+
+	//SIMDProcessor->TransformJoints( ent.joints, jointParent, jointHandle, jointHandle - 1 );
+}
+
+void idGameEdit::ANIM_CreateIdleAnimForModel( const char *modelpath, renderEntity_t &ent ) {
+	const char				*temp;
+	idRenderModel			*model;
+	const idMD5Anim 		*md5anim;
+	idStr					filename;
+	idStr					extension;
+	const idAnim			*anim;
+	int						animNum;
+	idVec3					offset;
+	const idDeclModelDef	*modelDef;
+
+
+	const char *animname = "idle";
+
+	model = ent.hModel;
+
+	if ( !model || model->IsDefaultModel() ) {
+		return;
+	}
+
+//	memset( &ent, 0, sizeof( ent ) );
+
+	ent.bounds.Clear();
+	ent.suppressSurfaceInViewID = 0;
+	if(ent.modelDecl == NULL)
+	{
+		ent.modelDecl = modelDef = (const idDeclModelDef *)declManager->FindType( DECL_MODELDEF, modelpath );
+	}
+	else
+	{
+		modelDef = ent.modelDecl;
+	}
+
+	if ( modelDef ) {
+		animNum = modelDef->GetAnim( animname );
+		if ( !animNum ) {
+			return;
+		}
+		anim = modelDef->GetAnim( animNum );
+		if ( !anim ) {
+			return;
+		}
+		anim->GetBounds( ent.bounds, 0, 0, 0 );
+		md5anim = anim->MD5Anim( 0 );
+		ent.customSkin = modelDef->GetDefaultSkin();
+		offset = modelDef->GetVisualOffset();
+	} 
+
+	if ( !md5anim ) {
+		return;
+	}
+
+	ent.numJoints = model->NumJoints();
+	if(ent.joints == NULL)
+	{
+		ent.joints = ( idJointMat * )Mem_Alloc16( ent.numJoints * sizeof( *ent.joints ) );
+		ent.bindPoseJoints = ( idJointMat * )Mem_Alloc16( ent.numJoints * sizeof( *ent.joints ) );
+	}
+	ANIM_CreateAnimFrame( model, md5anim, ent.numJoints, ent.joints, FRAME2MS( 0 ), offset, false, &ent.bindPoseJoints[0] );
+
 }

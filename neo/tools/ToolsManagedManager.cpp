@@ -32,11 +32,89 @@ TOOLS_EXPORTFUNC_NOOBJ_RETTYPE( idDict, idVec3, GetVector, (idDict *obj, const c
 TOOLS_EXPORTFUNC_NOOBJ_RETTYPE( idDict, int, GetNumKeyVals, (idDict *obj), () )
 TOOLS_EXPORTFUNC_NOOBJ_RETTYPE( idDict, idKeyValueInstance, GetKeyValInstance, (idDict *obj, int index), (index) )
 
+// idDecl
+TOOLS_EXPORTFUNC_NOOBJ( idDecl, Set, (idDict *obj, const char *str, const char *str1), (str, str1) )
+// bmKinectDevice
+TOOLS_EXPORTFUNC(kinectDevice, SetElevationAngle, (int angle), (angle) )
+TOOLS_EXPORTFUNC_RET( kinectDevice, GetElevationAngle, (void), () )
+TOOLS_EXPORTFUNC( kinectDevice, NextFrame, (void), () )
+TOOLS_EXPORTFUNC_RET( kinectDevice, GetTrackedPlayer, (int playerId), (playerId) )
+TOOLS_EXPORTFUNC_RET( kinectDevice, GetColorCameraData, (int &size, int &pitch ), (size, pitch) )
+TOOLS_EXPORTFUNC_RET( kinectDevice, GetDepthCameraData, (int &size, int &pitch ), (size, pitch) )
+TOOLS_EXPORTFUNC_RET( kinectDevice, DepthPixelToDepth, ( byte pixel ), (pixel) )
+
+// Model Manager
+TOOLS_EXPORTFUNC_RET( renderModelManager, FindModel, ( const char *modelName ), ( modelName ) );
+
+// RenderSystem
+//TOOLS_EXPORTFUNC_RET( renderSystem, AllocRenderWorld, (), () );
+
+extern "C" __declspec(dllexport) void TOOLAPI_Decl_SetText( idDecl *decl, const char *text ) 
+{
+	decl->SetText( text );
+}
+
+extern "C" __declspec(dllexport) const char * TOOLAPI_Decl_GetText( idDecl *decl ) 
+{
+	static char *buffer = NULL;
+
+	if(buffer == NULL)
+	{
+		buffer = new char[44432];
+	}
+
+	memset(buffer, 0, 44432 );
+
+	 decl->GetText(buffer);
+	 return &buffer[0];
+}
+
+extern "C" __declspec(dllexport) void TOOLAPI_Decl_Save( idDecl *decl ) 
+{
+	decl->base->ReplaceSourceFileText();
+}
+
+/*
+extern "C" __declspec(dllexport) idRenderEntity *TOOLAPI_RenderWorld_AddModelAtPosition( idRenderWorld *world, const char *modelPath, float x, float y, float z ) 
+{
+	idDict dict;
+
+	dict.Set("classname", "editor_model");
+	dict.Set("model", modelPath);
+	dict.Set("origin", va("%f %f %f", x, y, z));
+
+	return world->AddClientEntity( dict );
+}
+*/
+extern "C" __declspec(dllexport) void TOOLAPI_RenderWorld_FreeEntity( idRenderWorld *world, idRenderEntity *entity ) 
+{
+	//world->FreeClientEntity( entity );
+}
+
 float *GetCurrentViewPos();
 renderView_t view;
 idAngles viewAngle;
 
 void DrawRenderSurface( srfTriangles_t *surf, idImage *image, idVec3 origin, idAngles angle, bool cameraView, bool usingVertexCache );
+
+extern "C" __declspec(dllexport) const char **TOOLAPI_ModelManager_ListSkeletalMeshes( int &num ) 
+{
+	static idList<idStr>		pool;
+	static INT_PTR *poolPtr = NULL;
+
+	renderModelManager->FindSkeletalMeshes( pool );
+
+	num = pool.Num();
+	if(poolPtr)
+		delete poolPtr;
+
+	poolPtr = new INT_PTR[num];
+	for(int i = 0; i < num; i++) {
+		poolPtr[i] = (INT_PTR)&pool[i][0];
+	}
+
+	return (const char **)&poolPtr[0];
+}
 
 extern "C" __declspec(dllexport) void TOOLAPI_Editor_ExecuteCmd( const char *cmd ) 
 {

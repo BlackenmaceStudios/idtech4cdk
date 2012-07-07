@@ -39,7 +39,9 @@ If you have questions concerning this license or the applicable additional terms
 #include "CamWnd.h"
 #include "PaintWnd.h"
 #include "TextureBar.h"
-
+// jmarshall
+#include "MoCapStudioWnd.h"
+// jmarshall end
 
 const int RAD_SHIFT =   0x01;
 const int RAD_ALT =     0x02;
@@ -145,7 +147,7 @@ public:
 	CXYWnd* m_pXZWnd;
 	CCamWnd* m_pCamWnd;
 	CPaintWnd *m_pPaintWnd;
-
+	CMoCapStudioWnd *m_pMoCapWnd;
 protected:  // control bar embedded members
 	CStatusBar  m_wndStatusBar;
 	CToolBar m_wndToolBar;
@@ -184,6 +186,7 @@ public:
 	bool VerifyMapBuildable(const char *opname, bool checkProc=false);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnOpenModelStudio();
+	afx_msg void OnOpenMocapStudio();
 	afx_msg void OnOpenGUIEditor();
 	afx_msg void OnOpenScriptEditor();
 	afx_msg void OnOpenSoundEditor();

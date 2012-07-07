@@ -264,7 +264,7 @@ namespace ToolsManaged.Frontend
                     int width = 0, height = 0;
                     if (_currentMaterialName != _currentPaintLayer[_paintChart].materialName)
                     {
-                        chartLayerImg.BackgroundImage = BitmapFromSource(NativeAPI.GetDiffuseImageForMaterial(_currentPaintLayer[_paintChart].materialName, ref width, ref height));
+                        chartLayerImg.BackgroundImage = NativeAPI.BitmapFromSource(NativeAPI.GetDiffuseImageForMaterial(_currentPaintLayer[_paintChart].materialName, ref width, ref height));
                     }
                     _currentMaterialName = _currentPaintLayer[_paintChart].materialName;
                 }
@@ -507,18 +507,7 @@ namespace ToolsManaged.Frontend
             _debugGui.Activate(_debugGui.GetNativeAddress(), true, 0);
         }
 
-        private System.Drawing.Bitmap BitmapFromSource(BitmapSource bitmapsource)
-        {
-            System.Drawing.Bitmap bitmap;
-            using (MemoryStream outStream = new MemoryStream())
-            {
-                BitmapEncoder enc = new BmpBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create(bitmapsource));
-                enc.Save(outStream);
-                bitmap = new System.Drawing.Bitmap(outStream);
-            }
-            return bitmap;
-        } 
+        
 
 
         private void mtrListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -530,7 +519,7 @@ namespace ToolsManaged.Frontend
             mtrPath = (string)mtrListBox.Items[mtrListBox.SelectedIndex];
 
             _currentStencilImage = NativeAPI.idManagedImage.GetDiffuseImageHandleForMaterial(mtrPath);
-            StampImg.BackgroundImage = BitmapFromSource( NativeAPI.GetDiffuseImageForMaterial(mtrPath, ref width, ref height) );
+            StampImg.BackgroundImage = NativeAPI.BitmapFromSource(NativeAPI.GetDiffuseImageForMaterial(mtrPath, ref width, ref height));
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -556,7 +545,7 @@ namespace ToolsManaged.Frontend
             mtrPath = (string)brushList.Items[brushList.SelectedIndex];
 
             _currentBrushImage = NativeAPI.idManagedImage.GetDiffuseImageHandleForMaterial(mtrPath);
-            brushImage.BackgroundImage = BitmapFromSource(NativeAPI.GetDiffuseImageForMaterial(mtrPath, ref width, ref height));
+            brushImage.BackgroundImage = NativeAPI.BitmapFromSource(NativeAPI.GetDiffuseImageForMaterial(mtrPath, ref width, ref height));
         }
 
         private int BrushSize

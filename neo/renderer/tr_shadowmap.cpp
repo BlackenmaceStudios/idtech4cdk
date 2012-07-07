@@ -296,7 +296,11 @@ void R_CalculateShadowsForLight( idRenderLightLocal *light, viewLight_t *vLight 
 		}
 		else
 		{
-			model = R_EntityDefDynamicModel( vEntity->entityDef );
+			idRenderModel *_model = R_EntityDefDynamicModel( vEntity->entityDef );
+			if(_model != NULL)
+			{
+				model = _model;
+			}
 		}
 
 		// Don't shadow default models.

@@ -23,12 +23,6 @@ void RB_Layers_Init( void ) {
 	// Bind the pre-interaction program.
 	progs[PROG_LAYERS].programHandle->Bind();
 
-	GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT, 
-                        GL_COLOR_ATTACHMENT1_EXT,
-                         GL_COLOR_ATTACHMENT2_EXT
-						};
-
-    qglDrawBuffers(3, buffers);
 
 	RB_SetupDeferredRenderer();
 	
@@ -43,7 +37,7 @@ RB_Layers_Cleanup
 ===============
 */
 void RB_Layers_Cleanup( void ) {
-	qglDrawBuffer( GL_COLOR_ATTACHMENT0_EXT );
+	//qglDrawBuffer( GL_COLOR_ATTACHMENT0_EXT );
 
 
 	// Unbind the pre-interaction program.
@@ -75,6 +69,7 @@ void RB_Layers_DrawSurface( drawSurf_t *surf, idImage *image ) {
 	idImage *diffuse = NULL, *bump = NULL, *spec = NULL;
 
 	shader = surf->material;
+	image = shader->GetEditorImage();
 
 	// If the shader doesn't recieve lighting, use forward rendering instead.
 	if(!shader->ReceivesLighting()) {

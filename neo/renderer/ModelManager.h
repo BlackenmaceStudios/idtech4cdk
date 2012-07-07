@@ -94,6 +94,9 @@ public:
 
 // jmarshall
 	virtual bool			CacheModelTris( idRenderModel *model ) = 0;
+
+	// returns all skeletal meshes
+	virtual void			FindSkeletalMeshes( idList<idStr> &skeletalMeshes ) = 0;
 // jmarshall end
 };
 

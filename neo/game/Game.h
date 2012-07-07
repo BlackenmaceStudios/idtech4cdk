@@ -313,8 +313,13 @@ public:
 	virtual const idMD5Anim *	ANIM_GetAnim( const char *fileName );
 	virtual int					ANIM_GetLength( const idMD5Anim *anim );
 	virtual int					ANIM_GetNumFrames( const idMD5Anim *anim );
-	virtual void				ANIM_CreateAnimFrame( const idRenderModel *model, const idMD5Anim *anim, int numJoints, idJointMat *frame, int time, const idVec3 &offset, bool remove_origin_offset );
+	virtual void				ANIM_CreateAnimFrame( const idRenderModel *model, const idMD5Anim *anim, int numJoints, idJointMat *frame, int time, const idVec3 &offset, bool remove_origin_offset, idJointMat *bindJoints = NULL );
 	virtual idRenderModel *		ANIM_CreateMeshForAnim( idRenderModel *model, const char *classname, const char *animname, int frame, bool remove_origin_offset );
+
+// jmarshall
+	virtual void				ANIM_CreateIdleAnimForModel( const char *model, renderEntity_t &ent );
+	virtual void				ANIM_SetJointRoationForModel( int jointHandle, idQuat rotation, renderEntity_t &ent );
+// jmarshall end
 
 	// Articulated Figure calls for AF editor and Radiant.
 	virtual bool				AF_SpawnEntity( const char *fileName );
