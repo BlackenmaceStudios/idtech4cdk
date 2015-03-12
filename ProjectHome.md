@@ -1,0 +1,1 @@
+A project that will streamline the idTech 4 editor, and add features to bring it to current generation standards.
